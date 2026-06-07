@@ -1,5 +1,5 @@
 /* ===============================
-   VARIÁVEIS E TEMA
+   VARIÁVEIS
 =============================== */
 :root {
   --bg: #ffffff;
@@ -10,13 +10,9 @@
   --brand-light: #5a8dff;
   --accent-cronos: #6cbf6c;
   --accent-organo: #e7b26b;
-  --radius: 10px;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
 }
 
-/* Dark Mode */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0b0b0c;
@@ -28,43 +24,26 @@
 }
 
 /* ===============================
-   RESET
+   BASE
 =============================== */
 * {
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-}
-
-/* ===============================
-   BASE
-=============================== */
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  font-family: system-ui, Arial;
   background: var(--bg);
   color: var(--text);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  min-height: 100vh;
 }
 
 /* ===============================
    CONTAINER
 =============================== */
 .container {
-  width: 100%;
   max-width: 1000px;
-  padding: var(--space-6);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 0 auto;
+  padding: 30px 20px;
 }
 
 /* ===============================
@@ -72,19 +51,16 @@ body {
 =============================== */
 .header {
   text-align: center;
-  margin-bottom: var(--space-8);
+  margin-bottom: 40px;
 }
 
 .header img {
-  width: 150px;
-  height: auto;
-  margin-bottom: var(--space-4);
+  width: 140px;
+  margin-bottom: 10px;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
 }
 
 /* ===============================
@@ -92,9 +68,8 @@ body {
 =============================== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-6);
-  width: 100%;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 /* ===============================
@@ -102,144 +77,64 @@ body {
 =============================== */
 .card {
   background: var(--card);
-  border-radius: var(--radius);
-  padding: var(--space-6);
-
+  padding: 25px;
+  border-radius: 10px;
   text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
   text-decoration: none;
   color: inherit;
 
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  min-height: 280px;
+  transition: 0.3s;
 
   border: 2px solid transparent;
-
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-/* Hover geral */
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
 }
 
-/* Destaque visual */
+/* Destaque */
 .card.chronos {
   border-color: var(--accent-cronos);
-}
-
-.card.chronos:hover {
-  background: color-mix(in srgb, var(--accent-cronos) 10%, var(--card));
 }
 
 .card.organo {
   border-color: var(--accent-organo);
 }
 
-.card.organo:hover {
-  background: color-mix(in srgb, var(--accent-organo) 10%, var(--card));
-}
-
 /* ===============================
-   ELEMENTOS DO CARD
+   ELEMENTOS
 =============================== */
 .card-icon {
-  font-size: 3.5rem;
-  margin-bottom: var(--space-4);
+  font-size: 40px;
+  margin-bottom: 10px;
 }
 
 .card-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin-bottom: var(--space-4);
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .card-description {
-  font-size: 1rem;
   color: var(--muted);
-  margin-bottom: var(--space-6);
+  font-size: 14px;
+  margin-bottom: 15px;
 }
 
-/* ===============================
-   BOTÃO (VISUAL)
-=============================== */
 .card-button {
-  margin-top: auto;
-
+  display: inline-block;
   background: var(--brand);
-  color: #fff;
-
-  padding: 0.7rem 1.2rem;
+  color: white;
+  padding: 8px 14px;
   border-radius: 6px;
-
-  font-weight: 600;
-  font-size: 0.95rem;
-
-  transition: all 0.3s ease;
-}
-
-.card:hover .card-button {
-  background: var(--brand-light);
-  transform: scale(1.05);
 }
 
 /* ===============================
    FOOTER
 =============================== */
 .footer {
-  margin-top: var(--space-8);
+  margin-top: 40px;
   text-align: center;
   color: var(--muted);
-  font-size: 0.95rem;
-
-  border-top: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
-  padding-top: var(--space-6);
-
-  width: 100%;
-}
-
-/* ===============================
-   RESPONSIVO
-=============================== */
-@media (max-width: 768px) {
-  .header h1 {
-    font-size: 1.6rem;
-  }
-
-  .header img {
-    width: 120px;
-  }
-
-  .card {
-    min-height: 240px;
-  }
-
-  .card-icon {
-    font-size: 3rem;
-  }
-}
-
-/* ===============================
-   ANIMAÇÃO
-=============================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.container {
-  animation: fadeIn 0.6s ease;
+  font-size: 14px;
 }
