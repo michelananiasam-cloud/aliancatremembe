@@ -1,5 +1,5 @@
 /* ===============================
-   VARIÁVEIS
+   VARIÁVEIS E TEMA
 =============================== */
 :root {
   --bg: #ffffff;
@@ -16,74 +16,230 @@
   --space-8: 2rem;
 }
 
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0c;
+    --text: #f1f1f1;
+    --muted: #aaa;
+    --card: #1a1a1c;
+    --brand: #5a8dff;
+  }
+}
+
+/* ===============================
+   RESET
+=============================== */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 /* ===============================
    BASE
 =============================== */
-body{
-  font-family: system-ui;
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
 }
 
 /* ===============================
    CONTAINER
 =============================== */
-.container{
-  width:100%;
-  max-width:1000px;
+.container {
+  width: 100%;
+  max-width: 1000px;
   padding: var(--space-6);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ===============================
    HEADER
 =============================== */
-.header{
-  text-align:center;
+.header {
+  text-align: center;
   margin-bottom: var(--space-8);
 }
 
-.header img{
-  width:150px;
+.header img {
+  width: 150px;
+  height: auto;
+  margin-bottom: var(--space-4);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 /* ===============================
    GRID
 =============================== */
-.grid{
-  display:grid;
-  gap:20px;
-  grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  width: 100%;
 }
 
 /* ===============================
    CARD
 =============================== */
-.card{
+.card {
   background: var(--card);
-  border-radius:10px;
-  padding:20px;
-  text-align:center;
-  transition:.3s;
+  border-radius: var(--radius);
+  padding: var(--space-6);
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-decoration: none;
+  color: inherit;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  min-height: 280px;
+
+  border: 2px solid transparent;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-.card:hover{
-  transform:translateY(-5px);
+/* Hover geral */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
-.card-icon{
-  font-size:3rem;
+/* Destaque visual */
+.card.chronos {
+  border-color: var(--accent-cronos);
+}
+
+.card.chronos:hover {
+  background: color-mix(in srgb, var(--accent-cronos) 10%, var(--card));
+}
+
+.card.organo {
+  border-color: var(--accent-organo);
+}
+
+.card.organo:hover {
+  background: color-mix(in srgb, var(--accent-organo) 10%, var(--card));
 }
 
 /* ===============================
-   BOTÃO
+   ELEMENTOS DO CARD
 =============================== */
-.card-button{
-  margin-top:10px;
+.card-icon {
+  font-size: 3.5rem;
+  margin-bottom: var(--space-4);
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+}
+
+.card-description {
+  font-size: 1rem;
+  color: var(--muted);
+  margin-bottom: var(--space-6);
+}
+
+/* ===============================
+   BOTÃO (VISUAL)
+=============================== */
+.card-button {
+  margin-top: auto;
+
   background: var(--brand);
-  color:#fff;
-  padding:10px;
+  color: #fff;
+
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-button {
+  background: var(--brand-light);
+  transform: scale(1.05);
+}
+
+/* ===============================
+   FOOTER
+=============================== */
+.footer {
+  margin-top: var(--space-8);
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+
+  border-top: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  padding-top: var(--space-6);
+
+  width: 100%;
+}
+
+/* ===============================
+   RESPONSIVO
+=============================== */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 1.6rem;
+  }
+
+  .header img {
+    width: 120px;
+  }
+
+  .card {
+    min-height: 240px;
+  }
+
+  .card-icon {
+    font-size: 3rem;
+  }
+}
+
+/* ===============================
+   ANIMAÇÃO
+=============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  animation: fadeIn 0.6s ease;
 }
