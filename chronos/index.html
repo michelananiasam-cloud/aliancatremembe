@@ -627,7 +627,7 @@ body{
 	  <input 
 	  type="file" 
 	  id="importar-arquivo" 
-	  accept="application/json" 
+	  accept=".json,application/json,*/*"
 	  style="display:none" 
 	  onchange="handleImportFile(this.files[0])"
 	  />
@@ -896,6 +896,17 @@ function brParaIso(br) {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+function gerarNomeArquivo() {
+  const nome = getEvangelizacao()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+
+  return `cronograma_${nome || "backup"}.json`;
+}
+
 function exportarBackup(){
   const data = {
     version: 1,
@@ -905,14 +916,22 @@ function exportarBackup(){
       lista: carregarLista()
     }
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+
+  const blob = new Blob(
+    [JSON.stringify(data, null, 2)],
+    { type: "application/json" }
+  );
+
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
+
   a.href = url;
-  a.download = `cronograma_${Date.now()}.json`;
+  a.download = gerarNomeArquivo(); // ✅ nome melhorado
+
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
+
   URL.revokeObjectURL(url);
 }
 
