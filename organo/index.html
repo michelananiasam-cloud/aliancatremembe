@@ -197,15 +197,117 @@ body { padding-bottom: 200px !important; }
 
 <div class="container">
 
-  <a href="../" class="btn-voltar">← Voltar para Home</a>
-
+  <!-- ===============================
+       CABEÇALHO COM LOGO + TÍTULO
+  ================================== -->
   <div id="web-header" role="banner" aria-label="Topo">
     <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
          alt="Logo da Aliança">
     <h1 id="titulo-web">Organograma Movimento Tremembé</h1>
   </div>
 
-  <p>Página do Organograma - Conteúdo em desenvolvimento</p>
+<!-- Cabeçalho exclusivo para impressão (repetido em todas as páginas) -->
+
+<div id="print-header">
+  <img
+    src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
+    alt="Logo da Aliança">
+  <h2 id="print-title">Organograma Movimento Tremembé</h2>
+</div>
+
+
+<!-- ===============================
+     FORMULÁRIOS PRINCIPAIS
+================================== -->
+<section id="form-bloco" aria-label="Cadastro e Edição">
+
+  <!-- Botão de abrir/fechar -->
+  <button id="toggle-form" class="toggle-form-btn">-</button>
+
+  <!-- WRAPPER CORRETO -->
+  <div id="form-bloco-inner">
+
+    <!-- Pessoas‑Chave -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge">Coord. e Referências</span>
+      </div>
+
+      <div class="field">
+        <label for="chave-area">Área</label>
+        <select id="chave-area">
+          <option value="coordenacao">Coordenação (responsáveis)</option>
+          <option value="interna">Interna (responsáveis)</option>
+          <option value="externa">Externa (responsáveis)</option>
+          <option value="apoio">Apoio (responsáveis)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="chave-nome">Nome</label>
+        <input id="chave-nome" type="text" placeholder="Nome da pessoa">
+      </div>
+
+      <button class="primary" id="btn-add-chave">Adicionar Pessoa‑chave</button>
+    </div>
+
+
+
+    <!-- Equipes -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge">Equipes</span>
+      </div>
+
+      <div class="field">
+        <label for="eq-ref">Vincular em</label>
+        <select id="eq-ref">
+          <option value="interna">Interna</option>
+          <option value="externa">Externa</option>
+          <option value="apoio">Apoio</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="eq-nome">Equipe</label>
+        <input id="eq-nome" type="text" placeholder="Ex.: Acolhida">
+      </div>
+
+      <div class="field">
+        <label for="eq-pessoa">Servo</label>
+        <input id="eq-pessoa" type="text" placeholder="Ex.: Maria">
+      </div>
+
+      <div class="field" style="flex-direction:row; align-items:center; gap:8px;">
+        <input id="eq-marcar-ref" type="checkbox" style="width:auto;">
+        <label for="eq-marcar-ref" style="margin:0;">
+          Marcar este Servo como <b>referência</b> da equipe?
+        </label>
+      </div>
+
+      <button class="primary" id="btn-add-equipe">
+        Adicionar / Atualizar Equipe
+      </button>
+
+    </div><!-- card equipes -->
+
+  </div><!-- /form-bloco-inner -->
+
+</section><!-- /form-bloco -->
+
+
+
+  <!-- ===============================
+       ÁREA DO ORGANOGRAMA (WEB)
+  ================================== -->
+  <section id="org" aria-live="polite"></section>
+
+
+
+  <!-- ===============================
+       ÁREA DE IMPRESSÃO (TEXTO APENAS)
+  ================================== -->
+  <section id="print-lists" class="print-only"></section>
 
 </div>
 
