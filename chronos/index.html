@@ -510,6 +510,52 @@ button.edit{
 body{
   padding-bottom: 200px !important;
 }
+	/* Inicio novo css */
+/* =========================================================
+   🔽 NOVO: CONTROLE DE EXPANDIR / RECOLHER MENU
+   (não altera layout original, só adiciona comportamento)
+========================================================= */
+
+/* 🔹 Garante que o botão possa ficar posicionado dentro do menu */
+#menu-adicao {
+  position: relative; /* NÃO remove o sticky, isso só permite o botão ficar no canto */
+}
+
+/* 🔹 Posiciona o botão + / - no canto superior direito */
+#toggle-menu-adicao {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 30;
+}
+
+/* 🔹 Quando o menu estiver FECHADO */
+#menu-adicao.collapsed {
+  height: 22px !important;      /* altura mínima visível */
+  max-height: 48px !important;  /* evita crescimento */
+  overflow: hidden !important;  /* esconde conteúdo */
+  padding-top: 12px !important; /* espaço para o botão */
+}
+
+/* 🔹 Esconde TODOS os elementos internos quando colapsado */
+#menu-adicao.collapsed > *:not(#toggle-menu-adicao) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important; /* impede clique */
+}
+
+/* 🔹 Mantém o botão sempre visível */
+#menu-adicao.collapsed #toggle-menu-adicao {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+	
+	/* fim novo css */
 </style>
 
 </head>
@@ -527,6 +573,7 @@ body{
 	
 
   <div id="menu-adicao" aria-labelledby="titulo-form">
+	<button id="toggle-menu-adicao" class="toggle-form-btn">-</button>
 	<h2 id="titulo-form" class="sr-only" style="position:absolute;left:-9999px;">
 	  Adicionar atividade
 	</h2>
@@ -979,6 +1026,10 @@ function zerarTudo(){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ===============================
+  // 🔹 INICIALIZA SEU SISTEMA
+  // ===============================
   const ev = getEvangelizacao();
   const input = document.getElementById("evangelizacao");
   if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
@@ -988,12 +1039,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
-});
 
-window.addEventListener('beforeprint', () => {
-  document.querySelectorAll('.print-only').forEach(h2 => {
-    h2.textContent = getTituloCronograma();
-  });
+
+  // ===============================
+  // ✅ NOVO: CONTROLE DO MENU
+  // ===============================
+  const btn = document.getElementById("toggle-menu-adicao");
+  const menu = document.getElementById("menu-adicao");
+
+  if (btn && menu) {
+
+    // 👉 estado inicial: fechado
+    menu.classList.add("collapsed");
+    btn.textContent = "+";
+
+    // 👉 clique alterna estado
+    btn.addEventListener("click", () => {
+      const aberto = menu.classList.contains("expanded");
+
+      if (aberto) {
+        menu.classList.remove("expanded");
+        menu.classList.add("collapsed");
+        btn.textContent = "+";
+      } else {
+        menu.classList.remove("collapsed");
+        menu.classList.add("expanded");
+        btn.textContent = "-";
+      }
+    });
+  }
 });
 </script>
 
