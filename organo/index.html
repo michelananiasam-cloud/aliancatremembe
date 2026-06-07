@@ -769,7 +769,7 @@ button.primary{
     Import JSON
 </button>
 
-<input type="file" id="input-import-json" accept=".json" style="display:none;" />
+<input type="file" id="input-import-json" accept=".json,application/json,*/*" style="display:none;" />
 </div>
 
 
@@ -2088,12 +2088,17 @@ if (btnImport && inputImport) {
     });
 
     inputImport.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        importarJSONOrganograma(file);
+    	const file = e.target.files?.[0];
 
-        // permite importar o mesmo arquivo novamente
-        inputImport.value = "";
-    });
+    	if (!file) {
+        	alert("Nenhum arquivo selecionado.");
+        	return;
+    	}
+
+    	importarJSONOrganograma(file);
+
+    	inputImport.value = ""; // permite reimportar
+	});
 }
   
 }
