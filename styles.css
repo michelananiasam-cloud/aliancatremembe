@@ -1,7 +1,12 @@
-/* ===============================
-   VARIÁVEIS
-=============================== */
+/* ======================================
+   CONFIGURAÇÃO GLOBAL (VARIÁVEIS)
+====================================== */
 :root {
+  /* ✅ FLAG DA MARCA D’ÁGUA */
+  --watermark-display: block; 
+  /* block = mostra | none = esconde */
+
+  /* ✅ CORES */
   --bg: #ffffff;
   --text: #111;
   --muted: #666;
@@ -12,7 +17,9 @@
   --accent-organo: #e7b26b;
 }
 
-/* Dark mode */
+/* ======================================
+   DARK MODE
+====================================== */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0b0b0c;
@@ -23,9 +30,9 @@
   }
 }
 
-/* ===============================
+/* ======================================
    BASE
-=============================== */
+====================================== */
 * {
   box-sizing: border-box;
 }
@@ -37,18 +44,18 @@ body {
   color: var(--text);
 }
 
-/* ===============================
+/* ======================================
    CONTAINER
-=============================== */
+====================================== */
 .container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 30px 20px;
 }
 
-/* ===============================
+/* ======================================
    HEADER
-=============================== */
+====================================== */
 .header {
   text-align: center;
   margin-bottom: 40px;
@@ -63,18 +70,18 @@ body {
   margin: 0;
 }
 
-/* ===============================
+/* ======================================
    GRID
-=============================== */
+====================================== */
 .grid {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-/* ===============================
+/* ======================================
    CARD
-=============================== */
+====================================== */
 .card {
   background: var(--card);
   padding: 25px;
@@ -93,7 +100,7 @@ body {
   transform: translateY(-5px);
 }
 
-/* Destaque */
+/* Destaques */
 .card.chronos {
   border-color: var(--accent-cronos);
 }
@@ -102,9 +109,9 @@ body {
   border-color: var(--accent-organo);
 }
 
-/* ===============================
+/* ======================================
    ELEMENTOS
-=============================== */
+====================================== */
 .card-icon {
   font-size: 40px;
   margin-bottom: 10px;
@@ -129,12 +136,33 @@ body {
   border-radius: 6px;
 }
 
-/* ===============================
+/* ======================================
    FOOTER
-=============================== */
+====================================== */
 .footer {
   margin-top: 40px;
   text-align: center;
   color: var(--muted);
   font-size: 14px;
+}
+
+/* ======================================
+   MARCA D’ÁGUA
+====================================== */
+.watermark {
+  display: var(--watermark-display);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.06);
+
+  pointer-events: none;
+  user-select: none;
+  z-index: 9999;
+  white-space: nowrap;
 }
