@@ -2,9 +2,9 @@
    CONFIGURAÇÃO GLOBAL (VARIÁVEIS)
 ====================================== */
 :root {
-  /* ✅ FLAG DA MARCA D’ÁGUA */
-  --watermark-display: block; 
-  /* block = mostra | none = esconde */
+  /* ✅ FLAG watermark-display (Marca D'Água) */
+  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
+  --watermark-display: block;	
 
   /* ✅ CORES */
   --bg: #ffffff;
