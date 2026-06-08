@@ -51,7 +51,7 @@
 :root{
   /* ✅ FLAG watermark-display (Marca D'Água) */
   /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
-  --watermark-display: block;	
+  --watermark-display: flex;	
   --bg:#ffffff;
   --text:#111;
   --muted:#666;
@@ -559,6 +559,23 @@ body{
 }
 	
 	/* fim novo css */
+
+.watermark {
+  display: var(--watermark-display);
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 999999;
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.06);
+  transform: rotate(-30deg);
+}
+@media print { .watermark { display:none!important; } }
+
 </style>
 
 </head>
@@ -1074,8 +1091,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+  <div class="watermark">EM DESENVOLVIMENTO</div>
 </body>
-  <div class="watermark">
-  EM DESENVOLVIMENTO
-</div>
+  
 </html>
