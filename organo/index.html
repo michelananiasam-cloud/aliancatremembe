@@ -785,6 +785,10 @@ button.primary{
     Export JSON
 </button>
 
+<button onclick="carregarJSONDoRepositorio()" class="btn_rodape">
+  Carregar JSON do GitHub
+</button>
+
 <button type="button" id="btn-import-json" class="btn_rodape">
     Import JSON
 </button>
@@ -2257,37 +2261,60 @@ function getUsablePagePx(){
   return usableMM * MM_TO_PX;
 }
 
+// document.addEventListener("DOMContentLoaded", () => {
+
+//     // Inicia toda a aplicação
+//     initApp();
+
+//     // Configura o botão +/-
+//     const btn = document.getElementById("toggle-form");
+//     const bloco = document.getElementById("form-bloco");
+
+//     if (btn && bloco) {
+//         // estado inicial
+//         bloco.classList.add("collapsed");
+//         btn.textContent = "+";
+
+//         // toggle
+//         btn.addEventListener("click", () => {
+//             const isOpen = bloco.classList.contains("expanded");
+
+//             if (isOpen) {
+//                 bloco.classList.remove("expanded");
+//                 bloco.classList.add("collapsed");
+//                 btn.textContent = "+";
+//             } else {
+//                 bloco.classList.remove("collapsed");
+//                 bloco.classList.add("expanded");
+//                 btn.textContent = "-";
+//             }
+//         });
+//     }
+
+// });
+
 document.addEventListener("DOMContentLoaded", () => {
+  fetch('./data/organograma_model.json')
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("JSON não encontrado");
+      }
+      return res.json();
+    })
+    .then(json => {
+      const temDados = localStorage.getItem("organograma_dados_v2");
 
-    // Inicia toda a aplicação
-    initApp();
-
-    // Configura o botão +/-
-    const btn = document.getElementById("toggle-form");
-    const bloco = document.getElementById("form-bloco");
-
-    if (btn && bloco) {
-        // estado inicial
-        bloco.classList.add("collapsed");
-        btn.textContent = "+";
-
-        // toggle
-        btn.addEventListener("click", () => {
-            const isOpen = bloco.classList.contains("expanded");
-
-            if (isOpen) {
-                bloco.classList.remove("expanded");
-                bloco.classList.add("collapsed");
-                btn.textContent = "+";
-            } else {
-                bloco.classList.remove("collapsed");
-                bloco.classList.add("expanded");
-                btn.textContent = "-";
-            }
-        });
-    }
-
-});
+      if (!temDados) {
+        importarJSONDireto(json);
+      } else {
+        render();
+      }
+    })
+    .catch(err => {
+      console.warn("Falha ao carregar JSON:", err);
+      render();
+    });
+});	
 
 function getTeamStats(org){
     const stats = {
@@ -2962,6 +2989,104 @@ function importarJSONOrganograma(file) {
 
     reader.readAsText(file);
 }
+
+function carregarJSONDoRepositorio() {
+  fetch('data/organograma_model.json')
+    .then(res => res.json())
+    .then(json => {
+      importarJSONDireto(json);
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Erro ao carregar JSON do repositório");
+    });
+}
+
+function importarJSONDireto(json) {
+  try {
+    const novoModel = defaultModel();
+
+    if (typeof json.titulo === "string") {
+      setTitulo(json.titulo);
+    }
+
+    const areasMap = {
+      "Interna": "interna",
+      "Externa": "externa",
+      "Apoio": "apoio"
+    };
+
+    // coordenação
+    json.nodes
+      .filter(n => n.title === "Coordenador")
+      .forEach(n => {
+        novoModel.coordenacao.push(n.name);
+      });
+
+    // resto
+    json.nodes.forEach(n => {
+      const areaKey = areasMap[n.name];
+      if (!areaKey) return;
+
+      json.nodes
+        .filter(x => x.parentId === n.id && x.title === "Referência")
+        .forEach(ref => {
+          novoModel[areaKey].responsaveis.push(ref.name);
+        });
+
+      json.nodes
+        .filter(x =>
+          x.parentId === n.id &&
+          x.title !== "Referência" &&
+          x.title !== "Servo"
+        )
+        .forEach(eqNode => {
+          const eq = {
+            nome: eqNode.name,
+            pessoas: [],
+            referencia: null
+          };
+
+          const pessoas = json.nodes.filter(p =>
+            p.parentId === eqNode.id && p.title === "Servo"
+          );
+
+          pessoas.forEach(p => {
+            eq.pessoas.push({
+              nome: p.name,
+              confirmado: p.confirmado ?? null
+            });
+
+            if (p.isReferencia) {
+              eq.referencia = p.name;
+            }
+          });
+
+          novoModel[areaKey].equipes.push(eq);
+        });
+    });
+
+    saveOrg(novoModel);
+    atualizarTitulos();
+    render();
+
+    alert("JSON carregado com sucesso!");
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao importar JSON!");
+  }
+}
+
+function carregarJSON() {
+  fetch('./data/organograma_model.json')
+    .then(res => res.json())
+    .then(importarJSONDireto)
+    .catch(() => {
+      console.warn("usando localStorage");
+      render(); // usa dados salvos
+    });
+}
+
 </script>
 
   <div class="watermark">EM DESENVOLVIMENTO</div>
