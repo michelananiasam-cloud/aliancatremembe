@@ -1,0 +1,168 @@
+/* ======================================
+   CONFIGURAÇÃO GLOBAL (VARIÁVEIS)
+====================================== */
+:root {
+  /* ✅ FLAG watermark-display (Marca D'Água) */
+  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
+  --watermark-display: block;	
+
+  /* ✅ CORES */
+  --bg: #ffffff;
+  --text: #111;
+  --muted: #666;
+  --card: #f5f5f7;
+  --brand: #2d6cdf;
+  --brand-light: #5a8dff;
+  --accent-cronos: #6cbf6c;
+  --accent-organo: #e7b26b;
+}
+
+/* ======================================
+   DARK MODE
+====================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0c;
+    --text: #f1f1f1;
+    --muted: #aaa;
+    --card: #1a1a1c;
+    --brand: #5a8dff;
+  }
+}
+
+/* ======================================
+   BASE
+====================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, Arial;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ======================================
+   CONTAINER
+====================================== */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* ======================================
+   HEADER
+====================================== */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header img {
+  width: 140px;
+  margin-bottom: 10px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+/* ======================================
+   GRID
+====================================== */
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* ======================================
+   CARD
+====================================== */
+.card {
+  background: var(--card);
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+
+  text-decoration: none;
+  color: inherit;
+
+  transition: 0.3s;
+
+  border: 2px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Destaques */
+.card.chronos {
+  border-color: var(--accent-cronos);
+}
+
+.card.organo {
+  border-color: var(--accent-organo);
+}
+
+/* ======================================
+   ELEMENTOS
+====================================== */
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-description {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.card-button {
+  display: inline-block;
+  background: var(--brand);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+/* ======================================
+   FOOTER
+====================================== */
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ======================================
+   MARCA D’ÁGUA
+====================================== */
+.watermark {
+  display: var(--watermark-display);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.06);
+
+  pointer-events: none;
+  user-select: none;
+  z-index: 9999;
+  white-space: nowrap;
+}
