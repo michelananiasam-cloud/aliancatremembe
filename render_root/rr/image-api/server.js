@@ -14,9 +14,17 @@ function generateSignedUrl(filename) {
     .update(data)
     .digest('hex');
 
+  // ✅ corrigido aqui
   return `/api/image/${filename}?expires=${expires}&signature=${signature}`;
 }
 
+// ✅ NOVA ROTA (ESSENCIAL)
+app.get('/get-image-link', (req, res) => {
+  const url = generateSignedUrl('logo.png');
+  res.json({ url });
+});
+
+// (essa você já tinha)
 app.get('/', (req, res) => {
   const url = generateSignedUrl('logo.png');
 
