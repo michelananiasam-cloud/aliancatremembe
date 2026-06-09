@@ -2294,11 +2294,14 @@ function getUsablePagePx(){
 // });
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // 🔥 PRIMEIRO: inicializa tudo
+  initApp();
+
+  // 🔥 DEPOIS: tenta carregar JSON
   fetch('./data/organograma_model.json')
     .then(res => {
-      if (!res.ok) {
-        throw new Error("JSON não encontrado");
-      }
+      if (!res.ok) throw new Error("JSON não encontrado");
       return res.json();
     })
     .then(json => {
@@ -2306,16 +2309,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!temDados) {
         importarJSONDireto(json);
-      } else {
-        render();
       }
     })
     .catch(err => {
       console.warn("Falha ao carregar JSON:", err);
-      render();
     });
-});	
 
+  // 🔥 VOLTA O TOGGLE (você tinha isso antes e comentou!)
+  const btn = document.getElementById("toggle-form");
+  const bloco = document.getElementById("form-bloco");
+
+  if (btn && bloco) {
+      bloco.classList.add("collapsed");
+      btn.textContent = "+";
+
+      btn.addEventListener("click", () => {
+          const isOpen = bloco.classList.contains("expanded");
+
+          if (isOpen) {
+              bloco.classList.remove("expanded");
+              bloco.classList.add("collapsed");
+              btn.textContent = "+";
+          } else {
+              bloco.classList.remove("collapsed");
+              bloco.classList.add("expanded");
+              btn.textContent = "-";
+          }
+      });
+  }
+
+});
 function getTeamStats(org){
     const stats = {
         interna: { equipes: 0, servos: 0 },
