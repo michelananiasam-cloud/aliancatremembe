@@ -17,14 +17,20 @@
 
 <div class="container">
 
-  <!-- HEADER old https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png-->
-  <div class="header">
-    <img 
-      src="./img/alianca_logo-header.png" 
-      alt="Logo Movimento Tremembé"
-    >
-    <h1>Movimento Tremembé</h1>
-  </div>
+
+<div class="header">
+  <img id="logo" alt="Logo Movimento Tremembé">
+  <h1>Movimento Tremembé</h1>
+</div>
+
+<script>
+  fetch('https://SEU-BACKEND.onrender.com/get-image-link')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('logo').src = data.url;
+    });
+</script>
+
 
   <!-- GRID -->
   <div class="grid">
