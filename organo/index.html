@@ -777,16 +777,16 @@ button.primary{
 
     <!-- NOVOS BOTÕES -->
 
+<button onclick="carregarJSONDoRepositorio()" class="btn_rodape">
+  Dados do Servidor
+</button>	
+	
 <button type="button" id="btn-export-mermaid" class="btn_rodape">
     Export Mermaid
 </button>
 
 <button type="button" id="btn-export-json" class="btn_rodape">
     Export JSON
-</button>
-
-<button onclick="carregarJSONDoRepositorio()" class="btn_rodape">
-  Carregar JSON do GitHub
 </button>
 
 <button type="button" id="btn-import-json" class="btn_rodape">
@@ -2019,7 +2019,7 @@ function handleRodapeSubmit(e){
   ORG.alterarTitulo(e);
 }
 function handleClearAll(){
-  if (!confirm("Tem certeza que deseja ZERAR todas as informações do organograma?")) return;
+  if (!confirm("Tem certeza que deseja LIMPAR todas as informações do Organograma?")) return;
   localStorage.removeItem("organograma_dados_v2");
   var reset = confirm("Deseja TAMBÉM resetar o título para o padrão?");
   if (reset){
@@ -2221,7 +2221,7 @@ function baixarJSONOrganograma() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "organograma_" + nomeArquivo + ".json";
+    a.download = nomeArquivo + ".json";
     a.click();
 
     URL.revokeObjectURL(url);
@@ -2240,7 +2240,7 @@ function baixarMermaidA4() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "organo_a4_mermaid.txt";
+    a.download = "organograma_a4_mermaid.txt";
     a.click();
 
     URL.revokeObjectURL(url);
@@ -3093,10 +3093,10 @@ function importarJSONDireto(json) {
     atualizarTitulos();
     render();
 
-    alert("JSON carregado com sucesso!");
+    alert("Oganograma Atualizado com Sucesso!");
   } catch (e) {
     console.error(e);
-    alert("Erro ao importar JSON!");
+    alert("Erro ao importar JSON do Servidor!");
   }
 }
 
