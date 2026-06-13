@@ -1,5 +1,11 @@
+// 🔹 Função global para evitar cache (NOVO)
+function noCache(url) {
+  return url + '?v=' + Date.now();
+}
+
 function carregarConfig() {
-  fetch('./config/params.json?v=' + Date.now()) // ✅ CAMINHO CORRETO
+  // ✅ você já fazia certo aqui (mantive)
+  fetch('./config/params.json?v=' + Date.now())
     .then(res => res.json())
     .then(cfg => {
 
@@ -12,11 +18,13 @@ function carregarConfig() {
       document.getElementById("footer-copy").textContent =
         `© ${cfg.ano} • Desenvolvido com ❤️ por ${cfg.autor}`;
 
+      // ✅ ✅ AQUI ESTAVA O PROBLEMA
       const logo = document.getElementById("app-logo");
-      logo.src = cfg.logo;
+      logo.src = noCache(cfg.logo); // 👈 ALTERADO
       logo.alt = cfg.nomeProjeto;
 
-      document.getElementById("app-favicon").href = cfg.favicon;
+      // ✅ ✅ E AQUI TAMBÉM
+      document.getElementById("app-favicon").href = noCache(cfg.favicon); // 👈 ALTERADO
 
       // ✅ ENV (watermark)
       if ((cfg.env || "").toLowerCase() === "dev") {
