@@ -30,4 +30,4 @@ function carregarConfig() {
 }
 
 document.addEventListener("DOMContentLoaded", carregarConfig);
-``
+console.log("App carregado ✅");
