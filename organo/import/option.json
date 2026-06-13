@@ -1,0 +1,14 @@
+[
+  {
+    "nome": "Arquivo Atual",
+    "arquivo": "organograma_tk_atual.json"
+  },
+  {
+    "nome": "Modelo TK",
+    "arquivo": "organograma_tk_modelo.json"
+  },
+  {
+    "nome": "Modelo Caná",
+    "arquivo": "organograma_cana_modelo.json"
+  }
+]
