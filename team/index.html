@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title id="app-title"></title>
-  <link id="app-favicon" rel="icon" />
+  <link id="app-favicon" rel="icon" type="image/png" />
 
   <!-- GLOBAL -->
-  <link rel="stylesheet" href="../config/css/style.css">
-
-  <!-- TEAM -->
-  <link rel="stylesheet" href="./team.css">
+  <link rel="stylesheet" href<!-- TEAM -->
+  ./team.css
 </head>
 
 <body>
@@ -20,32 +17,111 @@
 <div class="container">
 
   <!-- HEADER -->
-  <div id="web-header">
-    <a href="../">
-      <img id="app-logo">
+  <div id="web-header" role="banner">
+    ../
+      <img id="app-logo" alt="Logo">
     </a>
+  
+    <h1 id="titulo-web"></h1>
+  </div>
 
-    <h1 id="titulo-web">Organograma</h1>
+  <!-- PRINT HEADER -->
+  <div id="print-header">
+    <img id="print-logo">
+    <h2 id="print-title"></h2>
   </div>
 
   <!-- FORM -->
-  <div class="card">
-    <input id="nome" placeholder="Nome">
-    <button onclick="add()">Adicionar</button>
-  </div>
+  <section id="form-bloco">
 
-  <!-- LISTA -->
-  <div id="org"></div>
+    <button id="toggle-form" class="toggle-form-btn">-</button>
 
+    <div id="form-bloco-inner">
+
+      <!-- PESSOA CHAVE -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge">Coord. e Referências</span>
+        </div>
+
+        <div class="field">
+          <label>Área</label>
+          <select id="chave-area">
+            <option value="coordenacao">Coordenação</option>
+            <option value="interna">Interna</option>
+            <option value="externa">Externa</option>
+            <option value="apoio">Apoio</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Nome</label>
+          <input id="chave-nome">
+        </div>
+
+        <button class="primary" id="btn-add-chave">Adicionar</button>
+      </div>
+
+      <!-- EQUIPES -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge">Equipes</span>
+        </div>
+
+        <select id="eq-ref">
+          <option value="interna">Interna</option>
+          <option value="externa">Externa</option>
+          <option value="apoio">Apoio</option>
+        </select>
+
+        <input id="eq-nome" placeholder="Equipe">
+        <input id="eq-pessoa" placeholder="Pessoa">
+
+        <label>
+          <input id="eq-marcar-ref" type="checkbox">
+          Referência
+        </label>
+
+        <button id="btn-add-equipe">Adicionar</button>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="org"></section>
+  <section id="print-lists" class="print-only"></section>
+
+</div>
+
+<!-- RODAPÉ -->
+<div id="menu-rodape">
+  <form id="form-rodape" class="menu-rodape-content">
+
+    <input id="evangelizacao" placeholder="Nome">
+
+    <div class="rodape-actions">
+      <button type="submit" class="btn_rodape">Alterar</button>
+
+      <button type="button" onclick="escolherAtualizacaoJSON()">Atualizar</button>
+
+      <button type="button" id="btn-export-json">Export</button>
+
+      <button type="button" id="btn-import-json">Import</button>
+
+      <input type="file" id="input-import-json" accept=".json" hidden>
+    </div>
+
+  </form>
 </div>
 
 <div class="watermark">EM DESENVOLVIMENTO</div>
 
-<!-- CONFIG -->
-<script src="../config/js/config.js"></script>
+<!-- LIB -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pakoin.js
+
+<!-- GLOBAL -->
+../config/js/config.js</script>
 
 <!-- TEAM -->
-<script src="./team.js"></script>
-
-</body>
+<script src="./team.jsbody>
 </html>
