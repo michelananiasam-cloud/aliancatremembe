@@ -1,7 +1,7 @@
 [
   {
-    "nome": "Arquivo Atual",
-    "arquivo": "organograma_tk_atual.json"
+    "nome": "Thalita Kum junho/2026",
+    "arquivo": "thalita_kum_junho_2026.json"
   },
   {
     "nome": "Modelo TK",
@@ -9,6 +9,6 @@
   },
   {
     "nome": "Modelo Caná",
-    "arquivo": "organograma_cana_modelo.json"
+    "arquivo": "cana_modelo.json"
   }
 ]
