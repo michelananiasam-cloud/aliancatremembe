@@ -1,1 +1,51 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title id="app-title"></title>
+  <link id="app-favicon" rel="icon" />
+
+  <!-- GLOBAL -->
+  <link rel="stylesheet" href="../config/css/style.css">
+
+  <!-- TEAM -->
+  <link rel="stylesheet" href="./team.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div id="web-header">
+    <a href="../">
+      <img id="app-logo">
+    </a>
+
+    <h1 id="titulo-web">Organograma</h1>
+  </div>
+
+  <!-- FORM -->
+  <div class="card">
+    <input id="nome" placeholder="Nome">
+    <button onclick="add()">Adicionar</button>
+  </div>
+
+  <!-- LISTA -->
+  <div id="org"></div>
+
+</div>
+
+<div class="watermark">EM DESENVOLVIMENTO</div>
+
+<!-- CONFIG -->
+<script src="../config/js/config.js"></script>
+
+<!-- TEAM -->
+<script src="./team.js"></script>
+
+</body>
+</html>
