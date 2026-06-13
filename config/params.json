@@ -1,8 +1,8 @@
-
 {
   "nomeProjeto": "Movimento Tremembé",
   "brand": "Aliança de Misericórdia",
   "autor": "Michel Ananias",
-  "ano": "@2026",
-  "logo": "./img/alianca_logo-header.png"
+  "ano": "2026",
+  "logo": "./config/img/alianca_logo-header.png",
+  "favicon": "./config/img/alianca_favicon.png"
 }
