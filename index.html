@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Título dinâmico -->
+  <!-- título dinâmico -->
   <title>Carregando...</title>
 
-  <!-- Favicon dinâmico -->
+  <!-- favicon dinâmico -->
   <link id="app-favicon" rel="icon">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="./styles.css">
+  <!-- ✅ CSS (novo caminho correto) -->
+  <link rel="stylesheet" href="/config/css/styles.css">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
        HEADER
   ================================== -->
   <div class="header">
-    <img id="app-logo" src="" alt="Logo">
+    <img id="app-logo" alt="Logo">
     <h1 id="nome-projeto">Carregando...</h1>
   </div>
 
@@ -32,7 +32,7 @@
   <div class="grid">
 
     <!-- CRONOGRAMA -->
-    <a href="./chronos/" class="card chronos">
+    <a href="/chronos/" class="card chronos">
       <div class="card-icon">⏱️</div>
       <div class="card-title">Programação</div>
       <div class="card-description">
@@ -42,7 +42,7 @@
     </a>
 
     <!-- ORGANOGRAMA -->
-    <a href="./organo/" class="card organo">
+    <a href="/organo/" class="card organo">
       <div class="card-icon">📊</div>
       <div class="card-title">Equipes</div>
       <div class="card-description">
@@ -67,14 +67,12 @@
 </div>
 
 <!-- ===============================
-     WATERMARK (CONTROLADA VIA CONFIG)
+     WATERMARK (controlada via config)
 =================================== -->
 <div class="watermark">EM DESENVOLVIMENTO</div>
 
-<!-- ===============================
-     JS (CONFIG GLOBAL)
-=================================== -->
-<script src="/js/config.js"></script>
+<!-- ✅ JS (config global) -->
+<script src="/config/js/config.js"></script>
 
 </body>
 </html>
