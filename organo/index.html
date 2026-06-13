@@ -781,9 +781,11 @@ button.primary{
 //  Atualizar
 //</button>	
 
-<button onclick="escolherAtualizacao()" class="btn_rodape">
+
+<button onclick="escolherAtualizacaoJSON()" class="btn_rodape">
   Atualizar
 </button>
+
 
 	
 <button type="button" id="btn-export-mermaid" class="btn_rodape">
@@ -3115,29 +3117,30 @@ function carregarJSON() {
     });
 }
 
-function escolherAtualizacao() {
+function escolherAtualizacaoJSON() {
 
-  const opcao = prompt(
-    "Escolha uma opção:\n\n" +
-    "1 - Arquivo Atual\n" +
-    "2 - Modelo"
-  );
+  fetch('import/option.json')
+    .then(res => res.json())
+    .then(opcoes => {
 
-  let caminho = null;
+      const escolha = prompt(
+        "Escolha o arquivo:\n\n" +
+        opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
+      );
 
-  if (opcao === "1") {
-    caminho = "import/organograma_tk_atual.json";
-  } 
-  else if (opcao === "2") {
-    caminho = "import/organograma_tk_modelo.json";
-  }
+      const idx = parseInt(escolha) - 1;
 
-  if (!caminho) return;
+      if (!opcoes[idx]) return;
 
-  fetch(caminho)
-    .then(r => r.json())
-    .then(importarJSONDireto)
-    .catch(() => alert("Erro ao carregar arquivo"));
+      const caminho = "import/" + opcoes[idx].arquivo;
+
+      fetch(caminho)
+        .then(r => r.json())
+        .then(importarJSONDireto)
+        .catch(() => alert("Erro ao carregar arquivo"));
+
+    })
+    .catch(() => alert("Erro ao carregar opções"));
 }
 
 </script>
