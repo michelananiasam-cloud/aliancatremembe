@@ -1,0 +1,19 @@
+.team-line{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px dashed #ccc;
+  padding:6px 0;
+}
+
+.people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:8px;
+}
+
+.chip{
+  padding:6px 10px;
+  border-radius:20px;
+  background:#eee;
+}
