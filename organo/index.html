@@ -3014,7 +3014,7 @@ function importarJSONOrganograma(file) {
 }
 
 function carregarJSONDoRepositorio() {
-  fetch('data/import/thalita_kum_modelo.json')
+  fetch('import/thalita_kum_modelo.json')
     .then(res => res.json())
     .then(json => {
       importarJSONDireto(json);
