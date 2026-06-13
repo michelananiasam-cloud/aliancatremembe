@@ -777,11 +777,6 @@ button.primary{
 
     <!-- NOVOS BOTÕES -->
 
-//<button onclick="carregarJSONDoRepositorio()" class="btn_rodape">
-//  Atualizar
-//</button>	
-
-
 <button onclick="escolherAtualizacaoJSON()" class="btn_rodape">
   Atualizar
 </button>
@@ -3119,7 +3114,7 @@ function carregarJSON() {
 
 function escolherAtualizacaoJSON() {
 
-  fetch('import/option.json')
+  fetch('import/option.json?v=' + Date.now()) // 🔥 força atualização
     .then(res => res.json())
     .then(opcoes => {
 
@@ -3142,7 +3137,6 @@ function escolherAtualizacaoJSON() {
     })
     .catch(() => alert("Erro ao carregar opções"));
 }
-
 </script>
 
   <div class="watermark">EM DESENVOLVIMENTO</div>
