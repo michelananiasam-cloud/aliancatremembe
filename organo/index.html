@@ -777,9 +777,14 @@ button.primary{
 
     <!-- NOVOS BOTÕES -->
 
-<button onclick="carregarJSONDoRepositorio()" class="btn_rodape">
+//<button onclick="carregarJSONDoRepositorio()" class="btn_rodape">
+//  Atualizar
+//</button>	
+
+<button onclick="escolherAtualizacao()" class="btn_rodape">
   Atualizar
-</button>	
+</button>
+
 	
 <button type="button" id="btn-export-mermaid" class="btn_rodape">
     Mermaid
@@ -3108,6 +3113,31 @@ function carregarJSON() {
       console.warn("usando localStorage");
       render(); // usa dados salvos
     });
+}
+
+function escolherAtualizacao() {
+
+  const opcao = prompt(
+    "Escolha uma opção:\n\n" +
+    "1 - Arquivo Atual\n" +
+    "2 - Modelo"
+  );
+
+  let caminho = null;
+
+  if (opcao === "1") {
+    caminho = "import/organograma_tk_atual.json";
+  } 
+  else if (opcao === "2") {
+    caminho = "import/organograma_tk_modelo.json";
+  }
+
+  if (!caminho) return;
+
+  fetch(caminho)
+    .then(r => r.json())
+    .then(importarJSONDireto)
+    .catch(() => alert("Erro ao carregar arquivo"));
 }
 
 </script>
