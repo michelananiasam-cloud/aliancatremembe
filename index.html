@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Movimento Tremembé</title>
 
-  <!-- Favicon -->
-  <!-- <link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png"> -->
-  <link rel="icon" href="./img/alianca_favicon.png">
+  <!-- Título dinâmico -->
+  <title>Carregando...</title>
 
-  <!-- ✅ CSS correto -->
+  <!-- Favicon dinâmico -->
+  <link id="app-favicon" rel="icon">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="./styles.css">
 </head>
 
@@ -17,16 +18,17 @@
 
 <div class="container">
 
-  <!-- HEADER old https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png-->
+  <!-- ===============================
+       HEADER
+  ================================== -->
   <div class="header">
-    <img 
-      src="./img/alianca_logo-header.png" 
-      alt="Logo Movimento Tremembé"
-    >
-    <h1>Movimento Tremembé</h1>
+    <img id="app-logo" src="" alt="Logo">
+    <h1 id="nome-projeto">Carregando...</h1>
   </div>
 
-  <!-- GRID -->
+  <!-- ===============================
+       GRID
+  ================================== -->
   <div class="grid">
 
     <!-- CRONOGRAMA -->
@@ -51,18 +53,28 @@
 
   </div>
 
-  <!-- FOOTER -->
+  <!-- ===============================
+       FOOTER
+  ================================== -->
   <div class="footer">
     <p>
-      <strong>Aliança de Misericórdia</strong> | Movimento Tremembé<br>
-      <small>© 2026 • Desenvolvido com ❤️ por Michel Ananias</small>
+      <strong id="brand-nome">Carregando...</strong> |
+      <span id="footer-projeto">...</span><br>
+      <small id="footer-copy"></small>
     </p>
   </div>
 
 </div>
 
+<!-- ===============================
+     WATERMARK (CONTROLADA VIA CONFIG)
+=================================== -->
+<div class="watermark">EM DESENVOLVIMENTO</div>
+
+<!-- ===============================
+     JS (CONFIG GLOBAL)
+=================================== -->
+<script src="/js/config.js"></script>
+
 </body>
-  <div class="watermark">
-  EM DESENVOLVIMENTO
-</div>
 </html>
