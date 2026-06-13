@@ -1,0 +1,360 @@
+{
+  "titulo": "Thalita Kum Junho/2026",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Coordenação",
+      "title": "Coordenação"
+    },
+    {
+      "id": "2",
+      "name": "Wilson",
+      "title": "Coordenador",
+      "parentId": "1"
+    },
+    {
+      "id": "3",
+      "name": "Interna",
+      "title": "Referência Interna",
+      "parentId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Maria Lívia",
+      "title": "Referência",
+      "parentId": "3"
+    },
+    {
+      "id": "5",
+      "name": "Michel",
+      "title": "Referência",
+      "parentId": "3"
+    },
+    {
+      "id": "6",
+      "name": "Animadores🧑🏻‍🎤",
+      "title": "Animadores🧑🏻‍🎤",
+      "parentId": "3"
+    },
+    {
+      "id": "7",
+      "name": "Caio",
+      "title": "Servo",
+      "parentId": "6",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "8",
+      "name": "Lina",
+      "title": "Servo",
+      "parentId": "6",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "9",
+      "name": "Baliza⏱️",
+      "title": "Baliza⏱️",
+      "parentId": "3"
+    },
+    {
+      "id": "10",
+      "name": "Matheus Victal",
+      "title": "Servo",
+      "parentId": "9",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "11",
+      "name": "Letícia Ferreira",
+      "title": "Servo",
+      "parentId": "9",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "12",
+      "name": "Comunicação📷",
+      "title": "Comunicação📷",
+      "parentId": "3"
+    },
+    {
+      "id": "13",
+      "name": "Bruno Passos",
+      "title": "Servo",
+      "parentId": "12",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "14",
+      "name": "Thais Costa",
+      "title": "Servo",
+      "parentId": "12",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "15",
+      "name": "Isadora Righi",
+      "title": "Servo",
+      "parentId": "12",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "16",
+      "name": "Dança💃",
+      "title": "Dança💃",
+      "parentId": "3"
+    },
+    {
+      "id": "17",
+      "name": "Karine",
+      "title": "Servo",
+      "parentId": "16",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "18",
+      "name": "Intercessão🛐",
+      "title": "Intercessão🛐",
+      "parentId": "3"
+    },
+    {
+      "id": "19",
+      "name": "Fatinha",
+      "title": "Servo",
+      "parentId": "18",
+      "confirmado": true,
+      "isReferencia": true
+    },
+    {
+      "id": "20",
+      "name": "Missionário SP",
+      "title": "Servo",
+      "parentId": "18",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "21",
+      "name": "Ticiana",
+      "title": "Servo",
+      "parentId": "18",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "22",
+      "name": "Denise",
+      "title": "Servo",
+      "parentId": "18",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "23",
+      "name": "Liturgia🕯️",
+      "title": "Liturgia🕯️",
+      "parentId": "3"
+    },
+    {
+      "id": "24",
+      "name": "Ana Dayse",
+      "title": "Servo",
+      "parentId": "23",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "25",
+      "name": "Missionária Casa",
+      "title": "Servo",
+      "parentId": "23",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "26",
+      "name": "Lojinha🛍️",
+      "title": "Lojinha🛍️",
+      "parentId": "3"
+    },
+    {
+      "id": "27",
+      "name": "Música🎶",
+      "title": "Música🎶",
+      "parentId": "3"
+    },
+    {
+      "id": "28",
+      "name": "Angélica🎤🎸",
+      "title": "Servo",
+      "parentId": "27",
+      "confirmado": true,
+      "isReferencia": true
+    },
+    {
+      "id": "29",
+      "name": "Matheus SJC🎤🎸🎹🥁🎷🎧",
+      "title": "Servo",
+      "parentId": "27",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "30",
+      "name": "Biel🎤🎸",
+      "title": "Servo",
+      "parentId": "27",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "31",
+      "name": "Pastores🐑",
+      "title": "Pastores🐑",
+      "parentId": "3"
+    },
+    {
+      "id": "32",
+      "name": "Gustavo",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": null,
+      "isReferencia": true
+    },
+    {
+      "id": "33",
+      "name": "Mariana",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "34",
+      "name": "Técnica💻",
+      "title": "Técnica💻",
+      "parentId": "3"
+    },
+    {
+      "id": "35",
+      "name": "Vando",
+      "title": "Servo",
+      "parentId": "34",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "36",
+      "name": "Externa",
+      "title": "Referência Externa",
+      "parentId": "1"
+    },
+    {
+      "id": "37",
+      "name": "Mircis",
+      "title": "Referência",
+      "parentId": "36"
+    },
+    {
+      "id": "38",
+      "name": "Teresinha",
+      "title": "Referência",
+      "parentId": "36"
+    },
+    {
+      "id": "39",
+      "name": "Cozinha👨‍🍳",
+      "title": "Cozinha👨‍🍳",
+      "parentId": "36"
+    },
+    {
+      "id": "40",
+      "name": "Decoração✨",
+      "title": "Decoração✨",
+      "parentId": "36"
+    },
+    {
+      "id": "41",
+      "name": "Enfermagem🩺",
+      "title": "Enfermagem🩺",
+      "parentId": "36"
+    },
+    {
+      "id": "42",
+      "name": "Ordem e Limpeza🧹",
+      "title": "Ordem e Limpeza🧹",
+      "parentId": "36"
+    },
+    {
+      "id": "43",
+      "name": "Salão☕",
+      "title": "Salão☕",
+      "parentId": "36"
+    },
+    {
+      "id": "44",
+      "name": "Secretaria📚",
+      "title": "Secretaria📚",
+      "parentId": "36"
+    },
+    {
+      "id": "45",
+      "name": "Apoio",
+      "title": "Apoio",
+      "parentId": "1"
+    },
+    {
+      "id": "46",
+      "name": "Se Lançar💪🏻",
+      "title": "Se Lançar💪🏻",
+      "parentId": "45"
+    },
+    {
+      "id": "47",
+      "name": "Junior",
+      "title": "Servo",
+      "parentId": "46",
+      "confirmado": null,
+      "isReferencia": false
+    },
+    {
+      "id": "48",
+      "name": "Suporte🛠️",
+      "title": "Suporte🛠️",
+      "parentId": "45"
+    },
+    {
+      "id": "49",
+      "name": "Junior",
+      "title": "Servo",
+      "parentId": "48",
+      "confirmado": null,
+      "isReferencia": true
+    },
+    {
+      "id": "50",
+      "name": "Transporte e Compras🚖",
+      "title": "Transporte e Compras🚖",
+      "parentId": "45"
+    }
+  ],
+  "links": [
+    {
+      "from": "45",
+      "to": "3",
+      "type": "responde_para"
+    },
+    {
+      "from": "45",
+      "to": "36",
+      "type": "responde_para"
+    }
+  ]
+}
