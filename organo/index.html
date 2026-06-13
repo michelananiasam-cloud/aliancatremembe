@@ -3014,7 +3014,7 @@ function importarJSONOrganograma(file) {
 }
 
 function carregarJSONDoRepositorio() {
-  fetch('data/organograma_model.json')
+  fetch('data/import/organo_model.json')
     .then(res => res.json())
     .then(json => {
       importarJSONDireto(json);
