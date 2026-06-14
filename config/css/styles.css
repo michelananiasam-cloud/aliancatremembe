@@ -272,3 +272,50 @@ body {
   z-index: 9999;
   white-space: nowrap;
 }
+
+/* =========================
+   ✅ EFEITOS RESTAURADOS
+========================= */
+
+.btn {
+  transition: all 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+.btn-outline:hover {
+  background: #f2f3f5;
+}
+
+/* LINK */
+.link {
+  transition: all 0.15s ease;
+}
+
+.link:hover {
+  background: #f2f3f5;
+}
+
+.link:active {
+  transform: scale(0.96);
+}
+
+/* INPUTS */
+input {
+  transition: 0.2s;
+}
+
+input:hover {
+  border-color: #666;
+}
+
+/* LOGO OTIMIZAÇÃO */
+.logo-hero {
+  will-change: transform;
+}
