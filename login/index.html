@@ -6,16 +6,16 @@
 
 <title>Carregando...</title>
 
-<!-- ✅ FAVICON DINÂMICO -->
+<!-- ✅ FAVICON -->
 <link id="app-favicon" rel="icon">
 
-<!-- ✅ BASE PATH (CRÍTICO PRO LOGIN FUNCIONAR) -->
+<!-- ✅ BASE PATH -->
 <script>
   window.BASE_PATH = "../";
 </script>
 
-<!-- ✅ CONFIG GLOBAL -->
-<script src="../config/js/config.js"></script>
+<!-- ✅ CONFIG -->
+<script src="../config/js/config.js" defer></script>
 
 <style>
 * {
@@ -78,8 +78,10 @@ body {
   cursor: pointer;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
   animation: float 3s ease-in-out infinite;
+  will-change: transform;
 }
 
+/* ANIMAÇÃO */
 @keyframes float {
   0% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
@@ -99,6 +101,11 @@ body {
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+
+.login-container:hover {
+  background: #f7f8fa;
 }
 
 h2 {
@@ -114,13 +121,20 @@ input {
   border-radius: 10px;
   border: 1px solid #dddfe2;
   font-size: 16px;
+  transition: 0.2s;
+}
+
+input:hover {
+  border-color: #666;
 }
 
 input:focus {
   border-color: #1877f2;
   outline: none;
+  box-shadow: 0 0 0 2px rgba(24,119,242,0.2);
 }
 
+/* BOTÕES */
 .btn {
   width: 100%;
   padding: 14px;
@@ -128,6 +142,11 @@ input:focus {
   font-size: 16px;
   cursor: pointer;
   border: none;
+  transition: all 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
 }
 
 .btn-primary {
@@ -136,14 +155,8 @@ input:focus {
   margin-bottom: 10px;
 }
 
-.link {
-  display: block;
-  text-align: center;
-  margin: 15px 0;
-  padding: 14px;
-  border-radius: 25px;
-  color: #1877f2;
-  text-decoration: none;
+.btn-primary:hover {
+  filter: brightness(0.95);
 }
 
 .btn-outline {
@@ -152,13 +165,38 @@ input:focus {
   background: transparent;
 }
 
+.btn-outline:hover {
+  background: #f2f3f5;
+}
+
+/* LINK */
+.link {
+  display: block;
+  text-align: center;
+  margin: 15px 0;
+  padding: 14px;
+  border-radius: 25px;
+  color: #1877f2;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.link:hover {
+  background: #f2f3f5;
+}
+
+.link:active {
+  transform: scale(0.96);
+}
+
+/* FOOTER */
 .footer {
   margin-top: 15px;
   font-size: 14px;
   text-align: center;
 }
 
-/* ✅ WATERMARK CONTROLADA PELO CONFIG */
+/* WATERMARK */
 .watermark {
   position: fixed;
   bottom: 10px;
@@ -191,12 +229,10 @@ input:focus {
 
 <body>
 
-<!-- ✅ WATERMARK -->
 <div id="watermark" class="watermark">EM DESENVOLVIMENTO</div>
 
 <div class="wrapper">
 
-  <!-- ESQUERDA -->
   <div class="left">
     <div class="content-left">
 
@@ -212,13 +248,11 @@ input:focus {
         </div>
       </div>
 
-      <!-- ✅ LOGO DINÂMICO -->
       <img id="logo-hero" class="logo-hero">
 
     </div>
   </div>
 
-  <!-- DIREITA -->
   <div class="right">
 
     <div class="login-wrapper">
@@ -242,11 +276,10 @@ input:focus {
 
       </div>
 
-      <!-- FOOTER -->
       <div class="footer">
         <p>
-          <strong id="brand-nome">...</strong> |
-          <span id="footer-projeto">...</span><br>
+          <strong id="brand-nome"></strong> |
+          <span id="footer-projeto"></span><br>
           <small id="footer-copy"></small>
         </p>
       </div>
@@ -265,16 +298,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const base = window.BASE_PATH || "../";
 
-  // ✅ TÍTULO
+  // ✅ título
   document.getElementById("login-title").textContent =
     "Entrar no " + cfg.nomeProjeto;
 
-  // ✅ LOGO HERO (FALTAVA ISSO)
+  // ✅ logo funcionando com cache bust
   const logo = document.getElementById("logo-hero");
-  logo.src = base + cfg.logo.replace('./', '');
-  logo.onclick = () => {
-    window.location.href = "../index.html";
-  };
+  if (logo) {
+    logo.src = base + cfg.logo.replace('./', '') + '?v=' + Date.now();
+
+    logo.onclick = () => {
+      window.location.href = "../index.html";
+    };
+  }
 
 });
 </script>
