@@ -3,75 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
 
-  <title>Carregando...</title>
-
-  <!-- ✅ Favicon dinâmico -->
-  <link id="app-favicon" rel="icon">
-
-  <!-- ✅ CSS CORRETO (CAMINHO RELATIVO) -->
-  <link rel="stylesheet" href="./config/css/styles.css">
+  ../config/css/styles.css
 </head>
 
 <body>
 
-<div class="container">
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;">
 
-  <!-- ===============================
-       HEADER
-  ================================== -->
-  <div class="header">
-    <img id="app-logo" alt="Logo">
-    <h1 id="nome-projeto">Carregando...</h1>
-  </div>
+  <div style="background:white;padding:30px;border-radius:12px;width:300px;">
+    <h2>Login</h2>
 
-  <!-- ===============================
-       GRID
-  ================================== -->
-  <div class="grid">
+    <input type="text" placeholder="Usuário" style="width:100%;margin-bottom:10px;">
+    <input type="password" placeholder="Senha" style="width:100%;margin-bottom:10px;">
 
-    <!-- CRONOGRAMA -->
-    <a href="./chronos/" class="card chronos">
-      <div class="card-icon">⏱️</div>
-      <div class="card-title">Programação</div>
-      <div class="card-description">
-        Gerencie a Programação de Evangelizações, Formações ou Eventos
-      </div>
-      <span class="card-button">Acessar →</span>
-    </a>
-
-    <!-- ORGANOGRAMA -->
-    <a href="./organo/" class="card organo">
-      <div class="card-icon">👥</div>
-      <div class="card-title">Equipes</div>
-      <div class="card-description">
-        Visualize e organize as equipes
-      </div>
-      <span class="card-button">Acessar →</span>
-    </a>
-
-  </div>
-
-  <!-- ===============================
-       FOOTER
-  ================================== -->
-  <div class="footer">
-    <p>
-      <strong id="brand-nome">Carregando...</strong> |
-      <span id="footer-projeto">...</span><br>
-      <small id="footer-copy"></small>
-    </p>
+    <button style="width:100%;">Entrar</button>
   </div>
 
 </div>
-
-<!-- ===============================
-     WATERMARK
-=================================== -->
-<div class="watermark">EM DESENVOLVIMENTO</div>
-
-<!-- ✅ JS CONFIG (CAMINHO RELATIVO CORRETO) -->
-<script src="./config/js/config.js"></script>
 
 </body>
 </html>
