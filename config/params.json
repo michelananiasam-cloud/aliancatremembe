@@ -6,7 +6,7 @@
 
   "logo": "./config/img/alianca_logo-header.png",
   "favicon": "./config/img/alianca_favicon.png",
-  "comment": "dev para ambiente em desenvimento e prd para ambiente em produção"
+  "comment": "dev para ambiente em desenvimento e prd para ambiente em produção",
   "env": "dev",
 
   "watermark": {
