@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EngajaKum</title>
+<title>Carregando...</title>
+
+<!-- ✅ FAVICON DINÂMICO -->
+<link id="app-favicon" rel="icon">
+
+<!-- ✅ CONFIG GLOBAL -->
+../config/js/config.js
 
 <style>
 * {
@@ -13,14 +19,7 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
-/* ✅ FLAG GLOBAL */
-:root {
-  --watermark-display: block; /* block = mostra | none = esconde */
-}
-  
-
-/* FUNDO */
+/* ✅ BACKGROUND */
 body {
   background: #f0f2f5;
   height: 100vh;
@@ -63,16 +62,15 @@ body {
   flex-direction: column;
 }
 
-/* AUTOR */
 .author {
   font-size: 22px;
-  color: #000;
   margin-top: 6px;
 }
 
-/* LOGO */
+/* ✅ LOGO DINÂMICO */
 .logo-hero {
   width: 250px;
+  cursor: pointer;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
   animation: float 3s ease-in-out infinite;
 }
@@ -96,21 +94,14 @@ body {
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  transition: background 0.2s;
 }
 
-.login-container:hover {
-  background: #f7f8fa;
-}
-
-/* TÍTULO */
 h2 {
   text-align: center;
   margin-bottom: 20px;
   color: #1877f2;
 }
 
-/* INPUT */
 input {
   width: 100%;
   padding: 14px;
@@ -118,21 +109,13 @@ input {
   border-radius: 10px;
   border: 1px solid #dddfe2;
   font-size: 16px;
-  transition: 0.2s;
-}
-
-/* hover escuro */
-input:hover {
-  border-color: #666;
 }
 
 input:focus {
   border-color: #1877f2;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(24,119,242,0.2);
 }
 
-/* BOTÕES */
 .btn {
   width: 100%;
   padding: 14px;
@@ -140,69 +123,43 @@ input:focus {
   font-size: 16px;
   cursor: pointer;
   border: none;
-  transition: all 0.15s ease;
 }
 
-.btn:active {
-  transform: scale(0.96);
-}
-
-/* PRINCIPAL */
 .btn-primary {
   background: linear-gradient(90deg, #1877f2, #166fe5);
   color: white;
   margin-bottom: 10px;
 }
 
-.btn-primary:hover {
-  filter: brightness(0.95);
+.link {
+  display: block;
+  text-align: center;
+  margin: 15px 0;
+  padding: 14px;
+  border-radius: 25px;
+  color: #1877f2;
+  text-decoration: none;
 }
 
-/* SECUNDÁRIO */
 .btn-outline {
   border: 1px solid #1877f2;
   color: #1877f2;
   background: transparent;
 }
 
-.btn-outline:hover {
-  background: #f2f3f5;
-}
-
-/* ✅ ESQUECEU SENHA (AGORA IGUAL AOS BOTÕES) */
-.link {
-  display: block;
-  text-align: center;
-  margin: 15px 0;
-
-  padding: 14px;
-  border-radius: 25px;
-
-  color: #1877f2;
-  text-decoration: none;
-
-  border: 1px solid transparent;
-
-  transition: all 0.15s ease;
-}
-
-.link:hover {
-  background: #f2f3f5;
-  border-color: #f2f3f5;
-}
-
-/* ✅ EFEITO DE CLIQUE (NOVO) */
-.link:active {
-  transform: scale(0.96);
-  background: #e4e6eb;
-}
-
-/* FOOTER */
 .footer {
   margin-top: 15px;
   font-size: 14px;
-  color: #606770;
   text-align: center;
+}
+
+/* ✅ WATERMARK */
+.watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 15px;
+  opacity: 0.2;
+  font-size: 12px;
 }
 
 /* MOBILE */
@@ -215,12 +172,6 @@ input:focus {
     width: 100%;
   }
 
-  .content-left {
-    flex-direction: column;
-    text-align: center;
-    transform: none;
-  }
-
   .text {
     font-size: 32px;
   }
@@ -228,24 +179,16 @@ input:focus {
   .logo-hero {
     width: 180px;
   }
-
-  .author {
-    font-size: 16px;
-  }
 }
 </style>
 </head>
 
-
 <body>
 
-<!-- ✅ MARCA D’ÁGUA (POSIÇÃO CORRETA) -->
-<div class="watermark">
-  EM DESENVOLVIMENTO
-</div>
+<!-- ✅ WATERMARK -->
+<div id="watermark" class="watermark">EM DESENVOLVIMENTO</div>
 
 <div class="wrapper">
-
 
   <!-- ESQUERDA -->
   <div class="left">
@@ -263,10 +206,8 @@ input:focus {
         </div>
       </div>
 
-      <img 
-        src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
-        class="logo-hero"
-      >
+      <!-- ✅ LOGO DINÂMICO + LINK PRA HOME -->
+      <img id="logo-hero" class="logo-hero">
 
     </div>
   </div>
@@ -278,7 +219,7 @@ input:focus {
 
       <div class="login-container">
 
-        <h2>Entrar no EngajaKum</h2>
+        <h2 id="login-title">Carregando...</h2>
 
         <form>
           <input type="email" placeholder="Email">
@@ -286,7 +227,7 @@ input:focus {
 
           <button class="btn btn-primary">Entrar</button>
 
-          <a href="#" class="link">Esqueceu a senha?</a>
+          #Esqueceu a senha?</a>
 
           <button type="button" class="btn btn-outline">
             Criar nova conta
@@ -295,18 +236,61 @@ input:focus {
 
       </div>
 
+      <!-- ✅ FOOTER DINÂMICO -->
       <div class="footer">
-     <p>
-      <strong>Aliança de Misericórdia</strong> | Movimento Tremembé<br>
-      <small>© 2026 • Desenvolvido com ❤️ por Michel Ananias</small>
-    </p>
+        <p>
+          <strong id="brand-nome">...</strong> |
+          <span id="footer-projeto">...</span><br>
+          <small id="footer-copy"></small>
+        </p>
       </div>
 
     </div>
 
   </div>
 
-  </div>
+</div>
+
+<script>
+/* ✅ AGUARDA CONFIG */
+document.addEventListener("DOMContentLoaded", () => {
+
+  if (!window.APP_CONFIG) return;
+
+  const cfg = window.APP_CONFIG;
+
+  // ✅ TITLE
+  document.title = cfg.nomeProjeto;
+
+  // ✅ LOGIN TITLE
+  document.getElementById("login-title").textContent =
+    "Entrar no " + cfg.nomeProjeto;
+
+  // ✅ LOGO + LINK HOME
+  const logo = document.getElementById("logo-hero");
+  logo.src = cfg.logo;
+
+  logo.onclick = () => {
+    window.location.href = "../index.html";
+  };
+
+  // ✅ FAVICON
+  document.getElementById("app-favicon").href = cfg.favicon;
+
+  // ✅ FOOTER
+  document.getElementById("brand-nome").textContent = cfg.brand;
+  document.getElementById("footer-projeto").textContent = cfg.nomeProjeto;
+  document.getElementById("footer-copy").textContent =
+    "© " + cfg.ano + " • Desenvolvido por " + cfg.autor;
+
+  // ✅ WATERMARK (DEV/PROD)
+  const watermark = document.getElementById("watermark");
+  if (cfg.env === "prod") {
+    watermark.style.display = "none";
+  }
+
+});
+</script>
 
 </body>
 </html>
