@@ -1,10 +1,16 @@
 {
-  "ano": "2026",
-  "autor": "Michel Ananias",
   "nomeProjeto": "Movimento Tremembé",
   "brand": "Aliança de Misericórdia",
+  "autor": "Michel Ananias",
+  "ano": "2026",
+
   "logo": "./config/img/alianca_logo-header.png",
   "favicon": "./config/img/alianca_favicon.png",
-  "env": "dev",
   "comment": "dev para ambiente em desenvimento e prd para ambiente em produção"
+  "env": "dev",
+
+  "watermark": {
+    "enabled": true,
+    "text": "EM DESENVOLVIMENTO"
+  }
 }
