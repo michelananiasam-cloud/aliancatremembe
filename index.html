@@ -6,68 +6,72 @@
 
   <title>Carregando...</title>
 
-  <!-- ✅ Favicon -->
+  <!-- ✅ Favicon dinâmico -->
   <link id="app-favicon" rel="icon">
 
-  <!-- ✅ CSS -->
-  .css">
+  <!-- ✅ CSS GLOBAL -->
+  <link rel="stylesheet" href="./config/css/styles.css">
 </head>
 
 <body>
 
 <!-- ===============================
-     NAVBAR (NOVO)
+     NAVBAR
 =================================== -->
 <header class="navbar">
+  
   <div class="nav-left">
-    <!-- LOGO CLICÁVEL -->
     <img id="app-logo" class="logo" alt="Logo">
-
     <span id="nome-projeto" class="project-name">Carregando...</span>
   </div>
 
   <nav class="nav-menu">
-    ./index.htmlHome</a>
-    ./chronos/>
-    ./organo/
+    <a href="./index.html">Home</a>
+    <a href="./chronos/">Programação</a>
+    <a href="./organo/">Equipes</a>
   </nav>
 
   <div class="nav-right">
-    ./login/
+    <!-- ✅ LOGIN NA NAVBAR -->
+    <a href="./login/" class="btn-login">Login</a>
   </div>
+
 </header>
 
 <!-- ===============================
-     CONTEÚDO
+     CONTEÚDO PRINCIPAL (HOME)
 =================================== -->
 <main class="container">
 
+  <!-- BOAS VINDAS -->
   <section class="hero">
     <h1>Bem-vindo 👋</h1>
     <p id="descricao-projeto">
-      Sistema de gestão de eventos e equipes
+      Gerencie Programações e Equipes de forma simples
     </p>
   </section>
 
-  <!-- GRID -->
+  <!-- GRID PRINCIPAL -->
   <section class="grid">
 
     <!-- CRONOGRAMA -->
-    ./chronos/
+    <a href="./chronos/" class="card chronos">
       <div class="card-icon">⏱️</div>
       <div class="card-title">Programação</div>
       <div class="card-description">
-        Gerencie eventos, cronogramas e horários
+        Gerencie eventos, horários e atividades
       </div>
+      <span class="card-button">Acessar →</span>
     </a>
 
-    <!-- ORGANOGRAMA -->
-    ./organo/
+    <!-- EQUIPES -->
+    <a href="./organo/" class="card organo">
       <div class="card-icon">👥</div>
       <div class="card-title">Equipes</div>
       <div class="card-description">
-        Gerencie e visualize equipes
+        Organize e visualize equipes
       </div>
+      <span class="card-button">Acessar →</span>
     </a>
 
   </section>
@@ -85,11 +89,13 @@
   </p>
 </footer>
 
-<!-- WATERMARK -->
-<div class="watermark">EM DESENVOLVIMENTO</div>
+<!-- ===============================
+     WATERMARK (CONTROLADO POR CONFIG)
+=================================== -->
+<div id="watermark" class="watermark">EM DESENVOLVIMENTO</div>
 
-<!-- ✅ CONFIG -->
-/config.js"></script>
+<!-- ✅ CONFIG GLOBAL -->
+<script src="./config/js/config.js"></script>
 
 </body>
 </html>
