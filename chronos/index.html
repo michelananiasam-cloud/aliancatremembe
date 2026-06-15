@@ -11,7 +11,12 @@
 /* ===============================
    STATUS DAS ATIVIDADES
 ================================*/
-
+/* 🟡 FUTURO DIA NÃO ATUAL */
+.item.futuro-data {
+  border-left: 5px solid transparent;
+  background: transparent;
+}
+	
 /* 🟡 FUTURO */
 .item.futuro {
   border-left: 5px solid #ffc107;
@@ -898,13 +903,27 @@ function getStatusAtividade(data, inicio, fim) {
 
   const hoje = new Date().toISOString().split("T")[0];
 
-  // ✅ NÃO É HOJE → TRATA COMO ENCERRADO (não interage mais)
-  if (data !== hoje) return "encerrado";
-
   const agora = new Date().getTime();
   const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
   const fimDate = new Date(`${data}T${fim}:00`).getTime();
 
+  // ✅ DIA FUTURO (outro dia)
+  if (data > hoje) {
+    return "futuro-data";
+  }
+
+  // ✅ DIA PASSADO
+  if (data < hoje) {
+    return "encerrado";
+  }
+
+  // ✅ HOJE (dinâmico)
+  if (agora < inicioDate) return "futuro";
+  if (agora >= inicioDate && agora <= fimDate) return "ativo";
+  return "encerrado";
+}
+
+  // ✅ HOJE (lógica dinâmica)
   if (agora < inicioDate) return "futuro";
   if (agora >= inicioDate && agora <= fimDate) return "ativo";
   return "encerrado";
