@@ -1212,239 +1212,123 @@ function getProgresso(data, inicio, fim){
   return Math.floor(((agora - i) / (f - i)) * 100);
 }
 
-function renderizarLista() {
+atividadesDoDia.forEach(p => {
 
-  const listaDiv = document.getElementById("lista");
-  listaDiv.innerHTML = "";
+  const idxReal = lista.indexOf(p);
 
-  const lista = ordenarLista(carregarLista());
+  const status = getStatusAtividade(p.data, p.inicio, p.fim);
+  const isProxima = (idxReal === proximaIndex);
 
-  const agoraGlobal = Date.now();
+  const agora = agoraGlobal;
 
-  const proximaIndex = marcarProximaAtividade(lista);
+  // ===================================
+  // ALERTA VISUAL (warning / danger)
+  // ===================================
+  let classeExtra = "";
 
-  const grupos = {};
+  if (status === "em-andamento") {
 
-  lista.forEach(p => {
-    if (!grupos[p.data]) grupos[p.data] = [];
-    grupos[p.data].push(p);
+    const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+    const minutos = Math.floor((fimDate - agora) / (1000 * 60));
+
+    if (minutos <= 5) {
+      classeExtra = "danger";
+    } else if (minutos <= 10) {
+      classeExtra = "warning";
+    }
+  }
+
+  // ===================================
+  // BARRA DE PROGRESSO
+  // ===================================
+  let progressContainer = null;
+
+  if (status === "em-andamento") {
+
+    const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+    const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+    const minutos = Math.floor((fimDate - agora) / (1000 * 60));
+
+    let classeBarra = "ativo";
+
+    if (minutos <= 5) {
+      classeBarra = "danger";
+    } else if (minutos <= 10) {
+      classeBarra = "warning";
+    }
+
+    const bar = el("div", {
+      className: `progress-bar ${classeBarra}`,
+      style: `width:${progresso}%`
+    });
+
+    progressContainer = el(
+      "div",
+      { className: "progress-container" },
+      bar
+    );
+  }
+
+  // ===================================
+  // CLASSES DO ITEM (CORRETO)
+  // ===================================
+  const classes = [
+    "item",
+    status
+  ];
+
+  if (classeExtra) classes.push(classeExtra);
+  if (isProxima) classes.push("proxima");
+
+  const li = el("li", {
+    className: classes.join(" ")
   });
 
-  const datasOrdenadas = Object.keys(grupos).sort();
+  li.dataset.data = p.data;
+  li.dataset.inicio = p.inicio;
+  li.dataset.fim = p.fim;
 
-  datasOrdenadas.forEach(data => {
+  // ===================================
+  // TEXTO
+  // ===================================
+  const info = buildInfo(p);
 
-    const atividadesDoDia = grupos[data];
+  const divInfo = el("div", {
+    className: "item-info",
+    "data-base": info
+  }, isProxima ? `⏳ ${info}` : info);
 
-    const containerDia = el("section", {
-      className: "pagina-detalhe"
-    });
+  // ===================================
+  // BOTÕES
+  // ===================================
+  const bEdit = el("button", { className: "edit" }, "Editar");
+  bEdit.addEventListener("click", () => editarAtividade(idxReal));
 
-    const dataBr = data.split("-").reverse().join("/");
-    const diaSemana = diaDaSemanaPorData(data);
+  const bDelete = el("button", { className: "delete" }, "Excluir");
+  bDelete.addEventListener("click", () => excluirAtividade(idxReal));
 
-    const h2Titulo = el(
-      "h2",
-      { className: "print-only" },
-      getTituloCronograma()
-    );
+  const bClone = el("button", { className: "clone" }, "Clonar");
+  bClone.addEventListener("click", () => clonarAtividade(idxReal));
 
-    const hDia = el(
-      "h3",
-      {},
-      `${diaSemana} - ${dataBr}`
-    );
+  const divBtns = el("div", { className: "item-botoes" }, [
+    bEdit, bDelete, bClone
+  ]);
 
-    const logo = el("img", {
-      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-      className: "logo",
-      alt: "Logo da Aliança"
-    });
+  // ===================================
+  // MONTAGEM FINAL
+  // ===================================
+  li.appendChild(divInfo);
+  li.appendChild(divBtns);
 
-    containerDia.appendChild(logo);
-    containerDia.appendChild(h2Titulo);
-    containerDia.appendChild(hDia);
+  if (progressContainer) {
+    li.appendChild(progressContainer);
+  }
 
-    const ul = el("ul", {
-      className: "lista-atividades"
-    });
+  ul.appendChild(li);
 
-    atividadesDoDia.forEach(p => {
-
-      const idxReal = lista.indexOf(p);
-
-      const status = getStatusAtividade(
-        p.data,
-        p.inicio,
-        p.fim
-      );
-
-      const isProxima = (idxReal === proximaIndex);
-
-      let classeExtra = "";
-
-      // ===================================
-      // ALERTAS VISUAIS
-      // ===================================
-      if (status === "em-andamento") {
-
-        const fimDate = new Date(
-          `${p.data}T${p.fim}:00`
-        ).getTime();
-
-        const minutos = Math.floor(
-          (fimDate - agoraGlobal) / (1000 * 60)
-        );
-
-        if (minutos <= 5) {
-          classeExtra = "danger";
-        }
-        else if (minutos <= 10) {
-          classeExtra = "warning";
-        }
-      }
-
-      // ===================================
-      // BARRA DE PROGRESSO
-      // ===================================
-      let progressContainer = null;
-
-      if (status === "em-andamento") {
-
-        const progresso = getProgresso(
-          p.data,
-          p.inicio,
-          p.fim
-        );
-
-        const fimDate = new Date(
-          `${p.data}T${p.fim}:00`
-        ).getTime();
-
-        const minutos = Math.floor(
-          (fimDate - agoraGlobal) / (1000 * 60)
-        );
-
-        let classeBarra = "ativo";
-
-        if (minutos <= 5) {
-          classeBarra = "danger";
-        }
-        else if (minutos <= 10) {
-          classeBarra = "warning";
-        }
-
-        const bar = el("div", {
-          className: `progress-bar ${classeBarra}`,
-          style: `width:${progresso}%`
-        });
-
-        progressContainer = el(
-          "div",
-          { className: "progress-container" },
-          bar
-        );
-      }
-
-let classeExtra = "";
-
-// 🔵 alerta de tempo restante (10 / 5 min)
-if (status === "em-andamento") {
-  const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-  const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
-
-  if (minutos <= 5) classeExtra = "danger";
-  else if (minutos <= 10) classeExtra = "warning";
-}
-
-// ===============================
-// 🔥 CLASSES DO ITEM (REFATORADO)
-// ===============================
-const classes = [
-  "item",
-  status
-];
-
-if (classeExtra) classes.push(classeExtra);
-if (isProxima) classes.push("proxima");
-
-const li = el("li", {
-  className: classes.join(" ")
 });
-
-// dados úteis (mantém como já estava)
-li.dataset.data = p.data;
-li.dataset.inicio = p.inicio;
-li.dataset.fim = p.fim;
-
-      const info = buildInfo(p);
-
-      const divInfo = el(
-        "div",
-        {
-          className: "item-info",
-          "data-base": info
-        },
-        isProxima ? `⏳ ${info}` : info
-      );
-
-      const bEdit = el(
-        "button",
-        { className: "edit" },
-        "Editar"
-      );
-
-      bEdit.addEventListener(
-        "click",
-        () => editarAtividade(idxReal)
-      );
-
-      const bDelete = el(
-        "button",
-        { className: "delete" },
-        "Excluir"
-      );
-
-      bDelete.addEventListener(
-        "click",
-        () => excluirAtividade(idxReal)
-      );
-
-      const bClone = el(
-        "button",
-        { className: "clone" },
-        "Clonar"
-      );
-
-      bClone.addEventListener(
-        "click",
-        () => clonarAtividade(idxReal)
-      );
-
-      const divBtns = el(
-        "div",
-        { className: "item-botoes" },
-        [bEdit, bDelete, bClone]
-      );
-
-      li.appendChild(divInfo);
-      li.appendChild(divBtns);
-
-      if (progressContainer) {
-        li.appendChild(progressContainer);
-      }
-
-      ul.appendChild(li);
-
-    });
-
-    containerDia.appendChild(ul);
-    listaDiv.appendChild(containerDia);
-
-  });
-
-}
-
+	
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
