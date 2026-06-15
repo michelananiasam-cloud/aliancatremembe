@@ -1105,7 +1105,7 @@ function renderizarLista() {
 
   let ativaAgora = null;
 
-  // ✅ agrupar por data
+  // agrupar por data
   const grupos = {};
 
   lista.forEach(p => {
@@ -1115,48 +1115,48 @@ function renderizarLista() {
     grupos[p.data].push(p);
   });
 
-  // ✅ ordenar datas
   const datasOrdenadas = Object.keys(grupos).sort();
 
   datasOrdenadas.forEach(data => {
 
     const atividadesDoDia = grupos[data];
 
-    const containerDia = el("section", { className:"pagina-detalhe" });
+    const containerDia = el("section", { className: "pagina-detalhe" });
 
     const dataBr = data.split("-").reverse().join("/");
     const diaSemana = diaDaSemanaPorData(data);
 
     const titulo = `${diaSemana} - ${dataBr}`;
 
-	const logo = el("img", { src:"https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png", className:"logo", alt:"Logo da Aliança" });
+    const logo = el("img", {
+      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+      className: "logo",
+      alt: "Logo da Aliança"
+    });
 
-    const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloCronograma());
     const hDia = el("h3", {}, titulo);
 
     containerDia.appendChild(logo);
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
-    const ul = el("ul", { className:"lista-atividades" });
+    const ul = el("ul", { className: "lista-atividades" });
 
     atividadesDoDia.forEach(p => {
 
-	  const info = buildInfo(p);
+      const info = buildInfo(p);
       const timer = getTempoRestante(p.data, p.inicio, p.fim);
-      
-	  const idxReal = lista.indexOf(p);
 
-      //const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
-      //bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
+      const idxReal = lista.indexOf(p);
 
-      const bEdit = el("button", { className:"edit" }, "Editar");
+      const bEdit = el("button", { className: "edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
 
-      const bDelete = el("button", { className:"delete" }, "Excluir");
+      const bDelete = el("button", { className: "delete" }, "Excluir");
       bDelete.addEventListener("click", () => excluirAtividade(idxReal));
 
-      const bClone = el("button", { className:"clone" }, "Clonar");
+      const bClone = el("button", { className: "clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
 
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
@@ -1176,7 +1176,10 @@ function renderizarLista() {
         ativaAgora = info.split("•")[0];
       }
 
-      let progress = null;
+      // =========================
+      // PROGRESSO
+      // =========================
+      let progressEl = null;
 
       if (status === "ativo") {
         const progresso = getProgresso(p.data, p.inicio, p.fim);
@@ -1186,49 +1189,43 @@ function renderizarLista() {
           style: `width:${progresso}%`
         });
 
-        progress = el("div", {
+        progressEl = el("div", {
           className: "progress-container"
         }, progressBar);
       }
 
-      const li = el("li", { className: `item ${status} ${classeExtra}` }, [
-        el("div", { className:"item-info" }, [
-  		el("div", {}, info),
-  		timer
-    	? el("div", { className:"timer-info" }, `• ${timer}`)
-    	: null
-		]),
-        const infoText = el("div", { className: "info-text" }, info);
+      // =========================
+      // BLOCO INFO (ORDEM LIMPA)
+      // =========================
+      const infoText = el("div", { className: "info-text" }, info);
 
-const timerEl = timer
-  ? el("div", { className: "timer-info" }, `• ${timer}`)
-  : null;
+      const timerEl = timer
+        ? el("div", { className: "timer-info" }, `• ${timer}`)
+        : null;
 
-// barra de progresso (quando ativo)
-const progressEl = progress || null;
+      const itemInfo = el("div", { className: "item-info" }, [
+        infoText,
+        timerEl,
+        progressEl
+      ]);
 
-const itemInfo = el("div", { className: "item-info" }, [
-  infoText,
-  timerEl,
-  progressEl
-]);
+      // =========================
+      // AÇÕES
+      // =========================
+      const actions = el("div", { className: "item-botoes" }, [
+        bEdit,
+        bDelete,
+        bClone
+      ]);
 
-const actions = el("div", { className: "item-botoes" }, [
-  bEdit,
-  bDelete,
-  bClone
-]);
-
-const li = el(
-  "li",
-  { className: `item ${status} ${classeExtra}` },
-  [itemInfo, actions]
-);
-
-ul.appendChild(li);
-        //el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
-        el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone])
-	  ]);
+      // =========================
+      // LI FINAL
+      // =========================
+      const li = el(
+        "li",
+        { className: `item ${status} ${classeExtra}` },
+        [itemInfo, actions]
+      );
 
       ul.appendChild(li);
     });
