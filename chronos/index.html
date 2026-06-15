@@ -923,11 +923,6 @@ function getStatusAtividade(data, inicio, fim) {
   return "encerrado";
 }
 
-  // ✅ HOJE (lógica dinâmica)
-  if (agora < inicioDate) return "futuro";
-  if (agora >= inicioDate && agora <= fimDate) return "ativo";
-  return "encerrado";
-}
 	
 function dataHoje(){
   const d = new Date();
@@ -1092,11 +1087,11 @@ function renderizarLista() {
 
     const containerDia = el("section", { className:"pagina-detalhe", "data-dia":dia });
 
-    const logo = el("img", {
-      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-      className:"logo",
-      alt:"Logo da Aliança"
-    });
+const logo = el("img", {
+  src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+  className: "logo",
+  alt: "Logo da Aliança"
+});
 
     const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
 
