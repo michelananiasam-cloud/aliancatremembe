@@ -1,8 +1,20 @@
 /* ========================================
-   UTIL
+   GLOBAL VERSION
 ======================================== */
-function noCache(url) {
-  return url + "?v=" + Date.now();
+let APP_VERSION = "dev";
+
+/* ========================================
+   UTIL (VERSIONAMENTO)
+======================================== */
+function versionedUrl(url, type = "static") {
+
+  // ✅ JSON sempre força atualização
+  if (type === "config") {
+    return url + "?v=" + Date.now();
+  }
+
+  // ✅ usa versão do sistema
+  return url + "?v=" + APP_VERSION;
 }
 
 /* ========================================
@@ -17,10 +29,8 @@ function getBasePath() {
 ======================================== */
 function aplicarConfigGeral(cfg, base) {
 
-  // ✅ TITLE
   document.title = cfg.nomeProjeto;
 
-  // ✅ TEXTOS GLOBAIS
   const nomeProjeto = document.getElementById("nome-projeto");
   const brand = document.getElementById("brand-nome");
   const footerProjeto = document.getElementById("footer-projeto");
@@ -35,20 +45,19 @@ function aplicarConfigGeral(cfg, base) {
       `© ${cfg.ano} • Desenvolvido com ❤️ por ${cfg.autor}`;
   }
 
-  // ✅ LOGO HEADER (HOME)
+  // ✅ LOGO HEADER
   const appLogo = document.getElementById("app-logo");
   if (appLogo) {
-    appLogo.src = noCache(base + cfg.logo.replace("./", ""));
+    appLogo.src = versionedUrl(base + cfg.logo.replace("./", ""));
     appLogo.alt = cfg.nomeProjeto;
   }
 
   // ✅ FAVICON
   const favicon = document.getElementById("app-favicon");
   if (favicon) {
-    favicon.href = noCache(base + cfg.favicon.replace("./", ""));
+    favicon.href = versionedUrl(base + cfg.favicon.replace("./", ""));
   }
 
-  // ✅ WATERMARK
   aplicarWatermark(cfg);
 }
 
@@ -62,13 +71,11 @@ function aplicarWatermark(cfg) {
 
   const env = (cfg.env || "").toLowerCase();
 
-  // ✅ TEXTO
   const text =
     (cfg.watermark.texts && cfg.watermark.texts[env]) || "";
 
   watermark.textContent = text;
 
-  // ✅ VISIBILIDADE
   if (!cfg.watermark.enabled || !text) {
     watermark.style.display = "none";
     return;
@@ -76,7 +83,6 @@ function aplicarWatermark(cfg) {
 
   watermark.style.display = "flex";
 
-  // ✅ ESTILOS DINÂMICOS (opcional)
   if (cfg.watermark.styles && cfg.watermark.styles[env]) {
     const styles = cfg.watermark.styles[env];
 
@@ -96,21 +102,35 @@ function aplicarWatermark(cfg) {
 ======================================== */
 function aplicarLogin(cfg, base) {
 
-  // ✅ TÍTULO LOGIN (novo modelo com span)
   const loginNome = document.getElementById("login-nome");
   if (loginNome) {
     loginNome.textContent = cfg.nomeProjeto;
   }
 
-  // ✅ LOGO HERO
   const logoHero = document.getElementById("logo-hero");
   if (logoHero) {
-    logoHero.src = noCache(base + cfg.logo.replace("./", ""));
+    logoHero.src = versionedUrl(base + cfg.logo.replace("./", ""));
 
     logoHero.onclick = () => {
       window.location.href = base + "index.html";
     };
   }
+}
+
+/* ========================================
+   FETCH CONFIG (SEM CACHE)
+======================================== */
+function fetchConfig(base) {
+
+  return fetch(versionedUrl(base + "config/params.json", "config"), {
+    cache: "no-store"
+  })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("HTTP " + res.status);
+      }
+      return res.json();
+    });
 }
 
 /* ========================================
@@ -120,22 +140,49 @@ function carregarConfig() {
 
   const base = getBasePath();
 
-  fetch(noCache(base + "config/params.json"))
-    .then((res) => res.json())
-    .then((cfg) => {
+  fetchConfig(base)
+    .then(cfg => {
 
-      // ✅ GLOBAL ACCESS
+      // ✅ atualiza versão
+      APP_VERSION = cfg.version || APP_VERSION;
+
+      // ✅ salva cache local
+      localStorage.setItem("APP_CONFIG_CACHE", JSON.stringify(cfg));
+
+      // ✅ global
       window.APP_CONFIG = cfg;
 
-      // ✅ APPLY CONFIG
       aplicarConfigGeral(cfg, base);
       aplicarLogin(cfg, base);
 
-      console.log("✅ Configuração aplicadas com sucesso");
+      console.log("✅ Config ONLINE");
+      console.log("📦 Versão:", APP_VERSION);
+      console.log("🌎 Ambiente:", cfg.env);
 
     })
-    .catch((err) => {
-      console.error("❌ Erro config:", err);
+    .catch(err => {
+
+      console.warn("⚠️ Falha no fetch, usando cache local");
+
+      const cached = localStorage.getItem("APP_CONFIG_CACHE");
+
+      if (cached) {
+        const cfg = JSON.parse(cached);
+
+        APP_VERSION = cfg.version || APP_VERSION;
+
+        window.APP_CONFIG = cfg;
+
+        aplicarConfigGeral(cfg, base);
+        aplicarLogin(cfg, base);
+
+        console.log("✅ Config CACHE LOCAL");
+        console.log("📦 Versão:", APP_VERSION);
+        console.log("🌎 Ambiente:", cfg.env);
+
+      } else {
+        console.error("❌ Nenhum config disponível", err);
+      }
     });
 }
 
