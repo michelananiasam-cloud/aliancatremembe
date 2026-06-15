@@ -401,14 +401,20 @@ button.edit{
   gap: var(--space-3);
 }
 
-@media(max-width:520px){
-  .lista-atividades li{
-	flex-direction:column;
-	align-items:stretch;
-  }
+/* Desktop */
+@media (min-width: 768px){
+
   .item-botoes{
-	justify-content:flex-start;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease;
   }
+
+  .lista-atividades li:hover .item-botoes{
+    opacity: 1;
+    visibility: visible;
+  }
+
 }
 
 /* ===============================
