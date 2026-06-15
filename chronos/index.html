@@ -8,18 +8,29 @@
 
 <style>
 
+/* ===============================
+   STATUS DAS ATIVIDADES
+================================*/
+
+/* 🟡 FUTURO (A VENCER) */
+.item.futuro {
+  border-left: 5px solid #ffc107;
+  background: rgba(255,193,7,0.12);
+}
+
+/* 🔵 ATIVO (EM ANDAMENTO) */
 .item.ativo {
   border-left: 5px solid #2d6cdf;
   background: rgba(45,108,223,0.08);
 }
 
+/* ✅ ENCERRADO */
 .item.encerrado {
-  opacity: 0.5;
+  border-left: 5px solid #28a745;
+  background: rgba(40,167,69,0.10);
+  opacity: 0.7;
 }
 
-.item.futuro {
-  opacity: 0.9;
-}	
 /* ===============================
    BOTÃO VOLTAR
 ================================*/
