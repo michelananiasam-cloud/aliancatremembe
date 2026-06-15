@@ -839,21 +839,35 @@ function carregarLista(){
   }
 }
 
-function ordenarLista(lista){
-  lista.sort((a,b)=>{
-    const iA = dias.indexOf(a.dia);
-    const iB = dias.indexOf(b.dia);
-    if(iA !== iB) return iA - iB;
+//function ordenarLista(lista){
+//  lista.sort((a,b)=>{
+//    const iA = dias.indexOf(a.dia);
+//    const iB = dias.indexOf(b.dia);
+//    if(iA !== iB) return iA - iB;
 
-    const [hA, mA] = a.inicio.split(":").map(Number);
-    const [hB, mB] = b.inicio.split(":").map(Number);
-    return (hA*60 + mA) - (hB*60 + mB);
+//    const [hA, mA] = a.inicio.split(":").map(Number);
+//    const [hB, mB] = b.inicio.split(":").map(Number);
+//    return (hA*60 + mA) - (hB*60 + mB);
+//  });
+
+//  salvarLista(lista);
+//  return lista;
+//}
+
+function ordenarLista(lista){
+
+  lista.sort((a,b)=>{
+
+    // ✅ ordena pela DATA + HORA (timestamp)
+    const dateA = new Date(`${a.data}T${a.inicio}:00`).getTime();
+    const dateB = new Date(`${b.data}T${b.inicio}:00`).getTime();
+
+    return dateA - dateB;
   });
 
   salvarLista(lista);
   return lista;
 }
-
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
 
