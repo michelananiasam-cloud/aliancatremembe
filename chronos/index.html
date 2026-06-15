@@ -388,11 +388,24 @@ button.edit{
 }
 
 .item-info{
-  text-align:left;
-  flex:1 1 auto;
-  font-size:1rem;
-  line-height:1.35;
-  word-break:break-word;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.info-text{
+  line-height:1.3;
+}
+
+.timer-info{
+  font-size:0.85rem;
+  color: var(--muted);
+}
+
+.progress-container{
+  width: 140px;
+  height: 2px;
+  margin-top: 2px;
 }
 
 .item-botoes{
@@ -1185,7 +1198,34 @@ function renderizarLista() {
     	? el("div", { className:"timer-info" }, `• ${timer}`)
     	: null
 		]),
-        progress || "",
+        const infoText = el("div", { className: "info-text" }, info);
+
+const timerEl = timer
+  ? el("div", { className: "timer-info" }, `• ${timer}`)
+  : null;
+
+// barra de progresso (quando ativo)
+const progressEl = progress || null;
+
+const itemInfo = el("div", { className: "item-info" }, [
+  infoText,
+  timerEl,
+  progressEl
+]);
+
+const actions = el("div", { className: "item-botoes" }, [
+  bEdit,
+  bDelete,
+  bClone
+]);
+
+const li = el(
+  "li",
+  { className: `item ${status} ${classeExtra}` },
+  [itemInfo, actions]
+);
+
+ul.appendChild(li);
         //el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
         el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone])
 	  ]);
