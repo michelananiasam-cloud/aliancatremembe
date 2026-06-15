@@ -967,21 +967,6 @@ function carregarLista(){
   }
 }
 
-//function ordenarLista(lista){
-//  lista.sort((a,b)=>{
-//    const iA = dias.indexOf(a.dia);
-//    const iB = dias.indexOf(b.dia);
-//    if(iA !== iB) return iA - iB;
-
-//    const [hA, mA] = a.inicio.split(":").map(Number);
-//    const [hB, mB] = b.inicio.split(":").map(Number);
-//    return (hA*60 + mA) - (hB*60 + mB);
-//  });
-
-//  salvarLista(lista);
-//  return lista;
-//}
-
 function ordenarLista(lista){
 
   lista.sort((a,b)=>{
@@ -1427,7 +1412,22 @@ function pararRender() {
     intervalRender = null;
   }
 }
+	
+function atualizarTimers() {
+  document.querySelectorAll(".item-info").forEach(el => {
+    const li = el.closest("li");
+    if (!li) return;
 
+    const data = li.dataset.data;
+    const inicio = li.dataset.inicio;
+    const fim = li.dataset.fim;
+
+    if (!data || !inicio || !fim) return;
+
+    el.textContent = buildInfo({ data, inicio, fim });
+  });
+}
+	
 // ✅ PAUSA AO IMPRIMIR
 window.addEventListener("beforeprint", () => {
   pararRender();
