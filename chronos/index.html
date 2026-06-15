@@ -1009,9 +1009,8 @@ function buildInfo(p){
 
   const duracao = getDuracao(p.inicio, p.fim);
 
-  // ✅ tempo total junto do horário
   let s = `[${p.inicio} – ${p.fim}`;
-  
+
   if (duracao) {
     s += ` (Total: ${duracao})`;
   }
@@ -1022,16 +1021,16 @@ function buildInfo(p){
   if (p.nome?.trim()) s += `: ${p.nome.trim()}`;
   if (p.servo?.trim()) s += ` (${p.servo.trim()})`;
 
-  // ✅ tempo dinâmico depois (se existir)
-  const timer = getTempoRestante(p.data, p.inicio, p.fim);
-
-  if (timer) {
-    s += ` • ${timer}`;
+  // ✅ NÃO MOSTRA TIMER NA IMPRESSÃO
+  if (!window.matchMedia('print').matches) {
+    const timer = getTempoRestante(p.data, p.inicio, p.fim);
+    if (timer) {
+      s += ` • ${timer}`;
+    }
   }
 
   return s;
 }
-
 
 function getProgresso(data, inicio, fim){
 
