@@ -25,22 +25,6 @@
   opacity: 1;
 }
 
-/*Bordas*/
-/* 🔵 normal */
-.item.em-andamento {
-  border-left: 5px solid #2d6cdf;
-}
-
-/* 🟡 alerta médio */
-.item.em-andamento.warning {
-  border-left: 5px solid #ffc107;
-}
-
-/* 🔴 crítico */
-.item.em-andamento.danger {
-  border-left: 5px solid #dc3545;
-}
-	
 /* 🔵 EM ANDAMENTO */
 .item.em-andamento {
   border-left: 5px solid #2d6cdf;
@@ -1212,97 +1196,216 @@ function getProgresso(data, inicio, fim){
   return Math.floor(((agora - i) / (f - i)) * 100);
 }
 
-  // ===================================
-  // BARRA DE PROGRESSO
-  // ===================================
-  let progressContainer = null;
+function renderizarLista() {
 
-  if (status === "em-andamento") {
+  const listaDiv = document.getElementById("lista");
+  listaDiv.innerHTML = "";
 
-    const progresso = getProgresso(p.data, p.inicio, p.fim);
+  const lista = ordenarLista(carregarLista());
 
-    const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-    const minutos = Math.floor((fimDate - agora) / (1000 * 60));
+  const agoraGlobal = Date.now();
 
-    let classeBarra = "ativo";
+  const proximaIndex = marcarProximaAtividade(lista);
 
-    if (minutos <= 5) {
-      classeBarra = "danger";
-    } else if (minutos <= 10) {
-      classeBarra = "warning";
-    }
+  const grupos = {};
 
-    const bar = el("div", {
-      className: `progress-bar ${classeBarra}`,
-      style: `width:${progresso}%`
-    });
-
-    progressContainer = el(
-      "div",
-      { className: "progress-container" },
-      bar
-    );
-  }
-
-  // ===================================
-  // CLASSES DO ITEM (CORRETO)
-  // ===================================
-  const classes = [
-    "item",
-    status
-  ];
-
-  if (classeExtra) classes.push(classeExtra);
-  if (isProxima) classes.push("proxima");
-
-  const li = el("li", {
-    className: classes.join(" ")
+  lista.forEach(p => {
+    if (!grupos[p.data]) grupos[p.data] = [];
+    grupos[p.data].push(p);
   });
 
-  li.dataset.data = p.data;
-  li.dataset.inicio = p.inicio;
-  li.dataset.fim = p.fim;
+  const datasOrdenadas = Object.keys(grupos).sort();
 
-  // ===================================
-  // TEXTO
-  // ===================================
-  const info = buildInfo(p);
+  datasOrdenadas.forEach(data => {
 
-  const divInfo = el("div", {
-    className: "item-info",
-    "data-base": info
-  }, isProxima ? `⏳ ${info}` : info);
+    const atividadesDoDia = grupos[data];
 
-  // ===================================
-  // BOTÕES
-  // ===================================
-  const bEdit = el("button", { className: "edit" }, "Editar");
-  bEdit.addEventListener("click", () => editarAtividade(idxReal));
+    const containerDia = el("section", {
+      className: "pagina-detalhe"
+    });
 
-  const bDelete = el("button", { className: "delete" }, "Excluir");
-  bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+    const dataBr = data.split("-").reverse().join("/");
+    const diaSemana = diaDaSemanaPorData(data);
 
-  const bClone = el("button", { className: "clone" }, "Clonar");
-  bClone.addEventListener("click", () => clonarAtividade(idxReal));
+    const h2Titulo = el(
+      "h2",
+      { className: "print-only" },
+      getTituloCronograma()
+    );
 
-  const divBtns = el("div", { className: "item-botoes" }, [
-    bEdit, bDelete, bClone
-  ]);
+    const hDia = el(
+      "h3",
+      {},
+      `${diaSemana} - ${dataBr}`
+    );
 
-  // ===================================
-  // MONTAGEM FINAL
-  // ===================================
-  li.appendChild(divInfo);
-  li.appendChild(divBtns);
+    const logo = el("img", {
+      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+      className: "logo",
+      alt: "Logo da Aliança"
+    });
 
-  if (progressContainer) {
-    li.appendChild(progressContainer);
-  }
+    containerDia.appendChild(logo);
+    containerDia.appendChild(h2Titulo);
+    containerDia.appendChild(hDia);
 
-  ul.appendChild(li);
+    const ul = el("ul", {
+      className: "lista-atividades"
+    });
 
-});
-	
+    atividadesDoDia.forEach(p => {
+
+      const idxReal = lista.indexOf(p);
+
+      const status = getStatusAtividade(
+        p.data,
+        p.inicio,
+        p.fim
+      );
+
+      const isProxima = (idxReal === proximaIndex);
+
+      let classeExtra = "";
+
+      // ===================================
+      // ALERTAS VISUAIS
+      // ===================================
+      if (status === "em-andamento") {
+
+        const fimDate = new Date(
+          `${p.data}T${p.fim}:00`
+        ).getTime();
+
+        const minutos = Math.floor(
+          (fimDate - agoraGlobal) / (1000 * 60)
+        );
+
+        if (minutos <= 5) {
+          classeExtra = "danger";
+        }
+        else if (minutos <= 10) {
+          classeExtra = "warning";
+        }
+      }
+
+      // ===================================
+      // BARRA DE PROGRESSO
+      // ===================================
+      let progressContainer = null;
+
+      if (status === "em-andamento") {
+
+        const progresso = getProgresso(
+          p.data,
+          p.inicio,
+          p.fim
+        );
+
+        const fimDate = new Date(
+          `${p.data}T${p.fim}:00`
+        ).getTime();
+
+        const minutos = Math.floor(
+          (fimDate - agoraGlobal) / (1000 * 60)
+        );
+
+        let classeBarra = "ativo";
+
+        if (minutos <= 5) {
+          classeBarra = "danger";
+        }
+        else if (minutos <= 10) {
+          classeBarra = "warning";
+        }
+
+        const bar = el("div", {
+          className: `progress-bar ${classeBarra}`,
+          style: `width:${progresso}%`
+        });
+
+        progressContainer = el(
+          "div",
+          { className: "progress-container" },
+          bar
+        );
+      }
+
+      const li = el("li", {
+        className: `item ${status} ${classeExtra} ${isProxima ? "proxima" : ""}`
+      });
+
+      li.dataset.data = p.data;
+      li.dataset.inicio = p.inicio;
+      li.dataset.fim = p.fim;
+
+      const info = buildInfo(p);
+
+      const divInfo = el(
+        "div",
+        {
+          className: "item-info",
+          "data-base": info
+        },
+        isProxima ? `⏳ ${info}` : info
+      );
+
+      const bEdit = el(
+        "button",
+        { className: "edit" },
+        "Editar"
+      );
+
+      bEdit.addEventListener(
+        "click",
+        () => editarAtividade(idxReal)
+      );
+
+      const bDelete = el(
+        "button",
+        { className: "delete" },
+        "Excluir"
+      );
+
+      bDelete.addEventListener(
+        "click",
+        () => excluirAtividade(idxReal)
+      );
+
+      const bClone = el(
+        "button",
+        { className: "clone" },
+        "Clonar"
+      );
+
+      bClone.addEventListener(
+        "click",
+        () => clonarAtividade(idxReal)
+      );
+
+      const divBtns = el(
+        "div",
+        { className: "item-botoes" },
+        [bEdit, bDelete, bClone]
+      );
+
+      li.appendChild(divInfo);
+      li.appendChild(divBtns);
+
+      if (progressContainer) {
+        li.appendChild(progressContainer);
+      }
+
+      ul.appendChild(li);
+
+    });
+
+    containerDia.appendChild(ul);
+    listaDiv.appendChild(containerDia);
+
+  });
+
+}
+
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
@@ -1548,86 +1651,15 @@ function iniciarLoops() {
   if (intervalGlobal) return;
 
   intervalGlobal = setInterval(() => {
-	  if (!isPrinting) {
-		  renderizarLista();
-		  const lista = carregarLista();
-		  checarAlertas(lista);
-  		}
-	}, 1000);
+    renderizarLista();
+  }, 1000);
+
 }
 	
 function setPrintMode(state) {
   isPrinting = state;
   document.body.classList.toggle("printing", state);
 }
-
-
-function mostrarPopup(mensagem) {
-
-  const toast = document.createElement("div");
-
-  toast.textContent = mensagem;
-
-  toast.style.position = "fixed";
-  toast.style.bottom = "90px";
-  toast.style.right = "20px";
-  toast.style.background = "#2d6cdf";
-  toast.style.color = "#fff";
-  toast.style.padding = "12px 16px";
-  toast.style.borderRadius = "8px";
-  toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
-  toast.style.zIndex = "99999";
-  toast.style.fontSize = "14px";
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.remove();
-  }, 5000);
-}	
-
-const alertasDisparados = {};
-
-function checarAlertas(lista) {
-
-  const agora = Date.now();
-
-  const alertas = [
-    { min: 80, texto: "1 hora e 20 minutos" },
-    { min: 60, texto: "1 hora" },
-    { min: 40, texto: "40 minutos" },
-    { min: 30, texto: "30 minutos" },	  
-    { min: 10, texto: "10 minutos" },
-    { min: 5, texto: "5 minutos" }
-  ];
-
-  lista.forEach(p => {
-
-    if (!p.data || !p.fim) return;
-
-    const fim = new Date(`${p.data}T${p.fim}:00`).getTime();
-
-    const chave = `${p.data}-${p.inicio}-${p.fim}`;
-
-    const minutos = Math.floor((fim - agora) / 60000);
-
-    if (!alertasDisparados[chave]) {
-      alertasDisparados[chave] = {};
-    }
-
-    alertas.forEach(a => {
-
-      if (minutos === a.min && !alertasDisparados[chave][a.min]) {
-
-        mostrarPopup(`⏳ Faltam ${a.texto}: ${p.nome}`);
-
-        alertasDisparados[chave][a.min] = true;
-      }
-
-    });
-
-  });
-}	
 	
 document.addEventListener("DOMContentLoaded", () => {
 
