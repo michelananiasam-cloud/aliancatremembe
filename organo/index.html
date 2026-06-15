@@ -2263,38 +2263,7 @@ function getUsablePagePx(){
   return usableMM * MM_TO_PX;
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-
-//     // Inicia toda a aplicação
-//     initApp();
-
-//     // Configura o botão +/-
-//     const btn = document.getElementById("toggle-form");
-//     const bloco = document.getElementById("form-bloco");
-
-//     if (btn && bloco) {
-//         // estado inicial
-//         bloco.classList.add("collapsed");
-//         btn.textContent = "+";
-
-//         // toggle
-//         btn.addEventListener("click", () => {
-//             const isOpen = bloco.classList.contains("expanded");
-
-//             if (isOpen) {
-//                 bloco.classList.remove("expanded");
-//                 bloco.classList.add("collapsed");
-//                 btn.textContent = "+";
-//             } else {
-//                 bloco.classList.remove("collapsed");
-//                 bloco.classList.add("expanded");
-//                 btn.textContent = "-";
-//             }
-//         });
-//     }
-
-// });
-
+/* ===============================
 document.addEventListener("DOMContentLoaded", () => {
 
   // 🔥 PRIMEIRO: inicializa tudo
@@ -2317,7 +2286,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("Falha ao carregar JSON:", err);
     });
 
-  // 🔥 VOLTA O TOGGLE (você tinha isso antes e comentou!)
+  // 🔥 VOLTA O TOGGLE
   const btn = document.getElementById("toggle-form");
   const bloco = document.getElementById("form-bloco");
 
@@ -2341,6 +2310,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  initApp();
+
+  // ✅ CARREGA AUTOMÁTICO PRIMEIRA OPÇÃO
+  fetch('import/option.json?v=' + Date.now())
+    .then(res => res.json())
+    .then(opcoes => {
+
+      const primeira = opcoes[0];
+
+      if (!primeira) return;
+
+      const caminho = "import/" + primeira.arquivo;
+
+      const temDados = localStorage.getItem("organograma_dados_v2");
+
+      if (!temDados) {
+        fetch(caminho)
+          .then(r => r.json())
+          .then(importarJSONDireto)
+          .catch(() => console.warn("Erro ao carregar JSON inicial"));
+      }
+
+    })
+    .catch(() => console.warn("Erro ao carregar option.json"));
+
+  // ✅ TOGGLE
+  const btn = document.getElementById("toggle-form");
+  const bloco = document.getElementById("form-bloco");
+
+  if (btn && bloco) {
+    bloco.classList.add("collapsed");
+    btn.textContent = "+";
+
+    btn.addEventListener("click", () => {
+      const isOpen = bloco.classList.contains("expanded");
+
+      if (isOpen) {
+        bloco.classList.remove("expanded");
+        bloco.classList.add("collapsed");
+        btn.textContent = "+";
+      } else {
+        bloco.classList.remove("collapsed");
+        bloco.classList.add("expanded");
+        btn.textContent = "-";
+      }
+    });
+  }
+
+});	
+	
 function getTeamStats(org){
     const stats = {
         interna: { equipes: 0, servos: 0 },
