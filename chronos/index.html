@@ -1536,6 +1536,16 @@ function zerarTudo(){
   }
 }
 
+function iniciarLoops() {
+
+  if (intervalGlobal) return;
+
+  intervalGlobal = setInterval(() => {
+    renderizarLista();
+  }, 1000);
+
+}
+	
 function setPrintMode(state) {
   isPrinting = state;
   document.body.classList.toggle("printing", state);
