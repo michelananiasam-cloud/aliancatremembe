@@ -2,7 +2,7 @@
    UTIL
 ======================================== */
 function noCache(url) {
-  return url + '?v=' + Date.now();
+  return url + "?v=" + Date.now();
 }
 
 /* ========================================
@@ -35,20 +35,20 @@ function aplicarConfigGeral(cfg, base) {
       `© ${cfg.ano} • Desenvolvido com ❤️ por ${cfg.autor}`;
   }
 
-  // ✅ LOGO HEADER
+  // ✅ LOGO HEADER (HOME)
   const appLogo = document.getElementById("app-logo");
   if (appLogo) {
-    appLogo.src = noCache(base + cfg.logo.replace('./', ''));
+    appLogo.src = noCache(base + cfg.logo.replace("./", ""));
     appLogo.alt = cfg.nomeProjeto;
   }
 
   // ✅ FAVICON
   const favicon = document.getElementById("app-favicon");
   if (favicon) {
-    favicon.href = noCache(base + cfg.favicon.replace('./', ''));
+    favicon.href = noCache(base + cfg.favicon.replace("./", ""));
   }
 
-  // ✅ WATERMARK COMPLETA
+  // ✅ WATERMARK
   aplicarWatermark(cfg);
 }
 
@@ -76,13 +76,14 @@ function aplicarWatermark(cfg) {
 
   watermark.style.display = "flex";
 
-  // ✅ ESTILO DINÂMICO (OPCIONAL)
+  // ✅ ESTILOS DINÂMICOS (opcional)
   if (cfg.watermark.styles && cfg.watermark.styles[env]) {
     const styles = cfg.watermark.styles[env];
 
     if (styles.color) watermark.style.color = styles.color;
     if (styles.opacity) watermark.style.opacity = styles.opacity;
     if (styles.fontSize) watermark.style.fontSize = styles.fontSize;
+
     if (styles.rotate) {
       watermark.style.transform =
         `translate(-50%, -50%) rotate(${styles.rotate})`;
@@ -91,18 +92,20 @@ function aplicarWatermark(cfg) {
 }
 
 /* ========================================
-   APPLY LOGIN (AUTOMÁTICO)
+   APPLY LOGIN
 ======================================== */
 function aplicarLogin(cfg, base) {
 
-  const loginTitle = document.getElementById("login-title");
-  if (loginTitle) {
-    loginTitle.textContent = "Entrar no " + cfg.nomeProjeto;
+  // ✅ TÍTULO LOGIN (novo modelo com span)
+  const loginNome = document.getElementById("login-nome");
+  if (loginNome) {
+    loginNome.textContent = cfg.nomeProjeto;
   }
 
+  // ✅ LOGO HERO
   const logoHero = document.getElementById("logo-hero");
   if (logoHero) {
-    logoHero.src = noCache(base + cfg.logo.replace('./', ''));
+    logoHero.src = noCache(base + cfg.logo.replace("./", ""));
 
     logoHero.onclick = () => {
       window.location.href = base + "index.html";
@@ -117,21 +120,23 @@ function carregarConfig() {
 
   const base = getBasePath();
 
-  fetch(noCache(base + 'config/params.json'))
-    .then(res => res.json())
-    .then(cfg => {
+  fetch(noCache(base + "config/params.json"))
+    .then((res) => res.json())
+    .then((cfg) => {
 
-      // ✅ GLOBAL
+      // ✅ GLOBAL ACCESS
       window.APP_CONFIG = cfg;
 
-      // ✅ APPLY
+      // ✅ APPLY CONFIG
       aplicarConfigGeral(cfg, base);
       aplicarLogin(cfg, base);
 
-      console.log("✅ Config aplicada com sucesso");
+      console.log("✅ Configuração aplicadas com sucesso");
 
     })
-    .catch(err => console.error("❌ Erro config:", err));
+    .catch((err) => {
+      console.error("❌ Erro config:", err);
+    });
 }
 
 /* ========================================
