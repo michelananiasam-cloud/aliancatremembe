@@ -1083,14 +1083,14 @@ function renderizarLista() {
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
 
       // ✅ DEFINE ATIVIDADE ATIVA GLOBAL
-      if (status === "ativo" && !ativaAgora) {
-        ativaAgora = p.inicio + "_" + (p.nome || "atividade");
-      }
+if (status === "ativo" && !ativaAgora) {
+  ativaAgora = buildInfo(p);
+}
 
       // ✅ PROGRESSO
 let progress = null;
 
-if (status !== "encerrado") {
+if (status === "ativo") {
 
   const progresso = getProgresso(p.data, p.inicio, p.fim);
 
@@ -1119,10 +1119,10 @@ if (status !== "encerrado") {
   // ===============================
   // 🔔 ALERTA (UMA VEZ SÓ)
   // ===============================
-  if (ativaAgora && atividadeAtual !== ativaAgora) {
-    atividadeAtual = ativaAgora;
-    alert("🔥 Nova atividade iniciada: " + ativaAgora);
-  }
+if (status === "ativo" && !ativaAgora) {
+  ativaAgora = buildInfo(p).split("•")[0];
+}
+
 }
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
