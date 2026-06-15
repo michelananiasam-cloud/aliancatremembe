@@ -40,13 +40,13 @@
 /* ⚠️ 10 MIN */
 .item.warning {
   border-left: 5px solid #ffc107;
-  animation: piscar-warning 1s infinite;
+  animation: piscar-warning 5s infinite;
 }
 
 /* 🚨 5 MIN */
 .item.danger {
   border-left: 5px solid #dc3545;
-  animation: piscar-danger 0.6s infinite;
+  animation: piscar-danger 2s infinite;
 }
 
 @keyframes piscar-warning {
@@ -967,21 +967,6 @@ function carregarLista(){
   }
 }
 
-//function ordenarLista(lista){
-//  lista.sort((a,b)=>{
-//    const iA = dias.indexOf(a.dia);
-//    const iB = dias.indexOf(b.dia);
-//    if(iA !== iB) return iA - iB;
-
-//    const [hA, mA] = a.inicio.split(":").map(Number);
-//    const [hB, mB] = b.inicio.split(":").map(Number);
-//    return (hA*60 + mA) - (hB*60 + mB);
-//  });
-
-//  salvarLista(lista);
-//  return lista;
-//}
-
 function ordenarLista(lista){
 
   lista.sort((a,b)=>{
@@ -1030,7 +1015,7 @@ function getDuracao(inicio, fim) {
 
   if (h > 0 && m > 0) return `${h}h ${m}m`;
   if (h > 0) return `${h}h`;
-  return `${m}m`;
+  return `${m}mim`;
 }
 
 function buildInfo(p){
@@ -1128,8 +1113,8 @@ function renderizarLista() {
       const info = buildInfo(p);
       const idxReal = lista.indexOf(p);
 
-      const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
-      bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
+      //const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
+      //bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
 
       const bEdit = el("button", { className:"edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
@@ -1175,8 +1160,9 @@ function renderizarLista() {
       const li = el("li", { className: `item ${status} ${classeExtra}` }, [
         el("div", { className:"item-info" }, info),
         progress || "",
-        el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
-      ]);
+        //el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
+      	el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone])
+	  ]);
 
       ul.appendChild(li);
     });
@@ -1426,7 +1412,22 @@ function pararRender() {
     intervalRender = null;
   }
 }
+	
+function atualizarTimers() {
+  document.querySelectorAll(".item-info").forEach(el => {
+    const li = el.closest("li");
+    if (!li) return;
 
+    const data = li.dataset.data;
+    const inicio = li.dataset.inicio;
+    const fim = li.dataset.fim;
+
+    if (!data || !inicio || !fim) return;
+
+    el.textContent = buildInfo({ data, inicio, fim });
+  });
+}
+	
 // ✅ PAUSA AO IMPRIMIR
 window.addEventListener("beforeprint", () => {
   pararRender();
