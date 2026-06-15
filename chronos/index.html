@@ -11,44 +11,46 @@
 /* ===============================
    STATUS DAS ATIVIDADES
 ================================*/
-/* 🟡 FUTURO DIA NÃO ATUAL */
-.item.futuro-data {
-  border-left: 5px solid transparent;
-  background: transparent;
-}
-	
-/* 🟡 FUTURO */
-.item.futuro {
-  border-left: 5px solid #ffc107;
-  background: rgba(255,193,7,0.12);
-}
-
-/* 🔵 ATIVO */
-.item.ativo {
-  border-left: 5px solid #2d6cdf;
-  background: rgba(45,108,223,0.08);
-  box-shadow: 0 0 8px rgba(45,108,223,0.25); /* ou box-shadow: 0 0 12px rgba(45,108,223,0.4); ou box-shadow: 0 0 20px rgba(45,108,223,0.5) */
-}
-
-/* ✅ ENCERRADO */
+/* ❌ ENCERRADO (hoje + anteriores) */
 .item.encerrado {
   border-left: 5px solid #28a745;
   background: rgba(40,167,69,0.10);
   opacity: 0.7;
 }
 
-/* ⚠️ 10 MIN */
+/* 🟡 FUTURO (hoje e dias futuros igual, sem diferença) */
+.item.futuro {
+  border-left: 5px solid transparent;
+  background: transparent;
+  opacity: 1;
+}
+
+/* 🔵 EM ANDAMENTO */
+.item.em-andamento {
+  border-left: 5px solid #2d6cdf;
+  background: rgba(45,108,223,0.08);
+  box-shadow: 0 0 8px rgba(45,108,223,0.25);
+}
+
+/* 🌟 PRÓXIMA ATIVIDADE */
+.item.proxima {
+  border-left: 5px solid #ffc107;
+  background: rgba(255,193,7,0.18);
+  box-shadow: 0 0 12px rgba(255,193,7,0.35);
+  transform: scale(1.01);
+}
+
+/* ⚠️ alertas continuam opcionais */
 .item.warning {
   border-left: 5px solid #ffc107;
   animation: piscar-warning 5s infinite;
 }
 
-/* 🚨 5 MIN */
 .item.danger {
   border-left: 5px solid #dc3545;
   animation: piscar-danger 2s infinite;
 }
-
+	
 @keyframes piscar-warning {
   0%   { background: rgba(255,193,7,0.25); }
   50%  { background: rgba(255,193,7,0.05); }
@@ -66,9 +68,10 @@
 ================================*/
 
 .progress-container{
+ 
   display:block;
   width:100%;
-  flex:0 0 100%;
+  flex: 1 0 100%;
 
   height:6px;
   margin-top:6px;
@@ -379,6 +382,7 @@ button.edit{
 }
 
 .lista-atividades li{
+  flex-direction: column;
   display:flex;
   flex-wrap:wrap; /* permite a barra ir para outra linha */
 
@@ -903,18 +907,22 @@ function dois(n){ return n.toString().padStart(2,'0'); }
 
 function getTempoRestante(data, inicio, fim) {
 
-  if (!data || !fim) return "";
+  if (!data || !inicio || !fim) return "";
 
   const hoje = new Date().toISOString().split("T")[0];
 
-  // ✅ BLOQUEIA dias diferentes de hoje
+  // ❌ só calcula se for hoje
   if (data !== hoje) return "";
 
-  const agora = new Date().getTime();
-  const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
-  const fimDate = new Date(`${data}T${fim}:00`).getTime();
+  const agora = Date.now();
 
-  // 🟡 FUTURO
+  const inicioDate = parseDateTime(data, inicio);
+  const fimDate = parseDateTime(data, fim);
+
+  // 🔴 segurança: dados inválidos
+  if (!inicioDate || !fimDate) return "";
+
+  // 🟡 FUTURO (ainda não começou)
   if (agora < inicioDate) {
 
     const diff = inicioDate - agora;
@@ -928,7 +936,7 @@ function getTempoRestante(data, inicio, fim) {
     return `⏱️ Inicia em ${s}seg`;
   }
 
-  // 🔵 ATIVO
+  // 🔵 EM ANDAMENTO
   if (agora >= inicioDate && agora <= fimDate) {
 
     const diff = fimDate - agora;
@@ -946,28 +954,63 @@ function getTempoRestante(data, inicio, fim) {
   return `✅ Encerrado`;
 }
 
-	function getStatusAtividade(data, inicio, fim) {
+function isDataValida(data, hora) {
+  return !isNaN(new Date(`${data}T${hora}:00`).getTime());
+}
 
-  const hoje = new Date().toISOString().split("T")[0];
+function parseDateTime(data, hora) {
+  const t = new Date(`${data}T${hora}:00`).getTime();
+  return isNaN(t) ? null : t;
+}
+	
+function getStatusAtividade(data, inicio, fim) {
 
-  const agora = new Date().getTime();
-  const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
-  const fimDate = new Date(`${data}T${fim}:00`).getTime();
+  const inicioDate = parseDateTime(data, inicio);
+  const fimDate = parseDateTime(data, fim);
 
-  // 🔵 ATIVO (somente hoje)
-  if (agora >= inicioDate && agora <= fimDate) {
-    return "ativo";
+  // 🔴 segurança: dados inválidos
+  if (!inicioDate || !fimDate) {
+    return "futuro";
   }
 
-  // ✅ ENCERRADO (passado)
+  const agora = Date.now();
+
+  // 🔵 EM ANDAMENTO
+  if (agora >= inicioDate && agora <= fimDate) {
+    return "em-andamento";
+  }
+
+  // ❌ ENCERRADO
   if (agora > fimDate) {
     return "encerrado";
   }
 
-  // 🟡 TUDO QUE AINDA NÃO COMEÇOU = FUTURO
-  return "futuro-data";
+  // 🟡 FUTURO
+  return "futuro";
 }
 
+function marcarProximaAtividade(lista) {
+
+  const agora = Date.now();
+
+  let proximaIndex = -1;
+  let menorDiff = Infinity;
+
+  lista.forEach((p, i) => {
+
+    const inicio = parseDateTime(p.data, p.inicio);
+
+    // 🔴 ignora dados inválidos
+    if (!inicio) return;
+
+    if (inicio > agora && (inicio - agora) < menorDiff) {
+      menorDiff = inicio - agora;
+      proximaIndex = i;
+    }
+  });
+
+  return proximaIndex;
+}
 	
 function dataHoje(){
   const d = new Date();
@@ -999,13 +1042,17 @@ function carregarLista(){
   }
 }
 
-function ordenarLista(lista){
+function ordenarLista(lista) {
 
-  lista.sort((a,b)=>{
+  lista.sort((a, b) => {
 
-    // ✅ ordena pela DATA + HORA (timestamp)
-    const dateA = new Date(`${a.data}T${a.inicio}:00`).getTime();
-    const dateB = new Date(`${b.data}T${b.inicio}:00`).getTime();
+    const dateA = parseDateTime(a.data, a.inicio);
+    const dateB = parseDateTime(b.data, b.inicio);
+
+    // 🔴 fallback seguro (mantém itens inválidos no fim)
+    if (!dateA && !dateB) return 0;
+    if (!dateA) return 1;
+    if (!dateB) return -1;
 
     return dateA - dateB;
   });
@@ -1013,6 +1060,7 @@ function ordenarLista(lista){
   salvarLista(lista);
   return lista;
 }
+	
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
 
@@ -1083,12 +1131,16 @@ function getProgresso(data, inicio, fim){
 
   const hoje = new Date().toISOString().split("T")[0];
 
-  // ✅ NÃO É HOJE → NÃO TEM PROGRESSO
+  // ❌ não é hoje → sem progresso
   if (data !== hoje) return 0;
 
-  const agora = new Date().getTime();
-  const i = new Date(`${data}T${inicio}:00`).getTime();
-  const f = new Date(`${data}T${fim}:00`).getTime();
+  const agora = Date.now();
+
+  const i = parseDateTime(data, inicio);
+  const f = parseDateTime(data, fim);
+
+  // 🔴 segurança: dados inválidos
+  if (!i || !f) return 0;
 
   if (agora < i) return 0;
   if (agora > f) return 100;
@@ -1103,9 +1155,12 @@ function renderizarLista() {
 
   const lista = ordenarLista(carregarLista());
 
-  let ativaAgora = null;
+  const agoraGlobal = new Date().getTime();
 
-  // ✅ agrupar por data
+  // 🔥 define próxima atividade (fora do loop)
+  const proximaIndex = marcarProximaAtividade(lista);
+
+  // 🔹 agrupar por data
   const grupos = {};
 
   lista.forEach(p => {
@@ -1115,7 +1170,6 @@ function renderizarLista() {
     grupos[p.data].push(p);
   });
 
-  // ✅ ordenar datas
   const datasOrdenadas = Object.keys(grupos).sort();
 
   datasOrdenadas.forEach(data => {
@@ -1129,7 +1183,11 @@ function renderizarLista() {
 
     const titulo = `${diaSemana} - ${dataBr}`;
 
-	const logo = el("img", { src:"https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png", className:"logo", alt:"Logo da Aliança" });
+    const logo = el("img", {
+      src:"https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+      className:"logo",
+      alt:"Logo da Aliança"
+    });
 
     const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
     const hDia = el("h3", {}, titulo);
@@ -1142,12 +1200,42 @@ function renderizarLista() {
 
     atividadesDoDia.forEach(p => {
 
-      const info = buildInfo(p);
       const idxReal = lista.indexOf(p);
 
-      //const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
-      //bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
 
+      const isProxima = (idxReal === proximaIndex);
+
+      // 🔥 classes extras de alerta (mantém seu sistema atual)
+      let classeExtra = "";
+
+      if (status === "em-andamento") {
+
+        const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+        const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
+
+        if (minutos <= 5) classeExtra = "danger";
+        else if (minutos <= 10) classeExtra = "warning";
+      }
+
+      // 🔥 progresso (só em andamento)
+      let progress = null;
+
+      if (status === "em-andamento") {
+
+        const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+        const progressBar = el("div", {
+          className: `progress-bar ativo`,
+          style: `width:${progresso}%`
+        });
+
+        progress = el("div", {
+          className: "progress-container"
+        }, progressBar);
+      }
+
+      // 🔥 botão editar/excluir/clonar
       const bEdit = el("button", { className:"edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
 
@@ -1157,43 +1245,20 @@ function renderizarLista() {
       const bClone = el("button", { className:"clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
 
-      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+      // 🔥 TEXTO (com ampulheta só na próxima)
+      let info = buildInfo(p);
 
-      let classeExtra = "";
-
-      if (status === "ativo") {
-        const agora = new Date().getTime();
-        const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-        const minutos = Math.floor((fimDate - agora) / (1000 * 60));
-
-        if (minutos <= 5) classeExtra = "danger";
-        else if (minutos <= 10) classeExtra = "warning";
+      if (isProxima) {
+        info = `⏳ ${info}`;
       }
 
-      if (status === "ativo" && !ativaAgora) {
-        ativaAgora = info.split("•")[0];
-      }
-
-      let progress = null;
-
-      if (status === "ativo") {
-        const progresso = getProgresso(p.data, p.inicio, p.fim);
-
-        const progressBar = el("div", {
-          className: `progress-bar ${status}`,
-          style: `width:${progresso}%`
-        });
-
-        progress = el("div", {
-          className: "progress-container"
-        }, progressBar);
-      }
-
-const li = el("li", { className: `item ${status} ${classeExtra}` }, [
-  el("div", { className:"item-info" }, info),
-  el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone]),
-  progress || ""
-]);
+      const li = el("li", {
+        className: `item ${status} ${classeExtra} ${isProxima ? "proxima" : ""}`
+      }, [
+        el("div", { className:"item-info" }, info),
+        el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone]),
+        progress || ""
+      ]);
 
       ul.appendChild(li);
     });
