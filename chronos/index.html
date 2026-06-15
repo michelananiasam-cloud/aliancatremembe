@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cronograma Aliança</title>
-<link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png">
+<link rel="icon" type="image/png" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png">	
+
 
 <style>
 
@@ -836,11 +837,15 @@ function alterarEvangelizacao(e) {
 }
 
 function dois(n){ return n.toString().padStart(2,'0'); }
-function dois(n){ return n.toString().padStart(2,'0'); }
 
 function getTempoRestante(data, inicio, fim) {
 
   if (!data || !fim) return "";
+
+  const hoje = new Date().toISOString().split("T")[0];
+
+  // ✅ BLOQUEIA dias diferentes de hoje
+  if (data !== hoje) return "";
 
   const agora = new Date().getTime();
   const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
@@ -855,45 +860,27 @@ function getTempoRestante(data, inicio, fim) {
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
 
-    if (h > 0) {
-  return `⏱️ Inicia em ${h}h ${m}min ${s}seg`;
-}
-
-if (m > 0) {
-  return `⏱️ Inicia em ${m}min ${s}seg`;
-}
-
-return `⏱️ Inicia em ${s}seg`;
-
+    if (h > 0) return `⏱️ Inicia em ${h}h ${m}min ${s}seg`;
+    if (m > 0) return `⏱️ Inicia em ${m}min ${s}seg`;
+    return `⏱️ Inicia em ${s}seg`;
   }
 
-// 🔵 ATIVO
-else if (agora >= inicioDate && agora <= fimDate) {
+  // 🔵 ATIVO
+  if (agora >= inicioDate && agora <= fimDate) {
 
-  const diff = fimDate - agora;
+    const diff = fimDate - agora;
 
-  const h = Math.floor(diff / (1000 * 60 * 60));
-  const m = Math.floor((diff / (1000 * 60)) % 60);
-  const s = Math.floor((diff / 1000) % 60);
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
 
-  if (h > 0) {
-    return `🔥 ${h}h ${m}min ${s}seg restantes`;
+    if (h > 0) return `🔥 ${h}h ${m}min ${s}seg restantes`;
+    if (m > 0) return `🔥 ${m}min ${s}seg restantes`;
+    return `🔥 ${s}seg restantes`;
   }
-
-  if (m > 0) {
-    return `🔥 ${m}min ${s}seg restantes`;
-  }
-
-  return `🔥 ${s}seg restantes`;
-}
-
 
   // ✅ ENCERRADO
-  else {
-
-    return `✅ Encerrado`;
-
-  }
+  return `✅ Encerrado`;
 }
 
 	
