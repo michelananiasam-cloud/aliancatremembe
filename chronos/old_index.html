@@ -1,1 +1,1097 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cronograma Aliança</title>
+<link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/x-icon">
 
+<style>
+/* ===============================
+   BOTÃO VOLTAR
+================================*/
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f5f5f7;
+  color: #111;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+.btn-voltar:hover {
+  background: #2d6cdf;
+  color: #fff;
+  border-color: #2d6cdf;
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-voltar {
+    background: #141416;
+    color: #f1f1f1;
+    border-color: rgba(255,255,255,0.15);
+  }
+  .btn-voltar:hover {
+    background: #5a8dff;
+    color: #fff;
+  }
+}
+
+/* ===============================
+   VARIÁVEIS E TEMA
+================================*/
+:root{
+  /* ✅ FLAG watermark-display (Marca D'Água) */
+  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
+  --watermark-display: flex;	
+  --bg:#ffffff;
+  --text:#111;
+  --muted:#666;
+  --card:#f5f5f7;
+  --brand:#2d6cdf;
+  --warn:#ffc107;
+  --danger:#dc3545;
+  --radius:10px;
+  --space-1:0.25rem;
+  --space-2:0.5rem;
+  --space-3:0.75rem;
+  --space-4:1rem;
+  --space-5:1.25rem;
+  --space-6:1.5rem;
+  --space-8:2rem;
+  --font-base:16px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+	--bg:#0b0b0c;
+	--text:#f1f1f1;
+	--muted:#aaa;
+	--card:#141416;
+	--brand:#5a8dff;
+  }
+}
+
+/* ===============================
+   RESET E BASE
+================================*/
+*{ box-sizing:border-box; }
+html, body { min-height: 100%; height: auto; }
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: var(--font-base);
+  line-height:1.45;
+  color:var(--text);
+  background:var(--bg);
+  margin:0;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+h1,h2,h3{
+  margin:0 0 var(--space-4);
+  line-height:1.2;
+}
+h1{ font-size:1.6rem; font-weight:700; }
+h2{ font-size:1.25rem; font-weight:600; }
+h3{ font-size:1.1rem; color:var(--muted); font-weight:600; }
+
+.container{
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   CABEÇALHO DA WEB
+================================*/
+#web-header{
+  display:flex;
+  gap: var(--space-4);
+  align-items:center;
+  justify-content:center;
+  padding: var(--space-4) var(--space-4);
+  position: relative;
+  top:0;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  z-index: 5;
+}
+
+#web-header img{
+  width: 120px;
+  height:auto;
+}
+
+#web-header h1{
+  text-align:center;
+  margin:0;
+}
+
+/* ===============================
+   FORMULÁRIO SUPERIOR – CAMPOS BASE
+================================*/
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field label{
+  font-weight:600;
+  font-size:0.92rem;
+}
+
+input, select{
+  width:100%;
+  padding: 0.7rem 0.8rem;
+  border:1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: var(--bg);
+  color: var(--text);
+  border-radius:8px;
+  font-size:1rem;
+}
+
+input[type="time"]{
+  font-variant-numeric: tabular-nums;
+}
+
+/* Botão principal */
+button.add{
+  padding: 0.95rem 1.1rem;
+  background: var(--brand);
+  color: #fff;
+  font-weight:600;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:1rem;
+  width:100%;
+}
+@media (min-width:820px){
+  button.add{ width:auto; }
+}
+
+/* Demais botões */
+button.open,
+button.clone,
+button.delete,
+button.edit{
+  padding: 0.55rem 0.8rem;
+  font-size:0.9rem;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button.open, button.clone{
+  background: var(--brand);
+  color:#fff;
+}
+button.delete{
+  background: var(--danger);
+  color:#fff;
+}
+button.edit{
+  background: var(--warn);
+  color:#000;
+}
+
+/* ===============================
+   PATCH: SUPORTE às classes col-*
+================================*/
+/* GRID PRINCIPAL COM 12 COLUNAS */
+#menu-adicao{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap:16px;
+  padding: var(--space-6) var(--space-4);
+  margin: var(--space-6) auto;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+/* Faz o menu de adição ficar fixo no topo ao rolar */
+#menu-adicao {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  /* Fundo sólido para não mostrar conteúdo atrás */
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  backdrop-filter: blur(8px);
+
+  /* Linha de separação visual */
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+}
+
+/* MOBILE = campos ocupam a linha toda */
+#menu-adicao .col-2,
+#menu-adicao .col-3,
+#menu-adicao .col-4,
+#menu-adicao .col-6,
+#menu-adicao .col-8,
+#menu-adicao .col-12 {
+  grid-column: span 12;
+}
+
+/* TELAS MÉDIAS */
+@media (min-width:560px){
+  #menu-adicao .col-2{ grid-column: span 6; }
+  #menu-adicao .col-3{ grid-column: span 6; }
+  #menu-adicao .col-4{ grid-column: span 6; }
+  #menu-adicao .col-6{ grid-column: span 6; }
+  #menu-adicao .col-8{ grid-column: span 12; }
+  #menu-adicao .col-12{ grid-column: span 12; }
+}
+
+/* TELAS GRANDES */
+@media (min-width:900px){
+  #menu-adicao .col-2{ grid-column: span 2; }
+  #menu-adicao .col-3{ grid-column: span 3; }
+  #menu-adicao .col-4{ grid-column: span 4; }
+  #menu-adicao .col-6{ grid-column: span 6; }
+  #menu-adicao .col-8{ grid-column: span 8; }
+  #menu-adicao .col-12{ grid-column: span 12; }
+}
+
+/* ===============================
+   LISTA DE ATIVIDADES
+================================*/
+
+#scroll-spacer{
+  height: 120px;
+  pointer-events: none;
+}
+
+#lista{
+  display:block;
+  margin-top: var(--space-6);
+}
+
+.pagina-detalhe{
+  margin-bottom: var(--space-8);
+}
+
+.lista-atividades{
+  list-style:none;
+  margin:0;
+  padding:0;
+  border:1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius:var(--radius);
+  background:var(--bg);
+  overflow:hidden;
+}
+
+.lista-atividades li{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom:1px solid color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.lista-atividades li:last-child{
+  border-bottom:none;
+}
+
+.item-info{
+  text-align:left;
+  flex:1 1 auto;
+  font-size:1rem;
+  line-height:1.35;
+  word-break:break-word;
+}
+
+.item-botoes{
+  display:flex;
+  flex-wrap:wrap;
+  gap: var(--space-3);
+}
+
+@media(max-width:520px){
+  .lista-atividades li{
+	flex-direction:column;
+	align-items:stretch;
+  }
+  .item-botoes{
+	justify-content:flex-start;
+  }
+}
+
+/* ===============================
+   PRINT (IMPRIMIR)
+================================*/
+.print-only{ display:none; }
+.logo { display: none; }
+@media print {
+
+  .print-only{ display:block !important; }
+
+  #menu-adicao,
+  #web-header,
+  #menu-rodape,
+  .item-botoes,
+  button,
+  .add,
+  .open,
+  .edit,
+  .delete,
+  .clone,
+  .btn-voltar{
+	display:none !important;
+  }
+
+  html, body{
+	background:#fff !important;
+	color:#000 !important;
+	margin:0 !important;
+	padding:0 !important;
+  }
+
+  .pagina-detalhe{
+	page-break-before:always;
+	page-break-inside:avoid;
+	position:relative;
+	padding-top:150px !important;
+  }
+
+  .pagina-detalhe .logo{
+	display:block !important;
+	position:absolute !important;
+	top:0 !important;
+	left:0 !important;
+	width:100px !important;
+	height:auto !important;
+  }
+
+  .pagina-detalhe h2{
+	position:absolute !important;
+	top:32px !important;
+	left:0 !important;
+	right:0 !important;
+	text-align:center !important;
+	font-size:18px !important;
+	font-weight:700 !important;
+	margin:0 !important;
+  }
+
+  .pagina-detalhe h3{
+	margin-top:20px !important;
+  }
+
+  .lista-atividades{
+	border:none !important;
+	background:#fff !important;
+  }
+
+  .lista-atividades li{
+	border:none !important;
+	padding:4px 0 !important;
+  }
+
+  *{
+	-webkit-print-color-adjust:exact;
+	print-color-adjust:exact;
+	background:transparent !important;
+	box-shadow:none !important;
+  }
+}
+
+/* ===============================
+   MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
+================================*/
+#menu-rodape{
+  position: fixed;
+  inset: auto 0 0 0;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+  z-index: 1000;
+
+  -webkit-overflow-scrolling: touch;
+  contain: layout paint;
+}
+
+.menu-rodape-content{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+.field-inline{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+#menu-rodape label{
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#menu-rodape input{
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: var(--bg);
+  color: var(--text);
+  min-width: 140px;
+  max-width: 220px;
+  width: 100%;
+}
+
+.rodape-actions{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.btn_rodape,
+.sec-btn{
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  color: var(--text);
+}
+
+.sec-btn{
+  background: var(--danger);
+  color:#fff;
+}
+
+.btn_rodape{
+  background: var(--brand);
+  color:#fff;
+}
+
+@media (max-width: 720px){
+  .menu-rodape-content{
+	flex-wrap: wrap;
+	gap: 8px;
+  }
+  .field-inline{
+	flex: 1 1 100%;
+  }
+  .rodape-actions{
+	flex: 1 1 100%;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 6px;
+  }
+  #menu-rodape input{
+	max-width: 100%;
+  }
+}
+
+body{
+  padding-bottom: 200px !important;
+}
+	/* Inicio novo css */
+/* =========================================================
+   🔽 NOVO: CONTROLE DE EXPANDIR / RECOLHER MENU
+   (não altera layout original, só adiciona comportamento)
+========================================================= */
+
+/* 🔹 Garante que o botão possa ficar posicionado dentro do menu */
+#menu-adicao {
+  position: relative; /* NÃO remove o sticky, isso só permite o botão ficar no canto */
+}
+
+/* 🔹 Posiciona o botão + / - no canto superior direito */
+#toggle-menu-adicao {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 30;
+}
+
+/* 🔹 Quando o menu estiver FECHADO */
+#menu-adicao.collapsed {
+  height: 22px !important;      /* altura mínima visível */
+  max-height: 48px !important;  /* evita crescimento */
+  overflow: hidden !important;  /* esconde conteúdo */
+  padding-top: 12px !important; /* espaço para o botão */
+}
+
+/* 🔹 Esconde TODOS os elementos internos quando colapsado */
+#menu-adicao.collapsed > *:not(#toggle-menu-adicao) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important; /* impede clique */
+}
+
+/* 🔹 Mantém o botão sempre visível */
+#menu-adicao.collapsed #toggle-menu-adicao {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+	
+	/* fim novo css */
+
+.watermark {
+  display: var(--watermark-display);
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 999999;
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.06);
+  transform: rotate(-30deg);
+}
+@media print { .watermark { display:none!important; } }
+
+</style>
+
+</head>
+<body>
+<div class="container">
+
+	<div id="web-header" role="banner" aria-label="Topo">
+  	<a href="../" class="logo-link">
+    	<img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
+         	alt="Logo da Aliança">
+  	</a>
+  
+  	<h1 id="titulo-web">Cronograma Movimento Tremembé</h1>
+	</div>
+	
+
+  <div id="menu-adicao" aria-labelledby="titulo-form">
+	<button id="toggle-menu-adicao" class="toggle-form-btn">-</button>
+	<h2 id="titulo-form" class="sr-only" style="position:absolute;left:-9999px;">
+	  Adicionar atividade
+	</h2>
+
+	<div class="field col-2">
+	  <label for="data">Data</label>
+	  <input type="date" id="data" title="Selecione a data da atividade">
+	</div>
+	
+	<div class="field col-4">
+	  <label for="tipo">Tipo</label>
+	  <select id="tipo" title="Escolha o tipo da atividade">
+		<option value="" disabled selected>Selecione o Tipo..</option>
+		<option value="Introdução">Introdução</option>
+		<option value="Pregação">Pregação</option>
+		<option value="Oração">Oração</option>
+		<option value="Acolhida">Acolhida</option>
+		<option value="Animação">Animação</option>
+		<option value="Adoração">Adoração</option>
+		<option value="Dinâmica">Dinâmica</option>
+		<option value="Testemunho">Testemunho</option>
+		<option value="Santa Missa">Santa Missa</option>
+		<option value="Momento">Momento</option>
+		<option value="Historinha">Historinha</option>
+		<option value="Monólogo">Monólogo</option>
+		<option value="Efusão">Efusão</option>
+		<option value="Life House">Life House</option>
+		<option value="Pausa">Pausa</option>
+		<option value="Intervalo">Intervalo</option>
+		<option value="Almoço">Almoço</option>
+		<option value="Café">Café</option>
+		<option value="Jantar">Jantar</option>
+		<option value="Palestra">Palestra</option>
+		<option value="Partilha">Partilha</option>
+	  </select>
+	</div>
+   
+	<div class="field col-4">
+	  <label for="nome">Nome da Atividade</label>
+	  <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
+	</div>
+   
+	<div class="field col-6">
+	  <label for="servo">Servo</label>
+	  <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
+	</div>
+   
+	<div class="field col-2">
+	  <label for="inicio">Hora Início</label>
+	  <input type="time" id="inicio" title="Selecione a hora de início da atividade">
+	</div>
+   
+	<div class="field col-2">
+	  <label for="fim">Hora Fim</label>
+	  <input type="time" id="fim" title="Selecione a hora de término da atividade">
+	</div>
+   
+	<div class="field col-12" style="align-items:flex-start;">
+	  <button class="add" onclick="adicionarAtividade()" aria-label="Adicionar Atividade">
+		Adicionar Atividade
+	  </button>
+	</div>
+
+  </div>
+
+  <div id="lista" aria-live="polite"></div>
+
+<div id="menu-rodape" role="region" aria-label="Alterar evangelização (rodapé)">
+  <form class="menu-rodape-content" onsubmit="alterarEvangelizacao(event)">
+	
+	<div class="field-inline">
+	  <label for="evangelizacao">Evangelização</label>
+	  <input 
+		type="text" 
+		id="evangelizacao" 
+		placeholder="Nome da Evangelização" 
+		title="Digite o nome da Evangelização"
+	  >
+	</div>
+
+	<div class="rodape-actions">
+	  <button type="submit" class="btn_rodape brand">
+		Alterar Evangelização
+	  </button>
+
+	  <button id="btn-zerar-tudo" type="button" class="sec-btn danger">
+		Limpar
+	  </button>
+	  
+	  <button type="button" class="btn_rodape" onclick="exportarBackup()">
+	  Exportar
+	  </button>
+	  
+	  <button type="button" class="btn_rodape" onclick="document.getElementById('importar-arquivo').click()">
+	  Importar
+	  </button>
+	  
+	  <input 
+	  type="file" 
+	  id="importar-arquivo" 
+	  accept=".json,application/json,*/*"
+	  style="display:none" 
+	  onchange="handleImportFile(this.files[0])"
+	  />
+	</div>
+
+  </form>
+</div>
+
+<div id="scroll-spacer"></div>
+</div>
+
+<script>
+const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Life House", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
+const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
+const LIST_KEY  = "cronograma";
+const HIST_KEY  = "historicos";
+const EVANG_KEY = "evangelizacao";
+const EVANG_DEFAULT = "Movimento Tremembé";
+
+function diaDaSemanaPorData(dataString) {
+  const diasSemana = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+  const dataObj = new Date(dataString + "T00:00:00"); 
+  return diasSemana[dataObj.getDay()];
+}
+
+function getEvangelizacao() {
+  try {
+    const v = localStorage.getItem(EVANG_KEY);
+    return (v || "").trim() || EVANG_DEFAULT;
+  } catch {
+    return EVANG_DEFAULT;
+  }
+}
+function setEvangelizacao(valor) {
+  try {
+    localStorage.setItem(EVANG_KEY, (valor || "").trim());
+  } catch(e) {
+    console.error("Erro salvando evangelização", e);
+  }
+}
+function getTituloCronograma() {
+  return `Cronograma ${getEvangelizacao()}`;
+}
+function atualizarTitulos() {
+  const h1 = document.getElementById("titulo-web");
+  if (h1) h1.textContent = getTituloCronograma();
+  document.title = getTituloCronograma();
+}
+
+function alterarEvangelizacao(e) {
+  e?.preventDefault();
+  const input = document.getElementById("evangelizacao");
+  const novoValor = input.value.trim();
+  setEvangelizacao(novoValor);
+  atualizarTitulos();
+  renderizarLista();
+}
+
+function dois(n){ return n.toString().padStart(2,'0'); }
+
+function dataHoje(){
+  const d = new Date();
+  return `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
+}
+
+function abrir(fim, inicio, titulo){
+  const link =
+    "https://relogioonline.com.br/temporizador/#date=" +
+    dataHoje() + "T" + fim + ":00" +
+    "&title=" + encodeURIComponent(titulo) +
+    "&loop=0";
+  window.open(link, "_blank");
+}
+
+function salvarLista(lista){
+  try{
+    localStorage.setItem(LIST_KEY, JSON.stringify(lista || []));
+  }catch(e){
+    alert("Não foi possível salvar localmente.");
+  }
+}
+function carregarLista(){
+  try{
+    const lista = localStorage.getItem(LIST_KEY);
+    return lista ? JSON.parse(lista) : [];
+  }catch(e){
+    return [];
+  }
+}
+
+function ordenarLista(lista){
+  lista.sort((a,b)=>{
+    const iA = dias.indexOf(a.dia);
+    const iB = dias.indexOf(b.dia);
+    if(iA !== iB) return iA - iB;
+
+    const [hA, mA] = a.inicio.split(":").map(Number);
+    const [hB, mB] = b.inicio.split(":").map(Number);
+    return (hA*60 + mA) - (hB*60 + mB);
+  });
+
+  salvarLista(lista);
+  return lista;
+}
+
+function el(tag, attrs={}, children=[]) {
+  const e = document.createElement(tag);
+
+  Object.entries(attrs).forEach(([k,v])=>{
+	if (k === "className") e.className = v;
+	else if (k.startsWith("on") && typeof v === "function")
+	  e.addEventListener(k.slice(2), v);
+	else
+	  e.setAttribute(k, v);
+  });
+
+  (Array.isArray(children) ? children : [children]).forEach(c=>{
+	if (typeof c === "string") e.appendChild(document.createTextNode(c));
+	else if (c) e.appendChild(c);
+  });
+
+  return e;
+}
+
+function buildInfo(p){ let s = `[${p.inicio} – ${p.fim}]`; if (p.tipo) s += ` ${p.tipo}`; if (p.nome?.trim()) s += `: ${p.nome.trim()}`; if (p.servo?.trim()) s += ` (${p.servo.trim()})`; return s; }
+
+function renderizarLista() {
+  const listaDiv = document.getElementById("lista");
+  listaDiv.innerHTML = "";
+  const lista = ordenarLista(carregarLista());
+  dias.forEach(dia => {
+    const atividadesDoDia = lista.filter(p => p.dia === dia);
+    if (atividadesDoDia.length === 0) return;
+    const containerDia = el("section", { className:"pagina-detalhe", "data-dia":dia });
+    const logo = el("img", { src:"https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png", className:"logo", alt:"Logo da Aliança" });
+    const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
+    const dataRef = atividadesDoDia[0].data;
+    let textoDia = dia;
+    if (dataRef) {
+      const dataBr = dataRef.split("-").reverse().join("/");
+      textoDia = `${dia} - ${dataBr}`;
+    }
+    const hDia = el("h3", {}, textoDia);
+    containerDia.appendChild(logo);
+    containerDia.appendChild(h2Titulo);
+    containerDia.appendChild(hDia);
+    const ul = el("ul", { className:"lista-atividades", role:"list" });
+    atividadesDoDia.forEach((p) => {
+      const info = buildInfo(p);
+      const idxReal = lista.indexOf(p);
+      const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
+      bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, buildInfo(p)));
+      const bEdit = el("button", { className:"edit" }, "Editar");
+      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+      const bDelete = el("button", { className:"delete" }, "Excluir");
+      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+      const bClone = el("button", { className:"clone" }, "Clonar");
+      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+      const li = el("li", {}, [
+        el("div", { className:"item-info" }, info),
+        el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
+      ]);
+      ul.appendChild(li);
+    });
+    containerDia.appendChild(ul);
+    listaDiv.appendChild(containerDia);
+  });
+}
+
+function adicionarAtividade(){
+  const data  = document.getElementById("data").value;
+  const dia   = diaDaSemanaPorData(data);
+  const tipo  = document.getElementById("tipo").value;
+  const nome  = document.getElementById("nome").value.trim();
+  const servo = document.getElementById("servo").value.trim();
+  const inicio = document.getElementById("inicio").value;
+  const fim    = document.getElementById("fim").value;
+
+  if(!data || !inicio || !fim){
+    alert("Preencha a data e horários!");
+    return;
+  }
+
+  const lista = carregarLista();
+  lista.push({dia, data, tipo, nome, servo, inicio, fim});
+  salvarLista(lista);
+  renderizarLista();
+
+  document.getElementById("data").value = "";
+  document.getElementById("tipo").selectedIndex = 0;
+  document.getElementById("nome").value="";
+  document.getElementById("servo").value="";
+  document.getElementById("inicio").value="";
+  document.getElementById("fim").value="";
+}
+
+function editarAtividade(index){
+  const lista = carregarLista();
+  const p = lista[index];
+  const dataBrAtual = isoParaBr(p.data);
+  const entradaDataBr = prompt("Editar data (DD/MM/AAAA):", dataBrAtual);
+  if (entradaDataBr === null) return;
+  const novaDataIso = brParaIso(entradaDataBr);
+  if (!novaDataIso) {
+    alert("Data inválida. Use o formato DD/MM/AAAA (ex.: 12/03/2026).");
+    return;
+  }
+  const novoDia  = diaDaSemanaPorData(novaDataIso);
+  let novoTipo = prompt(`Escolha o tipo de atividade:\n${tiposAtividade.join(", ")}`, p.tipo || "");
+  if (!novoTipo) novoTipo = "";
+  if (!tiposAtividade.includes(novoTipo)) novoTipo = "";
+  const novoNome  = (prompt("Editar nome da Atividade:", p.nome || "") || "").trim();
+  const novoservo = (prompt("Editar nome do Servo:", p.servo || "") || "").trim();
+  const novoInicio = prompt("Editar hora de início (HH:MM):", p.inicio);
+  if (!novoInicio) return;
+  const novoFim = prompt("Editar hora de fim (HH:MM):", p.fim);
+  if (!novoFim) return;
+  lista[index] = {
+    dia:   novoDia,
+    data:  novaDataIso,
+    tipo:  novoTipo,
+    nome:  novoNome,
+    servo: novoservo,
+    inicio: novoInicio,
+    fim:    novoFim
+  };
+  salvarLista(lista);
+  renderizarLista();
+}
+
+function excluirAtividade(index){
+  if(!confirm("Deseja realmente excluir esta atividade?")) return;
+  const lista = carregarLista();
+  lista.splice(index,1);
+  salvarLista(lista);
+  renderizarLista();
+}
+
+function clonarAtividade(index){
+  const lista = carregarLista();
+  lista.push({...lista[index], data: lista[index].data});
+  salvarLista(lista);
+  renderizarLista();
+}
+
+function isoParaBr(iso) {
+  if (!iso) return "";
+  const [yyyy, mm, dd] = iso.split("-");
+  if (!yyyy || !mm || !dd) return iso;
+  return `${dd}/${mm}/${yyyy}`;
+}
+
+function brParaIso(br) {
+  const m = String(br || "").trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!m) return null;
+  const dd = m[1], mm = m[2], yyyy = m[3];
+  const dt = new Date(`${yyyy}-${mm}-${dd}T00:00:00`);
+  if (
+    isNaN(dt.getTime()) ||
+    dt.getUTCFullYear() !== Number(yyyy) ||
+    (dt.getUTCMonth() + 1) !== Number(mm) ||
+    dt.getUTCDate() !== Number(dd)
+  ) {
+    return null;
+  }
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function gerarNomeArquivo() {
+  const nome = getEvangelizacao()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+
+  return `cronograma_${nome || "backup"}.json`;
+}
+
+function exportarBackup(){
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    current: {
+      evangelizacao: getEvangelizacao(),
+      lista: carregarLista()
+    }
+  };
+
+  const blob = new Blob(
+    [JSON.stringify(data, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = gerarNomeArquivo(); // ✅ nome melhorado
+
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+}
+
+function handleImportFile(file){
+  if(!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{
+      const obj = JSON.parse(fr.result);
+      if(!obj || !Array.isArray(obj.current?.lista)) {
+        alert("Arquivo JSON inválido.");
+        return;
+      }
+      if(confirm("Deseja SUBSTITUIR a lista atual?")){
+        salvarLista(obj.current.lista || []);
+        setEvangelizacao(obj.current.evangelizacao || EVANG_DEFAULT);
+        const inputEv = document.getElementById("evangelizacao");
+        if (inputEv) inputEv.value = obj.current.evangelizacao || "";
+      }
+      atualizarTitulos();
+      renderizarLista();
+      alert("Backup importado com sucesso.");
+    }catch(e){
+      console.error(e);
+      alert("Erro ao importar o arquivo.");
+    }
+  };
+  fr.readAsText(file);
+}
+
+function zerarTudo(){
+  if (!confirm("Tem certeza que deseja ZERAR a LISTA atual? Esta ação não pode ser desfeita.")) {
+    return;
+  }
+  try {
+    localStorage.removeItem(LIST_KEY);
+    localStorage.removeItem(HIST_KEY);
+    atualizarTitulos();
+    renderizarLista();
+    alert("Pronto! Lista foi zerada.");
+  } catch (e) {
+    console.error(e);
+    alert("Não foi possível zerar. Tente novamente.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ===============================
+  // 🔹 INICIALIZA SEU SISTEMA
+  // ===============================
+  const ev = getEvangelizacao();
+  const input = document.getElementById("evangelizacao");
+  if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
+
+  atualizarTitulos();
+  renderizarLista();
+
+  const btnZerar = document.getElementById('btn-zerar-tudo');
+  if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
+
+
+  // ===============================
+  // ✅ NOVO: CONTROLE DO MENU
+  // ===============================
+  const btn = document.getElementById("toggle-menu-adicao");
+  const menu = document.getElementById("menu-adicao");
+
+  if (btn && menu) {
+
+    // 👉 estado inicial: fechado
+    menu.classList.add("collapsed");
+    btn.textContent = "+";
+
+    // 👉 clique alterna estado
+    btn.addEventListener("click", () => {
+      const aberto = menu.classList.contains("expanded");
+
+      if (aberto) {
+        menu.classList.remove("expanded");
+        menu.classList.add("collapsed");
+        btn.textContent = "+";
+      } else {
+        menu.classList.remove("collapsed");
+        menu.classList.add("expanded");
+        btn.textContent = "-";
+      }
+    });
+  }
+});
+</script>
+
+  <div class="watermark">EM DESENVOLVIMENTO</div>
+</body>
+  
+</html>
