@@ -853,7 +853,7 @@ body{
 
 <script>
 let atividadeAtual = null;	
-let isPrinting = false; // 👈 ADICIONE AQUI
+//let isPrinting = false; // 👈 ADICIONE AQUI
 const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Life House", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "cronograma";
@@ -1146,129 +1146,105 @@ function getProgresso(data, inicio, fim){
 }
 
 function renderizarLista() {
-
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
 
   const lista = ordenarLista(carregarLista());
-
-  const agoraGlobal = Date.now();
-
   const proximaIndex = marcarProximaAtividade(lista);
 
-  const grupos = {};
-
-  lista.forEach(p => {
-    if (!grupos[p.data]) grupos[p.data] = [];
-    grupos[p.data].push(p);
-  });
+  const grupos = lista.reduce((acc, p) => {
+    (acc[p.data] ||= []).push(p);
+    return acc;
+  }, {});
 
   const datasOrdenadas = Object.keys(grupos).sort();
 
-  datasOrdenadas.forEach(data => {
+  const frag = document.createDocumentFragment();
 
-    const atividadesDoDia = grupos[data];
+  for (const data of datasOrdenadas) {
+    const atividades = grupos[data];
 
-    const containerDia = el("section", { className: "pagina-detalhe" });
+    const containerDia = document.createElement("section");
+    containerDia.className = "pagina-detalhe";
 
+    const logo = document.createElement("img");
+    logo.src = "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png";
+    logo.className = "logo";
+    logo.alt = "Logo da Aliança";
+
+    const h2 = document.createElement("h2");
+    h2.className = "print-only";
+    h2.textContent = getTituloCronograma();
+
+    const h3 = document.createElement("h3");
     const dataBr = data.split("-").reverse().join("/");
-    const diaSemana = diaDaSemanaPorData(data);
+    h3.textContent = `${diaDaSemanaPorData(data)} - ${dataBr}`;
 
-    const h2Titulo = el("h2", { className: "print-only" }, getTituloCronograma());
-    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
+    containerDia.append(logo, h2, h3);
 
-    const logo = el("img", {
-      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-      className: "logo",
-      alt: "Logo da Aliança"
-    });
+    const ul = document.createElement("ul");
+    ul.className = "lista-atividades";
 
-    containerDia.appendChild(logo);
-    containerDia.appendChild(h2Titulo);
-    containerDia.appendChild(hDia);
-
-    const ul = el("ul", { className: "lista-atividades" });
-
-    atividadesDoDia.forEach(p => {
-
-      const idxReal = lista.indexOf(p);
-
+    atividades.forEach(p => {
+      const idx = lista.indexOf(p);
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
-      const isProxima = (idxReal === proximaIndex);
+      const isProxima = idx === proximaIndex;
 
-      let classeExtra = "";
+      const li = document.createElement("li");
+      li.className = `item ${status} ${isProxima ? "proxima" : ""}`;
 
-      if (status === "em-andamento") {
-        const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-        const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
-
-        if (minutos <= 5) classeExtra = "danger";
-        else if (minutos <= 10) classeExtra = "warning";
-      }
-
-      // =========================
-      // 🔵 PROGRESSO (GARANTIDO)
-      // =========================
-      let progressContainer = null;
-
-      if (status === "em-andamento") {
-
-        const progresso = getProgresso(p.data, p.inicio, p.fim);
-
-        const bar = el("div", {
-          className: "progress-bar ativo",
-          style: `width:${progresso}%`
-        });
-
-        progressContainer = el("div", {
-          className: "progress-container"
-        }, bar);
-      }
-
-      const li = el("li", {
-        className: `item ${status} ${classeExtra} ${isProxima ? "proxima" : ""}`
-      });
-
+      // dados para update leve
       li.dataset.data = p.data;
       li.dataset.inicio = p.inicio;
       li.dataset.fim = p.fim;
 
-      const info = buildInfo(p);
+      const baseText = buildInfo(p);
 
-      const divInfo = el("div", {
-        className: "item-info",
-        "data-base": info
-      }, isProxima ? `⏳ ${info}` : info);
+      const info = document.createElement("div");
+      info.className = "item-info";
+      info.dataset.base = baseText;
+      info.textContent = baseText;
 
-      const bEdit = el("button", { className: "edit" }, "Editar");
-      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+      const btns = document.createElement("div");
+      btns.className = "item-botoes";
 
-      const bDelete = el("button", { className: "delete" }, "Excluir");
-      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+      const bEdit = document.createElement("button");
+      bEdit.className = "edit";
+      bEdit.textContent = "Editar";
+      bEdit.onclick = () => editarAtividade(idx);
 
-      const bClone = el("button", { className: "clone" }, "Clonar");
-      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+      const bDelete = document.createElement("button");
+      bDelete.className = "delete";
+      bDelete.textContent = "Excluir";
+      bDelete.onclick = () => excluirAtividade(idx);
 
-      const divBtns = el("div", { className: "item-botoes" }, [
-        bEdit, bDelete, bClone
-      ]);
+      const bClone = document.createElement("button");
+      bClone.className = "clone";
+      bClone.textContent = "Clonar";
+      bClone.onclick = () => clonarAtividade(idx);
 
-      li.appendChild(divInfo);
-      li.appendChild(divBtns);
+      btns.append(bEdit, bDelete, bClone);
 
-      // 🔥 IMPORTANTE: barra SEMPRE por último
-      if (progressContainer) {
-        li.appendChild(progressContainer);
-      }
+      const progress = document.createElement("div");
+      progress.className = "progress-container";
 
+      const bar = document.createElement("div");
+      bar.className = "progress-bar ativo";
+      bar.style.width = "0%";
+
+      progress.appendChild(bar);
+
+      li.append(info, btns, progress);
       ul.appendChild(li);
     });
 
     containerDia.appendChild(ul);
-    listaDiv.appendChild(containerDia);
+    frag.appendChild(containerDia);
+  }
 
-  });
+  listaDiv.appendChild(frag);
 }
+	
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
@@ -1302,11 +1278,11 @@ let intervalGlobal = null;
 
 function iniciarLoops() {
   if (intervalGlobal) return;
-
-  intervalGlobal = setInterval(() => {
-    renderizarLista();
-  }, 1000);
 }
+ // intervalGlobal = setInterval(() => {
+ //   atualizarTempoEProgresso(); // só atualiza DOM existente
+ // }, 1000);
+ //}
 
 function pararLoops() {
   if (intervalGlobal) {
@@ -1469,20 +1445,74 @@ function zerarTudo(){
   }
 }
 
+function atualizarTempoEProgresso() {
+
+  function isPrintingMode(){
+  return document.body.classList.contains("printing");
+}	
+
+  document.querySelectorAll(".item").forEach(li => {
+
+    const data = li.dataset.data;
+    const inicio = li.dataset.inicio;
+    const fim = li.dataset.fim;
+
+    // =========================
+    // 🔵 PROGRESSO
+    // =========================
+    const bar = li.querySelector(".progress-bar");
+
+    if (bar && data && inicio && fim) {
+
+      const status = getStatusAtividade(data, inicio, fim);
+
+      if (status === "em-andamento") {
+        const p = getProgresso(data, inicio, fim);
+        bar.style.width = p + "%";
+      } else if (status === "futuro") {
+        bar.style.width = "0%";
+      } else if (status === "encerrado") {
+        bar.style.width = "100%";
+      }
+    }
+
+    // =========================
+    // 🔵 TEXTO (TIMER)
+    // =========================
+    const info = li.querySelector(".item-info");
+
+    if (info && !isPrinting) {
+
+      const base = info.dataset.base;
+
+      const timer = getTempoRestante(data, inicio, fim);
+
+      info.textContent = timer
+        ? `${base} • ${timer}`
+        : base;
+    }
+  });
+}
+	
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
-  // 🔹 INICIALIZA
+  // 🔹 INICIALIZAÇÃO BASE
   // ===============================
   const ev = getEvangelizacao();
   const input = document.getElementById("evangelizacao");
-  if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
+
+  if (input) {
+    input.value = (ev === EVANG_DEFAULT ? "" : ev);
+  }
 
   atualizarTitulos();
   renderizarLista();
 
-  const btnZerar = document.getElementById('btn-zerar-tudo');
-  if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
+  const btnZerar = document.getElementById("btn-zerar-tudo");
+  if (btnZerar) {
+    btnZerar.addEventListener("click", zerarTudo);
+  }
 
   // ===============================
   // 🔹 MENU TOGGLE
@@ -1494,39 +1524,38 @@ document.addEventListener("DOMContentLoaded", () => {
     menu.classList.add("collapsed");
     btn.textContent = "+";
 
-    btn.addEventListener("click", () => {
-      const aberto = menu.classList.contains("expanded");
+btn.addEventListener("click", () => {
+  menu.classList.toggle("collapsed");
 
-      if (aberto) {
-        menu.classList.remove("expanded");
-        menu.classList.add("collapsed");
-        btn.textContent = "+";
-      } else {
-        menu.classList.remove("collapsed");
-        menu.classList.add("expanded");
-        btn.textContent = "-";
-      }
-    });
+  const fechado = menu.classList.contains("collapsed");
+  btn.textContent = fechado ? "+" : "-";
+});
   }
 
   // ===============================
-  // 🔥 LOOPS (CORRIGIDO)
+  // 🔥 LOOPS (tempo + atualização)
   // ===============================
   iniciarLoops();
 
-  // ===============================
-  // 🖨 PRINT CONTROL
-  // ===============================
-  window.addEventListener("beforeprint", () => {
-    isPrinting = true;
-  });
+  // se você criou isso, ele precisa rodar em loop também
+  setInterval(() => {
+    atualizarTempoEProgresso();
+  }, 1000);
 
-  window.addEventListener("afterprint", () => {
-    isPrinting = false;
-  });
+  // ===============================
+  // 🖨 PRINT CONTROL (SEM DUPLICAR EVENTO)
+  // ===============================
+  //let isPrinting = false;
 
+window.addEventListener("beforeprint", () => {
+  document.body.classList.add("printing");
 });
-	
+
+window.addEventListener("afterprint", () => {
+  document.body.classList.remove("printing");
+});
+
+});	
 </script>
 
   <div class="watermark">EM DESENVOLVIMENTO</div>
