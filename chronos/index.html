@@ -1080,18 +1080,49 @@ function renderizarLista() {
   // ===============================
   // 🔹 RENDER POR DIA
   // ===============================
-  dias.forEach(dia => {
+  //dias.forEach(dia => {
 
-    const atividadesDoDia = lista.filter(p => p.dia === dia);
-    if (atividadesDoDia.length === 0) return;
+  //  const atividadesDoDia = lista.filter(p => p.dia === dia);
+  //  if (atividadesDoDia.length === 0) return;
 
+// ✅ agrupar por data
+const grupos = {};
+
+lista.forEach(p => {
+  if (!grupos[p.data]) {
+    grupos[p.data] = [];
+  }
+  grupos[p.data].push(p);
+});
+
+// ✅ ordenar datas
+const datasOrdenadas = Object.keys(grupos).sort();
+	
+datasOrdenadas.forEach(data => {
+
+  const atividadesDoDia = grupos[data];
+
+  const containerDia = el("section", { className:"pagina-detalhe" });
+
+  const dataBr = data.split("-").reverse().join("/");
+  const diaSemana = diaDaSemanaPorData(data);
+
+  const titulo = `${diaSemana} - ${dataBr}`;
+
+  const hDia = el("h3", {}, titulo);
+
+  containerDia.appendChild(hDia);	
+
+	// ✅ ordenar datas
+	const datasOrdenadas = Object.keys(grupos).sort();
+	
     const containerDia = el("section", { className:"pagina-detalhe", "data-dia":dia });
 
-const logo = el("img", {
-  src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-  className: "logo",
-  alt: "Logo da Aliança"
-});
+	const logo = el("img", {
+  	src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+  	className: "logo",
+  	alt: "Logo da Aliança"
+	});
 
     const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
 
