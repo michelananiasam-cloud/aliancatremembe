@@ -1139,15 +1139,29 @@ function renderizarLista() {
 
     const ul = el("ul", { className: "lista-atividades" });
 
-    // =========================
-    // 🔥 LÓGICA NOVA (ATIVA + PRÓXIMA)
-    // =========================
-    const statusList = atividadesDoDia.map(p =>
-      getStatusAtividade(p.data, p.inicio, p.fim)
-    );
+// =========================
+// 🔥 LÓGICA ATIVA + PRÓXIMA (CORRIGIDA)
+// =========================
 
-    const ativaIndex = statusList.findIndex(s => s === "ativo");
-    const proximaIndex = ativaIndex !== -1 ? ativaIndex + 1 : 0;
+// pega status de cada atividade do dia
+const statusList = atividadesDoDia.map(p =>
+  getStatusAtividade(p.data, p.inicio, p.fim)
+);
+
+// índice da atividade ativa
+const ativaIndex = statusList.findIndex(s => s === "ativo");
+
+// calcula próxima atividade corretamente
+let proximaIndex = null;
+
+if (ativaIndex !== -1) {
+  // caso exista atividade ativa → próxima é a seguinte
+  proximaIndex = ativaIndex + 1;
+} else {
+  // caso ainda não tenha atividade ativa hoje
+  // pega a PRIMEIRA futura do dia
+  proximaIndex = statusList.findIndex(s => s === "futuro");
+}
 
     atividadesDoDia.forEach((p, i) => {
 
@@ -1181,13 +1195,16 @@ function renderizarLista() {
       // =========================
       // 🎯 DEFINE: ATIVA OU PRÓXIMA
       // =========================
-      const isAtiva = status === "ativo";
-      const isProxima = i === proximaIndex && !isAtiva;
+const isAtiva = status === "ativo";
+const isProxima = proximaIndex !== null && i === proximaIndex;
 
-      let classeStatusFinal = "normal";
-
-      if (isAtiva) classeStatusFinal = "ativo";
-      else if (isProxima) classeStatusFinal = "proxima";
+// regra final de classe
+const classeStatusFinal =
+  isAtiva
+    ? "ativo"
+    : isProxima
+      ? "proxima"
+      : "normal";
 
       // =========================
       // PROGRESSO
