@@ -25,6 +25,22 @@
   opacity: 1;
 }
 
+/*Bordas*/
+/* 🔵 normal */
+.item.em-andamento {
+  border-left: 5px solid #2d6cdf;
+}
+
+/* 🟡 alerta médio */
+.item.em-andamento.warning {
+  border-left: 5px solid #ffc107;
+}
+
+/* 🔴 crítico */
+.item.em-andamento.danger {
+  border-left: 5px solid #dc3545;
+}
+	
 /* 🔵 EM ANDAMENTO */
 .item.em-andamento {
   border-left: 5px solid #2d6cdf;
@@ -1330,13 +1346,36 @@ function renderizarLista() {
         );
       }
 
-      const li = el("li", {
-        className: `item ${status} ${classeExtra} ${isProxima ? "proxima" : ""}`
-      });
+let classeExtra = "";
 
-      li.dataset.data = p.data;
-      li.dataset.inicio = p.inicio;
-      li.dataset.fim = p.fim;
+// 🔵 alerta de tempo restante (10 / 5 min)
+if (status === "em-andamento") {
+  const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+  const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
+
+  if (minutos <= 5) classeExtra = "danger";
+  else if (minutos <= 10) classeExtra = "warning";
+}
+
+// ===============================
+// 🔥 CLASSES DO ITEM (REFATORADO)
+// ===============================
+const classes = [
+  "item",
+  status
+];
+
+if (classeExtra) classes.push(classeExtra);
+if (isProxima) classes.push("proxima");
+
+const li = el("li", {
+  className: classes.join(" ")
+});
+
+// dados úteis (mantém como já estava)
+li.dataset.data = p.data;
+li.dataset.inicio = p.inicio;
+li.dataset.fim = p.fim;
 
       const info = buildInfo(p);
 
