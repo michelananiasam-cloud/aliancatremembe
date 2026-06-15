@@ -411,6 +411,26 @@ button.edit{
   }
 }
 
+@media (min-width:521px){
+
+  .lista-atividades li{
+    position: relative;
+  }
+
+  .item-botoes{
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: all .2s ease;
+  }
+
+  .lista-atividades li:hover .item-botoes{
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+
 /* ===============================
    PRINT (IMPRIMIR)
 ================================*/
