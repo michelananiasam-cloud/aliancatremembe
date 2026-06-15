@@ -451,7 +451,7 @@ button.edit{
     page-break-before:always;
     page-break-inside:avoid;
     position:relative;
-    padding-top:120px !important; /* ↓ reduzi um pouco */
+    padding-top:120px !important;
   }
 
   /* ✅ LOGO */
@@ -489,7 +489,7 @@ button.edit{
     background:#fff !important;
   }
 
-  /* ✅ ITEM COMO LINHA (EVITA BAGUNÇA) */
+  /* ✅ ITEM COMO LINHA */
   .lista-atividades li{
     display:block !important;
     border:none !important;
@@ -503,12 +503,27 @@ button.edit{
     white-space:normal !important;
   }
 
-  /* ✅ REMOVE QUALQUER COISA VISUAL */
+  /* ✅ REMOVE TEMPORIZADORES */
+  .timer-info{
+    display:none !important;
+  }
+
+  /* ✅ REMOVE BARRAS DE PROGRESSO */
   .progress-container{
     display:none !important;
   }
 
-  /* ✅ CORREÇÃO FINAL (EVITA BAGUNÇA GLOBAL) */
+  /* ✅ REMOVE QUALQUER ANIMAÇÃO */
+  .warning,
+  .danger,
+  .ativo,
+  .futuro,
+  .encerrado{
+    animation:none !important;
+    box-shadow:none !important;
+  }
+
+  /* ✅ CORREÇÃO FINAL */
   *{
     -webkit-print-color-adjust:exact;
     print-color-adjust:exact;
@@ -1048,17 +1063,6 @@ function buildInfo(p){
   if (p.tipo) s += ` ${p.tipo}`;
   if (p.nome?.trim()) s += `: ${p.nome.trim()}`;
   if (p.servo?.trim()) s += ` (${p.servo.trim()})`;
-
-  // ✅ FORÇA limpar tempo na impressão
-  const isPrint = window.matchMedia('print').matches;
-
-  if (!isPrint) {
-    const timer = getTempoRestante(p.data, p.inicio, p.fim);
-    if (timer) {
-      s += ` • ${timer}`;
-    }
-  }
-
   return s;
 }
 
@@ -1125,8 +1129,10 @@ function renderizarLista() {
 
     atividadesDoDia.forEach(p => {
 
-      const info = buildInfo(p);
-      const idxReal = lista.indexOf(p);
+	  const info = buildInfo(p);
+      const timer = getTempoRestante(p.data, p.inicio, p.fim);
+      
+	  const idxReal = lista.indexOf(p);
 
       const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
       bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
@@ -1173,7 +1179,12 @@ function renderizarLista() {
       }
 
       const li = el("li", { className: `item ${status} ${classeExtra}` }, [
-        el("div", { className:"item-info" }, info),
+        el("div", { className:"item-info" }, [
+  		el("div", {}, info),
+  		timer
+    	? el("div", { className:"timer-info" }, `• ${timer}`)
+    	: null
+		]),
         progress || "",
         el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
       ]);
