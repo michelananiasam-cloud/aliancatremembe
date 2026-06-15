@@ -454,9 +454,13 @@ button.edit{
 
 @media print {
 
-  .print-only{ display:block !important; }
+  .print-only {
+    display: block !important;
+  }
 
-  /* ✅ REMOVE INTERAÇÕES */
+  /* ===============================
+     REMOVE ELEMENTOS DA INTERFACE
+  ============================== */
   #menu-adicao,
   #web-header,
   #menu-rodape,
@@ -467,91 +471,100 @@ button.edit{
   .edit,
   .delete,
   .clone,
-  .btn-voltar{
-    display:none !important;
+  .btn-voltar,
+  .progress-container,
+  .watermark {
+    display: none !important;
   }
 
-  /* ✅ BASE LIMPA */
-  html, body{
-    background:#fff !important;
-    color:#000 !important;
-    margin:0 !important;
-    padding:0 !important;
-    font-size:14px;
+  /* ===============================
+     BASE DA IMPRESSÃO
+  ============================== */
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 14px !important;
   }
 
-  /* ✅ GARANTE QUE CADA DIA FIQUE ORGANIZADO */
-  .pagina-detalhe{
-    display:block !important;
-    page-break-before:always;
-    page-break-inside:avoid;
-    position:relative;
-    padding-top:120px !important; /* ↓ reduzi um pouco */
+  /* ===============================
+     PÁGINAS
+  ============================== */
+  .pagina-detalhe {
+    display: block !important;
+    page-break-before: always;
+    page-break-inside: avoid;
+    position: relative;
+    padding-top: 120px !important;
   }
 
-  /* ✅ LOGO */
-  .pagina-detalhe .logo{
-    display:block !important;
-    position:absolute !important;
-    top:0 !important;
-    left:0 !important;
-    width:100px !important;
-    height:auto !important;
+  /* ===============================
+     LOGO
+  ============================== */
+  .pagina-detalhe .logo {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100px !important;
+    height: auto !important;
   }
 
-  /* ✅ TÍTULO PRINCIPAL */
-  .pagina-detalhe h2{
-    position:absolute !important;
-    top:30px !important;
-    left:0 !important;
-    right:0 !important;
-    text-align:center !important;
-    font-size:18px !important;
-    font-weight:700 !important;
-    margin:0 !important;
+  /* ===============================
+     TÍTULO
+  ============================== */
+  .pagina-detalhe h2 {
+    position: absolute !important;
+    top: 30px !important;
+    left: 0 !important;
+    right: 0 !important;
+    text-align: center !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
   }
 
-  /* ✅ DIA */
-  .pagina-detalhe h3{
-    margin-top:20px !important;
-    margin-bottom:10px !important;
-    font-size:15px;
+  /* ===============================
+     DATA / DIA DA SEMANA
+  ============================== */
+  .pagina-detalhe h3 {
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+    font-size: 15px !important;
   }
 
-  /* ✅ LISTA LIMPA */
-  .lista-atividades{
-    border:none !important;
-    background:#fff !important;
+  /* ===============================
+     LISTA
+  ============================== */
+  .lista-atividades {
+    border: none !important;
+    background: #fff !important;
   }
 
-  /* ✅ ITEM COMO LINHA (EVITA BAGUNÇA) */
-  .lista-atividades li{
-    display:block !important;
-    border:none !important;
-    padding:4px 0 !important;
-    margin-bottom:4px;
+  .lista-atividades li {
+    display: block !important;
+    border: none !important;
+    padding: 4px 0 !important;
+    margin-bottom: 4px !important;
   }
 
-  /* ✅ TEXTO ORGANIZADO */
-  .item-info{
-    display:block !important;
-    white-space:normal !important;
+  .item-info {
+    display: block !important;
+    white-space: normal !important;
   }
 
-  /* ✅ REMOVE QUALQUER COISA VISUAL */
-  .progress-container{
-    display:none !important;
+  /* ===============================
+     LIMPEZA VISUAL
+  ============================== */
+  * {
+    background: transparent !important;
+    box-shadow: none !important;
+    animation: none !important;
   }
 
-  /* ✅ CORREÇÃO FINAL (EVITA BAGUNÇA GLOBAL) */
-  *{
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-    background:transparent !important;
-    box-shadow:none !important;
-  }
 }
-
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
 ================================*/
@@ -1095,33 +1108,47 @@ function getDuracao(inicio, fim) {
   return `${m}mim`;
 }
 
-function buildInfo(p){
+function buildInfo(p) {
 
   const duracao = getDuracao(p.inicio, p.fim);
 
-  let s = `[${p.inicio} – ${p.fim}`;
+  let texto = `[${p.inicio} – ${p.fim}`;
 
   if (duracao) {
-    s += ` (Total: ${duracao})`;
+    texto += ` (Total: ${duracao})`;
   }
 
-  s += `]`;
+  texto += `]`;
 
-  if (p.tipo) s += ` ${p.tipo}`;
-  if (p.nome?.trim()) s += `: ${p.nome.trim()}`;
-  if (p.servo?.trim()) s += ` (${p.servo.trim()})`;
+  if (p.tipo) {
+    texto += ` ${p.tipo}`;
+  }
 
-  // ===============================
-  // 🔥 TIMER (NÃO APARECE NO PRINT)
-  // ===============================
+  if (p.nome?.trim()) {
+    texto += `: ${p.nome.trim()}`;
+  }
+
+  if (p.servo?.trim()) {
+    texto += ` (${p.servo.trim()})`;
+  }
+
+  /* ===============================
+     TIMER (NÃO APARECE NO PRINT)
+  ============================== */
   if (!isPrinting) {
-    const timer = getTempoRestante(p.data, p.inicio, p.fim);
+
+    const timer = getTempoRestante(
+      p.data,
+      p.inicio,
+      p.fim
+    );
+
     if (timer) {
-      s += ` • ${timer}`;
+      texto += ` • ${timer}`;
     }
   }
 
-  return s;
+  return texto;
 }
 
 function getProgresso(data, inicio, fim){
@@ -1295,24 +1322,64 @@ function adicionarAtividade(){
   document.getElementById("inicio").value="";
   document.getElementById("fim").value="";
 }
+
+	
 let intervalTimers = null;
 let intervalProgresso = null;
-
 let intervalGlobal = null;
 
-function iniciarLoops() {
-  if (intervalGlobal) return;
+function buildInfo(p) {
 
-  intervalGlobal = setInterval(() => {
-    renderizarLista();
-  }, 1000);
-}
+  const duracao = getDuracao(p.inicio, p.fim);
 
-function pararLoops() {
-  if (intervalGlobal) {
-    clearInterval(intervalGlobal);
-    intervalGlobal = null;
+  let texto = `[${p.inicio} – ${p.fim}`;
+
+  if (duracao) {
+    texto += ` (Total: ${duracao})`;
   }
+
+  texto += `]`;
+
+  if (p.tipo) {
+    texto += ` ${p.tipo}`;
+  }
+
+  if (p.nome?.trim()) {
+    texto += `: ${p.nome.trim()}`;
+  }
+
+  if (p.servo?.trim()) {
+    texto += ` (${p.servo.trim()})`;
+  }
+
+  /* ===============================
+     TIMER (NÃO APARECE NO PRINT)
+  ============================== */
+  if (!isPrinting) {
+
+    const timer = getTempoRestante(
+      p.data,
+      p.inicio,
+      p.fim
+    );
+
+    if (timer) {
+      texto += ` • ${timer}`;
+    }
+  }
+
+  return texto;
+}
+	
+function pararLoops() {
+
+  if (!intervalGlobal) {
+    return;
+  }
+
+  clearInterval(intervalGlobal);
+  intervalGlobal = null;
+
 }
 	
 function editarAtividade(index){
@@ -1469,6 +1536,11 @@ function zerarTudo(){
   }
 }
 
+function setPrintMode(state) {
+  isPrinting = state;
+  document.body.classList.toggle("printing", state);
+}
+	
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
@@ -1516,14 +1588,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
   // 🖨 PRINT CONTROL
-  // ===============================
-  window.addEventListener("beforeprint", () => {
-    isPrinting = true;
-  });
+  // ===============================window.addEventListener("beforeprint", () => {
 
-  window.addEventListener("afterprint", () => {
-    isPrinting = false;
-  });
+  isPrinting = true;
+
+  pararLoops();
+
+  renderizarLista();
+
+});
+
+window.addEventListener("afterprint", () => {
+
+  isPrinting = false;
+
+  renderizarLista();
+
+  iniciarLoops();
+
+});
 
 });
 	
