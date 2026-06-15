@@ -946,8 +946,7 @@ function getTempoRestante(data, inicio, fim) {
   return `✅ Encerrado`;
 }
 
-	
-function getStatusAtividade(data, inicio, fim) {
+	function getStatusAtividade(data, inicio, fim) {
 
   const hoje = new Date().toISOString().split("T")[0];
 
@@ -955,20 +954,18 @@ function getStatusAtividade(data, inicio, fim) {
   const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
   const fimDate = new Date(`${data}T${fim}:00`).getTime();
 
-  // ✅ DIA FUTURO (outro dia)
-  if (data > hoje) {
-    return "futuro-data";
+  // 🔵 ATIVO (somente hoje)
+  if (agora >= inicioDate && agora <= fimDate) {
+    return "ativo";
   }
 
-  // ✅ DIA PASSADO
-  if (data < hoje) {
+  // ✅ ENCERRADO (passado)
+  if (agora > fimDate) {
     return "encerrado";
   }
 
-  // ✅ HOJE (dinâmico)
-  if (agora < inicioDate) return "futuro";
-  if (agora >= inicioDate && agora <= fimDate) return "ativo";
-  return "encerrado";
+  // 🟡 TUDO QUE AINDA NÃO COMEÇOU = FUTURO
+  return "futuro-data";
 }
 
 	
