@@ -32,7 +32,30 @@
   opacity: 0.7;
 }
 
+/* ⚠️ 10 MIN */
+.item.warning {
+  border-left: 5px solid #ffc107;
+  animation: piscar-warning 1s infinite;
+}
 
+/* 🚨 5 MIN */
+.item.danger {
+  border-left: 5px solid #dc3545;
+  animation: piscar-danger 0.6s infinite;
+}
+
+@keyframes piscar-warning {
+  0%   { background: rgba(255,193,7,0.25); }
+  50%  { background: rgba(255,193,7,0.05); }
+  100% { background: rgba(255,193,7,0.25); }
+}
+
+@keyframes piscar-danger {
+  0%   { background: rgba(220,53,69,0.35); }
+  50%  { background: rgba(220,53,69,0.1); }
+  100% { background: rgba(220,53,69,0.35); }
+}
+	
 /* ===============================
    BARRA DE PROGRESSO
 ================================*/
@@ -1091,12 +1114,34 @@ function renderizarLista() {
       const bClone = el("button", { className:"clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
 
-      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+const status = getStatusAtividade(p.data, p.inicio, p.fim);
 
-      // ✅ DEFINE ATIVIDADE ATIVA GLOBAL
-if (status === "ativo" && !ativaAgora) {
-  ativaAgora = buildInfo(p);
+let classeExtra = "";
+
+if (status === "ativo") {
+
+  const agora = new Date().getTime();
+  const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+  const diff = fimDate - agora;
+
+  const minutos = Math.floor(diff / (1000 * 60));
+
+  if (minutos <= 5) {
+    classeExtra = "danger";
+  } 
+  else if (minutos <= 10) {
+    classeExtra = "warning";
+  }
 }
+
+  // ===============================
+  // 🔔 ALERTA (UMA VEZ SÓ)
+  // ===============================
+if (status === "ativo" && !ativaAgora) {
+  ativaAgora = buildInfo(p).split("•")[0];
+}
+		
+		
 
       // ✅ PROGRESSO
 let progress = null;
@@ -1114,7 +1159,7 @@ if (status === "ativo") {
     className: "progress-container"
   }, progressBar);
 }
-      const li = el("li", { className: `item ${status}` }, [
+      const li = el("li", { className: `item ${status} ${classeExtra}` }, [
         el("div", { className:"item-info" }, info),
         progress || "",
         el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
@@ -1127,12 +1172,7 @@ if (status === "ativo") {
     listaDiv.appendChild(containerDia);
   });
 
-  // ===============================
-  // 🔔 ALERTA (UMA VEZ SÓ)
-  // ===============================
-if (status === "ativo" && !ativaAgora) {
-  ativaAgora = buildInfo(p).split("•")[0];
-}
+
 
 }
 function adicionarAtividade(){
