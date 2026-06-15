@@ -211,6 +211,26 @@ body {
   font-size: 22px;
 }
 
+/* ✅ TÍTULO LOGIN */
+#login-title {
+  width: 100%;
+  max-width: 100%;
+
+  font-size: 18px;
+  text-align: center;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ✅ SOMENTE O NOME EM DESTAQUE */
+#login-nome {
+  color: var(--brand);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
 /* LOGO ANIMADA */
 .logo-hero {
   width: 250px;
@@ -337,7 +357,7 @@ input:focus {
 }
 
 /* ======================================
-   WATERMARK (GLOBAL PADRÃO)
+   WATERMARK
 ====================================== */
 .watermark {
   display: var(--watermark-display);
