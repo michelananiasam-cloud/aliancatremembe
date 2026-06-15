@@ -7,6 +7,19 @@
 <link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/x-icon">
 
 <style>
+
+.item.ativo {
+  border-left: 5px solid #2d6cdf;
+  background: rgba(45,108,223,0.08);
+}
+
+.item.encerrado {
+  opacity: 0.5;
+}
+
+.item.futuro {
+  opacity: 0.9;
+}	
 /* ===============================
    BOTÃO VOLTAR
 ================================*/
@@ -754,7 +767,48 @@ function alterarEvangelizacao(e) {
 }
 
 function dois(n){ return n.toString().padStart(2,'0'); }
+function dois(n){ return n.toString().padStart(2,'0'); }
 
+function getTempoRestante(data, inicio, fim) {
+
+  if (!data || !fim) return "";
+
+  const agora = new Date().getTime();
+  const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
+  const fimDate = new Date(`${data}T${fim}:00`).getTime();
+
+  if (agora < inicioDate) {
+
+    const diff = inicioDate - agora;
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+
+    return `⏱️ Inicia em ${h}h ${m}m`;
+
+  } else if (agora >= inicioDate && agora <= fimDate) {
+
+    const diff = fimDate - agora;
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    return `🔥 ${h}h ${m}m ${s}s restantes`;
+
+  } else {
+    return `✅ Encerrado`;
+  }
+}
+	
+function getStatusAtividade(data, inicio, fim) {
+
+  const agora = new Date().getTime();
+  const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
+  const fimDate = new Date(`${data}T${fim}:00`).getTime();
+
+  if (agora < inicioDate) return "futuro";
+  if (agora >= inicioDate && agora <= fimDate) return "ativo";
+  return "encerrado";
+}
 function dataHoje(){
   const d = new Date();
   return `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
@@ -853,10 +907,12 @@ function renderizarLista() {
       bDelete.addEventListener("click", () => excluirAtividade(idxReal));
       const bClone = el("button", { className:"clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
-      const li = el("li", {}, [
-        el("div", { className:"item-info" }, info),
-        el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
-      ]);
+const status = getStatusAtividade(p.data, p.inicio, p.fim);
+
+const li = el("li", { className: `item ${status}` }, [
+  el("div", { className:"item-info" }, info),
+  el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
+]);
       ul.appendChild(li);
     });
     containerDia.appendChild(ul);
@@ -1088,6 +1144,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+setInterval(() => {
+  renderizarLista();
+}, 1000);
+	
 });
 </script>
 
