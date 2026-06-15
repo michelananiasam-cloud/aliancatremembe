@@ -857,6 +857,7 @@ body{
 
 <script>
 let atividadeAtual = null;	
+let isPrinting = false; // 👈 ADICIONE AQUI
 const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Life House", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "cronograma";
@@ -959,8 +960,8 @@ function isDataValida(data, hora) {
 }
 
 function parseDateTime(data, hora) {
-  const t = new Date(`${data}T${hora}:00`).getTime();
-  return isNaN(t) ? null : t;
+  if (!data || !hora) return null;
+  return new Date(`${data}T${hora}:00`);
 }
 	
 function getStatusAtividade(data, inicio, fim) {
@@ -1114,10 +1115,10 @@ function buildInfo(p){
   if (p.nome?.trim()) s += `: ${p.nome.trim()}`;
   if (p.servo?.trim()) s += ` (${p.servo.trim()})`;
 
-  // ✅ FORÇA limpar tempo na impressão
-  const isPrint = window.matchMedia('print').matches;
-
-  if (!isPrint) {
+  // ===============================
+  // 🔥 TIMER (NÃO APARECE NO PRINT)
+  // ===============================
+  if (!isPrinting) {
     const timer = getTempoRestante(p.data, p.inicio, p.fim);
     if (timer) {
       s += ` • ${timer}`;
@@ -1155,18 +1156,16 @@ function renderizarLista() {
 
   const lista = ordenarLista(carregarLista());
 
-  const agoraGlobal = new Date().getTime();
+  const agoraGlobal = Date.now();
 
-  // define próxima atividade
+  // próxima atividade
   const proximaIndex = marcarProximaAtividade(lista);
 
   // agrupar por data
   const grupos = {};
 
   lista.forEach(p => {
-    if (!grupos[p.data]) {
-      grupos[p.data] = [];
-    }
+    if (!grupos[p.data]) grupos[p.data] = [];
     grupos[p.data].push(p);
   });
 
@@ -1176,7 +1175,7 @@ function renderizarLista() {
 
     const atividadesDoDia = grupos[data];
 
-    const containerDia = el("section", { className:"pagina-detalhe" });
+    const containerDia = el("section", { className: "pagina-detalhe" });
 
     const dataBr = data.split("-").reverse().join("/");
     const diaSemana = diaDaSemanaPorData(data);
@@ -1184,44 +1183,31 @@ function renderizarLista() {
     const titulo = `${diaSemana} - ${dataBr}`;
 
     const logo = el("img", {
-      src:"https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-      className:"logo",
-      alt:"Logo da Aliança"
+      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+      className: "logo",
+      alt: "Logo da Aliança"
     });
 
-    const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloCronograma());
     const hDia = el("h3", {}, titulo);
 
     containerDia.appendChild(logo);
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
-    const ul = el("ul", { className:"lista-atividades" });
+    const ul = el("ul", { className: "lista-atividades" });
 
     atividadesDoDia.forEach(p => {
 
       const idxReal = lista.indexOf(p);
 
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
-
       const isProxima = (idxReal === proximaIndex);
 
-      // 🔥 DEBUG CORRETO (AGORA FUNCIONA)
-      console.log("ITEM:", {
-        atividade: p.nome,
-        data: p.data,
-        inicio: p.inicio,
-        fim: p.fim,
-        status,
-        inicioParsed: parseDateTime(p.data, p.inicio),
-        fimParsed: parseDateTime(p.data, p.fim)
-      });
-
-      // alertas (warning / danger)
+      // alerta visual
       let classeExtra = "";
 
       if (status === "em-andamento") {
-
         const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
         const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
 
@@ -1229,47 +1215,69 @@ function renderizarLista() {
         else if (minutos <= 10) classeExtra = "warning";
       }
 
-      // barra de progresso
+      // progresso
       let progress = null;
 
       if (status === "em-andamento") {
-
         const progresso = getProgresso(p.data, p.inicio, p.fim);
 
-        const progressBar = el("div", {
+        const bar = el("div", {
           className: "progress-bar ativo",
           style: `width:${progresso}%`
         });
 
         progress = el("div", {
           className: "progress-container"
-        }, progressBar);
+        }, bar);
       }
 
-      // botões
-      const bEdit = el("button", { className:"edit" }, "Editar");
-      bEdit.addEventListener("click", () => editarAtividade(idxReal));
-
-      const bDelete = el("button", { className:"delete" }, "Excluir");
-      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
-
-      const bClone = el("button", { className:"clone" }, "Clonar");
-      bClone.addEventListener("click", () => clonarAtividade(idxReal));
-
-      // texto
-      let info = buildInfo(p);
-
-      if (isProxima) {
-        info = `⏳ ${info}`;
-      }
-
+      // item principal
       const li = el("li", {
         className: `item ${status} ${classeExtra} ${isProxima ? "proxima" : ""}`
-      }, [
-        el("div", { className:"item-info" }, info),
-        el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone]),
-        progress || ""
+      });
+
+      // ===============================
+      // 🔥 DATASET (ESSENCIAL PARA UPDATES)
+      // ===============================
+      li.dataset.data = p.data;
+      li.dataset.inicio = p.inicio;
+      li.dataset.fim = p.fim;
+
+      // ===============================
+      // 🔹 TEXTO BASE (timer update seguro)
+      // ===============================
+      const info = buildInfo(p);
+
+      const divInfo = el("div", {
+        className: "item-info",
+        "data-base": info
+      }, isProxima ? `⏳ ${info}` : info);
+
+      // ===============================
+      // 🔹 BOTÕES
+      // ===============================
+      const bEdit = el("button", { className: "edit" }, "Editar");
+      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+
+      const bDelete = el("button", { className: "delete" }, "Excluir");
+      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+
+      const bClone = el("button", { className: "clone" }, "Clonar");
+      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+
+      const divBtns = el("div", { className: "item-botoes" }, [
+        bEdit,
+        bDelete,
+        bClone
       ]);
+
+      // ===============================
+      // 🔹 MONTAGEM FINAL
+      // ===============================
+      li.appendChild(divInfo);
+      li.appendChild(divBtns);
+
+      if (progress) li.appendChild(progress);
 
       ul.appendChild(li);
     });
@@ -1306,7 +1314,26 @@ function adicionarAtividade(){
   document.getElementById("inicio").value="";
   document.getElementById("fim").value="";
 }
+let intervalTimers = null;
+let intervalProgresso = null;
 
+let intervalGlobal = null;
+
+function iniciarLoops() {
+  if (intervalGlobal) return;
+
+  intervalGlobal = setInterval(() => {
+    renderizarLista();
+  }, 1000);
+}
+
+function pararLoops() {
+  if (intervalGlobal) {
+    clearInterval(intervalGlobal);
+    intervalGlobal = null;
+  }
+}
+	
 function editarAtividade(index){
   const lista = carregarLista();
   const p = lista[index];
@@ -1464,7 +1491,7 @@ function zerarTudo(){
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
-  // 🔹 INICIALIZA SEU SISTEMA
+  // 🔹 INICIALIZA
   // ===============================
   const ev = getEvangelizacao();
   const input = document.getElementById("evangelizacao");
@@ -1476,20 +1503,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
 
-
   // ===============================
-  // ✅ NOVO: CONTROLE DO MENU
+  // 🔹 MENU TOGGLE
   // ===============================
   const btn = document.getElementById("toggle-menu-adicao");
   const menu = document.getElementById("menu-adicao");
 
   if (btn && menu) {
-
-    // 👉 estado inicial: fechado
     menu.classList.add("collapsed");
     btn.textContent = "+";
 
-    // 👉 clique alterna estado
     btn.addEventListener("click", () => {
       const aberto = menu.classList.contains("expanded");
 
@@ -1505,47 +1528,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-let intervalRender = null;
+  // ===============================
+  // 🔥 LOOPS (CORRIGIDO)
+  // ===============================
+  iniciarLoops();
 
-function iniciarRender() {
-  if (!intervalRender) {
-    intervalRender = setInterval(renderizarLista, 1000);
-  }
-}
-
-function pararRender() {
-  if (intervalRender) {
-    clearInterval(intervalRender);
-    intervalRender = null;
-  }
-}
-	
-function atualizarTimers() {
-  document.querySelectorAll(".item-info").forEach(el => {
-    const li = el.closest("li");
-    if (!li) return;
-
-    const data = li.dataset.data;
-    const inicio = li.dataset.inicio;
-    const fim = li.dataset.fim;
-
-    if (!data || !inicio || !fim) return;
-
-    el.textContent = buildInfo({ data, inicio, fim });
+  // ===============================
+  // 🖨 PRINT CONTROL
+  // ===============================
+  window.addEventListener("beforeprint", () => {
+    isPrinting = true;
   });
-}
-	
-// ✅ PAUSA AO IMPRIMIR
-window.addEventListener("beforeprint", () => {
-  pararRender();
-});
 
-// ✅ VOLTA AO NORMAL
-window.addEventListener("afterprint", () => {
-  iniciarRender();
-});
-
-iniciarRender();
+  window.addEventListener("afterprint", () => {
+    isPrinting = false;
+  });
 
 });
 	
