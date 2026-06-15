@@ -1,6 +1,50 @@
-/* ===============================
+/* ======================================
+   VARIABLES (CONFIG GLOBAL)
+====================================== */
+:root {
+  --watermark-display: block;
+
+  --bg: #ffffff;
+  --text: #111;
+  --muted: #666;
+
+  --card: #f5f5f7;
+
+  --brand: #2d6cdf;
+  --brand-light: #5a8dff;
+
+  --accent-cronos: #6cbf6c;
+  --accent-organo: #e7b26b;
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0c;
+    --text: #f1f1f1;
+    --muted: #aaa;
+    --card: #1a1a1c;
+    --brand: #5a8dff;
+  }
+}
+
+/* ======================================
+   BASE
+====================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ======================================
    NAVBAR
-================================ */
+====================================== */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -34,7 +78,6 @@
 .nav-menu a {
   color: white;
   text-decoration: none;
-  font-weight: 500;
 }
 
 .nav-menu a:hover {
@@ -46,112 +89,12 @@
   padding: 8px 14px;
   border-radius: 8px;
   color: #000;
-  text-decoration: none;
   font-weight: bold;
-}
-
-/* ===============================
-   HERO
-================================ */
-.hero {
-  padding: 40px 20px;
-  text-align: center;
-}
-
-/* ===============================
-   GRID (mantém seu padrão)
-================================ */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* ===============================
-   CARD (melhorado)
-================================ */
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
   text-decoration: none;
-  color: #000;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* ===============================
-   FOOTER
-================================ */
-.footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  color: #555;
-}
-
-/* ===============================
-   DARK BACKGROUND (app style)
-================================ */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f1f5f9;
 }
 
 /* ======================================
-   CONFIGURAÇÃO GLOBAL (VARIÁVEIS)
-====================================== */
-:root {
-  /* ✅ FLAG watermark-display (Marca D'Água) */
-  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
-  --watermark-display: block;	
-
-  /* ✅ CORES */
-  --bg: #ffffff;
-  --text: #111;
-  --muted: #666;
-  --card: #f5f5f7;
-  --brand: #2d6cdf;
-  --brand-light: #5a8dff;
-  --accent-cronos: #6cbf6c;
-  --accent-organo: #e7b26b;
-}
-
-/* ======================================
-   DARK MODE
-====================================== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b0b0c;
-    --text: #f1f1f1;
-    --muted: #aaa;
-    --card: #1a1a1c;
-    --brand: #5a8dff;
-  }
-}
-
-/* ======================================
-   BASE
-====================================== */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: system-ui, Arial;
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* ======================================
-   CONTAINER
+   HOME / CONTAINER
 ====================================== */
 .container {
   max-width: 1000px;
@@ -159,21 +102,9 @@ body {
   padding: 30px 20px;
 }
 
-/* ======================================
-   HEADER
-====================================== */
-.header {
+.hero {
+  padding: 40px 20px;
   text-align: center;
-  margin-bottom: 40px;
-}
-
-.header img {
-  width: 140px;
-  margin-bottom: 10px;
-}
-
-.header h1 {
-  margin: 0;
 }
 
 /* ======================================
@@ -182,6 +113,7 @@ body {
 .grid {
   display: grid;
   gap: 20px;
+  padding: 20px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
@@ -191,14 +123,12 @@ body {
 .card {
   background: var(--card);
   padding: 25px;
-  border-radius: 10px;
-  text-align: center;
+  border-radius: 12px;
 
   text-decoration: none;
   color: inherit;
 
   transition: 0.3s;
-
   border: 2px solid transparent;
 }
 
@@ -206,7 +136,6 @@ body {
   transform: translateY(-5px);
 }
 
-/* Destaques */
 .card.chronos {
   border-color: var(--accent-cronos);
 }
@@ -215,9 +144,7 @@ body {
   border-color: var(--accent-organo);
 }
 
-/* ======================================
-   ELEMENTOS
-====================================== */
+/* ELEMENTOS CARD */
 .card-icon {
   font-size: 40px;
   margin-bottom: 10px;
@@ -229,8 +156,8 @@ body {
 }
 
 .card-description {
-  color: var(--muted);
   font-size: 14px;
+  color: var(--muted);
   margin-bottom: 15px;
 }
 
@@ -240,6 +167,163 @@ body {
   color: white;
   padding: 8px 14px;
   border-radius: 6px;
+}
+
+/* ======================================
+   LOGIN LAYOUT
+====================================== */
+.wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+.left, .right {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transform: translateX(40px);
+}
+
+.text {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.text span {
+  color: #1877f2;
+}
+
+.text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.author {
+  margin-top: 6px;
+  font-size: 22px;
+}
+
+/* LOGO ANIMADA */
+.logo-hero {
+  width: 250px;
+  cursor: pointer;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
+  animation: float 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ANIMAÇÃO */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* ======================================
+   LOGIN CARD
+====================================== */
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-container {
+  width: 360px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  transition: 0.2s;
+}
+
+.login-container:hover {
+  background: #f7f8fa;
+}
+
+/* ======================================
+   FORM
+====================================== */
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #dddfe2;
+  transition: 0.2s;
+}
+
+input:hover {
+  border-color: #666;
+}
+
+input:focus {
+  border-color: #1877f2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(24,119,242,0.2);
+}
+
+/* ======================================
+   BUTTONS
+====================================== */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #1877f2, #166fe5);
+  color: white;
+  margin-bottom: 10px;
+}
+
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+.btn-outline {
+  border: 1px solid #1877f2;
+  color: #1877f2;
+}
+
+.btn-outline:hover {
+  background: #f2f3f5;
+}
+
+/* LINK */
+.link {
+  display: block;
+  text-align: center;
+  margin: 15px 0;
+  padding: 14px;
+  border-radius: 25px;
+  color: #1877f2;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.link:hover {
+  background: #f2f3f5;
+}
+
+.link:active {
+  transform: scale(0.96);
 }
 
 /* ======================================
@@ -253,7 +337,7 @@ body {
 }
 
 /* ======================================
-   MARCA D’ÁGUA
+   WATERMARK (GLOBAL PADRÃO)
 ====================================== */
 .watermark {
   display: var(--watermark-display);
@@ -261,61 +345,38 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
+
   transform: translate(-50%, -50%) rotate(-30deg);
 
   font-size: 60px;
   font-weight: bold;
+
   color: rgba(0, 0, 0, 0.06);
 
   pointer-events: none;
   user-select: none;
+
   z-index: 9999;
   white-space: nowrap;
 }
 
-/* =========================
-   ✅ EFEITOS RESTAURADOS
-========================= */
+/* ======================================
+   RESPONSIVE
+====================================== */
+@media (max-width: 900px) {
+  .wrapper {
+    flex-direction: column;
+  }
 
-.btn {
-  transition: all 0.15s ease;
-}
+  .left, .right {
+    width: 100%;
+  }
 
-.btn:active {
-  transform: scale(0.96);
-}
+  .text {
+    font-size: 32px;
+  }
 
-.btn-primary:hover {
-  filter: brightness(0.95);
-}
-
-.btn-outline:hover {
-  background: #f2f3f5;
-}
-
-/* LINK */
-.link {
-  transition: all 0.15s ease;
-}
-
-.link:hover {
-  background: #f2f3f5;
-}
-
-.link:active {
-  transform: scale(0.96);
-}
-
-/* INPUTS */
-input {
-  transition: 0.2s;
-}
-
-input:hover {
-  border-color: #666;
-}
-
-/* LOGO OTIMIZAÇÃO */
-.logo-hero {
-  will-change: transform;
+  .logo-hero {
+    width: 180px;
+  }
 }
