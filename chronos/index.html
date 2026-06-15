@@ -7,169 +7,9 @@
 <link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/x-icon">
 
 <style>
-/* ===============================
-   🌟 TIMELINE (LINHA DO TEMPO)
-================================*/
-.lista-atividades {
-  position: relative;
-}
-
-/* linha vertical */
-.lista-atividades::before {
-  content: "";
-  position: absolute;
-  left: 18px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: rgba(0,0,0,0.08);
-  z-index: 0;
-}
-
-.item {
-  position: relative;
-  z-index: 1;
-}
-
-/* bolinha base */
-.item::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #ccc;
-  z-index: 2;
-}
-
-/* ativa */
-.item.ativo::before {
-  background: #2d6cdf;
-  box-shadow: 0 0 0 4px rgba(45,108,223,0.2);
-}
-
-/* próxima */
-.item.proxima::before {
-  background: #ffc107;
-  box-shadow: 0 0 0 4px rgba(255,193,7,0.2);
-}
-
-/* warning/danger na bolinha */
-.item.warning::before {
-  background: #ffc107;
-}
-.item.danger::before {
-  background: #dc3545;
-}
-
-
-/* ===============================
-   📌 STATUS DAS ATIVIDADES
-================================*/
-.item.futuro-data {
-  border-left: 5px solid transparent;
-  background: transparent;
-}
-
-.item.futuro {
-  border-left: 5px solid #ffc107;
-  background: rgba(255,193,7,0.12);
-}
-
-.item.ativo {
-  border-left: 5px solid #2d6cdf;
-  background: rgba(45,108,223,0.08);
-  box-shadow: 0 0 8px rgba(45,108,223,0.25);
-}
-
-.item.encerrado {
-  border-left: 5px solid #28a745;
-  background: rgba(40,167,69,0.10);
-  opacity: 0.7;
-}
-
-.item.warning {
-  border-left: 5px solid #ffc107;
-  animation: piscar-warning 3s infinite;
-}
-
-.item.danger {
-  border-left: 5px solid #dc3545;
-  animation: piscar-danger 1s infinite;
-}
-
-/* animações */
-@keyframes piscar-warning {
-  0% { background: rgba(255,193,7,0.25); }
-  50% { background: rgba(255,193,7,0.05); }
-  100% { background: rgba(255,193,7,0.25); }
-}
-
-@keyframes piscar-danger {
-  0% { background: rgba(220,53,69,0.35); }
-  50% { background: rgba(220,53,69,0.1); }
-  100% { background: rgba(220,53,69,0.35); }
-}
-
-
-/* ===============================
-   📊 PROGRESSO
-================================*/
-.progress-container {
-  width: 100%;
-  height: 5px;
-  background: rgba(0,0,0,0.08);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 6px;
-}
-
-.progress-bar {
-  height: 100%;
-  transition: width 0.3s linear;
-}
-
-.progress-bar.futuro {
-  background: #ffc107;
-}
-
-.progress-bar.ativo {
-  background: linear-gradient(90deg, #2d6cdf, #5a8dff);
-}
-
-
-/* ===============================
-   🔙 BOTÃO VOLTAR
-================================*/
-.btn-voltar {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #f5f5f7;
-  color: #111;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.2s;
-  margin-bottom: 1.5rem;
-}
-
-.btn-voltar:hover {
-  background: #2d6cdf;
-  color: #fff;
-}
-
-
-/* ===============================
-   🎨 TEMA
-================================*/
+/* =========================================================
+   🔷 VARIÁVEIS E TEMA
+========================================================= */
 :root{
   --watermark-display: flex;
   --bg:#ffffff;
@@ -180,8 +20,15 @@
   --warn:#ffc107;
   --danger:#dc3545;
   --radius:10px;
+
+  --space-1:0.25rem;
+  --space-2:0.5rem;
+  --space-3:0.75rem;
   --space-4:1rem;
+  --space-5:1.25rem;
   --space-6:1.5rem;
+  --space-8:2rem;
+
   --font-base:16px;
 }
 
@@ -195,46 +42,42 @@
   }
 }
 
-
-/* ===============================
+/* =========================================================
    RESET
-================================*/
+========================================================= */
 *{ box-sizing:border-box; }
 
-body {
-  font-family: system-ui, Arial;
-  font-size: var(--font-base);
+html, body{
+  min-height:100%;
+}
+
+body{
   margin:0;
-  padding: var(--space-6) var(--space-4) 200px;
+  font-family: system-ui, Arial, sans-serif;
+  font-size: var(--font-base);
   background: var(--bg);
   color: var(--text);
+  padding: var(--space-6) var(--space-4) var(--space-8);
 }
 
-.container{
-  max-width:1100px;
-  margin:0 auto;
-}
-
-
-/* ===============================
+/* =========================================================
    HEADER
-================================*/
+========================================================= */
 #web-header{
   display:flex;
-  gap:1rem;
+  gap:var(--space-4);
   align-items:center;
   justify-content:center;
-  padding:1rem;
+  padding:var(--space-4);
   position:sticky;
   top:0;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   z-index:5;
 }
 
-
-/* ===============================
+/* =========================================================
    FORM
-================================*/
+========================================================= */
 .field{
   display:flex;
   flex-direction:column;
@@ -247,8 +90,7 @@ input, select{
   border:1px solid #ddd;
 }
 
-
-/* botão */
+/* botão principal */
 button.add{
   background: var(--brand);
   color:#fff;
@@ -258,17 +100,26 @@ button.add{
   cursor:pointer;
 }
 
-
-/* ===============================
-   LISTA
-================================*/
+/* =========================================================
+   LISTA + TIMELINE
+========================================================= */
 .lista-atividades{
   list-style:none;
-  padding:0;
   margin:0;
+  padding:0;
   border:1px solid rgba(0,0,0,0.1);
   border-radius:10px;
-  overflow:hidden;
+  position:relative;
+}
+
+.lista-atividades::before{
+  content:"";
+  position:absolute;
+  left:18px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:rgba(0,0,0,0.08);
 }
 
 .lista-atividades li{
@@ -277,61 +128,91 @@ button.add{
   gap:1rem;
   padding:1rem 1.2rem;
   border-bottom:1px solid rgba(0,0,0,0.08);
+  position:relative;
 }
 
 .lista-atividades li:last-child{
   border-bottom:none;
 }
 
-.item-info{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
+.item::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#ccc;
 }
 
-.timer-info{
-  font-size:0.85rem;
-  color:var(--muted);
+/* =========================================================
+   STATUS (SOMENTE VISUAL DE TELA)
+========================================================= */
+.item.ativo{
+  border-left:5px solid #2d6cdf;
+  background:rgba(45,108,223,0.08);
 }
 
+.item.futuro{
+  border-left:5px solid #ffc107;
+  background:rgba(255,193,7,0.12);
+}
 
-/* ===============================
+.item.encerrado{
+  border-left:5px solid #28a745;
+  background:rgba(40,167,69,0.10);
+  opacity:0.7;
+}
+
+.item.warning{
+  animation:piscar-warning 3s infinite;
+}
+
+.item.danger{
+  animation:piscar-danger 1s infinite;
+}
+
+@keyframes piscar-warning{
+  0%,100%{ background:rgba(255,193,7,0.25); }
+  50%{ background:rgba(255,193,7,0.05); }
+}
+
+@keyframes piscar-danger{
+  0%,100%{ background:rgba(220,53,69,0.35); }
+  50%{ background:rgba(220,53,69,0.1); }
+}
+
+/* =========================================================
+   PROGRESSO
+========================================================= */
+.progress-container{
+  height:5px;
+  background:rgba(0,0,0,0.08);
+  margin-top:6px;
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+}
+
+/* =========================================================
    BOTÕES
-================================*/
+========================================================= */
 .item-botoes{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
 
-
-/* ===============================
-   PRINT
-================================*/
-@media print {
-  *{
-    background:transparent !important;
-    box-shadow:none !important;
-  }
-
-  .item-botoes,
-  button,
-  #menu-adicao,
-  #menu-rodape{
-    display:none !important;
-  }
-
-  .pagina-detalhe{
-    page-break-before:always;
-  }
-}
-
-
-/* ===============================
+/* =========================================================
    WATERMARK
-================================*/
+========================================================= */
 .watermark{
-  display: var(--watermark-display);
+  display:var(--watermark-display);
   position:fixed;
   inset:0;
   align-items:center;
@@ -340,6 +221,90 @@ button.add{
   opacity:0.06;
   transform:rotate(-30deg);
   pointer-events:none;
+}
+
+/* =========================================================
+   PRINT (VERSÃO LIMPA TOTAL)
+========================================================= */
+@media print {
+
+  /* ❌ remove TUDO que é UI */
+  #menu-adicao,
+  #menu-rodape,
+  #web-header,
+  button,
+  .item-botoes,
+  .progress-container,
+  .watermark{
+    display:none !important;
+  }
+
+  /* 🔲 base limpa */
+  html, body{
+    background:#fff !important;
+    color:#000 !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  /* 📄 quebra por dia */
+  .pagina-detalhe{
+    page-break-before:always;
+    page-break-inside:avoid;
+    padding-top:120px;
+  }
+
+  /* 🖼 logo e títulos simples */
+  .pagina-detalhe .logo{
+    display:block !important;
+    width:100px;
+    position:absolute;
+    top:0;
+    left:0;
+  }
+
+  .pagina-detalhe h2{
+    text-align:center;
+    font-size:18px;
+    margin:0;
+    position:absolute;
+    top:30px;
+    left:0;
+    right:0;
+  }
+
+  /* 📋 lista limpa */
+  .lista-atividades{
+    border:none !important;
+  }
+
+  .lista-atividades li{
+    border:none !important;
+    padding:4px 0 !important;
+  }
+
+  /* ❌ REMOVE COMPLETAMENTE QUALQUER STATUS VISUAL */
+  .item,
+  .item.ativo,
+  .item.futuro,
+  .item.encerrado,
+  .item.warning,
+  .item.danger{
+    background:none !important;
+    border:none !important;
+    opacity:1 !important;
+    animation:none !important;
+  }
+
+  .item::before{
+    display:none !important;
+  }
+
+  /* limpeza final */
+  *{
+    box-shadow:none !important;
+    background:transparent !important;
+  }
 }
 
 </style>
