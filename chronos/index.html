@@ -12,16 +12,17 @@
    STATUS DAS ATIVIDADES
 ================================*/
 
-/* 🟡 FUTURO (A VENCER) */
+/* 🟡 FUTURO */
 .item.futuro {
   border-left: 5px solid #ffc107;
   background: rgba(255,193,7,0.12);
 }
 
-/* 🔵 ATIVO (EM ANDAMENTO) */
+/* 🔵 ATIVO */
 .item.ativo {
   border-left: 5px solid #2d6cdf;
   background: rgba(45,108,223,0.08);
+  box-shadow: 0 0 8px rgba(45,108,223,0.25); /* ou box-shadow: 0 0 12px rgba(45,108,223,0.4); ou box-shadow: 0 0 20px rgba(45,108,223,0.5) */
 }
 
 /* ✅ ENCERRADO */
@@ -29,6 +30,36 @@
   border-left: 5px solid #28a745;
   background: rgba(40,167,69,0.10);
   opacity: 0.7;
+}
+
+
+/* ===============================
+   BARRA DE PROGRESSO
+================================*/
+
+.progress-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+/* BASE DA BARRA */
+.progress-bar {
+  height: 100%;
+  transition: width 0.3s linear;
+}
+
+/* 🟡 FUTURO */
+.progress-bar.futuro {
+  background: #ffc107;
+}
+
+/* 🔵 ATIVO */
+.progress-bar.ativo {
+  background: linear-gradient(90deg, #2d6cdf, #5a8dff);
 }
 
 /* ===============================
@@ -731,6 +762,7 @@ body{
 </div>
 
 <script>
+let atividadeAtual = null;	
 const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Life House", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "cronograma";
@@ -898,53 +930,168 @@ function el(tag, attrs={}, children=[]) {
   return e;
 }
 
-function buildInfo(p){ let s = `[${p.inicio} – ${p.fim}]`; if (p.tipo) s += ` ${p.tipo}`; if (p.nome?.trim()) s += `: ${p.nome.trim()}`; if (p.servo?.trim()) s += ` (${p.servo.trim()})`; return s; }
+function getDuracao(inicio, fim) {
+
+  if (!inicio || !fim) return "";
+
+  const i = new Date(`1970-01-01T${inicio}:00`);
+  const f = new Date(`1970-01-01T${fim}:00`);
+  const diff = f - i;
+
+  if (diff <= 0) return "";
+
+  const h = Math.floor(diff / (1000 * 60 * 60));
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+
+  if (h > 0 && m > 0) return `${h}h ${m}m`;
+  if (h > 0) return `${h}h`;
+  return `${m}m`;
+}
+
+function buildInfo(p){
+
+  let s = `[${p.inicio} – ${p.fim}]`;
+
+  if (p.tipo) s += ` ${p.tipo}`;
+  if (p.nome?.trim()) s += `: ${p.nome.trim()}`;
+  if (p.servo?.trim()) s += ` (${p.servo.trim()})`;
+
+  const status = getStatusAtividade(p.data, p.inicio, p.fim);
+  const duracao = getDuracao(p.inicio, p.fim);
+
+  // ✅ só mostra duração se NÃO estiver encerrado
+  if (duracao && status !== "encerrado") {
+    s += ` (${duracao})`;
+  }
+
+  const timer = getTempoRestante(p.data, p.inicio, p.fim);
+
+  if (timer) {
+    s += ` • ${timer}`;
+  }
+
+  return s;
+}
+
+function getProgresso(data, inicio, fim){
+
+  const agora = new Date().getTime();
+  const i = new Date(`${data}T${inicio}:00`).getTime();
+  const f = new Date(`${data}T${fim}:00`).getTime();
+
+  if (agora < i) return 0;
+  if (agora > f) return 100;
+
+  return Math.floor(((agora - i) / (f - i)) * 100);
+}	
 
 function renderizarLista() {
+
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
+
   const lista = ordenarLista(carregarLista());
+
+  // ===============================
+  // 🔥 CONTROLE DE ATIVIDADE ATIVA
+  // ===============================
+  let ativaAgora = null;
+
+  // ===============================
+  // 🔹 RENDER POR DIA
+  // ===============================
   dias.forEach(dia => {
+
     const atividadesDoDia = lista.filter(p => p.dia === dia);
     if (atividadesDoDia.length === 0) return;
+
     const containerDia = el("section", { className:"pagina-detalhe", "data-dia":dia });
-    const logo = el("img", { src:"https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png", className:"logo", alt:"Logo da Aliança" });
+
+    const logo = el("img", {
+      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+      className:"logo",
+      alt:"Logo da Aliança"
+    });
+
     const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
+
     const dataRef = atividadesDoDia[0].data;
+
     let textoDia = dia;
     if (dataRef) {
       const dataBr = dataRef.split("-").reverse().join("/");
       textoDia = `${dia} - ${dataBr}`;
     }
+
     const hDia = el("h3", {}, textoDia);
+
     containerDia.appendChild(logo);
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
+
     const ul = el("ul", { className:"lista-atividades", role:"list" });
+
     atividadesDoDia.forEach((p) => {
+
       const info = buildInfo(p);
       const idxReal = lista.indexOf(p);
+
       const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
       bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, buildInfo(p)));
+
       const bEdit = el("button", { className:"edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
+
       const bDelete = el("button", { className:"delete" }, "Excluir");
       bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+
       const bClone = el("button", { className:"clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
-const status = getStatusAtividade(p.data, p.inicio, p.fim);
 
-const li = el("li", { className: `item ${status}` }, [
-  el("div", { className:"item-info" }, info),
-  el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
-]);
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+
+      // ✅ DEFINE ATIVIDADE ATIVA GLOBAL
+      if (status === "ativo" && !ativaAgora) {
+        ativaAgora = p.inicio + "_" + (p.nome || "atividade");
+      }
+
+      // ✅ PROGRESSO
+let progress = null;
+
+if (status !== "encerrado") {
+
+  const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+  const progressBar = el("div", {
+    className: `progress-bar ${status}`,
+    style: `width:${progresso}%`
+  });
+
+  progress = el("div", {
+    className: "progress-container"
+  }, progressBar);
+}
+      const li = el("li", { className: `item ${status}` }, [
+        el("div", { className:"item-info" }, info),
+        progress || "",
+        el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
+      ]);
+
       ul.appendChild(li);
     });
+
     containerDia.appendChild(ul);
     listaDiv.appendChild(containerDia);
   });
-}
 
+  // ===============================
+  // 🔔 ALERTA (UMA VEZ SÓ)
+  // ===============================
+  if (ativaAgora && atividadeAtual !== ativaAgora) {
+    atividadeAtual = ativaAgora;
+    alert("🔥 Nova atividade iniciada: " + ativaAgora);
+  }
+}
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
