@@ -6,21 +6,21 @@ function noCache(url) {
 }
 
 /* ========================================
-   BASE PATH (HOME ou LOGIN)
+   BASE PATH
 ======================================== */
 function getBasePath() {
   return window.BASE_PATH || "./";
 }
 
 /* ========================================
-   APPLY CONFIG (GLOBAL)
+   APPLY CONFIG GLOBAL
 ======================================== */
 function aplicarConfigGeral(cfg, base) {
 
   // ✅ TITLE
   document.title = cfg.nomeProjeto;
 
-  // ✅ TEXTO GLOBAL
+  // ✅ TEXTOS GLOBAIS
   const nomeProjeto = document.getElementById("nome-projeto");
   const brand = document.getElementById("brand-nome");
   const footerProjeto = document.getElementById("footer-projeto");
@@ -29,12 +29,13 @@ function aplicarConfigGeral(cfg, base) {
   if (nomeProjeto) nomeProjeto.textContent = cfg.nomeProjeto;
   if (brand) brand.textContent = cfg.brand;
   if (footerProjeto) footerProjeto.textContent = cfg.nomeProjeto;
+
   if (footerCopy) {
     footerCopy.textContent =
       `© ${cfg.ano} • Desenvolvido com ❤️ por ${cfg.autor}`;
   }
 
-  // ✅ LOGO HEADER (HOME)
+  // ✅ LOGO HEADER
   const appLogo = document.getElementById("app-logo");
   if (appLogo) {
     appLogo.src = noCache(base + cfg.logo.replace('./', ''));
@@ -47,11 +48,45 @@ function aplicarConfigGeral(cfg, base) {
     favicon.href = noCache(base + cfg.favicon.replace('./', ''));
   }
 
-  // ✅ WATERMARK
-  if ((cfg.env || "").toLowerCase() === "dev") {
-    document.documentElement.style.setProperty('--watermark-display', 'flex');
-  } else {
-    document.documentElement.style.setProperty('--watermark-display', 'none');
+  // ✅ WATERMARK COMPLETA
+  aplicarWatermark(cfg);
+}
+
+/* ========================================
+   WATERMARK DINÂMICA
+======================================== */
+function aplicarWatermark(cfg) {
+
+  const watermark = document.getElementById("watermark");
+  if (!watermark || !cfg.watermark) return;
+
+  const env = (cfg.env || "").toLowerCase();
+
+  // ✅ TEXTO
+  const text =
+    (cfg.watermark.texts && cfg.watermark.texts[env]) || "";
+
+  watermark.textContent = text;
+
+  // ✅ VISIBILIDADE
+  if (!cfg.watermark.enabled || !text) {
+    watermark.style.display = "none";
+    return;
+  }
+
+  watermark.style.display = "flex";
+
+  // ✅ ESTILO DINÂMICO (OPCIONAL)
+  if (cfg.watermark.styles && cfg.watermark.styles[env]) {
+    const styles = cfg.watermark.styles[env];
+
+    if (styles.color) watermark.style.color = styles.color;
+    if (styles.opacity) watermark.style.opacity = styles.opacity;
+    if (styles.fontSize) watermark.style.fontSize = styles.fontSize;
+    if (styles.rotate) {
+      watermark.style.transform =
+        `translate(-50%, -50%) rotate(${styles.rotate})`;
+    }
   }
 }
 
@@ -60,13 +95,11 @@ function aplicarConfigGeral(cfg, base) {
 ======================================== */
 function aplicarLogin(cfg, base) {
 
-  // ✅ TITLE LOGIN
   const loginTitle = document.getElementById("login-title");
   if (loginTitle) {
     loginTitle.textContent = "Entrar no " + cfg.nomeProjeto;
   }
 
-  // ✅ LOGO HERO (LOGIN)
   const logoHero = document.getElementById("logo-hero");
   if (logoHero) {
     logoHero.src = noCache(base + cfg.logo.replace('./', ''));
@@ -78,7 +111,7 @@ function aplicarLogin(cfg, base) {
 }
 
 /* ========================================
-   INIT CONFIG
+   INIT
 ======================================== */
 function carregarConfig() {
 
@@ -88,10 +121,10 @@ function carregarConfig() {
     .then(res => res.json())
     .then(cfg => {
 
-      // ✅ disponibiliza global
+      // ✅ GLOBAL
       window.APP_CONFIG = cfg;
 
-      // ✅ aplica partes
+      // ✅ APPLY
       aplicarConfigGeral(cfg, base);
       aplicarLogin(cfg, base);
 
