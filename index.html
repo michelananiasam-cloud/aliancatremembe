@@ -11,6 +11,9 @@
 
   <!-- ✅ CSS GLOBAL -->
   <link rel="stylesheet" href="./config/css/styles.css">
+
+  <!-- ✅ CONFIG GLOBAL (importante usar defer) -->
+  <script src="./config/js/config.js" defer></script>
 </head>
 
 <body>
@@ -32,14 +35,13 @@
   </nav>
 
   <div class="nav-right">
-    <!-- ✅ LOGIN NA NAVBAR -->
-    <a href="./login/" class="btn-login">Login</a>
+    <a href="./login/" class="btn-login">Entrar</a>
   </div>
 
 </header>
 
 <!-- ===============================
-     CONTEÚDO PRINCIPAL (HOME)
+     CONTEÚDO PRINCIPAL
 =================================== -->
 <main class="container">
 
@@ -51,7 +53,7 @@
     </p>
   </section>
 
-  <!-- GRID PRINCIPAL -->
+  <!-- GRID -->
   <section class="grid">
 
     <!-- CRONOGRAMA -->
@@ -90,12 +92,9 @@
 </footer>
 
 <!-- ===============================
-     WATERMARK (CONTROLADO POR CONFIG)
+     WATERMARK (DINÂMICA VIA CONFIG)
 =================================== -->
-<div id="watermark" class="watermark">EM DESENVOLVIMENTO</div>
-
-<!-- ✅ CONFIG GLOBAL -->
-<script src="./config/js/config.js"></script>
+<div id="watermark" class="watermark"></div>
 
 </body>
 </html>
