@@ -240,6 +240,12 @@ body {
   will-change: transform;
 }
 
+@media (max-width: 900px) {
+  .logo-hero {
+    width: 160px;
+  }
+}
+
 /* ANIMAÇÃO */
 @keyframes float {
   0% { transform: translateY(0); }
