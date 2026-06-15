@@ -1212,32 +1212,6 @@ function getProgresso(data, inicio, fim){
   return Math.floor(((agora - i) / (f - i)) * 100);
 }
 
-atividadesDoDia.forEach(p => {
-
-  const idxReal = lista.indexOf(p);
-
-  const status = getStatusAtividade(p.data, p.inicio, p.fim);
-  const isProxima = (idxReal === proximaIndex);
-
-  const agora = agoraGlobal;
-
-  // ===================================
-  // ALERTA VISUAL (warning / danger)
-  // ===================================
-  let classeExtra = "";
-
-  if (status === "em-andamento") {
-
-    const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-    const minutos = Math.floor((fimDate - agora) / (1000 * 60));
-
-    if (minutos <= 5) {
-      classeExtra = "danger";
-    } else if (minutos <= 10) {
-      classeExtra = "warning";
-    }
-  }
-
   // ===================================
   // BARRA DE PROGRESSO
   // ===================================
