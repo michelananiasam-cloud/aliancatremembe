@@ -1128,8 +1128,8 @@ function renderizarLista() {
       const info = buildInfo(p);
       const idxReal = lista.indexOf(p);
 
-      \\const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
-      \\bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
+      //const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
+      //bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
 
       const bEdit = el("button", { className:"edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
@@ -1175,7 +1175,7 @@ function renderizarLista() {
       const li = el("li", { className: `item ${status} ${classeExtra}` }, [
         el("div", { className:"item-info" }, info),
         progress || "",
-        \\el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
+        //el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
       	el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone])
 	  ]);
 
