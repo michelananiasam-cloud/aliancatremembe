@@ -33,11 +33,11 @@
 
 /* 🌟 PRÓXIMA ATIVIDADE */
 .item.proxima {
-  border-left: 5px solid #ffc107;
-  background: rgba(255,193,7,0.18);
+  background: rgba(0, 0, 0, 0.05);
+  border-left: 5px solid rgba(60, 60, 60, 0.35);
   box-shadow: 0 0 12px rgba(255,193,7,0.35);
   transform: scale(1.01);
-}
+}	
 
 /* ⚠️ alertas continuam opcionais */
 .item.warning {
@@ -79,6 +79,7 @@
 }
 
 /* BASE DA BARRA */
+/* BASE DA BARRA */
 .progress-bar {
   height: 100%;
   transition: width 0.3s linear;
@@ -89,10 +90,33 @@
   background: #ffc107;
 }
 
-/* 🔵 ATIVO */
+/* 🔵 EM ANDAMENTO */
 .progress-bar.ativo{
-  background: linear-gradient(90deg, #2d6cdf, #5a8dff);
+  background: linear-gradient(
+    90deg,
+    #2d6cdf,
+    #5a8dff
+  );
 }
+
+/* 🟡 ÚLTIMOS 10 MINUTOS */
+.progress-bar.warning{
+  background: linear-gradient(
+    90deg,
+    #ffc107,
+    #ffd95e
+  );
+}
+
+/* 🔴 ÚLTIMOS 5 MINUTOS */
+.progress-bar.danger{
+  background: linear-gradient(
+    90deg,
+    #dc3545,
+    #ff6b7a
+  );
+}
+
 /* ===============================
    BOTÃO VOLTAR
 ================================*/
@@ -1196,13 +1220,24 @@ function renderizarLista() {
 
     const atividadesDoDia = grupos[data];
 
-    const containerDia = el("section", { className: "pagina-detalhe" });
+    const containerDia = el("section", {
+      className: "pagina-detalhe"
+    });
 
     const dataBr = data.split("-").reverse().join("/");
     const diaSemana = diaDaSemanaPorData(data);
 
-    const h2Titulo = el("h2", { className: "print-only" }, getTituloCronograma());
-    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
+    const h2Titulo = el(
+      "h2",
+      { className: "print-only" },
+      getTituloCronograma()
+    );
+
+    const hDia = el(
+      "h3",
+      {},
+      `${diaSemana} - ${dataBr}`
+    );
 
     const logo = el("img", {
       src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
@@ -1214,42 +1249,85 @@ function renderizarLista() {
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
-    const ul = el("ul", { className: "lista-atividades" });
+    const ul = el("ul", {
+      className: "lista-atividades"
+    });
 
     atividadesDoDia.forEach(p => {
 
       const idxReal = lista.indexOf(p);
 
-      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+      const status = getStatusAtividade(
+        p.data,
+        p.inicio,
+        p.fim
+      );
+
       const isProxima = (idxReal === proximaIndex);
 
       let classeExtra = "";
 
+      // ===================================
+      // ALERTAS VISUAIS
+      // ===================================
       if (status === "em-andamento") {
-        const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-        const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
 
-        if (minutos <= 5) classeExtra = "danger";
-        else if (minutos <= 10) classeExtra = "warning";
+        const fimDate = new Date(
+          `${p.data}T${p.fim}:00`
+        ).getTime();
+
+        const minutos = Math.floor(
+          (fimDate - agoraGlobal) / (1000 * 60)
+        );
+
+        if (minutos <= 5) {
+          classeExtra = "danger";
+        }
+        else if (minutos <= 10) {
+          classeExtra = "warning";
+        }
       }
 
-      // =========================
-      // 🔵 PROGRESSO (GARANTIDO)
-      // =========================
+      // ===================================
+      // BARRA DE PROGRESSO
+      // ===================================
       let progressContainer = null;
 
       if (status === "em-andamento") {
 
-        const progresso = getProgresso(p.data, p.inicio, p.fim);
+        const progresso = getProgresso(
+          p.data,
+          p.inicio,
+          p.fim
+        );
+
+        const fimDate = new Date(
+          `${p.data}T${p.fim}:00`
+        ).getTime();
+
+        const minutos = Math.floor(
+          (fimDate - agoraGlobal) / (1000 * 60)
+        );
+
+        let classeBarra = "ativo";
+
+        if (minutos <= 5) {
+          classeBarra = "danger";
+        }
+        else if (minutos <= 10) {
+          classeBarra = "warning";
+        }
 
         const bar = el("div", {
-          className: "progress-bar ativo",
+          className: `progress-bar ${classeBarra}`,
           style: `width:${progresso}%`
         });
 
-        progressContainer = el("div", {
-          className: "progress-container"
-        }, bar);
+        progressContainer = el(
+          "div",
+          { className: "progress-container" },
+          bar
+        );
       }
 
       const li = el("li", {
@@ -1262,40 +1340,72 @@ function renderizarLista() {
 
       const info = buildInfo(p);
 
-      const divInfo = el("div", {
-        className: "item-info",
-        "data-base": info
-      }, isProxima ? `⏳ ${info}` : info);
+      const divInfo = el(
+        "div",
+        {
+          className: "item-info",
+          "data-base": info
+        },
+        isProxima ? `⏳ ${info}` : info
+      );
 
-      const bEdit = el("button", { className: "edit" }, "Editar");
-      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+      const bEdit = el(
+        "button",
+        { className: "edit" },
+        "Editar"
+      );
 
-      const bDelete = el("button", { className: "delete" }, "Excluir");
-      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+      bEdit.addEventListener(
+        "click",
+        () => editarAtividade(idxReal)
+      );
 
-      const bClone = el("button", { className: "clone" }, "Clonar");
-      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+      const bDelete = el(
+        "button",
+        { className: "delete" },
+        "Excluir"
+      );
 
-      const divBtns = el("div", { className: "item-botoes" }, [
-        bEdit, bDelete, bClone
-      ]);
+      bDelete.addEventListener(
+        "click",
+        () => excluirAtividade(idxReal)
+      );
+
+      const bClone = el(
+        "button",
+        { className: "clone" },
+        "Clonar"
+      );
+
+      bClone.addEventListener(
+        "click",
+        () => clonarAtividade(idxReal)
+      );
+
+      const divBtns = el(
+        "div",
+        { className: "item-botoes" },
+        [bEdit, bDelete, bClone]
+      );
 
       li.appendChild(divInfo);
       li.appendChild(divBtns);
 
-      // 🔥 IMPORTANTE: barra SEMPRE por último
       if (progressContainer) {
         li.appendChild(progressContainer);
       }
 
       ul.appendChild(li);
+
     });
 
     containerDia.appendChild(ul);
     listaDiv.appendChild(containerDia);
 
   });
+
 }
+
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
