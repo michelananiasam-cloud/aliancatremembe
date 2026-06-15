@@ -65,13 +65,16 @@
    BARRA DE PROGRESSO
 ================================*/
 
-.progress-container {
-  width: 100%;
-  height: 6px;
-  background: rgba(0,0,0,0.08);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 6px;
+.progress-container{
+  width:100%;
+  flex-basis:100%;
+
+  height:4px;
+  margin-top:2px;
+
+  background:rgba(0,0,0,.05);
+  border-radius:999px;
+  overflow:hidden;
 }
 
 /* BASE DA BARRA */
@@ -86,8 +89,8 @@
 }
 
 /* 🔵 ATIVO */
-.progress-bar.ativo {
-  background: linear-gradient(90deg, #2d6cdf, #5a8dff);
+.progress-bar.ativo{
+  background: rgba(45,108,223,.45);
 }
 
 /* ===============================
@@ -376,9 +379,13 @@ button.edit{
 
 .lista-atividades li{
   display:flex;
+  flex-wrap:wrap; /* permite a barra ir para outra linha */
+
   align-items:flex-start;
   justify-content:space-between;
-  gap: var(--space-4);
+
+  gap: var(--space-3);
+
   padding: var(--space-4) var(--space-5);
   border-bottom:1px solid color-mix(in srgb, var(--text) 8%, transparent);
 }
@@ -1177,12 +1184,11 @@ function renderizarLista() {
         }, progressBar);
       }
 
-      const li = el("li", { className: `item ${status} ${classeExtra}` }, [
-        el("div", { className:"item-info" }, info),
-        progress || "",
-        //el("div", { className:"item-botoes" }, [bOpen, bEdit, bDelete, bClone])
-      	el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone])
-	  ]);
+const li = el("li", { className: `item ${status} ${classeExtra}` }, [
+  el("div", { className:"item-info" }, info),
+  el("div", { className:"item-botoes" }, [bEdit, bDelete, bClone]),
+  progress || ""
+]);
 
       ul.appendChild(li);
     });
