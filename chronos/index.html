@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cronograma Aliança</title>
-<link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/x-icon">
+<link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png">
 
 <style>
 
@@ -666,10 +666,8 @@ body{
 <div class="container">
 
 	<div id="web-header" role="banner" aria-label="Topo">
-  	<a href="../" class="logo-link">
-    	<img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
-         	alt="Logo da Aliança">
-  	</a>
+  	<img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
+     alt="Logo da Aliança">
   
   	<h1 id="titulo-web">Cronograma Movimento Tremembé</h1>
 	</div>
@@ -1072,83 +1070,54 @@ function renderizarLista() {
 
   const lista = ordenarLista(carregarLista());
 
-  // ===============================
-  // 🔥 CONTROLE DE ATIVIDADE ATIVA
-  // ===============================
   let ativaAgora = null;
 
-  // ===============================
-  // 🔹 RENDER POR DIA
-  // ===============================
-  //dias.forEach(dia => {
+  // ✅ agrupar por data
+  const grupos = {};
 
-  //  const atividadesDoDia = lista.filter(p => p.dia === dia);
-  //  if (atividadesDoDia.length === 0) return;
+  lista.forEach(p => {
+    if (!grupos[p.data]) {
+      grupos[p.data] = [];
+    }
+    grupos[p.data].push(p);
+  });
 
-// ✅ agrupar por data
-const grupos = {};
+  // ✅ ordenar datas
+  const datasOrdenadas = Object.keys(grupos).sort();
 
-lista.forEach(p => {
-  if (!grupos[p.data]) {
-    grupos[p.data] = [];
-  }
-  grupos[p.data].push(p);
-});
+  datasOrdenadas.forEach(data => {
 
-// ✅ ordenar datas
-const datasOrdenadas = Object.keys(grupos).sort();
-	
-datasOrdenadas.forEach(data => {
+    const atividadesDoDia = grupos[data];
 
-  const atividadesDoDia = grupos[data];
+    const containerDia = el("section", { className:"pagina-detalhe" });
 
-  const containerDia = el("section", { className:"pagina-detalhe" });
+    const dataBr = data.split("-").reverse().join("/");
+    const diaSemana = diaDaSemanaPorData(data);
 
-  const dataBr = data.split("-").reverse().join("/");
-  const diaSemana = diaDaSemanaPorData(data);
+    const titulo = `${diaSemana} - ${dataBr}`;
 
-  const titulo = `${diaSemana} - ${dataBr}`;
-
-  const hDia = el("h3", {}, titulo);
-
-  containerDia.appendChild(hDia);	
-
-	// ✅ ordenar datas
-	const datasOrdenadas = Object.keys(grupos).sort();
-	
-    const containerDia = el("section", { className:"pagina-detalhe", "data-dia":dia });
-
-	const logo = el("img", {
-  	src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-  	className: "logo",
-  	alt: "Logo da Aliança"
-	});
+    const logo = el("img", {
+      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
+      className: "logo",
+      alt: "Logo da Aliança"
+    });
 
     const h2Titulo = el("h2", { className:"print-only" }, getTituloCronograma());
-
-    const dataRef = atividadesDoDia[0].data;
-
-    let textoDia = dia;
-    if (dataRef) {
-      const dataBr = dataRef.split("-").reverse().join("/");
-      textoDia = `${dia} - ${dataBr}`;
-    }
-
-    const hDia = el("h3", {}, textoDia);
+    const hDia = el("h3", {}, titulo);
 
     containerDia.appendChild(logo);
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
-    const ul = el("ul", { className:"lista-atividades", role:"list" });
+    const ul = el("ul", { className:"lista-atividades" });
 
-    atividadesDoDia.forEach((p) => {
+    atividadesDoDia.forEach(p => {
 
       const info = buildInfo(p);
       const idxReal = lista.indexOf(p);
 
       const bOpen = el("button", { className:"open" }, "Iniciar Cronômetro");
-      bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, buildInfo(p)));
+      bOpen.addEventListener("click", () => abrir(p.fim, p.inicio, info));
 
       const bEdit = el("button", { className:"edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
@@ -1159,51 +1128,38 @@ datasOrdenadas.forEach(data => {
       const bClone = el("button", { className:"clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
 
-const status = getStatusAtividade(p.data, p.inicio, p.fim);
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
 
-let classeExtra = "";
+      let classeExtra = "";
 
-if (status === "ativo") {
+      if (status === "ativo") {
+        const agora = new Date().getTime();
+        const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+        const minutos = Math.floor((fimDate - agora) / (1000 * 60));
 
-  const agora = new Date().getTime();
-  const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
-  const diff = fimDate - agora;
+        if (minutos <= 5) classeExtra = "danger";
+        else if (minutos <= 10) classeExtra = "warning";
+      }
 
-  const minutos = Math.floor(diff / (1000 * 60));
+      if (status === "ativo" && !ativaAgora) {
+        ativaAgora = info.split("•")[0];
+      }
 
-  if (minutos <= 5) {
-    classeExtra = "danger";
-  } 
-  else if (minutos <= 10) {
-    classeExtra = "warning";
-  }
-}
+      let progress = null;
 
-  // ===============================
-  // 🔔 ALERTA (UMA VEZ SÓ)
-  // ===============================
-if (status === "ativo" && !ativaAgora) {
-  ativaAgora = buildInfo(p).split("•")[0];
-}
-		
-		
+      if (status === "ativo") {
+        const progresso = getProgresso(p.data, p.inicio, p.fim);
 
-      // ✅ PROGRESSO
-let progress = null;
+        const progressBar = el("div", {
+          className: `progress-bar ${status}`,
+          style: `width:${progresso}%`
+        });
 
-if (status === "ativo") {
+        progress = el("div", {
+          className: "progress-container"
+        }, progressBar);
+      }
 
-  const progresso = getProgresso(p.data, p.inicio, p.fim);
-
-  const progressBar = el("div", {
-    className: `progress-bar ${status}`,
-    style: `width:${progresso}%`
-  });
-
-  progress = el("div", {
-    className: "progress-container"
-  }, progressBar);
-}
       const li = el("li", { className: `item ${status} ${classeExtra}` }, [
         el("div", { className:"item-info" }, info),
         progress || "",
@@ -1215,11 +1171,10 @@ if (status === "ativo") {
 
     containerDia.appendChild(ul);
     listaDiv.appendChild(containerDia);
+
   });
-
-
-
 }
+
 function adicionarAtividade(){
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
