@@ -873,6 +873,11 @@ else if (agora >= inicioDate && agora <= fimDate) {
 	
 function getStatusAtividade(data, inicio, fim) {
 
+  const hoje = new Date().toISOString().split("T")[0];
+
+  // ✅ NÃO É HOJE → TRATA COMO ENCERRADO (não interage mais)
+  if (data !== hoje) return "encerrado";
+
   const agora = new Date().getTime();
   const inicioDate = new Date(`${data}T${inicio}:00`).getTime();
   const fimDate = new Date(`${data}T${fim}:00`).getTime();
@@ -881,6 +886,7 @@ function getStatusAtividade(data, inicio, fim) {
   if (agora >= inicioDate && agora <= fimDate) return "ativo";
   return "encerrado";
 }
+	
 function dataHoje(){
   const d = new Date();
   return `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
@@ -1007,6 +1013,11 @@ function buildInfo(p){
 
 function getProgresso(data, inicio, fim){
 
+  const hoje = new Date().toISOString().split("T")[0];
+
+  // ✅ NÃO É HOJE → NÃO TEM PROGRESSO
+  if (data !== hoje) return 0;
+
   const agora = new Date().getTime();
   const i = new Date(`${data}T${inicio}:00`).getTime();
   const f = new Date(`${data}T${fim}:00`).getTime();
@@ -1015,7 +1026,7 @@ function getProgresso(data, inicio, fim){
   if (agora > f) return 100;
 
   return Math.floor(((agora - i) / (f - i)) * 100);
-}	
+}
 
 function renderizarLista() {
 
