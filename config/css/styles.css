@@ -50,8 +50,15 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 12px 24px;
-  background: #0f172a;
+  /*background: #0f172a;*/
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* 👈 moderno */ 
   color: white;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .nav-left {
@@ -241,8 +248,23 @@ body {
 }
 
 @media (max-width: 900px) {
+
+  .navbar {
+    padding: 10px 16px; /* 👈 menor */
+  }
+
+  .nav-menu {
+    display: none; /* 👈 esconde menu grande */
+  }
+ 
   .logo-hero {
-    width: 160px;
+    width: 140px;
+  }
+}
+
+  .btn-login {
+    font-size: 13px;
+    padding: 6px 10px;
   }
 }
 
