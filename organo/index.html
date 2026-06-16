@@ -239,11 +239,16 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
-   MOBILE READ-ONLY FINAL (COMPLETO)
+   MOBILE READ-ONLY FINAL REAL
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ Mantém header (logo + título) */
+  /* ✅ Limpa header (tira barra cinza) */
+  #web-header {
+    background: transparent !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
 
   /* ❌ Esconde formulário */
   #form-bloco {
@@ -255,26 +260,23 @@ button.primary{
     display: none !important;
   }
 
-  /* ✅ Remove completamente aparência do rodapé */
+  /* ✅ Remove visual do rodapé */
   #menu-rodape {
+    position: static !important;
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-
     height: 0 !important;
-    min-height: 0 !important;
     padding: 0 !important;
-
-    overflow: visible !important;
   }
 
-  /* ❌ Esconde tudo dentro do rodapé */
-  #menu-rodape * {
+  /* ✅ ESCONDE TUDO EXCETO O BOTÃO */
+  #menu-rodape .menu-rodape-content {
     display: none !important;
   }
 
-  /* ✅ Mostra SOMENTE botão Atualizar */
-  #menu-rodape button[onclick*="escolherAtualizacaoJSON"] {
+  /* ✅ Força botão atualizar */
+  button[onclick="escolherAtualizacaoJSON()"] {
     display: block !important;
 
     position: fixed;
@@ -282,34 +284,21 @@ button.primary{
     right: 20px;
 
     background: var(--brand);
-    color: #fff;
+    color: white;
 
     padding: 14px 18px;
     border-radius: 50px;
-
-    font-weight: bold;
     font-size: 14px;
+    font-weight: bold;
 
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 
-    z-index: 9999;
+    z-index: 99999;
 
     pointer-events: auto !important;
   }
 
-  /* ✅ efeito clique */
-  #menu-rodape button[onclick*="escolherAtualizacaoJSON"]:active {
-    transform: scale(0.95);
-  }
-
-  /* ❌ Remove ações (hover/edit) */
-  .team-actions,
-  .chip-actions,
-  .ref-actions {
-    display: none !important;
-  }
-
-  /* ❌ BLOQUEIA TODA interação */
+  /* ❌ Bloqueia resto */
   input,
   select,
   button,
@@ -317,22 +306,19 @@ button.primary{
     pointer-events: none !important;
   }
 
-  /* ✅ libera SOMENTE o botão atualizar */
-  #menu-rodape button[onclick*="escolherAtualizacaoJSON"] {
+  /* ✅ Libera botão */
+  button[onclick="escolherAtualizacaoJSON()"] {
     pointer-events: auto !important;
   }
 
-  /* ✅ Remove possíveis pseudo-elementos do rodapé */
-  #menu-rodape::before,
-  #menu-rodape::after {
+  /* ❌ Remove ações */
+  .team-actions,
+  .chip-actions,
+  .ref-actions {
     display: none !important;
   }
-
-  /* ✅ opcional: melhora UX (sem cursor de interação) */
-  body {
-    cursor: default;
-  }
 }
+	
 /* ===============================
    EQUIPES
 ================================*/
