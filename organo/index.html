@@ -241,79 +241,90 @@ button.primary{
 /* ===============================
    MOBILE READ-ONLY FINAL REAL
 ================================*/
+/* ===============================
+   MOBILE READ-ONLY FINAL LIMPO
+================================*/
 @media (max-width: 760px) {
 
+  /* ✅ Ajuste de espaçamento */
   body {
     padding: 8px 12px 80px !important;
   }
 
+  /* ✅ Header mais limpo */
   #web-header {
     border-bottom: none !important;
     backdrop-filter: none !important;
   }
 
-  /* ❌ form (remove a barra fantasma) */
+  /* ❌ Remove completamente o formulário (inclusive barrinha) */
   #form-bloco,
   #form-bloco.collapsed {
     display: none !important;
   }
 
-  /* ❌ botão +/- */
+  /* ❌ Remove botão +/- */
   .toggle-form-btn {
     display: none !important;
   }
 
-  /* ✅ rodapé limpo */
+  /* ✅ Limpa rodapé */
   #menu-rodape {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
   }
 
-  /* ✅ ESCONDE TUDO MENOS O BOTÃO */
-  .menu-rodape-content > *:not(#btn-atualizar) {
+  /* ❌ Esconde rodapé inteiro */
+  .menu-rodape-content {
     display: none !important;
   }
 
-  /* ✅ BOTÃO */
-  #btn-atualizar {
-    display: block !important;
-    pointer-events: auto !important;
-
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-
-    background: var(--brand);
-    color: white;
-
-    padding: 14px 18px;
-    border-radius: 50px;
-
-    font-weight: bold;
-
-    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-
-    z-index: 999999;
-  }
-
-  /* ❌ bloqueia geral */
-  input, select, button, .chip {
-    pointer-events: none !important;
-  }
-
-  /* ✅ libera botão */
-  #btn-atualizar {
-    pointer-events: auto !important;
-  }
-
-  /* ❌ remove ações */
+  /* ❌ Remove ações */
   .team-actions,
   .chip-actions,
   .ref-actions {
     display: none !important;
   }
+
+  /* ❌ Bloqueia interação geral */
+  input,
+  select,
+  button,
+  .chip {
+    pointer-events: none !important;
+  }
+
+  /* ✅ Libera SOMENTE botão mobile */
+  #btn-atualizar-mobile {
+    display: block;
+    pointer-events: auto !important;
+  }
 }
+
+/* ===============================
+   BOTÃO MOBILE (BASE)
+================================*/
+#btn-atualizar-mobile {
+  display: none;
+
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  background: var(--brand);
+  color: #fff;
+
+  padding: 14px 18px;
+  border-radius: 50px;
+
+  font-weight: bold;
+  font-size: 14px;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+  z-index: 999999;
+}	
 	
 /* ===============================
    EQUIPES
@@ -830,6 +841,13 @@ button.primary{
 
 </div> <!-- container -->
 
+
+<!-- ✅ BOTÃO MOBILE -->
+<button id="btn-atualizar-mobile"
+        type="button"
+        onclick="escolherAtualizacaoJSON()">
+  🔄 Atualizar
+</button>
 
 
 <!-- ===============================
