@@ -8,12 +8,10 @@ let APP_VERSION = "dev";
 ======================================== */
 function versionedUrl(url, type = "static") {
 
-  // ✅ JSON sempre força atualização
   if (type === "config") {
     return url + "?v=" + Date.now();
   }
 
-  // ✅ usa versão do sistema
   return url + "?v=" + APP_VERSION;
 }
 
@@ -118,6 +116,17 @@ function aplicarLogin(cfg, base) {
 }
 
 /* ========================================
+   APPLY UI (NOVO)
+======================================== */
+function aplicarUI(cfg) {
+
+  // ✅ controlar botão login
+  if (!cfg.ui?.showLogin) {
+    document.body.classList.add("hide-login");
+  }
+}
+
+/* ========================================
    FETCH CONFIG (SEM CACHE)
 ======================================== */
 function fetchConfig(base) {
@@ -143,17 +152,15 @@ function carregarConfig() {
   fetchConfig(base)
     .then(cfg => {
 
-      // ✅ atualiza versão
       APP_VERSION = cfg.version || APP_VERSION;
 
-      // ✅ salva cache local
       localStorage.setItem("APP_CONFIG_CACHE", JSON.stringify(cfg));
 
-      // ✅ global
       window.APP_CONFIG = cfg;
 
       aplicarConfigGeral(cfg, base);
       aplicarLogin(cfg, base);
+      aplicarUI(cfg); // ✅ NOVO
 
       console.log("✅ Config ONLINE");
       console.log("📦 Versão:", APP_VERSION);
@@ -175,6 +182,7 @@ function carregarConfig() {
 
         aplicarConfigGeral(cfg, base);
         aplicarLogin(cfg, base);
+        aplicarUI(cfg); // ✅ NOVO
 
         console.log("✅ Config CACHE LOCAL");
         console.log("📦 Versão:", APP_VERSION);
