@@ -8,14 +8,13 @@
 
   "logo": "./config/img/alianca_logo-header.png",
   "favicon": "./config/img/alianca_favicon.png",
-
-  "comment": "dev = desenvolvimento, hml = homologação, prod = produção",
-  "env": "dev",
-
+  "comment_bt_login": Mostrar ou não Botão de Login: "true = Mostrar Botão ou false = Não Mostrar Botão",
   "ui": {
     "showLogin": true
   },
-
+ 
+  "comment_env": Mostrar ou não Marca D'água: "dev = desenvolvimento, hml = homologação, prod = produção",
+  "env": "dev",
   "watermark": {
     "enabled": true,
     "texts": {
