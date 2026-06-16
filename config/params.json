@@ -10,7 +10,7 @@
   "favicon": "./config/img/alianca_favicon.png",
   "comment_bt_login": "Mostrar ou não Botão de Login: true = Mostrar Botão ou false = Não Mostrar Botão",
   "ui": {
-    "showLogin": true
+    "showLogin": false
   },
  
   "comment_env": "Mostrar ou não Marca D'água: dev = desenvolvimento, hml = homologação, prod = produção",
@@ -18,7 +18,7 @@
   "watermark": {
     "enabled": true,
     "texts": {
-      "dev": "EM DESENVOLVIMENTO",
+      "dev": "TK Tá ON!",
       "hml": "EM HOMOLOGAÇÃO",
       "prod": ""
     },
