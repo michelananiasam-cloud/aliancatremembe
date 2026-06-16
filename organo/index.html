@@ -239,6 +239,46 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
+   MOBILE CLEAN (SEM MENU/RODAPE)
+================================*/
+@media (max-width: 760px) {
+
+  /* ❌ Esconde topo */
+  #web-header {
+    display: none !important;
+  }
+
+  /* ❌ Esconde rodapé inteiro */
+  #menu-rodape {
+    display: none !important;
+  }
+
+  /* ❌ Esconde todos os botões */
+  .btn_rodape {
+    display: none !important;
+  }
+
+  /* ✅ Mostra só o botão Atualizar */
+  button[onclick*="escolherAtualizacaoJSON"] {
+    display: block !important;
+
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    background: var(--brand);
+    color: #fff;
+
+    padding: 12px 16px;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+    z-index: 9999;
+  }
+}
+	
+/* ===============================
    EQUIPES
 ================================*/
 .team-line{
