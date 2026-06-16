@@ -293,32 +293,40 @@ button.primary{
     pointer-events: none !important;
   }
 
-  /* ✅ BOTÃO MOBILE (FORÇADO) */
-  #btn-atualizar-mobile {
-    display: block !important;
-    position: fixed !important;
+/* ✅ BOTÃO MOBILE — ESTILO PADRÃO DO SISTEMA */
+#btn-atualizar-mobile {
+  display: block !important;
+  position: fixed !important;
 
-    bottom: 20px !important;
-    right: 20px !important;
+  bottom: 16px !important;
+  right: 16px !important;
 
-    z-index: 9999999 !important;
+  z-index: 9999999 !important;
 
-    pointer-events: auto !important;
+  pointer-events: auto !important;
 
-    background: var(--brand) !important;
-    color: #fff !important;
+  /* 👇 VISUAL ALINHADO COM SEU PROJETO */
+  background: var(--brand) !important;
+  color: #fff !important;
 
-    padding: 14px 18px;
-    border-radius: 50px;
+  padding: 8px 12px;
+  border-radius: 8px;
 
-    font-weight: bold;
-    font-size: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
 
-    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
 
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  opacity: 0.95;
+  transition: 0.2s;
+}
+
+/* ✅ hover leve */
+#btn-atualizar-mobile:active {
+  transform: scale(0.96);
+}
 }
 
 /* ===============================
