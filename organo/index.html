@@ -243,11 +243,12 @@ button.primary{
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ Limpa header (tira barra cinza) */
+  /* ✅ LIMPA HEADER COMPLETO */
   #web-header {
     background: transparent !important;
-    border-bottom: none !important;
+    border: none !important;
     box-shadow: none !important;
+    backdrop-filter: none !important;
   }
 
   /* ❌ Esconde formulário */
@@ -260,23 +261,25 @@ button.primary{
     display: none !important;
   }
 
-  /* ✅ Remove visual do rodapé */
+  /* ✅ Remove rodapé visual */
   #menu-rodape {
     position: static !important;
     background: none !important;
     border: none !important;
     box-shadow: none !important;
+
     height: 0 !important;
     padding: 0 !important;
+    overflow: visible !important;
   }
 
-  /* ✅ ESCONDE TUDO EXCETO O BOTÃO */
-  #menu-rodape .menu-rodape-content {
+  /* ❌ Esconde conteúdo do rodapé */
+  .menu-rodape-content {
     display: none !important;
   }
 
-  /* ✅ Força botão atualizar */
-  button[onclick="escolherAtualizacaoJSON()"] {
+  /* ✅ BOTÃO ATUALIZAR */
+  #btn-atualizar {
     display: block !important;
 
     position: fixed;
@@ -288,17 +291,18 @@ button.primary{
 
     padding: 14px 18px;
     border-radius: 50px;
+
     font-size: 14px;
     font-weight: bold;
 
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 
-    z-index: 99999;
+    z-index: 999999;
 
     pointer-events: auto !important;
   }
 
-  /* ❌ Bloqueia resto */
+  /* ❌ Bloqueia interações */
   input,
   select,
   button,
@@ -306,12 +310,12 @@ button.primary{
     pointer-events: none !important;
   }
 
-  /* ✅ Libera botão */
-  button[onclick="escolherAtualizacaoJSON()"] {
+  /* ✅ libera botão */
+  #btn-atualizar {
     pointer-events: auto !important;
   }
 
-  /* ❌ Remove ações */
+  /* ❌ remove ações */
   .team-actions,
   .chip-actions,
   .ref-actions {
@@ -858,7 +862,7 @@ button.primary{
 
     <!-- NOVOS BOTÕES -->
 
-<button onclick="escolherAtualizacaoJSON()" class="btn_rodape">
+<button id="btn-atualizar" onclick="escolherAtualizacaoJSON()" class="btn_rodape">
   Atualizar
 </button>
 
