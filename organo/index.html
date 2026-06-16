@@ -239,26 +239,39 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
-   MOBILE CLEAN (SEM MENU/RODAPE)
+   MOBILE READ-ONLY + BOTÃO UPDATE
 ================================*/
 @media (max-width: 760px) {
 
-  /* ❌ Esconde topo */
-  #web-header {
-    display: none !important;
-  }
+  /* ✅ Mantém header (logo + título visíveis) */
+  /* NÃO escondemos #web-header */
 
   /* ❌ Esconde rodapé inteiro */
   #menu-rodape {
     display: none !important;
   }
 
-  /* ❌ Esconde todos os botões */
+  /* ❌ Desativa input e botões */
+  input,
+  select,
+  button:not([onclick*="escolherAtualizacaoJSON"]) {
+    pointer-events: none !important;
+    opacity: 0.6;
+  }
+
+  /* ❌ Remove ações de edição (hover) */
+  .team-actions,
+  .chip-actions,
+  .ref-actions {
+    display: none !important;
+  }
+
+  /* ❌ Esconde todos botões padrão */
   .btn_rodape {
     display: none !important;
   }
 
-  /* ✅ Mostra só o botão Atualizar */
+  /* ✅ Mostra SOMENTE botão Atualizar (flutuante) */
   button[onclick*="escolherAtualizacaoJSON"] {
     display: block !important;
 
@@ -269,15 +282,24 @@ button.primary{
     background: var(--brand);
     color: #fff;
 
-    padding: 12px 16px;
-    border-radius: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    font-weight: bold;
+    font-size: 14px;
+
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+    pointer-events: auto !important;
 
     z-index: 9999;
   }
-}
-	
+
+  /* ✅ efeito de clique */
+  button[onclick*="escolherAtualizacaoJSON"]:active {
+    transform: scale(0.95);
+  }
+}	
 /* ===============================
    EQUIPES
 ================================*/
