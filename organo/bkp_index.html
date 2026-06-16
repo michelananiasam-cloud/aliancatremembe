@@ -239,11 +239,11 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
-   MOBILE READ-ONLY FINAL
+   MOBILE READ-ONLY FINAL (COMPLETO)
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ Mantém header */
+  /* ✅ Mantém header (logo + título) */
 
   /* ❌ Esconde formulário */
   #form-bloco {
@@ -255,30 +255,26 @@ button.primary{
     display: none !important;
   }
 
-  /* ❌ Esconde rodapé */
+  /* ✅ Remove completamente aparência do rodapé */
   #menu-rodape {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  /* ❌ Esconde tudo dentro do rodapé */
+  #menu-rodape * {
     display: none !important;
   }
 
-  /* ❌ Remove ações */
-  .team-actions,
-  .chip-actions,
-  .ref-actions {
-    display: none !important;
-  }
-
-  /* ❌ BLOQUEIA CLIQUES GERAIS */
-  input,
-  select,
-  button,
-  .chip {
-    pointer-events: none !important;
-  }
-
-  /* ✅ Reativa SÓ o botão atualizar */
-  button[onclick*="escolherAtualizacaoJSON"] {
-    pointer-events: auto !important;
-
+  /* ✅ Mostra SOMENTE botão Atualizar */
+  #menu-rodape button[onclick*="escolherAtualizacaoJSON"] {
     display: block !important;
 
     position: fixed;
@@ -288,19 +284,53 @@ button.primary{
     background: var(--brand);
     color: #fff;
 
-    padding: 14px 16px;
-    border-radius: 14px;
+    padding: 14px 18px;
+    border-radius: 50px;
 
     font-weight: bold;
+    font-size: 14px;
 
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 
     z-index: 9999;
+
+    pointer-events: auto !important;
   }
 
   /* ✅ efeito clique */
-  button[onclick*="escolherAtualizacaoJSON"]:active {
+  #menu-rodape button[onclick*="escolherAtualizacaoJSON"]:active {
     transform: scale(0.95);
+  }
+
+  /* ❌ Remove ações (hover/edit) */
+  .team-actions,
+  .chip-actions,
+  .ref-actions {
+    display: none !important;
+  }
+
+  /* ❌ BLOQUEIA TODA interação */
+  input,
+  select,
+  button,
+  .chip {
+    pointer-events: none !important;
+  }
+
+  /* ✅ libera SOMENTE o botão atualizar */
+  #menu-rodape button[onclick*="escolherAtualizacaoJSON"] {
+    pointer-events: auto !important;
+  }
+
+  /* ✅ Remove possíveis pseudo-elementos do rodapé */
+  #menu-rodape::before,
+  #menu-rodape::after {
+    display: none !important;
+  }
+
+  /* ✅ opcional: melhora UX (sem cursor de interação) */
+  body {
+    cursor: default;
   }
 }
 /* ===============================
@@ -868,6 +898,16 @@ button.primary{
 </div>
 
 <script>
+const MOBILE_EDITABLE = false;  /* true para liberar edição no mobile
+
+function isMobileEditAllowed() {
+  return MOBILE_EDITABLE;
+}
+
+function canEdit() {
+  return !(window.innerWidth <= 760 && !isMobileEditAllowed());
+}
+	
 /* ============================================================
    PARTE 3 — Modelo de dados, storage e utilitários
    - Tema e rodapé já vieram nas Partes 1 e 2
@@ -1375,120 +1415,19 @@ render();
 }
 /* ------------------------------------------------------------
    LINHA DA EQUIPE (B2 — ícones ao lado do nome no hover)
------------------------------------------------------------- */
-//function makeEquipeHeader(refKey, equipe){
-//  //const isRefStar = equipe.referencia ? "⭐" : "";
-//  const line = el("div", {className:"team-line"});
-//
-//  
-///* Nome da equipe (sem estrela) */
-//  const nameSpan = el("span", {className:"team-name"}, equipe.nome);
-//
-//
-//  /* Duplo clique → editar nome da equipe */
-//  nameSpan.ondblclick = function(){
-//    ORG.startInlineEdit(
-//      nameSpan,
-//      equipe.nome,
-//      function(newName){
-//        ORG.renameEquipe(refKey, equipe.nome, newName);
-//        render();
-//      }
-//    );
-//  };
-//
-//  line.appendChild(nameSpan);
-//
-//  /* AÇÕES (mostra no hover) */
-//  const acts = el("div", {className:"team-actions"});
-//
-//  /* Editar equipe */
-//  const btnEdit = el("button", {
-//    title:"Editar nome da equipe",
-//    onclick:function(){
-//      ORG.startInlineEdit(
-//        nameSpan,
-//        equipe.nome,
-//        function(newName){
-//          ORG.renameEquipe(refKey, equipe.nome, newName);
-//          render();
-//        }
-//      );
-//    }
-//  }, "✎");
-//
-//  /* Adicionar pessoa */
-//  const btnAdd = el("button", {
-//    title:"Adicionar pessoa à equipe",
-//    onclick:function(){
-//      const p = prompt("Nome da nova pessoa:");
-//      if(p){
-//        ORG.addPessoaToEquipe(refKey, equipe.nome, p, false);
-//        render();
-//      }
-//    }
-//  }, "＋");
-//
-//  /* Favoritar equipe (trocar referência da equipe) */
-//  const btnFav = el("button", {
-//    title:"Marcar / desmarcar como referência da equipe",
-//    onclick:function(){
-//      if (!equipe.pessoas.length) {
-//        alert("Adicione pelo menos 1 pessoa antes de marcar referência.");
-//        return;
-//      }
-//
-//      // se já houver referência → remove
-//      if (equipe.referencia) {
-//        ORG.toggleReferencia(refKey, equipe.nome, equipe.referencia);
-//      } else {
-//        // se não houver, pergunta qual escolher
-//        const p = prompt("Digite o nome da Referência da Equipe:\n" + equipe.pessoas.join("\n"));
-//        if (p && equipe.pessoas.includes(p)) {
-//          ORG.toggleReferencia(refKey, equipe.nome, p);
-//        } else if (p) {
-//          alert("Essa pessoa não pertence à equipe.");
-//        }
-//      }
-//      render();
-//    }
-//  }, "⭐");
-//
-//  /* Excluir equipe */
-//  const btnDel = el("button", {
-//    title:"Excluir equipe",
-//    onclick:function(){
-//      if(confirm(`Excluir a equipe "${equipe.nome}"?`)){
-//        ORG.deleteEquipe(refKey, equipe.nome);
-//        render();
-//      }
-//    }
-//  }, "🗑");
-//
-//  /* Ordem correta */
-//  acts.appendChild(btnEdit);
-//  acts.appendChild(btnAdd);
-//  acts.appendChild(btnFav);  // <-- ESTA LINHA AGORA ESTÁ CORRETA
-//  acts.appendChild(btnDel);
-//
-//  line.appendChild(acts);
-//
-//  return line;
-//}
-
-/* ------------------------------------------------------------
-   LINHA DA EQUIPE (B2 — ícones ao lado do nome no hover)
    -> Sem estrela no nome da equipe; mostra contagem (N)
 ------------------------------------------------------------ */
 function makeEquipeHeader(refKey, equipe){
   const line = el("div", {className:"team-line"});
 
-  // Nome da equipe + quantidade distinta ao lado
   const qtd = countDistinctInEquipe(equipe);
   const nameSpan = el("span", {className:"team-name"}, `${equipe.nome} (${qtd})`);
 
-  // Duplo clique → editar nome da equipe
+  // ✅ Duplo clique protegido
   nameSpan.ondblclick = function(){
+
+    if (!canEdit()) return;
+
     ORG.startInlineEdit(
       nameSpan,
       equipe.nome,
@@ -1501,13 +1440,15 @@ function makeEquipeHeader(refKey, equipe){
 
   line.appendChild(nameSpan);
 
-  // AÇÕES (mostra no hover)
   const acts = el("div", {className:"team-actions"});
 
-  // Editar equipe
+  // ✅ EDITAR
   const btnEdit = el("button", {
     title:"Editar nome da equipe",
     onclick:function(){
+
+      if (!canEdit()) return;
+
       ORG.startInlineEdit(
         nameSpan,
         equipe.nome,
@@ -1519,10 +1460,13 @@ function makeEquipeHeader(refKey, equipe){
     }
   }, "✎");
 
-  // Adicionar pessoa
+  // ✅ ADD PESSOA
   const btnAdd = el("button", {
     title:"Adicionar pessoa à equipe",
     onclick:function(){
+
+      if (!canEdit()) return;
+
       const p = prompt("Nome da nova pessoa:");
       if(p){
         ORG.addPessoaToEquipe(refKey, equipe.nome, p, false);
@@ -1531,14 +1475,18 @@ function makeEquipeHeader(refKey, equipe){
     }
   }, "＋");
 
-  // (Opcional) Favoritar referência via equipe — mantém o atalho, sem estrela no título
+  // ✅ REFERÊNCIA
   const btnFav = el("button", {
     title:"Marcar / desmarcar como referência da equipe",
     onclick:function(){
+
+      if (!canEdit()) return;
+
       if (!equipe.pessoas || !equipe.pessoas.length) {
         alert("Adicione pelo menos 1 pessoa antes de marcar referência.");
         return;
       }
+
       if (equipe.referencia) {
         ORG.toggleReferencia(refKey, equipe.nome, equipe.referencia);
       } else {
@@ -1549,14 +1497,18 @@ function makeEquipeHeader(refKey, equipe){
           alert("Essa pessoa não pertence à equipe.");
         }
       }
+
       render();
     }
   }, "⭐");
 
-  // Excluir equipe
+  // ✅ EXCLUIR
   const btnDel = el("button", {
     title:"Excluir equipe",
     onclick:function(){
+
+      if (!canEdit()) return;
+
       if(confirm(`Excluir a equipe "${equipe.nome}"?`)){
         ORG.deleteEquipe(refKey, equipe.nome);
         render();
@@ -1684,7 +1636,6 @@ function renderRefCard(label, refKey, dataRef){
 function makeResponsaveisRow(areaKey, arr){
   const wrap = el("div", {className:"people"});
 
-  // ❗ Se não tiver responsáveis, retorna apenas o wrap vazio (SEM "Nenhum")
   if (!arr || arr.length === 0){
     return wrap; 
   }
@@ -1693,10 +1644,15 @@ function makeResponsaveisRow(areaKey, arr){
     .slice()
     .sort(function(a,b){ return ORG.sortByNamePT(a,b); })
     .forEach(function(name){
+
       const chip = el("div", {className:"chip"});
       const nameSpan = el("span", {className:"chip-name"}, name);
 
+      // ✅ Duplo clique protegido
       nameSpan.ondblclick = function(){
+
+        if (!canEdit()) return;
+
         ORG.startInlineEdit(
           nameSpan,
           name,
@@ -1709,11 +1665,15 @@ function makeResponsaveisRow(areaKey, arr){
 
       const actions = el("div", {className:"chip-actions"});
 
+      // ✅ EDITAR
       actions.appendChild(
         el("button", {
           title:"Editar",
           onclick:function(e){
+
             e.stopPropagation();
+            if (!canEdit()) return;
+
             ORG.startInlineEdit(
               nameSpan,
               name,
@@ -1726,11 +1686,15 @@ function makeResponsaveisRow(areaKey, arr){
         }, "✎")
       );
 
+      // ✅ EXCLUIR
       actions.appendChild(
         el("button", {
           title:"Excluir",
           onclick:function(e){
+
             e.stopPropagation();
+            if (!canEdit()) return;
+
             if(confirm(`Excluir "${name}" desta função?`)){
               ORG.removePessoaChave(areaKey, name);
               render();
