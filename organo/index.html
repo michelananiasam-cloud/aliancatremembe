@@ -239,42 +239,43 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
-   MOBILE READ-ONLY CORRIGIDO
+   MOBILE READ-ONLY FINAL
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ mantém header (logo + título) */
+  /* ✅ Mantém header */
 
-  /* ❌ ESCONDE FORMULÁRIO COMPLETO */
+  /* ❌ Esconde formulário */
   #form-bloco {
     display: none !important;
   }
 
-  /* ❌ ESCONDE botão + / - */
+  /* ❌ Esconde botão +/- */
   .toggle-form-btn {
     display: none !important;
   }
 
-  /* ❌ ESCONDE rodapé inteiro */
+  /* ❌ Esconde rodapé */
   #menu-rodape {
     display: none !important;
   }
 
-  /* ❌ REMOVE qualquer ação de edição */
+  /* ❌ Remove ações */
   .team-actions,
   .chip-actions,
   .ref-actions {
     display: none !important;
   }
 
-  /* ❌ DESATIVA inputs remanescentes */
+  /* ❌ BLOQUEIA CLIQUES GERAIS */
   input,
   select,
-  button {
+  button,
+  .chip {
     pointer-events: none !important;
   }
 
-  /* 🚨 IMPORTANTE: reativa só o botão atualizar */
+  /* ✅ Reativa SÓ o botão atualizar */
   button[onclick*="escolherAtualizacaoJSON"] {
     pointer-events: auto !important;
 
@@ -291,7 +292,6 @@ button.primary{
     border-radius: 14px;
 
     font-weight: bold;
-    font-size: 14px;
 
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 
@@ -303,7 +303,6 @@ button.primary{
     transform: scale(0.95);
   }
 }
-
 /* ===============================
    EQUIPES
 ================================*/
