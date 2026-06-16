@@ -243,44 +243,44 @@ button.primary{
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ LIMPA HEADER COMPLETO */
+  /* ✅ remove espaço estranho */
+  body {
+    padding: 8px 12px 80px !important;
+  }
+
+  /* ✅ limpa header SEM mexer no layout */
   #web-header {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+    border-bottom: none !important;
     backdrop-filter: none !important;
   }
 
-  /* ❌ Esconde formulário */
+  /* ❌ form */
   #form-bloco {
     display: none !important;
   }
 
-  /* ❌ Esconde botão +/- */
+  /* ❌ botão +/- */
   .toggle-form-btn {
     display: none !important;
   }
 
-  /* ✅ Remove rodapé visual */
+  /* ✅ rodapé invisível */
   #menu-rodape {
-    position: static !important;
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-
-    height: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
   }
 
-  /* ❌ Esconde conteúdo do rodapé */
+  /* ❌ esconde conteúdo, mas sem matar layout */
   .menu-rodape-content {
-    display: none !important;
+    opacity: 0;
+    pointer-events: none;
   }
 
-  /* ✅ BOTÃO ATUALIZAR */
+  /* ✅ BOTÃO FUNCIONANDO */
   #btn-atualizar {
-    display: block !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
 
     position: fixed;
     bottom: 20px;
@@ -292,25 +292,19 @@ button.primary{
     padding: 14px 18px;
     border-radius: 50px;
 
-    font-size: 14px;
     font-weight: bold;
 
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 
     z-index: 999999;
-
-    pointer-events: auto !important;
   }
 
-  /* ❌ Bloqueia interações */
-  input,
-  select,
-  button,
-  .chip {
+  /* ❌ bloqueia interação geral */
+  input, select, button, .chip {
     pointer-events: none !important;
   }
 
-  /* ✅ libera botão */
+  /* ✅ libera o botão */
   #btn-atualizar {
     pointer-events: auto !important;
   }
