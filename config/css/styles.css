@@ -50,7 +50,6 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 12px 24px;
-  /*background: #0f172a;*/
   background: linear-gradient(135deg, #2b6cb0, #63a4ff);
   color: white;
 }
@@ -61,16 +60,23 @@ body {
   font-weight: 500;
 }
 
+/* ✅ Destaque suave da logo */
 .nav-left {
   display: flex;
   align-items: center;
   gap: 10px;
+
+  background: rgba(255, 255, 255, 0.12);
+  padding: 6px 12px;
+  border-radius: 12px;
+
+  backdrop-filter: blur(6px);
 }
 
 .logo {
   height: 40px;
   cursor: pointer;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
 }
 
 .project-name {
@@ -81,11 +87,6 @@ body {
 .nav-menu {
   display: flex;
   gap: 20px;
-}
-
-.nav-menu a {
-  color: white;
-  text-decoration: none;
 }
 
 .nav-menu a:hover {
@@ -99,6 +100,11 @@ body {
   color: #000;
   font-weight: bold;
   text-decoration: none;
+}
+
+/* ✅ CONTROLE DO LOGIN VIA JSON */
+.hide-login .nav-right {
+  display: none;
 }
 
 /* ======================================
@@ -152,7 +158,6 @@ body {
   border-color: var(--accent-organo);
 }
 
-/* ELEMENTOS CARD */
 .card-icon {
   font-size: 40px;
   margin-bottom: 10px;
@@ -202,41 +207,10 @@ body {
 .text {
   font-size: 56px;
   font-weight: 700;
-  line-height: 1.1;
 }
 
 .text span {
   color: #1877f2;
-}
-
-.text-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.author {
-  margin-top: 6px;
-  font-size: 22px;
-}
-
-/* ✅ TÍTULO LOGIN */
-#login-title {
-  width: 100%;
-  max-width: 100%;
-
-  font-size: 18px;
-  text-align: center;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ✅ SOMENTE O NOME EM DESTAQUE */
-#login-nome {
-  color: var(--brand);
-  font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
 /* LOGO ANIMADA */
@@ -245,23 +219,24 @@ body {
   cursor: pointer;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
   animation: float 3s ease-in-out infinite;
-  will-change: transform;
 }
 
+/* ======================================
+   RESPONSIVE NAVBAR
+====================================== */
 @media (max-width: 900px) {
 
   .navbar {
-    padding: 10px 16px; /* 👈 menor */
+    padding: 10px 16px;
   }
 
   .nav-menu {
-    display: none; /* 👈 esconde menu grande */
+    display: none;
   }
- 
+
   .logo-hero {
     width: 140px;
   }
-}
 
   .btn-login {
     font-size: 13px;
@@ -269,118 +244,13 @@ body {
   }
 }
 
-/* ANIMAÇÃO */
+/* ======================================
+   ANIMAÇÃO
+====================================== */
 @keyframes float {
   0% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
   100% { transform: translateY(0); }
-}
-
-/* ======================================
-   LOGIN CARD
-====================================== */
-.login-wrapper {
-  width: 100%;
-  max-width: 420px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  justify-content: center; /* ✅ centraliza verticalmente */
-  gap: 15px; /* ✅ controla distância do footer */
-
-  min-height: 60vh; /* ✅ cria área para centralização real */
-}
-
-.login-container {
-  width: 360px;
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  transition: 0.2s;
-}
-
-.login-container:hover {
-  background: #f7f8fa;
-}
-
-/* ======================================
-   FORM
-====================================== */
-input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  border: 1px solid #dddfe2;
-  transition: 0.2s;
-}
-
-input:hover {
-  border-color: #666;
-}
-
-input:focus {
-  border-color: #1877f2;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(24,119,242,0.2);
-}
-
-/* ======================================
-   BUTTONS
-====================================== */
-.btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 25px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn:active {
-  transform: scale(0.96);
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, #1877f2, #166fe5);
-  color: white;
-  margin-bottom: 10px;
-}
-
-.btn-primary:hover {
-  filter: brightness(0.95);
-}
-
-.btn-outline {
-  border: 1px solid #1877f2;
-  color: #1877f2;
-}
-
-.btn-outline:hover {
-  background: #f2f3f5;
-}
-
-/* LINK */
-.link {
-  display: block;
-  text-align: center;
-  margin: 15px 0;
-  padding: 14px;
-  border-radius: 25px;
-  color: #1877f2;
-  text-decoration: none;
-  transition: all 0.15s ease;
-}
-
-.link:hover {
-  background: #f2f3f5;
-}
-
-.link:active {
-  transform: scale(0.96);
 }
 
 /* ======================================
@@ -398,42 +268,12 @@ input:focus {
 ====================================== */
 .watermark {
   display: var(--watermark-display);
-
   position: fixed;
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%) rotate(-30deg);
-
   font-size: 60px;
   font-weight: bold;
-
   color: rgba(0, 0, 0, 0.06);
-
   pointer-events: none;
-  user-select: none;
-
-  z-index: 9999;
-  white-space: nowrap;
-}
-
-/* ======================================
-   RESPONSIVE
-====================================== */
-@media (max-width: 900px) {
-  .wrapper {
-    flex-direction: column;
-  }
-
-  .left, .right {
-    width: 100%;
-  }
-
-  .text {
-    font-size: 32px;
-  }
-
-  .logo-hero {
-    width: 180px;
-  }
 }
