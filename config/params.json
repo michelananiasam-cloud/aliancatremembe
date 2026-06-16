@@ -12,6 +12,10 @@
   "comment": "dev = desenvolvimento, hml = homologação, prod = produção",
   "env": "dev",
 
+  "ui": {
+    "showLogin": true
+  },
+
   "watermark": {
     "enabled": true,
     "texts": {
