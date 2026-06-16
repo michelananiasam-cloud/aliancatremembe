@@ -243,19 +243,18 @@ button.primary{
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ remove espaço estranho */
   body {
     padding: 8px 12px 80px !important;
   }
 
-  /* ✅ limpa header SEM mexer no layout */
   #web-header {
     border-bottom: none !important;
     backdrop-filter: none !important;
   }
 
-  /* ❌ form */
-  #form-bloco {
+  /* ❌ form (remove a barra fantasma) */
+  #form-bloco,
+  #form-bloco.collapsed {
     display: none !important;
   }
 
@@ -264,22 +263,21 @@ button.primary{
     display: none !important;
   }
 
-  /* ✅ rodapé invisível */
+  /* ✅ rodapé limpo */
   #menu-rodape {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
   }
 
-  /* ❌ esconde conteúdo, mas sem matar layout */
-  .menu-rodape-content {
-    opacity: 0;
-    pointer-events: none;
+  /* ✅ ESCONDE TUDO MENOS O BOTÃO */
+  .menu-rodape-content > *:not(#btn-atualizar) {
+    display: none !important;
   }
 
-  /* ✅ BOTÃO FUNCIONANDO */
+  /* ✅ BOTÃO */
   #btn-atualizar {
-    opacity: 1 !important;
+    display: block !important;
     pointer-events: auto !important;
 
     position: fixed;
@@ -299,12 +297,12 @@ button.primary{
     z-index: 999999;
   }
 
-  /* ❌ bloqueia interação geral */
+  /* ❌ bloqueia geral */
   input, select, button, .chip {
     pointer-events: none !important;
   }
 
-  /* ✅ libera o botão */
+  /* ✅ libera botão */
   #btn-atualizar {
     pointer-events: auto !important;
   }
