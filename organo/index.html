@@ -239,25 +239,23 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
-   MOBILE READ-ONLY FINAL REAL
-================================*/
-/* ===============================
-   MOBILE READ-ONLY FINAL LIMPO
+   MOBILE READ-ONLY FINAL (CORRETO)
 ================================*/
 @media (max-width: 760px) {
 
-  /* ✅ Ajuste de espaçamento */
+  /* ✅ Espaçamento */
   body {
     padding: 8px 12px 80px !important;
+    overflow-x: hidden;
   }
 
-  /* ✅ Header mais limpo */
+  /* ✅ Header */
   #web-header {
     border-bottom: none !important;
     backdrop-filter: none !important;
   }
 
-  /* ❌ Remove completamente o formulário (inclusive barrinha) */
+  /* ❌ Remove formulário */
   #form-bloco,
   #form-bloco.collapsed {
     display: none !important;
@@ -275,7 +273,7 @@ button.primary{
     box-shadow: none !important;
   }
 
-  /* ❌ Esconde rodapé inteiro */
+  /* ❌ Esconde rodapé */
   .menu-rodape-content {
     display: none !important;
   }
@@ -287,48 +285,49 @@ button.primary{
     display: none !important;
   }
 
-  /* ❌ Bloqueia interação geral */
+  /* ❌ Bloqueia interação geral (SEM QUEBRAR BOTÃO) */
   input,
+  select,
   button:not(#btn-atualizar-mobile),
   .chip {
     pointer-events: none !important;
   }
 
-  /* ✅ Libera SOMENTE botão mobile */
-#btn-atualizar-mobile {
-  display: block !important;
-  pointer-events: auto !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+  /* ✅ BOTÃO MOBILE (FORÇADO) */
+  #btn-atualizar-mobile {
+    display: block !important;
+    position: fixed !important;
+
+    bottom: 20px !important;
+    right: 20px !important;
+
+    z-index: 9999999 !important;
+
+    pointer-events: auto !important;
+
+    background: var(--brand) !important;
+    color: #fff !important;
+
+    padding: 14px 18px;
+    border-radius: 50px;
+
+    font-weight: bold;
+    font-size: 14px;
+
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
 }
-}
-	
-#btn-atualizar-mobile {
-  background: red !important;
-}
+
 /* ===============================
-   BOTÃO MOBILE (BASE)
+   BASE (DESKTOP)
 ================================*/
 #btn-atualizar-mobile {
   display: none;
-
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-
-  background: var(--brand);
-  color: #fff;
-
-  padding: 14px 18px;
-  border-radius: 50px;
-
-  font-weight: bold;
-  font-size: 14px;
-
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-
-  z-index: 999999;
 }	
+
 	
 /* ===============================
    EQUIPES
