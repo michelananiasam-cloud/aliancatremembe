@@ -2309,5 +2309,11 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar opções"));
 }
 
+function baixarPDF() {
+  setTimeout(() => {
+    window.print();
+  }, 100);
+}
 
 window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
+window.baixarPDF = baixarPDF;
