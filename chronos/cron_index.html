@@ -1675,8 +1675,7 @@ function setPrintMode(state) {
   isPrinting = state;
   document.body.classList.toggle("printing", state);
 }
-	
-function escolherAtualizacaoJSON() {
+	function escolherAtualizacaoJSON() {
   fetch('import/option.json?v=' + Date.now())
     .then(res => res.json())
     .then(opcoes => {
@@ -1687,7 +1686,6 @@ function escolherAtualizacaoJSON() {
       );
 
       const idx = parseInt(escolha) - 1;
-
       if (!opcoes[idx]) return;
 
       const caminho = "import/" + opcoes[idx].arquivo;
@@ -1701,11 +1699,14 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar opções"));
 }
 
+window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
+
 function baixarPDF() {
   setTimeout(() => {
     window.print();
   }, 100);
 }
+window.baixarPDF = baixarPDF;
 	
 document.addEventListener("DOMContentLoaded", () => {
 
