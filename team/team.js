@@ -17,7 +17,7 @@ function canEdit() {
 
 /* ---------- CHAVES ---------- */
 var TITLE_KEY = "Equipes_titulo";
-var TITLE_DEFAULT = "Equipes Movimento Tremembé";
+var TITLE_DEFAULT = "Equipe Movimento Tremembé";
 var ORG_KEY = "Equipes_dados_v2"; // v2 p/ evitar conflito com versões antigas
 
 /* ---------- MODELO PADRÃO ---------- */
@@ -62,7 +62,7 @@ function alterarTitulo(e){
   var inp = document.getElementById("evangelizacao");
   var novo = (inp && inp.value || "").trim();
   setTitulo(novo);        // salva só o nome
-  atualizarTitulos();     // mostra "Equipes <nome>"
+  atualizarTitulos();     // mostra "Equipe <nome>"
 }
 
 
@@ -1148,7 +1148,7 @@ function handleClearAll(){
   localStorage.removeItem("Equipes_dados_v2");
   var reset = confirm("Deseja TAMBÉM resetar o título para o padrão?");
   if (reset){
-    ORG.setTitulo("Equipes Movimento Tremembé");
+    ORG.setTitulo("Equipe Movimento Tremembé");
     var inp = document.getElementById("evangelizacao");
     if (inp) inp.value = "";
   }
@@ -1252,12 +1252,12 @@ if (btnImport && inputImport) {
   
 }
 
-// Retorna sempre no formato "Equipes <nome>"
+// Retorna sempre no formato "Equipe <nome>"
 function getTituloFormatado(){
   var base = getTitulo();
   base = (base || "").trim();
   var nome = base && base !== TITLE_DEFAULT ? base : TITLE_DEFAULT.replace(/^Equipes\s*/i, "");
-  return "Equipes " + nome;
+  return "Equipe " + nome;
 }
 
 
