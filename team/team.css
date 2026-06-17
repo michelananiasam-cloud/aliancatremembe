@@ -1,6 +1,3 @@
-<style>
-
-
 /* ===============================
    FIXAR HEADER WEB NO TOPO
 ================================*/
@@ -719,5 +716,3 @@ button.primary{
   transform: rotate(-30deg);
 }
 @media print { .watermark { display:none!important; } }
-
-</style>
