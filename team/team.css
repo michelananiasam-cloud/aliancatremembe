@@ -576,10 +576,12 @@ button.primary{
   #web-header,
   #menu-rodape,
   #btn-atualizar-mobile,
+  #btn-pdf,
   #org {
-      display:none !important;
+    display: none !important;
   }
 
+  /* ----------- MOSTRAR PRINT ----------- */
   .print-only {
       display:block !important;
   }
