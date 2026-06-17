@@ -1,0 +1,468 @@
+{
+  "version": 1,
+  "exportedAt": "2026-06-17T18:20:26.424Z",
+  "current": {
+    "evangelizacao": "Thalita Kum Junho/26",
+    "lista": [
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "07:00",
+        "fim": "07:30"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Oração",
+        "nome": "Despertar dos Servos",
+        "servo": "",
+        "inicio": "07:30",
+        "fim": "08:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Crachás + Café da Manhã",
+        "servo": "Secretaria",
+        "inicio": "08:00",
+        "fim": "08:30"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Animação e Apresentação",
+        "servo": "",
+        "inicio": "08:30",
+        "fim": "08:40"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Historinha",
+        "nome": "\"Um Sábio - Depende de Você\"",
+        "servo": "",
+        "inicio": "08:40",
+        "fim": "09:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "Desafio",
+        "servo": "",
+        "inicio": "09:00",
+        "fim": "09:30"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Historinha",
+        "nome": "\"Ele existe - O cientista e o filho\"",
+        "servo": "",
+        "inicio": "09:30",
+        "fim": "09:40"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Amor do Pai",
+        "servo": "",
+        "inicio": "09:40",
+        "fim": "10:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Intervalo",
+        "nome": "com Lanche",
+        "servo": "",
+        "inicio": "10:20",
+        "fim": "10:40"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "10:40",
+        "fim": "10:50"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Life House",
+        "nome": "",
+        "servo": "",
+        "inicio": "10:50",
+        "fim": "11:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Historinha",
+        "nome": "\"Toalhas Brancas\"",
+        "servo": "",
+        "inicio": "11:00",
+        "fim": "11:15"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Amor Roubado",
+        "servo": "",
+        "inicio": "11:15",
+        "fim": "12:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Almoço",
+        "nome": "",
+        "servo": "",
+        "inicio": "12:00",
+        "fim": "13:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "13:00",
+        "fim": "13:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Pecado e Salvação",
+        "servo": "",
+        "inicio": "13:20",
+        "fim": "14:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Monólogo",
+        "nome": "do Barro",
+        "servo": "",
+        "inicio": "14:00",
+        "fim": "14:30"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "da Cruz",
+        "servo": "",
+        "inicio": "14:30",
+        "fim": "15:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Exame de Consciência",
+        "servo": "",
+        "inicio": "15:00",
+        "fim": "15:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Intervalo",
+        "nome": "com Lanche (Banho se necessário)",
+        "servo": "",
+        "inicio": "15:20",
+        "fim": "15:40"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Senhorio de Jesus",
+        "servo": "",
+        "inicio": "15:40",
+        "fim": "16:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Adoração, Renuncia e Louvor",
+        "servo": "",
+        "inicio": "16:20",
+        "fim": "17:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Intervalo",
+        "nome": "Água e Banheiro",
+        "servo": "",
+        "inicio": "17:00",
+        "fim": "17:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "17:20",
+        "fim": "17:40"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "Levar Maria para Casa",
+        "servo": "",
+        "inicio": "17:50",
+        "fim": "18:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Maria",
+        "servo": "",
+        "inicio": "18:00",
+        "fim": "18:40"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Oração",
+        "nome": "Cura Interior com Maria",
+        "servo": "",
+        "inicio": "18:40",
+        "fim": "19:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Jantar",
+        "nome": "com Maria",
+        "servo": "",
+        "inicio": "19:20",
+        "fim": "20:20"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "20:20",
+        "fim": "20:30"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Família do Zé",
+        "servo": "",
+        "inicio": "20:30",
+        "fim": "20:50"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Vida Nova em Família",
+        "servo": "",
+        "inicio": "20:50",
+        "fim": "21:30"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "Abraçar os Pais + Carta aos Pais/Familiares",
+        "servo": "",
+        "inicio": "21:30",
+        "fim": "22:00"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Avisos e Encerramento",
+        "servo": "",
+        "inicio": "22:00",
+        "fim": "22:30"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "07:30",
+        "fim": "08:00"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Oração",
+        "nome": "da Manhã no Salão do Café",
+        "servo": "",
+        "inicio": "08:00",
+        "fim": "08:20"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Café",
+        "nome": "da Manhã",
+        "servo": "",
+        "inicio": "08:20",
+        "fim": "08:50"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "08:50",
+        "fim": "09:00"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Pregação",
+        "nome": "Promessa do Pai",
+        "servo": "",
+        "inicio": "09:00",
+        "fim": "09:30"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Efusão",
+        "servo": "",
+        "inicio": "09:30",
+        "fim": "10:20"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Intervalo",
+        "nome": "Lanche",
+        "servo": "",
+        "inicio": "10:20",
+        "fim": "10:40"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Partilha Direcionada",
+        "servo": "Pastores",
+        "inicio": "10:40",
+        "fim": "11:10"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Pregação",
+        "nome": "Se Lançar",
+        "servo": "",
+        "inicio": "11:10",
+        "fim": "11:50"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Dinâmica",
+        "nome": "Se Lançar",
+        "servo": "",
+        "inicio": "11:50",
+        "fim": "12:50"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Almoço",
+        "nome": "",
+        "servo": "",
+        "inicio": "13:00",
+        "fim": "14:00"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "14:00",
+        "fim": "14:10"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Pregação",
+        "nome": "Vida Nova",
+        "servo": "",
+        "inicio": "14:10",
+        "fim": "14:50"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Retrospectiva + Cartas",
+        "servo": "Animadores",
+        "inicio": "14:50",
+        "fim": "15:20"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Pais e Família",
+        "servo": "",
+        "inicio": "15:20",
+        "fim": "15:40"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Intervalo",
+        "nome": "Preparação para Santa Missa",
+        "servo": "Equipe Litúrgica",
+        "inicio": "15:40",
+        "fim": "16:00"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Santa Missa",
+        "nome": "Encerramento",
+        "servo": "",
+        "inicio": "16:00",
+        "fim": "17:00"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "",
+        "nome": "Organização do Local",
+        "servo": "Todos os Servos",
+        "inicio": "17:00",
+        "fim": "18:00"
+      }
+    ]
+  }
+}
