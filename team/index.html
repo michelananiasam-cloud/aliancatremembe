@@ -11,12 +11,11 @@
   <!-- ✅ CSS -->
   <link rel="stylesheet" href="team.css">
 
-  <!-- ✅ Biblioteca (APENAS UMA VEZ) -->
+  <!-- ✅ Biblioteca -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" defer></script>
 
   <!-- ✅ Seu app -->
   <script src="team.js" defer></script>
-
 </head>
 
 <body>
@@ -24,8 +23,8 @@
 <div class="container">
 
   <!-- HEADER -->
-  <div id="web-header" role="banner" aria-label="Topo">
-    <a href="../" class="logo-link">
+  <div id="web-header">
+    <a href="../">
       <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
            alt="Logo da Aliança">
     </a>
@@ -35,13 +34,12 @@
 
   <!-- PRINT HEADER -->
   <div id="print-header">
-    <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
-         alt="Logo da Aliança">
+    <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png">
     <h2 id="print-title">Equipes Movimento Tremembé</h2>
   </div>
 
   <!-- FORM -->
-  <section id="form-bloco" aria-label="Cadastro e Edição">
+  <section id="form-bloco">
 
     <button id="toggle-form" class="toggle-form-btn">-</button>
 
@@ -56,19 +54,21 @@
         <div class="field">
           <label for="chave-area">Área</label>
           <select id="chave-area">
-            <option value="coordenacao">Coordenação (responsáveis)</option>
-            <option value="interna">Interna (responsáveis)</option>
-            <option value="externa">Externa (responsáveis)</option>
-            <option value="apoio">Apoio (responsáveis)</option>
+            <option value="coordenacao">Coordenação</option>
+            <option value="interna">Interna</option>
+            <option value="externa">Externa</option>
+            <option value="apoio">Apoio</option>
           </select>
         </div>
 
         <div class="field">
           <label for="chave-nome">Nome</label>
-          <input id="chave-nome" type="text" placeholder="Nome da pessoa">
+          <input id="chave-nome" type="text">
         </div>
 
-        <button class="primary" id="btn-add-chave">Adicionar Pessoa‑chave</button>
+        <button class="primary" id="btn-add-chave">
+          Adicionar Pessoa‑chave
+        </button>
       </div>
 
       <!-- EQUIPES -->
@@ -88,16 +88,16 @@
 
         <div class="field">
           <label for="eq-nome">Equipe</label>
-          <input id="eq-nome" type="text" placeholder="Ex.: Acolhida">
+          <input id="eq-nome" type="text">
         </div>
 
         <div class="field">
           <label for="eq-pessoa">Servo</label>
-          <input id="eq-pessoa" type="text" placeholder="Ex.: Maria">
+          <input id="eq-pessoa" type="text">
         </div>
 
-        <div class="field" style="flex-direction:row; align-items:center; gap:8px;">
-          <input id="eq-marcar-ref" type="checkbox" style="width:auto;">
+        <div class="field" style="flex-direction:row; gap:8px;">
+          <input id="eq-marcar-ref" type="checkbox">
           <label for="eq-marcar-ref">
             Marcar como <b>referência</b>?
           </label>
@@ -112,19 +112,21 @@
   </section>
 
   <!-- ÁREA PRINCIPAL -->
-  <section id="org" aria-live="polite"></section>
+  <section id="org"></section>
 
   <!-- PRINT -->
   <section id="print-lists" class="print-only"></section>
 
 </div>
 
-<!-- BOTÃO MOBILE -->
-<button id="btn-atualizar-mobile" type="button">
+<!-- ✅ BOTÃO MOBILE -->
+<button id="btn-atualizar-mobile"
+        type="button"
+        onclick="escolherAtualizacaoJSON()">
   🔄 Atualizar
 </button>
 
-<!-- RODAPÉ -->
+<!-- ✅ RODAPÉ -->
 <div id="menu-rodape">
   <form class="menu-rodape-content" id="form-rodape">
 
@@ -139,7 +141,10 @@
         Alterar Evangelização
       </button>
 
-      <button id="btn-atualizar" type="button" class="btn_rodape">
+      <button id="btn-atualizar"
+              type="button"
+              onclick="escolherAtualizacaoJSON()"
+              class="btn_rodape">
         Atualizar
       </button>
 
@@ -155,30 +160,15 @@
         Import
       </button>
 
-      <input type="file" id="input-import-json" hidden>
+      <input type="file"
+             id="input-import-json"
+             accept=".json,application/json"
+             hidden>
     </div>
 
   </form>
 </div>
 
 <div class="watermark">EM DESENVOLVIMENTO</div>
-
-<!-- ✅ MODAL -->
-<div id="custom-modal" style="display:none;">
-  <div class="modal-box">
-
-    <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
-         class="modal-logo">
-
-    <h3 id="modal-title">Confirmação</h3>
-    <p id="modal-text"></p>
-
-    <div class="modal-actions">
-      <button id="modal-cancel">Cancelar</button>
-      <button class="primary" id="modal-confirm">OK</button>
-    </div>
-
-  </div>
-</div>
 
 </body>
