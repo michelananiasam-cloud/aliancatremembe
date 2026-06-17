@@ -279,89 +279,53 @@ button.primary{
   /* ❌ Bloqueia interação geral (SEM QUEBRAR BOTÃO) */
   input,
   select,
-  button:not(#btn-atualizar-mobile),
+  button:not(#mobile-actions button),
   .chip {
     pointer-events: none !important;
   }
 
-/* ✅ BOTÃO MOBILE — ESTILO PADRÃO DO SISTEMA */
-#btn-atualizar-mobile {
-  display: block !important;
-  position: fixed !important;
-
-  bottom: 16px !important;
-  right: 16px !important;
-
-  z-index: 9999999 !important;
-
-  pointer-events: auto !important;
-
-  /* 👇 VISUAL ALINHADO COM SEU PROJETO */
-  background: var(--brand) !important;
-  color: #fff !important;
-
-  padding: 8px 12px;
-  border-radius: 8px;
-
-  font-size: 0.9rem;
-  font-weight: 600;
-
-  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
-
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-
-  opacity: 0.95;
-  transition: 0.2s;
-}
-
-/* ✅ hover leve */
-#btn-atualizar-mobile:active {
-  transform: scale(0.96);
-}
-
-#btn-pdf-mobile {
-  display: block !important;
-  position: fixed !important;
-
-  bottom: 16px !important;
-  right: 95px !important; /* fica ao lado do outro botão */
-
-  z-index: 9999999 !important;
-
-  pointer-events: auto !important;
-
-  background: var(--brand) !important;
-  color: #fff !important;
-
-  padding: 8px 12px;
-  border-radius: 8px;
-
-  font-size: 0.9rem;
-  font-weight: 600;
-
-  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
-
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-
-  opacity: 0.95;
-  transition: 0.2s;
-}
-/* ✅ hover leve */
-#btn-pdf-mobile:active {
-  transform: scale(0.96);
-}
-}
-
 /* ===============================
-   BASE (DESKTOP)
+   MOBILE ACTIONS (SUBSTITUI BOTÕES FIXOS)
 ================================*/
-#btn-atualizar-mobile {
-  display: none;
-}	
-#btn-pdf-mobile {
-  display: none;
-}	
-	
+
+#mobile-actions {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+
+  display: flex;
+  gap: 10px;
+
+  z-index: 9999999;
+}
+
+/* Botões padrão */
+#mobile-actions button {
+  pointer-events: auto;
+
+  background: var(--brand);
+  color: #fff;
+
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  opacity: 0.95;
+  transition: 0.2s;
+}
+
+/* Clique */
+#mobile-actions button:active {
+  transform: scale(0.96);
+}
+
+
 /* ===============================
    EQUIPES
 ================================*/
@@ -597,6 +561,10 @@ button.primary{
 =========================================== */
 @media print {
 
+#mobile-actions {
+  display: none !important;
+}
+
   /* ----------- Pagina ----------- */
   @page {
       size: auto;
@@ -609,8 +577,6 @@ button.primary{
   #toggle-form,
   #web-header,
   #menu-rodape,
-  #btn-atualizar-mobile,
-  #btn-pdf-mobile,
   #org {
     display: none !important;
   }
@@ -736,7 +702,9 @@ button.primary{
 
 }
 
-
+#mobile-actions {
+  display: none;
+}
 
 .watermark {
   display: var(--watermark-display);
