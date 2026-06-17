@@ -2315,5 +2315,51 @@ function baixarPDF() {
   }, 100);
 }
 
+
+
+/* ============================================
+   EXPOR FUNÇÕES PARA HTML (OBRIGATÓRIO)
+============================================ */
+
+
+/* ============================================================
+   🔥 FIX GLOBAL — NECESSÁRIO PARA JS EXTERNO
+============================================================ */
+
+/* funções chamadas no HTML */
 window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
+window.baixarJSONEquipes = baixarJSONEquipes;
+window.baixarMermaidA4 = baixarMermaidA4;
 window.baixarPDF = baixarPDF;
+
+/* render principal */
+window.render = render;
+
+/* storage (usados indiretamente) */
+window.saveOrg = saveOrg;
+window.loadOrg = loadOrg;
+
+/* import */
+window.importarJSONDireto = importarJSONDireto;
+window.importarJSONEquipes = importarJSONEquipes;
+
+/* handlers */
+window.handleAddPessoaChave = handleAddPessoaChave;
+window.handleUpsertEquipe = handleUpsertEquipe;
+
+/* título */
+window.getTitulo = getTitulo;
+window.setTitulo = setTitulo;
+window.getTituloFormatado = getTituloFormatado;
+window.atualizarTitulos = atualizarTitulos;
+
+/* debug opcional */
+window.DEBUG = {
+  render,
+  loadOrg,
+  saveOrg
+};
+
+
+
+
