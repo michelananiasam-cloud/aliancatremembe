@@ -1675,7 +1675,34 @@ function setPrintMode(state) {
   isPrinting = state;
   document.body.classList.toggle("printing", state);
 }
-	function escolherAtualizacaoJSON() {
+
+function importarJSONDireto(json) {
+  try {
+
+    if (!json.current?.lista) {
+      throw new Error("Formato inválido");
+    }
+
+    // ✅ atualiza dados
+    salvarLista(json.current.lista);
+
+    // ✅ atualiza evangelização
+    if (json.current.evangelizacao) {
+      setEvangelizacao(json.current.evangelizacao);
+    }
+
+    atualizarTitulos();
+    renderizarLista();
+
+    alert("✅ Cronograma atualizado com sucesso!");
+
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao importar JSON do servidor!");
+  }
+}
+	
+function escolherAtualizacaoJSON() {
   fetch('import/option.json?v=' + Date.now())
     .then(res => res.json())
     .then(opcoes => {
