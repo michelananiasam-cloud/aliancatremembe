@@ -1,7 +1,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Programação Movimento Tremembé</title>
+<title>Equipes Movimento Tremembé</title>
 <link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/png" />
 
 <style>
@@ -743,7 +743,7 @@ button.primary{
          	alt="Logo da Aliança">
   	</a>
   
-  	<h1 id="titulo-web">Programação Movimento Tremembé</h1>
+  	<h1 id="titulo-web">Equipes Movimento Tremembé</h1>
 	</div>
 
 
@@ -753,7 +753,7 @@ button.primary{
   <img
     src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
     alt="Logo da Aliança">
-  <h2 id="print-title">Programação Movimento Tremembé</h2>
+  <h2 id="print-title">Equipes Movimento Tremembé</h2>
 </div>
 
 
@@ -839,7 +839,7 @@ button.primary{
 
 
   <!-- ===============================
-       ÁREA DO Programação (WEB)
+       ÁREA DO Equipes (WEB)
   ================================== -->
   <section id="org" aria-live="polite"></section>
 
@@ -873,8 +873,8 @@ button.primary{
       <input
         type="text"
         id="evangelizacao"
-        placeholder="Nome do Programação"
-        title="Digite o título do Programação">
+        placeholder="Nome do Equipes"
+        title="Digite o título do Equipes">
     </div>
 
 
@@ -928,9 +928,9 @@ function canEdit() {
 ============================================================ */
 
 /* ---------- CHAVES ---------- */
-var TITLE_KEY = "Programação_titulo";
-var TITLE_DEFAULT = "Programação Movimento Tremembé";
-var ORG_KEY = "Programação_dados_v2"; // v2 p/ evitar conflito com versões antigas
+var TITLE_KEY = "Equipes_titulo";
+var TITLE_DEFAULT = "Equipes Movimento Tremembé";
+var ORG_KEY = "Equipes_dados_v2"; // v2 p/ evitar conflito com versões antigas
 
 /* ---------- MODELO PADRÃO ---------- */
 function defaultModel(){
@@ -974,7 +974,7 @@ function alterarTitulo(e){
   var inp = document.getElementById("evangelizacao");
   var novo = (inp && inp.value || "").trim();
   setTitulo(novo);        // salva só o nome
-  atualizarTitulos();     // mostra "Programação <nome>"
+  atualizarTitulos();     // mostra "Equipes <nome>"
 }
 
 
@@ -2063,11 +2063,11 @@ function handleRodapeSubmit(e){
   ORG.alterarTitulo(e);
 }
 function handleClearAll(){
-  if (!confirm("Tem certeza que deseja LIMPAR todas as informações do Programação?")) return;
-  localStorage.removeItem("Programação_dados_v2");
+  if (!confirm("Tem certeza que deseja LIMPAR todas as informações do Equipes?")) return;
+  localStorage.removeItem("Equipes_dados_v2");
   var reset = confirm("Deseja TAMBÉM resetar o título para o padrão?");
   if (reset){
-    ORG.setTitulo("Programação Movimento Tremembé");
+    ORG.setTitulo("Equipes Movimento Tremembé");
     var inp = document.getElementById("evangelizacao");
     if (inp) inp.value = "";
   }
@@ -2139,7 +2139,7 @@ if (btnExportMermaid){
 // Exportar JSON
 const btnExportJSON = document.getElementById("btn-export-json");
 if (btnExportJSON){
-  btnExportJSON.addEventListener("click", baixarJSONProgramação);
+  btnExportJSON.addEventListener("click", baixarJSONEquipes);
 }
 
 
@@ -2163,7 +2163,7 @@ if (btnImport && inputImport) {
         	return;
     	}
 
-    	importarJSONProgramação(file);
+    	importarJSONEquipes(file);
 
     	inputImport.value = ""; // permite reimportar
 	});
@@ -2171,12 +2171,12 @@ if (btnImport && inputImport) {
   
 }
 
-// Retorna sempre no formato "Programação <nome>"
+// Retorna sempre no formato "Equipes <nome>"
 function getTituloFormatado(){
   var base = getTitulo();
   base = (base || "").trim();
-  var nome = base && base !== TITLE_DEFAULT ? base : TITLE_DEFAULT.replace(/^Programação\s*/i, "");
-  return "Programação " + nome;
+  var nome = base && base !== TITLE_DEFAULT ? base : TITLE_DEFAULT.replace(/^Equipes\s*/i, "");
+  return "Equipes " + nome;
 }
 
 
@@ -2244,8 +2244,8 @@ function renderCountsWeb(counts){
   return card;
 }
 
-function baixarJSONProgramação() {
-    const json = gerarJSONProgramaçãoComLinks();
+function baixarJSONEquipes() {
+    const json = gerarJSONEquipesComLinks();
     const conteudo = JSON.stringify(json, null, 2);
 
     let nomeArquivo = getTitulo();
@@ -2258,7 +2258,7 @@ function baixarJSONProgramação() {
         .replace(/^_|_$/g, "")
         .toLowerCase(); // ✅ garante minúsculo
 
-    if (!nomeArquivo) nomeArquivo = "Programação";
+    if (!nomeArquivo) nomeArquivo = "Equipes";
 
     const blob = new Blob([conteudo], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -2284,7 +2284,7 @@ function baixarMermaidA4() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Programação_a4_mermaid.txt";
+    a.download = "Equipes_a4_mermaid.txt";
     a.click();
 
     URL.revokeObjectURL(url);
@@ -2312,13 +2312,13 @@ document.addEventListener("DOMContentLoaded", () => {
   initApp();
 
   // 🔥 DEPOIS: tenta carregar JSON
-  fetch('./data/Programação_model.json')
+  fetch('./data/Equipes_model.json')
     .then(res => {
       if (!res.ok) throw new Error("JSON não encontrado");
       return res.json();
     })
     .then(json => {
-      const temDados = localStorage.getItem("Programação_dados_v2");
+      const temDados = localStorage.getItem("Equipes_dados_v2");
 
       if (!temDados) {
         importarJSONDireto(json);
@@ -2369,7 +2369,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const caminho = "import/" + primeira.arquivo;
 
-      const temDados = localStorage.getItem("Programação_dados_v2");
+      const temDados = localStorage.getItem("Equipes_dados_v2");
 
       if (!temDados) {
         fetch(caminho)
@@ -2432,7 +2432,7 @@ function getTeamStats(org){
     return { stats, totalAreas };
 }
 
-function gerarJSONProgramaçãoComLinks() {
+function gerarJSONEquipesComLinks() {
     const org = ORG.load();
 
     let idCounter = 1;
@@ -2574,12 +2574,12 @@ function gerarLinkMermaid(mermaidCode) {
 }
 
 function testarJSON() {
-    const json = gerarJSONProgramaçãoComLinks();
+    const json = gerarJSONEquipesComLinks();
     console.log(json);
 }
 
 function abrirMermaid() {
-    const { nodes, links } = gerarJSONProgramaçãoComLinks();
+    const { nodes, links } = gerarJSONEquipesComLinks();
     const codigo = gerarMermaidAPartirDoJSON(nodes, links);
     const url = gerarLinkMermaid(codigo);
     window.open(url, "_blank");
@@ -2616,7 +2616,7 @@ function gerarMermaidAPartirDoJSON(nodes, links) {
 
 function baixarMermaidTXT() {
     // 1. pega seus dados reais
-    const { nodes, links } = gerarJSONProgramaçãoComLinks();
+    const { nodes, links } = gerarJSONEquipesComLinks();
 
     // 2. converte em texto Mermaid
     const mermaid = gerarMermaidTexto(nodes, links);
@@ -2628,7 +2628,7 @@ function baixarMermaidTXT() {
     // 4. cria o link invisível para baixar
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Programação.mmd.txt";
+    a.download = "Equipes.mmd.txt";
     document.body.appendChild(a);
     a.click();
     
@@ -2673,7 +2673,7 @@ function normalizarNos(nodes) {
     return Array.from(mapa.values());
 }
 
-function gerarMermaidProgramação(nodes, links) {
+function gerarMermaidEquipes(nodes, links) {
     // remove duplicações automáticas
     nodes = normalizarNos(nodes);
 
@@ -2702,15 +2702,15 @@ function gerarMermaidProgramação(nodes, links) {
 }
 
 function baixarMermaidRealTXT() {
-    const { nodes, links } = gerarJSONProgramaçãoComLinks();
-    const mermaid = gerarMermaidProgramação(nodes, links);
+    const { nodes, links } = gerarJSONEquipesComLinks();
+    const mermaid = gerarMermaidEquipes(nodes, links);
 
     const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
   
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Programação_real.mmd.txt";
+    a.download = "Equipes_real.mmd.txt";
     document.body.appendChild(a);
     a.click();
   
@@ -2758,7 +2758,7 @@ function gerarMermaidPorEquipes(nodes, links) {
 }
 
 function baixarMermaidEquipesTXT() {
-    const { nodes, links } = gerarJSONProgramaçãoComLinks();
+    const { nodes, links } = gerarJSONEquipesComLinks();
     const mermaid = gerarMermaidPorEquipes(nodes, links);
 
     const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
@@ -2766,7 +2766,7 @@ function baixarMermaidEquipesTXT() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Programação_equipes.mmd.txt";
+    a.download = "Equipes_equipes.mmd.txt";
     document.body.appendChild(a);
     a.click();
 
@@ -2775,7 +2775,7 @@ function baixarMermaidEquipesTXT() {
 }
 
 function gerarMermaidEquipesSimplificado() {
-    const { nodes, links } = gerarJSONProgramaçãoComLinks();
+    const { nodes, links } = gerarJSONEquipesComLinks();
 
     // index para consultar servos associados a cada equipe
     const mapaServos = {};
@@ -2875,7 +2875,7 @@ function gerarMermaidA4() {
     const eqApo   = org.apoio.equipes || [];
 
     let txt = `flowchart TB
-%% Programação A4 – AUTO GERADO DINAMICAMENTE
+%% Equipes A4 – AUTO GERADO DINAMICAMENTE
 %% https://mermaid.live/
 
 
@@ -2962,7 +2962,7 @@ window.addEventListener("beforeprint", () => {
     syncPrintHeaderTitle();
 });
 
-function importarJSONProgramação(file) {
+function importarJSONEquipes(file) {
     if (!file) return;
 
     const reader = new FileReader();
