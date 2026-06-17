@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cronograma Aliança</title>
+<title>Programação Movimento Tremembé</title>
 <link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/x-icon">
 
 <style>
@@ -770,7 +770,7 @@ body{
          	alt="Logo da Aliança">
   	</a>
   
-  	<h1 id="titulo-web">Cronograma Movimento Tremembé</h1>
+  	<h1 id="titulo-web">Programação Movimento Tremembé</h1>
 	</div>
 	
 
@@ -908,7 +908,7 @@ let atividadeAtual = null;
 let isPrinting = false; // 👈 ADICIONE AQUI
 const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
-const LIST_KEY  = "cronograma";
+const LIST_KEY  = "Programação";
 const HIST_KEY  = "historicos";
 const EVANG_KEY = "evangelizacao";
 const EVANG_DEFAULT = "Movimento Tremembé";
@@ -934,13 +934,13 @@ function setEvangelizacao(valor) {
     console.error("Erro salvando evangelização", e);
   }
 }
-function getTituloCronograma() {
-  return `Cronograma ${getEvangelizacao()}`;
+function getTituloProgramacao() {
+  return `Programação ${getEvangelizacao()}`;
 }
 function atualizarTitulos() {
   const h1 = document.getElementById("titulo-web");
-  if (h1) h1.textContent = getTituloCronograma();
-  document.title = getTituloCronograma();
+  if (h1) h1.textContent = getTituloProgramacao();
+  document.title = getTituloProgramacao();
 }
 
 function alterarEvangelizacao(e) {
@@ -1245,7 +1245,7 @@ function renderizarLista() {
     const h2Titulo = el(
       "h2",
       { className: "print-only" },
-      getTituloCronograma()
+      getTituloProgramacao()
     );
 
     const hDia = el(
@@ -1587,7 +1587,7 @@ function gerarNomeArquivo() {
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_|_$/g, "");
 
-  return `cronograma_${nome || "backup"}.json`;
+  return `Programacao_${nome || "backup"}.json`;
 }
 
 function exportarBackup(){
@@ -1694,7 +1694,7 @@ function importarJSONDireto(json) {
     atualizarTitulos();
     renderizarLista();
 
-    alert("✅ Cronograma atualizado com sucesso!");
+    alert("✅ Programação atualizada com sucesso!");
 
   } catch (e) {
     console.error(e);
@@ -1808,7 +1808,7 @@ window.addEventListener("afterprint", () => {
 	
 </script>
 
-  <div class="watermark">EM DESENVOLVIMENTO</div>
+  <div class="watermark">TK JOVEM</div>
 </body>
   
 </html>
