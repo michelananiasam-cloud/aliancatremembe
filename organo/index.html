@@ -911,7 +911,7 @@ button.primary{
 </div>
 
 <script>
-const MOBILE_EDITABLE = false;  /* true para liberar edição no mobile
+const MOBILE_EDITABLE = false;  /* true para liberar edição no mobile */
 
 function isMobileEditAllowed() {
   return MOBILE_EDITABLE;
@@ -1359,21 +1359,22 @@ function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
 
   chip.appendChild(nameSpan);
 
-  chip.addEventListener("click", function(){
-    if (pessoaObj.confirmado === null) pessoaObj.confirmado = true;
-    else if (pessoaObj.confirmado === true) pessoaObj.confirmado = false;
-    else pessoaObj.confirmado = null;
+chip.addEventListener("click", function(){
 
+  if (!canEdit()) return;  // ✅ ADICIONE ISSO
 
+  if (pessoaObj.confirmado === null) pessoaObj.confirmado = true;
+  else if (pessoaObj.confirmado === true) pessoaObj.confirmado = false;
+  else pessoaObj.confirmado = null;
 
-const org = ORG.load();
-const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
-const pessoa = eq.pessoas.find(p => p.nome === nome);
-pessoa.confirmado = pessoaObj.confirmado;
-saveOrg(org);
-render();
+  const org = ORG.load();
+  const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
+  const pessoa = eq.pessoas.find(p => p.nome === nome);
+  pessoa.confirmado = pessoaObj.confirmado;
 
-  });
+  saveOrg(org);
+  render();
+});
 
   if (isRef){
     chip.appendChild(el("span", { className:"chip-star" }, "⭐"));
@@ -3160,7 +3161,7 @@ function importarJSONDireto(json) {
     atualizarTitulos();
     render();
 
-    alert("Oganograma Atualizado com Sucesso!");
+    alert("✅ Equipe Atualizada com Sucesso!");
   } catch (e) {
     console.error(e);
     alert("Erro ao importar JSON do Servidor!");
