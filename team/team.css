@@ -318,6 +318,38 @@ button.primary{
 #btn-atualizar-mobile:active {
   transform: scale(0.96);
 }
+
+#btn-pdf-mobile {
+  display: block !important;
+  position: fixed !important;
+
+  bottom: 16px !important;
+  right: 95px !important; /* fica ao lado do outro botão */
+
+  z-index: 9999999 !important;
+
+  pointer-events: auto !important;
+
+  background: var(--brand) !important;
+  color: #fff !important;
+
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  opacity: 0.95;
+  transition: 0.2s;
+}
+/* ✅ hover leve */
+#btn-pdf-mobile:active {
+  transform: scale(0.96);
+}
 }
 
 /* ===============================
@@ -326,7 +358,9 @@ button.primary{
 #btn-atualizar-mobile {
   display: none;
 }	
-
+#btn-pdf-mobile {
+  display: none;
+}	
 	
 /* ===============================
    EQUIPES
@@ -576,7 +610,7 @@ button.primary{
   #web-header,
   #menu-rodape,
   #btn-atualizar-mobile,
-  #btn-pdf,
+  #btn-pdf-mobile,
   #org {
     display: none !important;
   }
