@@ -1,19 +1,26 @@
+<style>
+
+
 /* ===============================
    FIXAR HEADER WEB NO TOPO
 ================================*/
+
 #web-header{
     position:sticky;
     top:0;
     backdrop-filter:blur(6px);
     background:rgba(255,255,255,0.75);
-    z-index: 9999 !important;
+	z-index: 9999 !important;
 }
+
 
 /* ===============================
    VARIÁVEIS E TEMA
 ================================*/
 :root{
-  --watermark-display: flex;
+  /* ✅ FLAG watermark-display (Marca D'Água) */
+  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
+  --watermark-display: flex;	
   --bg:#ffffff;
   --text:#111;
   --muted:#666;
@@ -26,8 +33,10 @@
   --space-2:0.5rem;
   --space-3:0.75rem;
   --space-4:1rem;
+  --space-5:1.25rem;
   --space-6:1.5rem;
   --space-8:2rem;
+  --font-base:16px;
 }
 
 @media (prefers-color-scheme: dark){
@@ -44,109 +53,712 @@
    BASE
 ================================*/
 *{ box-sizing:border-box; }
+html, body { min-height:100%; height:auto; }
+
 body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: var(--font-base);
+  line-height:1.45;
+  color:var(--text);
+  background:var(--bg);
   margin:0;
-  font-family:system-ui;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+h1,h2,h3{ margin:0 0 var(--space-4); line-height:1.2; }
+h1{ font-size:1.6rem; font-weight:700; }
+
+.container{ max-width:1100px; margin:0 auto; }
+
+/* ===============================
+   CABEÇALHO WEB
+================================*/
+#web-header{
+  display:flex;
+  gap: var(--space-4);
+  align-items:center;
+  justify-content:center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  backdrop-filter: blur(6px);
+}
+#web-header img{ width:120px; height:auto; }
+
+/* ===============================
+   FORMULÁRIOS (com seta no canto)
+================================*/
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field label{ font-weight:600; font-size:0.92rem; }
+
+input, select{
+  width:100%;
+  padding:0.7rem 0.8rem;
+  border:1px solid color-mix(in srgb, var(--text) 18%, transparent);
   background:var(--bg);
   color:var(--text);
+  border-radius:8px;
+  font-size:1rem;
+}
+
+
+#form-bloco{
+  display:block;
+  position:relative;
+  padding: var(--space-6) var(--space-4);
+}
+
+#form-bloco .card{
+  margin-bottom:16px;
+}
+
+
+#form-bloco-inner {
+   display:grid;
+   gap:16px;
+}
+
+/* 🔥 SETA MINIMALISTA — APENAS - / + */
+.toggle-form-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:none;
+  border:none;
+  color:var(--text);
+  font-size:22px;
+  font-weight:bold;
+  cursor:pointer;
+  padding:0;
+  margin:0;
+  line-height:1;
+  transition:0.2s;
+  z-index:10;
+}
+.toggle-form-btn:hover{
+  opacity:0.6;
+}
+
+/* animação de abrir/fechar o menu de adição */
+#form-bloco.expanded{
+  max-height:5000px;
+  opacity:1;
+  transition:all .35s ease;
+}
+
+#form-bloco.collapsed{
+  display:block !important;
+  height:20px !important; /* altura da barra visível */
+  max-height:48px !important;
+  overflow:hidden !important;
+
+  padding: var(--space-6) var(--space-4) !important;
+  padding-top:10px !important; /* espaço para a seta */
+
+  background: var(--card);
+  border-radius: var(--radius);
+  border:1px solid color-mix(in srgb, var(--text) 10%, transparent);
+
+  position:relative;
+  opacity:1 !important;
+  transition:all .35s ease;
+}
+
+/* ESCONDE TODO CONTEÚDO INTERNO */
+#form-bloco.collapsed > *:not(.toggle-form-btn){
+  opacity:0 !important;
+  visibility:hidden !important;
+  height:0 !important;
+  max-height:0 !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  margin:0 !important;
+  pointer-events:none !important;
+}
+
+/* MANTÉM A SETA VISÍVEL */
+#form-bloco.collapsed .toggle-form-btn{
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+button.primary{
+  padding:0.9rem 1rem;
+  background:var(--brand);
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:1rem;
 }
 
 /* ===============================
-   MOBILE ACTIONS BASE
+   CARTÕES
 ================================*/
-#mobile-actions {
-  display:none;
+.card{
+  background:var(--bg);
+  border:1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.card-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:10px;
+}
+.badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:0.85rem;
+  font-weight:600;
+  background: color-mix(in srgb, var(--brand) 15%, transparent);
+  border:1px solid color-mix(in srgb, var(--brand) 28%, transparent);
 }
 
 /* ===============================
-   MOBILE
+   GRID DE REFERÊNCIAS
 ================================*/
-@media (max-width:760px){
+.grid-refs{
+  display:grid;
+  gap:16px;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+.ref-apoio{ grid-column:1/-1; }
+@media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
-  body{
-    padding:8px 12px 80px;
+/* ===============================
+   MOBILE READ-ONLY FINAL (CORRETO)
+================================*/
+@media (max-width: 760px) {
+
+  /* ✅ Espaçamento */
+  body {
+    padding: 8px 12px 80px !important;
+    overflow-x: hidden;
   }
 
+  /* ✅ Header */
+  #web-header {
+    border-bottom: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* ❌ Remove formulário */
   #form-bloco,
-  .toggle-form-btn,
-  .menu-rodape-content,
+  #form-bloco.collapsed {
+    display: none !important;
+  }
+
+  /* ❌ Remove botão +/- */
+  .toggle-form-btn {
+    display: none !important;
+  }
+
+  /* ✅ Limpa rodapé */
+  #menu-rodape {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ❌ Esconde rodapé */
+  .menu-rodape-content {
+    display: none !important;
+  }
+
+  /* ❌ Remove ações */
   .team-actions,
   .chip-actions,
-  .ref-actions{
-    display:none !important;
+  .ref-actions {
+    display: none !important;
   }
 
-  /* ✅ BLOQUEIA INTERAÇÃO GLOBAL */
+  /* ❌ Bloqueia interação geral (SEM QUEBRAR BOTÃO) */
   input,
   select,
-  button,
-  .chip{
-    pointer-events:none;
+  button:not(#btn-atualizar-mobile),
+  .chip {
+    pointer-events: none !important;
   }
 
-  /* ✅ LIBERA APENAS MOBILE ACTIONS */
-  #mobile-actions,
-  #mobile-actions *{
-    pointer-events:auto;
-  }
+/* ✅ BOTÃO MOBILE — ESTILO PADRÃO DO SISTEMA */
+#btn-atualizar-mobile {
+  display: block !important;
+  position: fixed !important;
 
-  /* ✅ BOTÕES MOBILE */
-  #mobile-actions{
-    position:fixed;
-    bottom:16px;
-    right:16px;
-    display:flex;
-    gap:10px;
-    z-index:999999;
-  }
+  bottom: 16px !important;
+  right: 16px !important;
 
-  #mobile-actions button{
-    background:var(--brand);
-    color:#fff;
-    border:none;
-    padding:8px 12px;
-    border-radius:8px;
-    font-weight:600;
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
-  }
+  z-index: 9999999 !important;
 
+  pointer-events: auto !important;
+
+  /* 👇 VISUAL ALINHADO COM SEU PROJETO */
+  background: var(--brand) !important;
+  color: #fff !important;
+
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  opacity: 0.95;
+  transition: 0.2s;
+}
+
+/* ✅ hover leve */
+#btn-atualizar-mobile:active {
+  transform: scale(0.96);
+}
 }
 
 /* ===============================
-   PRINT
+   BASE (DESKTOP)
 ================================*/
-@media print{
+#btn-atualizar-mobile {
+  display: none;
+}	
 
-  #mobile-actions{
-    display:none !important;
+	
+/* ===============================
+   EQUIPES
+================================*/
+.team-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 4px;
+  margin-bottom:6px;
+  border-bottom:1px dashed color-mix(in srgb, var(--text) 12%, transparent);
+}
+.team-line:hover .team-actions{ opacity:1; pointer-events:auto; }
+.team-name{
+  font-size:1rem;
+  font-weight:600;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.team-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.team-actions button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:1rem;
+  color:var(--text);
+  opacity:0.85;
+}
+.team-actions button:hover{ opacity:1; }
+
+/* ===============================
+   CHIPS
+================================*/
+.people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.chip{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:var(--card);
+  border:2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
+  font-size:0.92rem;
+  transition: border-color 0.25s linear;
+}
+.chip-ok{ border-color:#28a745 !important; }
+.chip-pend{ border-color:#dc3545 !important; }
+.chip:hover .chip-actions{ opacity:1; pointer-events:auto; }
+.chip-actions{
+  display:flex;
+  gap:4px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.chip-actions button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:0.85rem;
+  opacity:0.85;
+  color:var(--text);
+}
+.chip-star{ color:var(--warn); font-size:1rem; }
+
+/* ===============================
+   MENU DE RODAPÉ – VERSÃO FINAL
+================================*/
+#menu-rodape{
+  position: fixed;
+  inset: auto 0 0 0;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+  z-index: 1000;
+
+  -webkit-overflow-scrolling: touch;
+  contain: layout paint;
+}
+
+/* Linha principal do rodapé */
+.menu-rodape-content{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  max-width: 1100px;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+/* Campo inline (label + input) */
+.field-inline{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+/* input no rodapé */
+#menu-rodape label{
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#menu-rodape input{
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: var(--bg);
+  color: var(--text);
+  min-width: 140px;
+  max-width: 220px;
+  width: 100%;
+}
+
+/* A área de botões */
+.rodape-actions{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  flex: 1 1 auto;
+  justify-content: flex-end;
+
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+/* Botões */
+.btn_rodape,
+.sec-btn{
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  color: var(--text);
+}
+
+.btn_rodape{
+  background: var(--brand);
+  color:#fff;
+}
+
+.sec-btn{
+  background: var(--danger);
+  color:#fff;
+}
+
+.btn_rodape.brand{
+  border-color: color-mix(in srgb, var(--brand) 60%, transparent);
+  color:#fff;
+}
+
+.sec-btn.danger{
+  border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+  color:#fff;
+}
+
+/* Mobile: empilha */
+@media (max-width: 720px){
+  .menu-rodape-content{
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
+  .field-inline{
+    flex: 1 1 100%;
+  }
+
+  .rodape-actions{
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #menu-rodape input{
+    max-width: 100%;
+  }
+}
+
+/* ===============================
+   AÇÕES HOVER
+================================*/
+.ref-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.card:hover .ref-actions{ opacity:1; pointer-events:auto; }
+.ref-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:1.25rem;
+  color:var(--text);
+  opacity:0.85;
+}
+.ref-btn:hover{ opacity:1; }
+
+/* ===============================
+   IMPRESSÃO – BLOCO FINAL CONSOLIDADO
+================================*/
+
+#print-header{ display:none !important; }
+.print-only{ display:none !important; }
+
+/* ============================================
+   IMPRESSÃO — VERSÃO FINAL (100% CORRIGIDA)
+=========================================== */
+@media print {
+
+  /* ----------- Pagina ----------- */
+  @page {
+      size: auto;
+      margin: 5mm 8mm 8mm 8mm !important;
+  }
+
+  /* ----------- OCULTAR INTERFACE WEB ----------- */
   #form-bloco,
+  #form-bloco *,
+  #toggle-form,
   #web-header,
-  #menu-rodape{
-    display:none !important;
+  #menu-rodape,
+  #org {
+      display:none !important;
   }
 
-  .print-only{
-    display:block !important;
+  .print-only {
+      display:block !important;
   }
+
+  /* ----------- CABEÇALHO FIXO ----------- */
+  #print-header {
+      position:fixed !important;
+      top:0; left:0; right:0;
+
+      height:22mm !important;
+      padding:4mm 0 !important;
+
+      display:flex !important;
+      justify-content:center;
+      align-items:center;
+
+      background:#fff !important;
+      z-index:9999 !important;
+
+      border:none !important; /* impede linha invasiva */
+  }
+
+  #print-header img {
+      position:absolute !important;
+      top:1mm;
+      left:0mm;
+      max-height:22mm !important;
+  }
+
+  /* ----------- ZERAR BODY ----------- */
+  body {
+      margin:0 !important;
+      padding:0 !important;
+      background:#fff !important;
+  }
+
+  /* ----------- CONTAINER DAS PÁGINAS ----------- */
+  #print-lists {
+      margin:0 !important;
+      padding:0 !important;
+  }
+
+  /* ----------- QUEBRA DE PÁGINA REAL ----------- */
+  .print-break {
+      page-break-before:always !important;
+      break-before:page !important;
+  }
+
+  /* ------ NOTA IMPORTANTE ------
+     Não usamos ::before nem padding-top aqui,
+     pois o espaçamento correto é feito SOMENTE
+     pelo JS usando divs reais (firstSpacer/spacer2/spacer3).
+  -------------------------------- */
+
+  /* ----------- TÍTULOS DE SEÇÃO ----------- */
+  .print-section-title {
+      display:block !important;
+      font-size:16px !important;
+      font-weight:700 !important;
+
+      background:#eef3ff !important;
+      border-left:4px solid #2a5bd7 !important;
+
+      padding:2mm 1mm !important;
+      margin:6mm 0 4mm 0 !important;
+
+      page-break-inside:avoid !important;
+  }
+
+  /* ----------- LISTAS ----------- */
+  .print-list-block {
+      margin:1mm 0 2mm 0 !important;
+  }
+
+  .print-line {
+      font-size:14px !important;
+      margin:1mm 0 !important;
+  }
+
+  /* ----------- EQUIPES (inline, sem quebra) ----------- */
+  .print-team-outer {
+      display:block !important;
+      page-break-inside:avoid !important;
+      break-inside:avoid !important;
+      orphans:999 !important;
+      widows:999 !important;
+
+      margin:3mm 0 !important;
+      padding-bottom:1mm !important;
+
+      border-top:none !important;
+      border-bottom:1px dashed #999 !important;
+  }
+
+  .print-team-outer:last-of-type {
+      border-bottom:none !important;
+  }
+
+  .team-title {
+      font-size:14px !important;
+      font-weight:700 !important;
+
+      border-bottom:1px solid #ddd !important;
+      padding-bottom:1mm !important;
+      margin-bottom:1mm !important;
+  }
+
+  .team-members-inline {
+      font-size:12.5px !important;
+      line-height:1.3 !important;
+      word-break:break-word !important;
+      white-space:normal !important;
+  }
+
+  /* ----------- CHIPS ----------- */
+  .chip-ok  { border:2px solid #28a745 !important; }
+  .chip-pend{ border:2px solid #dc3545 !important; }
 
 }
 
-/* ===============================
-   WATERMARK
-================================*/
-.watermark{
-  display:var(--watermark-display);
+
+
+.watermark {
+  display: var(--watermark-display);
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 999999;
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.06);
+  transform: rotate(-30deg);
+}
+@media print { .watermark { display:none!important; } }
+
+#custom-modal{
   position:fixed;
   inset:0;
-  justify-content:center;
+  background:rgba(0,0,0,0.4);
+  display:none;
   align-items:center;
-  font-size:60px;
-  color:rgba(0,0,0,0.06);
-  transform:rotate(-30deg);
+  justify-content:center;
+  z-index:9999999;
 }
 
-@media print{
-  .watermark{ display:none; }
+.modal-box{
+  background:var(--bg);
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
+
+.modal-logo{
+  width:80px;
+  margin-bottom:10px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:15px;
+}
+
+.modal-actions button{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+}
+
+
+</style>
