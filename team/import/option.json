@@ -1,17 +1,17 @@
 [
   {
     "nome": "Equipe Thalita Kum junho/2026",
-    "arquivo": "thalita_kum_junho_2026.json",
+    "arquivo": "team_tk_jun_26.json",
     "versao": "2026-06-17T08:00:00"
   },
   {
     "nome": "Modelo Equipe TK",
-    "arquivo": "thalita_kum_modelo.json",
+    "arquivo": "team_tk_modelo.json",
     "versao": "2026-06-15T08:00:00"
   },
   {
     "nome": "Modelo Equipe Caná",
-    "arquivo": "cana_modelo.json",
+    "arquivo": "team_cana_modelo.json",
     "versao": "2026-06-14T08:00:00"
   }
 ]
