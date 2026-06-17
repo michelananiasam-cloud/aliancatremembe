@@ -6,12 +6,7 @@
   },
   {
     "nome": "Modelo Cronograma TK",
-    "arquivo": "cron_tk_modelo.json",
+    "arquivo": "cron_tk_model.json",
     "versao": "2026-06-15T08:00:00"
-  },
-  {
-    "nome": "Modelo Cronograma Caná",
-    "arquivo": "cron_cana_modelo.json",
-    "versao": "2026-06-14T08:00:00"
   }
 ]
