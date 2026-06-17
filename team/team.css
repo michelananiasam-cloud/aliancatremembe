@@ -279,54 +279,68 @@ button.primary{
     display: none !important;
   }
 
-  /* ❌ Bloqueia interação geral (SEM QUEBRAR BOTÃO) */
+  /* ❌ BLOQUEIA INTERAÇÃO GLOBAL (FORMA SEGURA) */
   input,
   select,
-  button:not(#btn-atualizar-mobile),
+  button,
   .chip {
     pointer-events: none !important;
   }
 
-/* ✅ BOTÃO MOBILE — ESTILO PADRÃO DO SISTEMA */
-#btn-atualizar-mobile {
-  display: block !important;
-  position: fixed !important;
+  /* ✅ LIBERA APENAS OS BOTÕES MOBILE */
+  #btn-atualizar-mobile,
+  #btn-pdf-mobile {
+    pointer-events: auto !important;
+  }
 
-  bottom: 16px !important;
-  right: 16px !important;
+  /* ✅ BOTÕES MOBILE */
+  #btn-atualizar-mobile,
+  #btn-pdf-mobile {
+    display: block !important;
+    position: fixed !important;
 
-  z-index: 9999999 !important;
+    bottom: 16px !important;
 
-  pointer-events: auto !important;
+    z-index: 9999999 !important;
 
-  /* 👇 VISUAL ALINHADO COM SEU PROJETO */
-  background: var(--brand) !important;
-  color: #fff !important;
+    background: var(--brand) !important;
+    color: #fff !important;
 
-  padding: 8px 12px;
-  border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
 
-  font-size: 0.9rem;
-  font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 600;
 
-  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+    border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 
-  opacity: 0.95;
-  transition: 0.2s;
-}
+    opacity: 0.95;
+    transition: 0.2s;
+  }
 
-/* ✅ hover leve */
-#btn-atualizar-mobile:active {
-  transform: scale(0.96);
-}
+  /* ✅ POSIÇÃO (SEM SOBREPOR) */
+  #btn-atualizar-mobile {
+    right: 16px !important;
+  }
+
+  #btn-pdf-mobile {
+    right: 110px !important;
+  }
+
+  /* ✅ Clique */
+  #btn-atualizar-mobile:active, 
+  #btn-pdf-mobile:active {
+    transform: scale(0.96);
+  }
 }
 
 /* ===============================
    BASE (DESKTOP)
 ================================*/
-#btn-atualizar-mobile {
+#btn-atualizar-mobile,
+#btn-pdf-mobile {
   display: none;
 }	
 
