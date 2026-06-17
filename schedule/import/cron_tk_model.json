@@ -97,8 +97,8 @@
       {
         "dia": "Sábado",
         "data": "2026-06-27",
-        "tipo": "Life House",
-        "nome": "",
+        "tipo": "Teatro",
+        "nome": "\"Life House\"",  
         "servo": "",
         "inicio": "10:50",
         "fim": "11:00"
@@ -268,8 +268,8 @@
       {
         "dia": "Sábado",
         "data": "2026-06-27",
-        "tipo": "Momento",
-        "nome": "Família do Zé",
+        "tipo": "Teatro",
+        "nome": "\"Família do Zé\"",  
         "servo": "",
         "inicio": "20:30",
         "fim": "20:50"
