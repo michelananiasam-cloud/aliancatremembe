@@ -1,14 +1,17 @@
 [
   {
-    "nome": "Programação Thalita Kum junho/2026",
-    "arquivo": "prog_thalita_kum_junho_2026.json"
+    "nome": "Thalita Kum Jovem Jun/2026",
+    "arquivo": "cron_tk_jun_26.json",
+    "versao": "2026-06-17T08:00:00"
   },
   {
-    "nome": "Modelo Programação TK",
-    "arquivo": "prog_thalita_kum_modelo.json"
+    "nome": "Modelo Cronograma TK",
+    "arquivo": "cron_tk_modelo.json",
+    "versao": "2026-06-15T08:00:00"
   },
   {
-    "nome": "Modelo Programação Caná",
-    "arquivo": "prog_cana_modelo.json"
+    "nome": "Modelo Cronograma Caná",
+    "arquivo": "cron_cana_modelo.json",
+    "versao": "2026-06-14T08:00:00"
   }
 ]
