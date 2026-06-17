@@ -1,17 +1,26 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-17T18:51:10.316Z",
+  "exportedAt": "2026-06-17T20:40:47.661Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
       {
-        "dia": "Sábado",
-        "data": "2026-06-27",
+        "dia": "Quarta",
+        "data": "2026-06-17",
         "tipo": "",
         "nome": "Chegada dos Servos",
         "servo": "",
-        "inicio": "07:00",
-        "fim": "07:30"
+        "inicio": "17:30",
+        "fim": "17:41"
+      },
+      {
+        "dia": "Quarta",
+        "data": "2026-06-17",
+        "tipo": "",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "17:42",
+        "fim": "18:30"
       },
       {
         "dia": "Sábado",
@@ -98,7 +107,7 @@
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Teatro",
-        "nome": "\"Life House\"",        
+        "nome": "\"Life House\"",
         "servo": "",
         "inicio": "10:50",
         "fim": "11:00"
@@ -269,7 +278,7 @@
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Teatro",
-        "nome": "\"Família do Zé\"",        
+        "nome": "\"Família do Zé\"",
         "servo": "",
         "inicio": "20:30",
         "fim": "20:50"
