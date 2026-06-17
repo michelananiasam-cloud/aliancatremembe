@@ -1,4 +1,4 @@
-<script>
+
 const MOBILE_EDITABLE = false;  /* true para liberar edição no mobile */
 
 function isMobileEditAllowed() {
@@ -386,8 +386,6 @@ window.ORG = {
   startInlineEdit: startInlineEdit
 };
 
-</script>
-<script>
 /* ============================================================
    PARTE 4.1 — Funções utilitárias de renderização visual
    (Criar elementos e estruturas HTML dos cartões)
@@ -628,8 +626,8 @@ function makeEquipeHeader(refKey, equipe){
   return line;
 }
 
-</script>
-<script>
+
+
 /* ============================================================
    PARTE 4.2 — Gerador dos cartões e de toda a árvore visual
    (Coordenação, Interna, Externa, Apoio + Equipes + Pessoas)
@@ -933,12 +931,12 @@ atualizarTitulos();
   /* Gera versão textual p/ impressão */
   renderPrintVersion(org);
 }
-</script>
+
 
 <!-- Carregar biblioteca PAKO (OBRIGATÓRIO) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js">
 
-<script>
+
 
 
 function renderPrintVersion(org){
@@ -2291,4 +2289,3 @@ function escolherAtualizacaoJSON() {
     })
     .catch(() => alert("Erro ao carregar opções"));
 }
-</script>
