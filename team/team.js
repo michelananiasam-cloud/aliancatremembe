@@ -933,12 +933,6 @@ atualizarTitulos();
 }
 
 
-<!-- Carregar biblioteca PAKO (OBRIGATÓRIO) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js">
-
-
-
-
 function renderPrintVersion(org){
     const wrap = document.getElementById("print-lists");
     if (!wrap) return;
@@ -2289,3 +2283,31 @@ function escolherAtualizacaoJSON() {
     })
     .catch(() => alert("Erro ao carregar opções"));
 }
+
+function escolherAtualizacaoJSON() {
+  fetch('import/option.json?v=' + Date.now())
+    .then(res => res.json())
+    .then(opcoes => {
+
+      const escolha = prompt(
+        "Escolha o arquivo:\n\n" +
+        opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
+      );
+
+      const idx = parseInt(escolha) - 1;
+
+      if (!opcoes[idx]) return;
+
+      const caminho = "import/" + opcoes[idx].arquivo;
+
+      fetch(caminho)
+        .then(r => r.json())
+        .then(importarJSONDireto)
+        .catch(() => alert("Erro ao carregar arquivo"));
+
+    })
+    .catch(() => alert("Erro ao carregar opções"));
+}
+
+
+window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
