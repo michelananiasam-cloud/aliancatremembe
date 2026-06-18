@@ -486,7 +486,10 @@ button.edit{
 .item.destaque::after {
   display: none !important;
 }
-
+	
+.item {
+  border-left: none !important;
+}
 
   .print-only {
     display: block !important;
@@ -702,17 +705,23 @@ button.edit{
   }
 }
 
-button.flag {button.flag transparent;
-  border: none;
-  font-size: 16px;
+button.obs {
+  background: transparent;
+  border: none;     /* ✅ remove borda preta feia */
   cursor: pointer;
-  opacity: 0.6;
-  transition: all 0.2s ease;
+  font-size: 15px;
+  opacity: 0.5;
 }
 
-button.flag:hover {
+button.obs:hover {
   opacity: 1;
   transform: scale(1.2);
+}
+
+/* quando tem comentário */
+button.obs.tem-obs {
+  color: #2d6cdf;
+  opacity: 1;
 }
 
 body{
@@ -1446,6 +1455,18 @@ const li = el("li", {
         () => clonarAtividade(idxReal)
       );
 
+const bObs = el(
+  "button",
+  { className: "obs" },
+  "💬"
+);
+		
+bObs.addEventListener(
+  "click",
+  () => editarObservacao(idxReal)
+);
+
+		
 const bFlag = el(
   "button",
   { className: "flag" },
@@ -1460,7 +1481,7 @@ bFlag.addEventListener(
 const divBtns = el(
   "div",
   { className: "item-botoes" },
-  [bEdit, bDelete, bClone, bFlag]
+  [bEdit, bDelete, bClone, bObs]
 );
 
       li.appendChild(divInfo);
@@ -1482,6 +1503,7 @@ const divBtns = el(
 }
 
 function adicionarAtividade(){
+
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
   const tipo  = document.getElementById("tipo").value;
@@ -1496,26 +1518,51 @@ function adicionarAtividade(){
   }
 
   const lista = carregarLista();
-lista.push({
-  dia,
-  data,
-  tipo,
-  nome,
-  servo,
-  inicio,
-  fim,
-  destaque: false   // ✅ NOVO
-});
+
+  lista.push({
+    dia,
+    data,
+    tipo,
+    nome,
+    servo,
+    inicio,
+    fim,
+
+    destaque: false,  // ✅ para marcar com ⚠️
+    obs: ""           // ✅ armazenar comentário 💬
+  });
+
   salvarLista(lista);
   renderizarLista();
 
+  // ✅ limpa campos
   document.getElementById("data").value = "";
   document.getElementById("tipo").selectedIndex = 0;
-  document.getElementById("nome").value="";
-  document.getElementById("servo").value="";
-  document.getElementById("inicio").value="";
-  document.getElementById("fim").value="";
+  document.getElementById("nome").value = "";
+  document.getElementById("servo").value = "";
+  document.getElementById("inicio").value = "";
+  document.getElementById("fim").value = "";
 }
+
+function editarObservacao(index){
+  const lista = carregarLista();
+
+  const atual = lista[index].obs || "";
+
+  const nova = prompt("Observação:", atual);
+
+  if (nova === null) return;
+
+  const texto = nova.trim();
+
+  lista[index].obs = texto;
+
+  // ✅ FAZ VIRAR FLAG AUTOMATICAMENTE
+  lista[index].destaque = texto.length > 0;
+
+  salvarLista(lista);
+  renderizarLista();
+}	
 	
 function toggleDestaque(index){
   const lista = carregarLista();
