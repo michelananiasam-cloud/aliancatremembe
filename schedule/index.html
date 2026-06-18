@@ -1456,32 +1456,23 @@ const li = el("li", {
         () => clonarAtividade(idxReal)
       );
 
-bObs.addEventListener(
-  "click",
-  () => editarObservacao(idxReal)
-);
-
-// ✅ TOOLTIP NO ÍCONE
-if (p.obs) {
-  bObs.setAttribute("title", p.obs);
-}
-		
 const bObs = el(
   "button",
   { className: "obs" },
   "💬"
 );
 
+// ✅ clique
 bObs.addEventListener(
   "click",
   () => editarObservacao(idxReal)
 );
 
-// ✅ ESSA LINHA É O SEGREDO
+// ✅ tooltip
 if (p.obs && p.obs.trim() !== "") {
   bObs.setAttribute("title", p.obs);
 }
-		
+
 const divBtns = el(
   "div",
   { className: "item-botoes" },
