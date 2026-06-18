@@ -480,9 +480,11 @@ button.edit{
 /* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
 .item.destaque {
   border-left: none !important;
-  background: transparent estaque::after {  background: transparent !important;
-  display: none !important;
+  background: transparent !important;
 }
+
+.item.destaque::after {
+  display: none !important;
 }
 
 
@@ -784,9 +786,9 @@ body{
   position: relative; /* ✅ garante posicionamento */
 }
 
-/* ⚠️ Marcação de atividade para melhor acompanhamento */
+/* 💬 Marcação de atividade para melhor acompanhamento */
 .item.destaque::after {
-  content: "⚠️";
+  content: "💬";
   position: absolute;
 
   left: 1px;   /* ✅ deslocamento da borda ou left: 3px; */
