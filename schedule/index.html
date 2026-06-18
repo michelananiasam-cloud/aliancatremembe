@@ -1482,31 +1482,25 @@ function adicionarAtividade(){
   document.getElementById("fim").value = "";
 }
 
-function editarObservacao(index){function const lista = carregarLista();
+function editarObservacao(index){
 
-  // pega o valor atual (evita undefined)
+  const lista = carregarLista();
+
+  // pega o valor atual
   const atual = lista[index].obs || "";
 
-  // abre o prompt com valor atual
   const nova = prompt("Observação:", atual);
 
-  // se cancelou → não faz nada
   if (nova === null) return;
 
-  // limpa espaços
   const texto = nova.trim();
 
-  // ✅ salva observação
+  // salva observação
   lista[index].obs = texto;
 
-  // ✅ controla destaque automaticamente
-  if (texto.length > 0) {
-    lista[index].destaque = true;
-  } else {
-    lista[index].destaque = false;
-  }
+  // ativa/desativa destaque automaticamente
+  lista[index].destaque = texto.length > 0;
 
-  // ✅ salva e renderiza
   salvarLista(lista);
   renderizarLista();
 }
