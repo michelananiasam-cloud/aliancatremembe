@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-18T05:05:26.459Z",
+  "exportedAt": "2026-06-18T21:49:45.449Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
@@ -93,10 +93,11 @@
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Amor do Pai",
-        "servo": "Felipe Miojo e Letícia Ferreira",
+        "servo": "Jonatan Gabriel e Letícia Ferreira",
         "inicio": "09:40",
         "fim": "10:20",
-        "obs": ""
+        "obs": "",
+        "destaque": false
       },
       {
         "dia": "Sábado",
@@ -173,10 +174,10 @@
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Pecado e Salvação",
-        "servo": "Tati *",
+        "servo": "Tati e Michel*",
         "inicio": "13:20",
         "fim": "14:00",
-        "obs": "Dedfinir quem fará a pregação com a Tati",
+        "obs": "Dedfinir se será Tati com Michel ou outro pregador",
         "destaque": true
       },
       {
@@ -184,10 +185,10 @@
         "data": "2026-06-27",
         "tipo": "Teatro",
         "nome": "\"Monólogo do Barro\"",
-        "servo": "Missionário(a) qual??",
+        "servo": "Letícia Ferreira*",
         "inicio": "14:00",
         "fim": "14:30",
-        "obs": "Precisa definir que missionária fará o monólogo.",
+        "obs": "Letícia Ferreira a confirmar, caso contrário Paulo Passos",
         "destaque": true
       },
       {
@@ -225,10 +226,11 @@
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Senhorio de Jesus",
-        "servo": "??",
+        "servo": "Felipe Miojo e Michele",
         "inicio": "15:40",
         "fim": "16:20",
-        "obs": ""
+        "obs": "A conformar com Felipe Miojo e Michele",
+        "destaque": true
       },
       {
         "dia": "Sábado",
@@ -365,10 +367,11 @@
         "data": "2026-06-28",
         "tipo": "Oração",
         "nome": "da Manhã no Salão do Café",
-        "servo": "Gabi ou Fabrício*",
+        "servo": "Jonatan Gabriel",
         "inicio": "08:00",
         "fim": "08:20",
-        "obs": ""
+        "obs": "",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -396,10 +399,11 @@
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Promessa do Pai",
-        "servo": "Caio e Missionários quais??",
+        "servo": "Angélica e *",
         "inicio": "09:00",
         "fim": "09:30",
-        "obs": ""
+        "obs": "Definir quem prega com a Angélica.",
+        "destaque": true
       },
       {
         "dia": "Domingo",
@@ -436,11 +440,11 @@
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Se Lançar",
-        "servo": "Michel e *",
+        "servo": "Michel e Marília",
         "inicio": "11:10",
         "fim": "11:50",
-        "obs": "Definir com quem Michel fará a Pregação!",
-        "destaque": true
+        "obs": "",
+        "destaque": false
       },
       {
         "dia": "Domingo",
