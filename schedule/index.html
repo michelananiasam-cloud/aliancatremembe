@@ -1456,29 +1456,32 @@ const li = el("li", {
         () => clonarAtividade(idxReal)
       );
 
-const bObs = el(
-  "button",
-  { className: "obs" },
-  "💬"
-);
-		
 bObs.addEventListener(
   "click",
   () => editarObservacao(idxReal)
 );
 
+// ✅ TOOLTIP NO ÍCONE
+if (p.obs) {
+  bObs.setAttribute("title", p.obs);
+}
 		
-const bFlag = el(
+const bObs = el(
   "button",
-  { className: "flag" },
+  { className: "obs" },
   "💬"
 );
 
-bFlag.addEventListener(
+bObs.addEventListener(
   "click",
-  () => toggleDestaque(idxReal)
+  () => editarObservacao(idxReal)
 );
 
+// ✅ ESSA LINHA É O SEGREDO
+if (p.obs && p.obs.trim() !== "") {
+  bObs.setAttribute("title", p.obs);
+}
+		
 const divBtns = el(
   "div",
   { className: "item-botoes" },
