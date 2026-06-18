@@ -433,6 +433,36 @@ button.edit{
   gap: var(--space-3);
 }
 
+/* ===============================
+   ÍCONE DE OBSERVAÇÃO (💬)
+================================*/
+.item {
+  position: relative; /* ✅ ESSENCIAL */
+}
+
+.icon-obs {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  font-size: 18px;
+  cursor: pointer;
+
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.icon-obs:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* quando tem comentário */
+.icon-obs.tem-obs {
+  opacity: 1;
+}
+
 @media(max-width:520px){
 
   .item-info{
@@ -481,10 +511,6 @@ button.edit{
 .item.destaque {
   border-left: none !important;
   background: transparent !important;
-}
-
-.item.destaque::after {
-  display: none !important;
 }
 	
 .item {
@@ -797,16 +823,8 @@ body{
 }
 
 /* 💬 Marcação de atividade para melhor acompanhamento */
-.item.destaque::after {
-  content: "💬";
-  position: absolute;
-
-  left: 1px;   /* ✅ deslocamento da borda ou left: 3px; */
-  top: 50%;
-  transform: translateY(-50%);
-
-  font-size: 11px;
-  opacity: 0.7;
+.icon-obs {
+  display: none !important;
 }
 
 
@@ -1408,6 +1426,29 @@ const li = el("li", {
   `
 });
 
+// ✅ cria o ícone real
+if (p.destaque) {
+
+  const iconObs = el(
+    "span",
+    { className: "icon-obs" },
+    "💬"
+  );
+
+  // ✅ clique → abre edição
+  iconObs.addEventListener(
+    "click",
+    () => editarObservacao(idxReal)
+  );
+
+  // ✅ tooltip → comentário
+  if (p.obs && p.obs.trim() !== "") {
+    iconObs.setAttribute("title", p.obs);
+  }
+
+  li.appendChild(iconObs);
+}
+		
       li.dataset.data = p.data;
       li.dataset.inicio = p.inicio;
       li.dataset.fim = p.fim;
