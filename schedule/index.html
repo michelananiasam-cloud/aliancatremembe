@@ -117,11 +117,6 @@
   );
 }
 
-#btn-atualizar-mobile,
-#btn-pdf-mobile {
-  display: none;
-}
-
 /* ===============================
    BOTÃO VOLTAR
 ================================*/
@@ -509,7 +504,7 @@ button.edit{
    PRINT (IMPRIMIR)
 ================================*/
 .print-only{ display:none; }
-
+.logo { display: none; }
 
 @media print {
 /* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
@@ -568,7 +563,17 @@ button.edit{
     padding-top: 120px !important;
   }
 
-
+  /* ===============================
+     LOGO
+  ============================== */
+  .pagina-detalhe .logo {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100px !important;
+    height: auto !important;
+  }
 
   /* ===============================
      TÍTULO
@@ -820,7 +825,22 @@ body{
 
 @media print {
 
-  /* ✅ garante que a logo aparece */
+  /* ✅ garante logo visível (override direto) */
+  .logo {
+    display: block !important;
+  }
+
+  /* ✅ remove ícone que interfere no layout */
+  .icon-obs {
+    display: none !important;
+  }
+
+}
+
+
+@media print {
+
+  /* ✅ garante que a logo aparece SEMPRE */
   .logo {
     display: block !important;
   }
@@ -832,10 +852,9 @@ body{
     left: 0 !important;
     width: 100px !important;
     height: auto !important;
-    z-index: 9999 !important;
+    z-index: 1 !important;
   }
 
-}
   /* ✅ limpa elementos absolutos que atrapalham layout */
   .icon-obs {
     display: none !important;
