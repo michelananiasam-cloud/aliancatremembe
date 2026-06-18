@@ -1153,33 +1153,22 @@ function salvarLista(lista){
     alert("Não foi possível salvar localmente.");
   }
 }
+
 function carregarLista(){
   try{
-    const lista = localStorage.getItem(LIST_KEY);
-    return lista ? JSON.parse(lista) : [];
+    const lista =    const dados = lista ? JSON.parse(lista) : [];    const lista = localStorage.getItem(LIST_KEY);
+
+    // ✅ garante obs em todos os itens
+    dados.forEach(item => {
+      if (item.obs === undefined) item.obs = "";
+    });
+
+    return dados;
   }catch(e){
     return [];
   }
 }
 
-function ordenarLista(lista) {
-
-  lista.sort((a, b) => {
-
-    const dateA = parseDateTime(a.data, a.inicio);
-    const dateB = parseDateTime(b.data, b.inicio);
-
-    // 🔴 fallback seguro (mantém itens inválidos no fim)
-    if (!dateA && !dateB) return 0;
-    if (!dateA) return 1;
-    if (!dateB) return -1;
-
-    return dateA - dateB;
-  });
-
-  salvarLista(lista);
-  return lista;
-}
 	
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
@@ -1486,7 +1475,6 @@ function editarObservacao(index){
 
   const lista = carregarLista();
 
-  // pega o valor atual
   const atual = lista[index].obs || "";
 
   const nova = prompt("Observação:", atual);
@@ -1495,10 +1483,8 @@ function editarObservacao(index){
 
   const texto = nova.trim();
 
-  // salva observação
   lista[index].obs = texto;
 
-  // ativa/desativa destaque automaticamente
   lista[index].destaque = texto.length > 0;
 
   salvarLista(lista);
