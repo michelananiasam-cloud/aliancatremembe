@@ -692,9 +692,17 @@ button.edit{
   }
 }
 
-button.flag {
-  background: #ffc107;
-  color: #000;
+button.flag {button.flag transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+button.flag:hover {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 body{
