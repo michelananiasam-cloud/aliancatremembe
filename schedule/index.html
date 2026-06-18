@@ -1156,7 +1156,8 @@ function salvarLista(lista){
 
 function carregarLista(){
   try{
-    const lista =    const dados = lista ? JSON.parse(lista) : [];    const lista = localStorage.getItem(LIST_KEY);
+    const lista =    const dados = lista ? JSON.parse(lista) : [];    
+	const lista = localStorage.getItem(LIST_KEY);
 
     // ✅ garante obs em todos os itens
     dados.forEach(item => {
