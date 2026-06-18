@@ -1398,9 +1398,16 @@ function renderizarLista() {
       const bClone = el("button", { className: "clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
 
-      const divBtns = el("div", { className: "item-botoes" },
-        [bEdit, bDelete, bClone]
-      );
+const bObs = el("button", { className: "obs" }, "💬");
+
+bObs.addEventListener(
+  "click",
+  () => editarObservacao(idxReal)
+);
+
+const divBtns = el("div", { className: "item-botoes" },
+  [bEdit, bDelete, bClone, bObs]
+);
 
       li.appendChild(divInfo);
       li.appendChild(divBtns);
