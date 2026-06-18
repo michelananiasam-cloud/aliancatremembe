@@ -1171,6 +1171,19 @@ function carregarLista(){
     return [];
   }
 }
+
+function ordenarLista(lista) {
+
+  lista.sort((a, b) => {
+
+    const dateA = new Date(`${a.data}T${a.inicio}:00`);
+    const dateB = new Date(`${b.data}T${b.inicio}:00`);
+
+    return dateA - dateB;
+  });
+
+  return lista;
+}
 	
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
