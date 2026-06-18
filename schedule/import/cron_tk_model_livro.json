@@ -11,7 +11,9 @@
         "nome": "Chegada dos Servos",
         "servo": "",
         "inicio": "06:00",
-        "fim": "06:30"
+        "fim": "06:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -20,7 +22,9 @@
         "nome": "Despertar dos Servos",
         "servo": "",
         "inicio": "06:30",
-        "fim": "07:00"
+        "fim": "07:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -29,7 +33,9 @@
         "nome": "Crachás + Café da Manhã",
         "servo": "Secretaria",
         "inicio": "07:00",
-        "fim": "07:30"
+        "fim": "07:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -38,7 +44,9 @@
         "nome": "Animação e Apresentação",
         "servo": "",
         "inicio": "07:30",
-        "fim": "07:45"
+        "fim": "07:45",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -47,7 +55,9 @@
         "nome": "\"Um Sábio - Depende de Você\"",
         "servo": "",
         "inicio": "07:45",
-        "fim": "08:10"
+        "fim": "08:10",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -56,7 +66,9 @@
         "nome": "Desafio",
         "servo": "",
         "inicio": "08:10",
-        "fim": "08:40"
+        "fim": "08:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -65,7 +77,9 @@
         "nome": "\"Ele existe - O cientista e o filho\"",
         "servo": "",
         "inicio": "08:40",
-        "fim": "09:00"
+        "fim": "09:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -74,7 +88,9 @@
         "nome": "Amor do Pai",
         "servo": "",
         "inicio": "09:00",
-        "fim": "09:40"
+        "fim": "09:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -83,7 +99,9 @@
         "nome": "com Lanche",
         "servo": "",
         "inicio": "09:40",
-        "fim": "10:00"
+        "fim": "10:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -92,7 +110,9 @@
         "nome": "",
         "servo": "",
         "inicio": "10:00",
-        "fim": "10:30"
+        "fim": "10:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -101,7 +121,9 @@
         "nome": "\"Life House\"",
         "servo": "",
         "inicio": "10:30",
-        "fim": "10:40"
+        "fim": "10:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -110,7 +132,9 @@
         "nome": "\"Toalhas Brancas\"",
         "servo": "",
         "inicio": "10:40",
-        "fim": "11:00"
+        "fim": "11:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -119,7 +143,9 @@
         "nome": "Amor Roubado",
         "servo": "",
         "inicio": "11:00",
-        "fim": "12:00"
+        "fim": "12:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -128,7 +154,9 @@
         "nome": "",
         "servo": "",
         "inicio": "12:00",
-        "fim": "13:00"
+        "fim": "13:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -137,7 +165,9 @@
         "nome": "",
         "servo": "",
         "inicio": "13:00",
-        "fim": "13:30"
+        "fim": "13:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -146,7 +176,9 @@
         "nome": "Pecado e Salvação",
         "servo": "",
         "inicio": "13:30",
-        "fim": "14:10"
+        "fim": "14:10",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -155,7 +187,9 @@
         "nome": "do Barro",
         "servo": "",
         "inicio": "14:10",
-        "fim": "14:30"
+        "fim": "14:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -164,7 +198,9 @@
         "nome": "da Cruz",
         "servo": "",
         "inicio": "14:30",
-        "fim": "15:00"
+        "fim": "15:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -173,7 +209,9 @@
         "nome": "Exame de Consciência",
         "servo": "",
         "inicio": "15:00",
-        "fim": "15:30"
+        "fim": "15:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -182,7 +220,9 @@
         "nome": "com Lanche (Banho se necessário)",
         "servo": "",
         "inicio": "15:30",
-        "fim": "17:00"
+        "fim": "17:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -191,7 +231,9 @@
         "nome": "Senhorio de Jesus",
         "servo": "",
         "inicio": "17:00",
-        "fim": "17:40"
+        "fim": "17:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -200,7 +242,9 @@
         "nome": "Adoração, Renuncia e Louvor",
         "servo": "",
         "inicio": "17:40",
-        "fim": "18:20"
+        "fim": "18:20",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -209,7 +253,9 @@
         "nome": "Água e Banheiro",
         "servo": "",
         "inicio": "18:20",
-        "fim": "18:30"
+        "fim": "18:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -218,7 +264,9 @@
         "nome": "",
         "servo": "",
         "inicio": "18:30",
-        "fim": "18:40"
+        "fim": "18:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -227,7 +275,9 @@
         "nome": "Levar Maria para Casa",
         "servo": "",
         "inicio": "18:40",
-        "fim": "18:50"
+        "fim": "18:50",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -236,7 +286,9 @@
         "nome": "Maria",
         "servo": "",
         "inicio": "18:50",
-        "fim": "19:30"
+        "fim": "19:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -245,7 +297,9 @@
         "nome": "Cura Interior com Maria",
         "servo": "",
         "inicio": "19:30",
-        "fim": "20:00"
+        "fim": "20:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -254,7 +308,9 @@
         "nome": "com Maria",
         "servo": "",
         "inicio": "20:00",
-        "fim": "21:00"
+        "fim": "21:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -263,7 +319,9 @@
         "nome": "",
         "servo": "",
         "inicio": "21:00",
-        "fim": "21:15"
+        "fim": "21:15",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -272,7 +330,9 @@
         "nome": "\"Família do Zé\"",
         "servo": "",
         "inicio": "21:15",
-        "fim": "21:30"
+        "fim": "21:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -281,7 +341,9 @@
         "nome": "Vida Nova em Família",
         "servo": "",
         "inicio": "21:30",
-        "fim": "22:10"
+        "fim": "22:10",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -290,7 +352,9 @@
         "nome": "Abraçar os Pais",
         "servo": "",
         "inicio": "21:10",
-        "fim": "22:30"
+        "fim": "22:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -299,7 +363,9 @@
         "nome": "Escrever Carta aos Pais/Familiares",
         "servo": "",
         "inicio": "22:30",
-        "fim": "22:50"
+        "fim": "22:50",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -308,7 +374,9 @@
         "nome": "\"O filho que dá um cobertor para o pai\"",
         "servo": "",
         "inicio": "22:50",
-        "fim": "23:00"
+        "fim": "23:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -317,7 +385,9 @@
         "nome": "Oração da Noite - Dormir",
         "servo": "",
         "inicio": "23:00",
-        "fim": "23:15"
+        "fim": "23:15",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -326,7 +396,9 @@
         "nome": "Despertar dos Servos",
         "servo": "",
         "inicio": "07:00",
-        "fim": "07:30"
+        "fim": "07:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -335,7 +407,9 @@
         "nome": "Despartar dos Cursistas",
         "servo": "",
         "inicio": "07:30",
-        "fim": "08:00"
+        "fim": "08:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -344,7 +418,9 @@
         "nome": "da Manhã no Salão do Café",
         "servo": "",
         "inicio": "08:00",
-        "fim": "08:30"
+        "fim": "08:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -353,7 +429,9 @@
         "nome": "da Manhã",
         "servo": "",
         "inicio": "08:30",
-        "fim": "09:00"
+        "fim": "09:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -362,7 +440,9 @@
         "nome": "",
         "servo": "",
         "inicio": "09:00",
-        "fim": "09:30"
+        "fim": "09:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -371,7 +451,9 @@
         "nome": "Promessa do Pai",
         "servo": "",
         "inicio": "09:30",
-        "fim": "10:10"
+        "fim": "10:10",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -380,7 +462,9 @@
         "nome": "Efusão",
         "servo": "",
         "inicio": "10:10",
-        "fim": "11:00"
+        "fim": "11:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -389,7 +473,9 @@
         "nome": "Lanche",
         "servo": "",
         "inicio": "11:00",
-        "fim": "11:15"
+        "fim": "11:15",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -398,7 +484,9 @@
         "nome": "",
         "servo": "",
         "inicio": "11:15",
-        "fim": "11:30"
+        "fim": "11:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -407,7 +495,9 @@
         "nome": "Partilha Direcionada",
         "servo": "Pastores",
         "inicio": "11:30",
-        "fim": "12:00"
+        "fim": "12:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -416,7 +506,9 @@
         "nome": "Se Lançar",
         "servo": "",
         "inicio": "12:00",
-        "fim": "12:40"
+        "fim": "12:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -425,7 +517,9 @@
         "nome": "Se Lançar",
         "servo": "",
         "inicio": "12:40",
-        "fim": "13:30"
+        "fim": "13:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -434,7 +528,9 @@
         "nome": "",
         "servo": "",
         "inicio": "13:30",
-        "fim": "14:30"
+        "fim": "14:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -443,7 +539,9 @@
         "nome": "",
         "servo": "",
         "inicio": "14:30",
-        "fim": "14:40"
+        "fim": "14:40",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -452,7 +550,9 @@
         "nome": "Vida Nova",
         "servo": "",
         "inicio": "14:40",
-        "fim": "15:20"
+        "fim": "15:20",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -461,7 +561,9 @@
         "nome": "Retrospectiva + Cartas",
         "servo": "Animadores",
         "inicio": "15:20",
-        "fim": "16:00"
+        "fim": "16:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -470,7 +572,9 @@
         "nome": "Pais e Família",
         "servo": "",
         "inicio": "16:00",
-        "fim": "16:30"
+        "fim": "16:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -479,7 +583,9 @@
         "nome": "Preparação para Santa Missa",
         "servo": "Equipe Litúrgica",
         "inicio": "16:30",
-        "fim": "17:00"
+        "fim": "17:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -488,7 +594,9 @@
         "nome": "Encerramento",
         "servo": "",
         "inicio": "17:00",
-        "fim": "18:00"
+        "fim": "18:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -497,7 +605,9 @@
         "nome": "Organização do Local",
         "servo": "Todos os Servos",
         "inicio": "18:00",
-        "fim": "19:00"
+        "fim": "19:00",
+        "destaque": false,
+        "obs": ""
       }
     ]
   }
