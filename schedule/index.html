@@ -1156,8 +1156,9 @@ function salvarLista(lista){
 
 function carregarLista(){
   try{
-    const lista =    const dados = lista ? JSON.parse(lista) : [];    
-	const lista = localStorage.getItem(LIST_KEY);
+
+    const lista = localStorage.getItem(LIST_KEY);
+    const dados = lista ? JSON.parse(lista) : [];
 
     // ✅ garante obs em todos os itens
     dados.forEach(item => {
@@ -1165,11 +1166,11 @@ function carregarLista(){
     });
 
     return dados;
+
   }catch(e){
     return [];
   }
 }
-
 	
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
