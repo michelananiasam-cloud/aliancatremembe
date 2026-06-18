@@ -1362,7 +1362,16 @@ function renderizarLista() {
       li.dataset.fim = p.fim;
 
       // ✅ ICONE 💬 (SUPERIOR DIREITO)
-      if (p.obs && p.obs.trim() !== "") {
+      //if (p.obs && p.obs.trim() !== "") {
+console.log("TESTE:", p.obs);console.log iconObs = el(
+  "span",
+  { className: "icon-obs" },
+  "💬"
+);
+
+li.appendChild(iconObs);
+
+
 
         const iconObs = el(
           "span",
