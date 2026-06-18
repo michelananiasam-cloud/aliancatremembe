@@ -1519,40 +1519,61 @@ function pararLoops() {
   intervalGlobal = null;
 
 }
-	
-function editarAtividade(index){
+	function editarAtividade(index){
+
   const lista = carregarLista();
   const p = lista[index];
+
   const dataBrAtual = isoParaBr(p.data);
+
   const entradaDataBr = prompt("Editar data (DD/MM/AAAA):", dataBrAtual);
   if (entradaDataBr === null) return;
+
   const novaDataIso = brParaIso(entradaDataBr);
   if (!novaDataIso) {
-    alert("Data inválida. Use o formato DD/MM/AAAA (ex.: 12/03/2026).");
+    alert("Data inválida.");
     return;
   }
-  const novoDia  = diaDaSemanaPorData(novaDataIso);
-  let novoTipo = prompt(`Escolha o tipo de atividade:\n${tiposAtividade.join(", ")}`, p.tipo || "");
-  if (!novoTipo) novoTipo = "";
-  if (!tiposAtividade.includes(novoTipo)) novoTipo = "";
-  const novoNome  = (prompt("Editar nome da Atividade:", p.nome || "") || "").trim();
-  const novoservo = (prompt("Editar nome do Servo:", p.servo || "") || "").trim();
-  const novoInicio = prompt("Editar hora de início (HH:MM):", p.inicio);
-  if (!novoInicio) return;
-  const novoFim = prompt("Editar hora de fim (HH:MM):", p.fim);
-  if (!novoFim) return;
+
+  const novoTipo = prompt("Tipo da atividade:", p.tipo || "");
+  if (novoTipo === null) return;
+
+  const novoNome = prompt("Nome da Atividade:", p.nome || "");
+  if (novoNome === null) return;
+
+  const novoServo = prompt("Servo:", p.servo || "");
+  if (novoServo === null) return;
+
+  const novoInicio = prompt("Hora início:", p.inicio);
+  if (novoInicio === null) return;
+
+  const novoFim = prompt("Hora fim:", p.fim);
+  if (novoFim === null) return;
+
+  // ✅ OBSERVAÇÃO INCLUÍDA (CORRETAMENTE)
+  const novaObs = prompt("Observação:", p.obs || "");
+  if (novaObs === null) return;
+
+  const textoObs = novaObs.trim();
+
+  // ✅ ATUALIZA SEM PERDER DADOS
   lista[index] = {
-    dia:   novoDia,
-    data:  novaDataIso,
-    tipo:  novoTipo,
-    nome:  novoNome,
-    servo: novoservo,
+    ...p,
+    dia: diaDaSemanaPorData(novaDataIso),
+    data: novaDataIso,
+    tipo: novoTipo,
+    nome: novoNome.trim(),
+    servo: novoServo.trim(),
     inicio: novoInicio,
-    fim:    novoFim
+    fim: novoFim,
+    obs: textoObs,
+    destaque: textoObs.length > 0
   };
+
   salvarLista(lista);
   renderizarLista();
 }
+
 
 function excluirAtividade(index){
   if(!confirm("Deseja realmente excluir esta atividade?")) return;
