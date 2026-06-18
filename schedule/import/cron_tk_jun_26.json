@@ -18,6 +18,17 @@
       {
         "dia": "Sábado",
         "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "07:00",
+        "fim": "07:30",
+        "destaque": false,
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
         "tipo": "Oração",
         "nome": "Despertar dos Servos",
         "servo": "",
