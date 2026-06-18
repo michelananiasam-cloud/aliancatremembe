@@ -1288,9 +1288,7 @@ function renderizarLista() {
   listaDiv.innerHTML = "";
 
   const lista = ordenarLista(carregarLista());
-
   const agoraGlobal = Date.now();
-
   const proximaIndex = marcarProximaAtividade(lista);
 
   const grupos = {};
@@ -1313,17 +1311,8 @@ function renderizarLista() {
     const dataBr = data.split("-").reverse().join("/");
     const diaSemana = diaDaSemanaPorData(data);
 
-    const h2Titulo = el(
-      "h2",
-      { className: "print-only" },
-      getTituloProgramacao()
-    );
-
-    const hDia = el(
-      "h3",
-      {},
-      `${diaSemana} - ${dataBr}`
-    );
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
+    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
 
     const logo = el("img", {
       src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
@@ -1335,123 +1324,59 @@ function renderizarLista() {
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
-    const ul = el("ul", {
-      className: "lista-atividades"
-    });
+    const ul = el("ul", { className: "lista-atividades" });
 
     atividadesDoDia.forEach(p => {
 
       const idxReal = lista.indexOf(p);
 
-      const status = getStatusAtividade(
-        p.data,
-        p.inicio,
-        p.fim
-      );
-
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
       const isProxima = (idxReal === proximaIndex);
 
       let classeExtra = "";
 
-      // ===================================
-      // ALERTAS VISUAIS
-      // ===================================
       if (status === "em-andamento") {
+        const fimDate = new Date(`${p.data}T${p.fim}:00`).getTime();
+        const minutos = Math.floor((fimDate - agoraGlobal) / (1000 * 60));
 
-        const fimDate = new Date(
-          `${p.data}T${p.fim}:00`
-        ).getTime();
-
-        const minutos = Math.floor(
-          (fimDate - agoraGlobal) / (1000 * 60)
-        );
-
-        if (minutos <= 5) {
-          classeExtra = "danger";
-        }
-        else if (minutos <= 10) {
-          classeExtra = "warning";
-        }
+        if (minutos <= 5) classeExtra = "danger";
+        else if (minutos <= 10) classeExtra = "warning";
       }
 
-      // ===================================
-      // BARRA DE PROGRESSO
-      // ===================================
-      let progressContainer = null;
+      const li = el("li", {
+        className: `
+          item 
+          ${status} 
+          ${classeExtra} 
+          ${isProxima ? "proxima" : ""}
+          ${p.destaque ? "destaque" : ""}
+        `
+      });
 
-      if (status === "em-andamento") {
-
-        const progresso = getProgresso(
-          p.data,
-          p.inicio,
-          p.fim
-        );
-
-        const fimDate = new Date(
-          `${p.data}T${p.fim}:00`
-        ).getTime();
-
-        const minutos = Math.floor(
-          (fimDate - agoraGlobal) / (1000 * 60)
-        );
-
-        let classeBarra = "ativo";
-
-        if (minutos <= 5) {
-          classeBarra = "danger";
-        }
-        else if (minutos <= 10) {
-          classeBarra = "warning";
-        }
-
-        const bar = el("div", {
-          className: `progress-bar ${classeBarra}`,
-          style: `width:${progresso}%`
-        });
-
-        progressContainer = el(
-          "div",
-          { className: "progress-container" },
-          bar
-        );
-      }
-
-const li = el("li", {
-  className: `
-    item 
-    ${status} 
-    ${classeExtra} 
-    ${isProxima ? "proxima" : ""}
-    ${p.destaque ? "destaque" : ""}
-  `
-});
-
-// ✅ cria o ícone real
-if (p.destaque) {
-
-  const iconObs = el(
-    "span",
-    { className: "icon-obs" },
-    "💬"
-  );
-
-  // ✅ clique → abre edição
-  iconObs.addEventListener(
-    "click",
-    () => editarObservacao(idxReal)
-  );
-
-  // ✅ tooltip → comentário
-  if (p.obs && p.obs.trim() !== "") {
-    iconObs.setAttribute("title", p.obs);
-  }
-
-  li.appendChild(iconObs);
-}
-		
       li.dataset.data = p.data;
       li.dataset.inicio = p.inicio;
       li.dataset.fim = p.fim;
+
+      // ✅ ICONE 💬 (SUPERIOR DIREITO)
+      if (p.obs && p.obs.trim() !== "") {
+
+        const iconObs = el(
+          "span",
+          { className: "icon-obs" },
+          "💬"
+        );
+
+        // clique para editar
+        iconObs.addEventListener(
+          "click",
+          () => editarObservacao(idxReal)
+        );
+
+        // tooltip
+        iconObs.setAttribute("title", p.obs);
+
+        li.appendChild(iconObs);
+      }
 
       const info = buildInfo(p);
 
@@ -1464,66 +1389,37 @@ if (p.destaque) {
         isProxima ? `⏳ ${info}` : info
       );
 
-      const bEdit = el(
-        "button",
-        { className: "edit" },
-        "Editar"
+      const bEdit = el("button", { className: "edit" }, "Editar");
+      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+
+      const bDelete = el("button", { className: "delete" }, "Excluir");
+      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+
+      const bClone = el("button", { className: "clone" }, "Clonar");
+      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+
+      const divBtns = el("div", { className: "item-botoes" },
+        [bEdit, bDelete, bClone]
       );
-
-      bEdit.addEventListener(
-        "click",
-        () => editarAtividade(idxReal)
-      );
-
-      const bDelete = el(
-        "button",
-        { className: "delete" },
-        "Excluir"
-      );
-
-      bDelete.addEventListener(
-        "click",
-        () => excluirAtividade(idxReal)
-      );
-
-      const bClone = el(
-        "button",
-        { className: "clone" },
-        "Clonar"
-      );
-
-      bClone.addEventListener(
-        "click",
-        () => clonarAtividade(idxReal)
-      );
-
-const bObs = el(
-  "button",
-  { className: "obs" },
-  "💬"
-);
-
-// ✅ clique
-bObs.addEventListener(
-  "click",
-  () => editarObservacao(idxReal)
-);
-
-// ✅ tooltip
-if (p.obs && p.obs.trim() !== "") {
-  bObs.setAttribute("title", p.obs);
-}
-
-const divBtns = el(
-  "div",
-  { className: "item-botoes" },
-  [bEdit, bDelete, bClone, bObs]
-);
 
       li.appendChild(divInfo);
       li.appendChild(divBtns);
 
-      if (progressContainer) {
+      if (status === "em-andamento") {
+
+        const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+        const bar = el("div", {
+          className: "progress-bar ativo",
+          style: `width:${progresso}%`
+        });
+
+        const progressContainer = el(
+          "div",
+          { className: "progress-container" },
+          bar
+        );
+
         li.appendChild(progressContainer);
       }
 
@@ -1535,7 +1431,6 @@ const divBtns = el(
     listaDiv.appendChild(containerDia);
 
   });
-
 }
 
 function adicionarAtividade(){
