@@ -1,26 +1,19 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-17T20:40:47.661Z",
+  "exportedAt": "2026-06-18T05:05:26.459Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
       {
-        "dia": "Quarta",
-        "data": "2026-06-17",
-        "tipo": "",
-        "nome": "Chegada dos Servos",
+        "dia": "Quinta",
+        "data": "2026-06-18",
+        "tipo": "Introdução",
+        "nome": "REUNIÃO DOS SERVOS",
         "servo": "",
-        "inicio": "17:30",
-        "fim": "17:41"
-      },
-      {
-        "dia": "Quarta",
-        "data": "2026-06-17",
-        "tipo": "",
-        "nome": "Chegada dos Servos",
-        "servo": "",
-        "inicio": "17:42",
-        "fim": "18:30"
+        "inicio": "19:30",
+        "fim": "20:30",
+        "destaque": true,
+        "obs": "Gerar Link para reunião"
       },
       {
         "dia": "Sábado",
@@ -29,25 +22,30 @@
         "nome": "Despertar dos Servos",
         "servo": "",
         "inicio": "07:30",
-        "fim": "08:00"
+        "fim": "08:00",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Acolhida",
         "nome": "Crachás + Café da Manhã",
-        "servo": "Secretaria",
+        "servo": "",
         "inicio": "08:00",
-        "fim": "08:30"
+        "fim": "08:30",
+        "destaque": false,
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Acolhida",
         "nome": "Animação e Apresentação",
-        "servo": "",
+        "servo": "João e Lina",
         "inicio": "08:30",
-        "fim": "08:40"
+        "fim": "08:40",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -56,16 +54,18 @@
         "nome": "\"Um Sábio - Depende de Você\"",
         "servo": "",
         "inicio": "08:40",
-        "fim": "09:00"
+        "fim": "09:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Dinâmica",
         "nome": "Desafio",
-        "servo": "",
+        "servo": "Lina",
         "inicio": "09:00",
-        "fim": "09:30"
+        "fim": "09:30",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -74,16 +74,18 @@
         "nome": "\"Ele existe - O cientista e o filho\"",
         "servo": "",
         "inicio": "09:30",
-        "fim": "09:40"
+        "fim": "09:40",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Amor do Pai",
-        "servo": "",
+        "servo": "Felipe Miojo e Letícia Ferreira",
         "inicio": "09:40",
-        "fim": "10:20"
+        "fim": "10:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -92,7 +94,8 @@
         "nome": "com Lanche",
         "servo": "",
         "inicio": "10:20",
-        "fim": "10:40"
+        "fim": "10:40",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -101,7 +104,8 @@
         "nome": "",
         "servo": "",
         "inicio": "10:40",
-        "fim": "10:50"
+        "fim": "10:50",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -110,7 +114,8 @@
         "nome": "\"Life House\"",
         "servo": "",
         "inicio": "10:50",
-        "fim": "11:00"
+        "fim": "11:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -119,16 +124,18 @@
         "nome": "\"Toalhas Brancas\"",
         "servo": "",
         "inicio": "11:00",
-        "fim": "11:15"
+        "fim": "11:15",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Amor Roubado",
-        "servo": "",
+        "servo": "Karine e Matheus Victal",
         "inicio": "11:15",
-        "fim": "12:00"
+        "fim": "12:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -137,7 +144,8 @@
         "nome": "",
         "servo": "",
         "inicio": "12:00",
-        "fim": "13:00"
+        "fim": "13:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -146,25 +154,30 @@
         "nome": "",
         "servo": "",
         "inicio": "13:00",
-        "fim": "13:20"
+        "fim": "13:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Pecado e Salvação",
-        "servo": "",
+        "servo": "Tati *",
         "inicio": "13:20",
-        "fim": "14:00"
+        "fim": "14:00",
+        "obs": "Dedfinir quem fará a pregação com a Tati",
+        "destaque": true
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
-        "tipo": "Monólogo",
-        "nome": "do Barro",
-        "servo": "",
+        "tipo": "Teatro",
+        "nome": "\"Monólogo do Barro\"",
+        "servo": "Missionário(a) qual??",
         "inicio": "14:00",
-        "fim": "14:30"
+        "fim": "14:30",
+        "obs": "Precisa definir que missionária fará o monólogo.",
+        "destaque": true
       },
       {
         "dia": "Sábado",
@@ -173,7 +186,8 @@
         "nome": "da Cruz",
         "servo": "",
         "inicio": "14:30",
-        "fim": "15:00"
+        "fim": "15:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -182,25 +196,28 @@
         "nome": "Exame de Consciência",
         "servo": "",
         "inicio": "15:00",
-        "fim": "15:20"
+        "fim": "15:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Intervalo",
-        "nome": "com Lanche (Banho se necessário)",
+        "nome": "com Lanche (*Banho se necessário)",
         "servo": "",
         "inicio": "15:20",
-        "fim": "15:40"
+        "fim": "15:40",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Senhorio de Jesus",
-        "servo": "",
+        "servo": "??",
         "inicio": "15:40",
-        "fim": "16:20"
+        "fim": "16:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -209,7 +226,8 @@
         "nome": "Adoração, Renuncia e Louvor",
         "servo": "",
         "inicio": "16:20",
-        "fim": "17:00"
+        "fim": "17:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -218,7 +236,8 @@
         "nome": "Água e Banheiro",
         "servo": "",
         "inicio": "17:00",
-        "fim": "17:20"
+        "fim": "17:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -227,25 +246,28 @@
         "nome": "",
         "servo": "",
         "inicio": "17:20",
-        "fim": "17:40"
+        "fim": "17:40",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Dinâmica",
         "nome": "Levar Maria para Casa",
-        "servo": "",
+        "servo": "Rafa e Evelyn",
         "inicio": "17:50",
-        "fim": "18:00"
+        "fim": "18:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Maria",
-        "servo": "",
+        "servo": "Rafa e Evelyn",
         "inicio": "18:00",
-        "fim": "18:40"
+        "fim": "18:40",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -254,7 +276,8 @@
         "nome": "Cura Interior com Maria",
         "servo": "",
         "inicio": "18:40",
-        "fim": "19:20"
+        "fim": "19:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -263,7 +286,8 @@
         "nome": "com Maria",
         "servo": "",
         "inicio": "19:20",
-        "fim": "20:20"
+        "fim": "20:20",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -272,7 +296,8 @@
         "nome": "",
         "servo": "",
         "inicio": "20:20",
-        "fim": "20:30"
+        "fim": "20:30",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -281,16 +306,18 @@
         "nome": "\"Família do Zé\"",
         "servo": "",
         "inicio": "20:30",
-        "fim": "20:50"
+        "fim": "20:50",
+        "obs": ""
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Vida Nova em Família",
-        "servo": "",
+        "servo": "Wilson e Paula",
         "inicio": "20:50",
-        "fim": "21:30"
+        "fim": "21:30",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -299,7 +326,8 @@
         "nome": "Abraçar os Pais + Carta aos Pais/Familiares",
         "servo": "",
         "inicio": "21:30",
-        "fim": "22:00"
+        "fim": "22:00",
+        "obs": ""
       },
       {
         "dia": "Sábado",
@@ -308,7 +336,8 @@
         "nome": "Avisos e Encerramento",
         "servo": "",
         "inicio": "22:00",
-        "fim": "22:30"
+        "fim": "22:30",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -317,16 +346,18 @@
         "nome": "Chegada dos Servos",
         "servo": "",
         "inicio": "07:30",
-        "fim": "08:00"
+        "fim": "08:00",
+        "obs": ""
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Oração",
         "nome": "da Manhã no Salão do Café",
-        "servo": "",
+        "servo": "Gabi ou Fabrício*",
         "inicio": "08:00",
-        "fim": "08:20"
+        "fim": "08:20",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -335,7 +366,8 @@
         "nome": "da Manhã",
         "servo": "",
         "inicio": "08:20",
-        "fim": "08:50"
+        "fim": "08:50",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -344,16 +376,19 @@
         "nome": "",
         "servo": "",
         "inicio": "08:50",
-        "fim": "09:00"
+        "fim": "09:00",
+        "obs": "",
+        "destaque": false
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Promessa do Pai",
-        "servo": "",
+        "servo": "Caio e Missionários quais??",
         "inicio": "09:00",
-        "fim": "09:30"
+        "fim": "09:30",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -362,7 +397,8 @@
         "nome": "Efusão",
         "servo": "",
         "inicio": "09:30",
-        "fim": "10:20"
+        "fim": "10:20",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -371,7 +407,8 @@
         "nome": "Lanche",
         "servo": "",
         "inicio": "10:20",
-        "fim": "10:40"
+        "fim": "10:40",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -380,16 +417,19 @@
         "nome": "Partilha Direcionada",
         "servo": "Pastores",
         "inicio": "10:40",
-        "fim": "11:10"
+        "fim": "11:10",
+        "obs": ""
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Se Lançar",
-        "servo": "",
+        "servo": "Michel e *",
         "inicio": "11:10",
-        "fim": "11:50"
+        "fim": "11:50",
+        "obs": "Definir com quem Michel fará a Pregação!",
+        "destaque": true
       },
       {
         "dia": "Domingo",
@@ -398,7 +438,8 @@
         "nome": "Se Lançar",
         "servo": "",
         "inicio": "11:50",
-        "fim": "12:50"
+        "fim": "12:50",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -407,7 +448,8 @@
         "nome": "",
         "servo": "",
         "inicio": "13:00",
-        "fim": "14:00"
+        "fim": "14:00",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -416,16 +458,18 @@
         "nome": "",
         "servo": "",
         "inicio": "14:00",
-        "fim": "14:10"
+        "fim": "14:10",
+        "obs": ""
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Vida Nova",
-        "servo": "",
+        "servo": "Wilson e Gabi",
         "inicio": "14:10",
-        "fim": "14:50"
+        "fim": "14:50",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -434,7 +478,8 @@
         "nome": "Retrospectiva + Cartas",
         "servo": "Animadores",
         "inicio": "14:50",
-        "fim": "15:20"
+        "fim": "15:20",
+        "obs": ""
       },
       {
         "dia": "Domingo",
@@ -443,34 +488,38 @@
         "nome": "Pais e Família",
         "servo": "",
         "inicio": "15:20",
-        "fim": "15:40"
+        "fim": "15:40",
+        "obs": ""
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Intervalo",
         "nome": "Preparação para Santa Missa",
-        "servo": "Equipe Litúrgica",
+        "servo": "",
         "inicio": "15:40",
-        "fim": "16:00"
+        "fim": "16:00",
+        "obs": ""
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Santa Missa",
-        "nome": "Encerramento",
+        "nome": "",
         "servo": "",
         "inicio": "16:00",
-        "fim": "17:00"
+        "fim": "17:00",
+        "obs": ""
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "",
-        "nome": "Organização do Local",
+        "nome": "Foto Oficial + Encerramento + Organização do Local",
         "servo": "Todos os Servos",
         "inicio": "17:00",
-        "fim": "18:00"
+        "fim": "18:00",
+        "obs": ""
       }
     ]
   }
