@@ -1488,12 +1488,12 @@ function editarObservacao(index){
 
   lista[index].obs = texto;
 
-  // ✅ FAZ VIRAR FLAG AUTOMATICAMENTE
+  // ✅ isso é essencial
   lista[index].destaque = texto.length > 0;
 
   salvarLista(lista);
   renderizarLista();
-}	
+}
 	
 function toggleDestaque(index){
   const lista = carregarLista();
