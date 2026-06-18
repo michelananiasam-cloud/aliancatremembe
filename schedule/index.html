@@ -692,6 +692,11 @@ button.edit{
   }
 }
 
+button.flag {
+  background: #ffc107;
+  color: #000;
+}
+
 body{
   padding-bottom: 200px !important;
 }
@@ -757,6 +762,20 @@ body{
   transform: rotate(-30deg);
 }
 @media print { .watermark { display:none!important; } }
+
+.item.destaque {
+  border-left: 5px solid #ffc107;
+  background: rgba(255,193,7,0.08);
+}
+
+.item.destaque::after {
+  content: "⚠️";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  opacity: 0.5;
+}
+
 
 </style>
 
@@ -1345,9 +1364,15 @@ function renderizarLista() {
         );
       }
 
-      const li = el("li", {
-        className: `item ${status} ${classeExtra} ${isProxima ? "proxima" : ""}`
-      });
+const li = el("li", {
+  className: `
+    item 
+    ${status} 
+    ${classeExtra} 
+    ${isProxima ? "proxima" : ""}
+    ${p.destaque ? "destaque" : ""}
+  `
+});
 
       li.dataset.data = p.data;
       li.dataset.inicio = p.inicio;
@@ -1397,11 +1422,22 @@ function renderizarLista() {
         () => clonarAtividade(idxReal)
       );
 
-      const divBtns = el(
-        "div",
-        { className: "item-botoes" },
-        [bEdit, bDelete, bClone]
-      );
+const bFlag = el(
+  "button",
+  { className: "flag" },
+  "⚠️"
+);
+
+bFlag.addEventListener(
+  "click",
+  () => toggleDestaque(idxReal)
+);
+
+const divBtns = el(
+  "div",
+  { className: "item-botoes" },
+  [bEdit, bDelete, bClone, bFlag]
+);
 
       li.appendChild(divInfo);
       li.appendChild(divBtns);
@@ -1436,7 +1472,16 @@ function adicionarAtividade(){
   }
 
   const lista = carregarLista();
-  lista.push({dia, data, tipo, nome, servo, inicio, fim});
+lista.push({
+  dia,
+  data,
+  tipo,
+  nome,
+  servo,
+  inicio,
+  fim,
+  destaque: false   // ✅ NOVO
+});
   salvarLista(lista);
   renderizarLista();
 
@@ -1447,7 +1492,15 @@ function adicionarAtividade(){
   document.getElementById("inicio").value="";
   document.getElementById("fim").value="";
 }
+	
+function toggleDestaque(index){
+  const lista = carregarLista();
 
+  lista[index].destaque = !lista[index].destaque;
+
+  salvarLista(lista);
+  renderizarLista();
+}
 	
 let intervalTimers = null;
 let intervalProgresso = null;
