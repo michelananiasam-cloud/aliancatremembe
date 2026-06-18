@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-18T21:36:53.147Z",
+  "exportedAt": "2026-06-18T21:49:45.449Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
@@ -174,10 +174,10 @@
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Pecado e Salvação",
-        "servo": "Tati e Michel",
+        "servo": "Tati e Michel*",
         "inicio": "13:20",
         "fim": "14:00",
-        "obs": "Dedfinir quem fará a pregação com a Tati e Michel ou outro Homem",
+        "obs": "Dedfinir se será Tati com Michel ou outro pregador",
         "destaque": true
       },
       {
@@ -185,10 +185,10 @@
         "data": "2026-06-27",
         "tipo": "Teatro",
         "nome": "\"Monólogo do Barro\"",
-        "servo": "Letícia",
+        "servo": "Letícia Ferreira*",
         "inicio": "14:00",
         "fim": "14:30",
-        "obs": "Maria Lívia irá contatar",
+        "obs": "Letícia Ferreira a confirmar, caso contrário Paulo Passos",
         "destaque": true
       },
       {
@@ -229,7 +229,7 @@
         "servo": "Felipe Miojo e Michele",
         "inicio": "15:40",
         "fim": "16:20",
-        "obs": "Falta conformar com os pregadores.",
+        "obs": "A conformar com Felipe Miojo e Michele",
         "destaque": true
       },
       {
@@ -399,10 +399,10 @@
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Promessa do Pai",
-        "servo": "Angélica",
+        "servo": "Angélica e *",
         "inicio": "09:00",
         "fim": "09:30",
-        "obs": "Maria Livia irá confirmar com a Angélica e também estanos em oração para o outro pregador.",
+        "obs": "Definir quem prega com a Angélica.",
         "destaque": true
       },
       {
@@ -484,8 +484,7 @@
         "servo": "Wilson e Gabi",
         "inicio": "14:10",
         "fim": "14:50",
-        "obs": "Falta confirmar com o Wilson",
-        "destaque": true
+        "obs": ""
       },
       {
         "dia": "Domingo",
