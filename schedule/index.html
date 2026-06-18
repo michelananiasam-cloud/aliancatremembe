@@ -821,6 +821,8 @@ body{
  background: rgba(255,193,7,0.08);  border-left: 5px solid #ffc107;
   position: relative; /* ✅ garante posicionamento */
 }
+
+/*	
 @media print {
 
   /* ✅ garante logo visível (override direto) */
@@ -834,6 +836,86 @@ body{
   }
 
 }
+*/
+
+@media print {
+
+  /* ✅ garante que a logo aparece SEMPRE */
+  .logo {
+    display: block !important;
+  }
+
+  .pagina-detalhe .logo {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100px !important;
+    height: auto !important;
+    z-index: 1 !important;
+  }
+
+  /* ✅ limpa elementos absolutos que atrapalham layout */
+  .icon-obs {
+    display: none !important;
+  }
+
+  /* ✅ remove qualquer posicionamento relativo que possa quebrar impressão */
+  .item {
+    position: static !important;
+  }
+
+  /* ✅ garante título central correto */
+  .pagina-detalhe h2 {
+    position: absolute !important;
+    top: 30px !important;
+    left: 0 !important;
+    right: 0 !important;
+    text-align: center !important;
+  }
+
+}	
+
+@media (max-width:520px){@media (max-width:520apé */
+  #menu-rodape{
+    display: none !important;
+  }
+
+  /* ✅ some com menu superior */
+  #menu-adicao{
+    display: none !important;
+  }
+
+  /* ✅ garante que botão +/- também não aparece */
+  #toggle-menu-adicao{
+    display: none !important;
+  }
+
+}
+@media (max-width:520px){
+
+  /* ✅ esconde rodapé */
+  #menu-rodape{
+    display: none !important;
+  }
+
+  /* ✅ esconde menu superior */
+  #menu-adicao{
+    display: none !important;
+  }
+
+  /* ✅ esconde botão +/- */
+  #toggle-menu-adicao{
+    display: none !important;
+  }
+
+  /* ✅ remove espaço extra do body */
+  body{
+    padding-bottom: 20px !important;
+  }
+
+}
+	
 </style>
 
 </head>
