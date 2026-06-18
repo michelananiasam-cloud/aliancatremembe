@@ -1,680 +1,542 @@
 {
-  "titulo": "Thalita Kum Jovem Jun/2026",
-  "nodes": [
-    {
-      "id": "1",
-      "name": "Coordenação",
-      "title": "Coordenação"
-    },
-    {
-      "id": "2",
-      "name": "Wilson",
-      "title": "Coordenador",
-      "parentId": "1"
-    },
-    {
-      "id": "3",
-      "name": "Interna",
-      "title": "Referência Interna",
-      "parentId": "1"
-    },
-    {
-      "id": "4",
-      "name": "Maria Lívia",
-      "title": "Referência",
-      "parentId": "3"
-    },
-    {
-      "id": "5",
-      "name": "Michel",
-      "title": "Referência",
-      "parentId": "3"
-    },
-    {
-      "id": "6",
-      "name": "Animadores🧑🏻‍🎤",
-      "title": "Animadores🧑🏻‍🎤",
-      "parentId": "3"
-    },
-    {
-      "id": "7",
-      "name": "João",
-      "title": "Servo",
-      "parentId": "6",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "8",
-      "name": "Lina",
-      "title": "Servo",
-      "parentId": "6",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "9",
-      "name": "Baliza⏱️",
-      "title": "Baliza⏱️",
-      "parentId": "3"
-    },
-    {
-      "id": "10",
-      "name": "Matheus Victal",
-      "title": "Servo",
-      "parentId": "9",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "11",
-      "name": "Letícia Ferreira",
-      "title": "Servo",
-      "parentId": "9",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "12",
-      "name": "Comunicação📷",
-      "title": "Comunicação📷",
-      "parentId": "3"
-    },
-    {
-      "id": "13",
-      "name": "Bruno Passos",
-      "title": "Servo",
-      "parentId": "12",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "14",
-      "name": "Thais Costa",
-      "title": "Servo",
-      "parentId": "12",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "15",
-      "name": "Isadora Righi",
-      "title": "Servo",
-      "parentId": "12",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "16",
-      "name": "Dança💃",
-      "title": "Dança💃",
-      "parentId": "3"
-    },
-    {
-      "id": "17",
-      "name": "Karine",
-      "title": "Servo",
-      "parentId": "16",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "18",
-      "name": "Tati",
-      "title": "Servo",
-      "parentId": "16",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "19",
-      "name": "Intercessão🛐",
-      "title": "Intercessão🛐",
-      "parentId": "3"
-    },
-    {
-      "id": "20",
-      "name": "Fatinha",
-      "title": "Servo",
-      "parentId": "19",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "21",
-      "name": "Jaque",
-      "title": "Servo",
-      "parentId": "19",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "22",
-      "name": "Marília",
-      "title": "Servo",
-      "parentId": "19",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "23",
-      "name": "Célia",
-      "title": "Servo",
-      "parentId": "19",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "24",
-      "name": "Fernanda",
-      "title": "Servo",
-      "parentId": "19",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "25",
-      "name": "Maria Angélica",
-      "title": "Servo",
-      "parentId": "19",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "26",
-      "name": "Liturgia🕯️",
-      "title": "Liturgia🕯️",
-      "parentId": "3"
-    },
-    {
-      "id": "27",
-      "name": "Ana Dayse",
-      "title": "Servo",
-      "parentId": "26",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "28",
-      "name": "Michelle",
-      "title": "Servo",
-      "parentId": "26",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "29",
-      "name": "Lojinha🛍️",
-      "title": "Lojinha🛍️",
-      "parentId": "3"
-    },
-    {
-      "id": "30",
-      "name": "Sara",
-      "title": "Servo",
-      "parentId": "29",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "31",
-      "name": "Ana Aline",
-      "title": "Servo",
-      "parentId": "29",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "32",
-      "name": "Música🎶",
-      "title": "Música🎶",
-      "parentId": "3"
-    },
-    {
-      "id": "33",
-      "name": "Angélica🎤🎸",
-      "title": "Servo",
-      "parentId": "32",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "35",
-      "name": "Biel🎤🎸🥁",
-      "title": "Servo",
-      "parentId": "32",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "36",
-      "name": "Felipe Sousa🎸🥁",
-      "title": "Servo",
-      "parentId": "32",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "37",
-      "name": "Letícia Paula🎤",
-      "title": "Servo",
-      "parentId": "32",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "38",
-      "name": "Pastores🐑",
-      "title": "Pastores🐑",
-      "parentId": "3"
-    },
-    {
-      "id": "39",
-      "name": "Karine",
-      "title": "Servo",
-      "parentId": "38",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "40",
-      "name": "Michelle",
-      "title": "Servo",
-      "parentId": "38",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "41",
-      "name": "Tati",
-      "title": "Servo",
-      "parentId": "38",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "42",
-      "name": "Junior",
-      "title": "Servo",
-      "parentId": "38",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "43",
-      "name": "Cely",
-      "title": "Servo",
-      "parentId": "38",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "44",
-      "name": "Técnica💻",
-      "title": "Técnica💻",
-      "parentId": "3"
-    },
-    {
-      "id": "45",
-      "name": "Felipe Miojo",
-      "title": "Servo",
-      "parentId": "44",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "46",
-      "name": "Externa",
-      "title": "Referência Externa",
-      "parentId": "1"
-    },
-    {
-      "id": "47",
-      "name": "Mircis",
-      "title": "Referência",
-      "parentId": "46"
-    },
-    {
-      "id": "48",
-      "name": "Teresinha",
-      "title": "Referência",
-      "parentId": "46"
-    },
-    {
-      "id": "49",
-      "name": "Cozinha👨‍🍳",
-      "title": "Cozinha👨‍🍳",
-      "parentId": "46"
-    },
-    {
-      "id": "50",
-      "name": "Lindalva",
-      "title": "Servo",
-      "parentId": "49",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "51",
-      "name": "Heitor",
-      "title": "Servo",
-      "parentId": "49",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "52",
-      "name": "André AX",
-      "title": "Servo",
-      "parentId": "49",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "53",
-      "name": "Marcia Novikof",
-      "title": "Servo",
-      "parentId": "49",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "54",
-      "name": "Decoração✨",
-      "title": "Decoração✨",
-      "parentId": "46"
-    },
-    {
-      "id": "55",
-      "name": "Andréa",
-      "title": "Servo",
-      "parentId": "54",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "56",
-      "name": "Enfermagem🩺",
-      "title": "Enfermagem🩺",
-      "parentId": "46"
-    },
-    {
-      "id": "57",
-      "name": "Maria Angélica",
-      "title": "Servo",
-      "parentId": "56",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "58",
-      "name": "Ordem e Limpeza🧹",
-      "title": "Ordem e Limpeza🧹",
-      "parentId": "46"
-    },
-    {
-      "id": "59",
-      "name": "Everton",
-      "title": "Servo",
-      "parentId": "58",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "60",
-      "name": "Débora",
-      "title": "Servo",
-      "parentId": "58",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "61",
-      "name": "Stéfany",
-      "title": "Servo",
-      "parentId": "58",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "62",
-      "name": "César",
-      "title": "Servo",
-      "parentId": "58",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "63",
-      "name": "Salão☕",
-      "title": "Salão☕",
-      "parentId": "46"
-    },
-    {
-      "id": "64",
-      "name": "André",
-      "title": "Servo",
-      "parentId": "63",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "65",
-      "name": "Tamires",
-      "title": "Servo",
-      "parentId": "63",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "66",
-      "name": "Isadora",
-      "title": "Servo",
-      "parentId": "63",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "67",
-      "name": "Giovana",
-      "title": "Servo",
-      "parentId": "63",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "68",
-      "name": "Cainan",
-      "title": "Servo",
-      "parentId": "63",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "69",
-      "name": "Secretaria📚",
-      "title": "Secretaria📚",
-      "parentId": "46"
-    },
-    {
-      "id": "70",
-      "name": "Mariana",
-      "title": "Servo",
-      "parentId": "69",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "71",
-      "name": "Regiane",
-      "title": "Servo",
-      "parentId": "69",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "72",
-      "name": "Livia",
-      "title": "Servo",
-      "parentId": "69",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "73",
-      "name": "Gabi(dom.)",
-      "title": "Servo",
-      "parentId": "69",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "74",
-      "name": "Apoio",
-      "title": "Apoio",
-      "parentId": "1"
-    },
-    {
-      "id": "75",
-      "name": "Se Lançar💪🏻",
-      "title": "Se Lançar💪🏻",
-      "parentId": "74"
-    },
-    {
-      "id": "76",
-      "name": "André AX",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "77",
-      "name": "Heitor",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "78",
-      "name": "Everton",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "79",
-      "name": "César",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "80",
-      "name": "Cainan",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "81",
-      "name": "André",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "82",
-      "name": "Fabiano",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "83",
-      "name": "Marcelo",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "84",
-      "name": "Bruno Passos",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "85",
-      "name": "Matheus Victal",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "86",
-      "name": "Junior",
-      "title": "Servo",
-      "parentId": "75",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "87",
-      "name": "Suporte🛠️",
-      "title": "Suporte🛠️",
-      "parentId": "74"
-    },
-    {
-      "id": "88",
-      "name": "Fabiano",
-      "title": "Servo",
-      "parentId": "87",
-      "confirmado": true,
-      "isReferencia": true
-    },
-    {
-      "id": "89",
-      "name": "Marcelo",
-      "title": "Servo",
-      "parentId": "87",
-      "confirmado": true,
-      "isReferencia": false
-    },
-    {
-      "id": "90",
-      "name": "Transporte e Compras🚖",
-      "title": "Transporte e Compras🚖",
-      "parentId": "74"
-    },
-    {
-      "id": "91",
-      "name": "Jaime",
-      "title": "Servo",
-      "parentId": "90",
-      "confirmado": true,
-      "isReferencia": false
-    }
-  ],
-  "links": [
-    {
-      "from": "74",
-      "to": "3",
-      "type": "responde_para"
-    },
-    {
-      "from": "74",
-      "to": "46",
-      "type": "responde_para"
-    }
-  ]
+  "version": 1,
+  "exportedAt": "2026-06-18T21:36:53.147Z",
+  "current": {
+    "evangelizacao": "Thalita Kum Junho/26",
+    "lista": [
+      {
+        "dia": "Quinta",
+        "data": "2026-06-18",
+        "tipo": "Introdução",
+        "nome": "REUNIÃO DOS SERVOS",
+        "servo": "",
+        "inicio": "20:00",
+        "fim": "21:00",
+        "destaque": true,
+        "obs": "Gerar Link para reunião"
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "07:00",
+        "fim": "07:30",
+        "destaque": false,
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Oração",
+        "nome": "Despertar dos Servos",
+        "servo": "",
+        "inicio": "07:30",
+        "fim": "08:00",
+        "destaque": false,
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Crachás + Café da Manhã",
+        "servo": "",
+        "inicio": "08:00",
+        "fim": "08:30",
+        "destaque": false,
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Animação e Apresentação",
+        "servo": "João e Lina",
+        "inicio": "08:30",
+        "fim": "08:40",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Historinha",
+        "nome": "\"Um Sábio - Depende de Você\"",
+        "servo": "",
+        "inicio": "08:40",
+        "fim": "09:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "Desafio",
+        "servo": "Lina",
+        "inicio": "09:00",
+        "fim": "09:30",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Historinha",
+        "nome": "\"Ele existe - O cientista e o filho\"",
+        "servo": "",
+        "inicio": "09:30",
+        "fim": "09:40",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Amor do Pai",
+        "servo": "Jonatan Gabriel e Letícia Ferreira",
+        "inicio": "09:40",
+        "fim": "10:20",
+        "obs": "",
+        "destaque": false
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Intervalo",
+        "nome": "com Lanche",
+        "servo": "",
+        "inicio": "10:20",
+        "fim": "10:40",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "10:40",
+        "fim": "10:50",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Teatro",
+        "nome": "\"Life House\"",
+        "servo": "",
+        "inicio": "10:50",
+        "fim": "11:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Historinha",
+        "nome": "\"Toalhas Brancas\"",
+        "servo": "",
+        "inicio": "11:00",
+        "fim": "11:15",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Amor Roubado",
+        "servo": "Karine e Matheus Victal",
+        "inicio": "11:15",
+        "fim": "12:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Almoço",
+        "nome": "",
+        "servo": "",
+        "inicio": "12:00",
+        "fim": "13:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "13:00",
+        "fim": "13:20",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Pecado e Salvação",
+        "servo": "Tati e Michel",
+        "inicio": "13:20",
+        "fim": "14:00",
+        "obs": "Dedfinir quem fará a pregação com a Tati e Michel ou outro Homem",
+        "destaque": true
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Teatro",
+        "nome": "\"Monólogo do Barro\"",
+        "servo": "Letícia",
+        "inicio": "14:00",
+        "fim": "14:30",
+        "obs": "Maria Lívia irá contatar",
+        "destaque": true
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "da Cruz",
+        "servo": "",
+        "inicio": "14:30",
+        "fim": "15:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Exame de Consciência",
+        "servo": "",
+        "inicio": "15:00",
+        "fim": "15:20",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Intervalo",
+        "nome": "com Lanche (*Banho se necessário)",
+        "servo": "",
+        "inicio": "15:20",
+        "fim": "15:40",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Senhorio de Jesus",
+        "servo": "Felipe Miojo e Michele",
+        "inicio": "15:40",
+        "fim": "16:20",
+        "obs": "Falta conformar com os pregadores.",
+        "destaque": true
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Adoração, Renuncia e Louvor",
+        "servo": "",
+        "inicio": "16:20",
+        "fim": "17:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Intervalo",
+        "nome": "Água e Banheiro",
+        "servo": "",
+        "inicio": "17:00",
+        "fim": "17:20",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "17:20",
+        "fim": "17:40",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "Levar Maria para Casa",
+        "servo": "Rafa e Evelyn",
+        "inicio": "17:50",
+        "fim": "18:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Maria",
+        "servo": "Rafa e Evelyn",
+        "inicio": "18:00",
+        "fim": "18:40",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Oração",
+        "nome": "Cura Interior com Maria",
+        "servo": "",
+        "inicio": "18:40",
+        "fim": "19:20",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Jantar",
+        "nome": "com Maria",
+        "servo": "",
+        "inicio": "19:20",
+        "fim": "20:20",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "20:20",
+        "fim": "20:30",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Teatro",
+        "nome": "\"Família do Zé\"",
+        "servo": "",
+        "inicio": "20:30",
+        "fim": "20:50",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Pregação",
+        "nome": "Vida Nova em Família",
+        "servo": "Wilson e Paula",
+        "inicio": "20:50",
+        "fim": "21:30",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Dinâmica",
+        "nome": "Abraçar os Pais + Carta aos Pais/Familiares",
+        "servo": "",
+        "inicio": "21:30",
+        "fim": "22:00",
+        "obs": ""
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Momento",
+        "nome": "Avisos e Encerramento",
+        "servo": "",
+        "inicio": "22:00",
+        "fim": "22:30",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "07:30",
+        "fim": "08:00",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Oração",
+        "nome": "da Manhã no Salão do Café",
+        "servo": "Jonatan Gabriel",
+        "inicio": "08:00",
+        "fim": "08:20",
+        "obs": "",
+        "destaque": false
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Café",
+        "nome": "da Manhã",
+        "servo": "",
+        "inicio": "08:20",
+        "fim": "08:50",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "08:50",
+        "fim": "09:00",
+        "obs": "",
+        "destaque": false
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Pregação",
+        "nome": "Promessa do Pai",
+        "servo": "Angélica",
+        "inicio": "09:00",
+        "fim": "09:30",
+        "obs": "Maria Livia irá confirmar com a Angélica e também estanos em oração para o outro pregador.",
+        "destaque": true
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Efusão",
+        "servo": "",
+        "inicio": "09:30",
+        "fim": "10:20",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Intervalo",
+        "nome": "Lanche",
+        "servo": "",
+        "inicio": "10:20",
+        "fim": "10:40",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Partilha Direcionada",
+        "servo": "Pastores",
+        "inicio": "10:40",
+        "fim": "11:10",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Pregação",
+        "nome": "Se Lançar",
+        "servo": "Michel e Marília",
+        "inicio": "11:10",
+        "fim": "11:50",
+        "obs": "",
+        "destaque": false
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Dinâmica",
+        "nome": "Se Lançar",
+        "servo": "",
+        "inicio": "11:50",
+        "fim": "12:50",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Almoço",
+        "nome": "",
+        "servo": "",
+        "inicio": "13:00",
+        "fim": "14:00",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Animação",
+        "nome": "",
+        "servo": "",
+        "inicio": "14:00",
+        "fim": "14:10",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Pregação",
+        "nome": "Vida Nova",
+        "servo": "Wilson e Gabi",
+        "inicio": "14:10",
+        "fim": "14:50",
+        "obs": "Falta confirmar com o Wilson",
+        "destaque": true
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Retrospectiva + Cartas",
+        "servo": "Animadores",
+        "inicio": "14:50",
+        "fim": "15:20",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Momento",
+        "nome": "Pais e Família",
+        "servo": "",
+        "inicio": "15:20",
+        "fim": "15:40",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Intervalo",
+        "nome": "Preparação para Santa Missa",
+        "servo": "",
+        "inicio": "15:40",
+        "fim": "16:00",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "Santa Missa",
+        "nome": "",
+        "servo": "",
+        "inicio": "16:00",
+        "fim": "17:00",
+        "obs": ""
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-06-28",
+        "tipo": "",
+        "nome": "Foto Oficial + Encerramento + Organização do Local",
+        "servo": "Todos os Servos",
+        "inicio": "17:00",
+        "fim": "18:00",
+        "obs": ""
+      }
+    ]
+  }
 }
