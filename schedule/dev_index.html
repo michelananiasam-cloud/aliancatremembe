@@ -926,6 +926,7 @@ body{
 	  <label for="data">Data</label>
 	  <input type="date" id="data" title="Selecione a data da atividade">
 	</div>
+	  
 	<!--
 	<div class="field col-4">
 	  <label for="tipo">Tipo</label>
@@ -1129,6 +1130,50 @@ function alterarEvangelizacao(e) {
   renderizarLista();
 }
 
+	<!-- ✅ Preencher o select automaticamente -->
+function preencherTipos() {
+  const select = document.getElementById('tipo');
+
+  select.innerHTML = '<option value="">Selecione...</option>';
+
+  tiposAtividade.forEach(tipo => {
+    const option = document.createElement('option');
+    option.value = tipo;
+    option.textContent = tipo;
+    select.appendChild(option);
+  });
+
+  // adiciona "Outro" sempre no final
+  const optionOutro = document.createElement('option');
+  optionOutro.value = 'Outro';
+  optionOutro.textContent = 'Outro...';
+  select.appendChild(optionOutro);
+}
+
+	<!-- ✅ Mostrar campo quando escolher “Outro” -->
+function checkOutro() {function check document.getElementById('tipoOutro');
+
+  if (select.value === 'Outro') {
+    input.style.display = 'block';
+    input.focus();
+  } else {
+    input.style.display = 'none';
+    input.value = '';
+  }
+}
+  const select = document.getElementById('tipo');
+
+	<!-- ✅ Pegar o valor final-->	
+function obterTipoSelecionado() {
+  const select = document.getElementById('tipo');
+  const input = document.getElementById('tipoOutro');
+
+  if (select.value === 'Outro') {
+    return input.value.trim();
+  }
+
+  return select.value;
+}	
 function dois(n){ return n.toString().padStart(2,'0'); }
 
 function getTempoRestante(data, inicio, fim) {
@@ -1893,6 +1938,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   atualizarTitulos();
   renderizarLista();
+  preencherTipos();
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
