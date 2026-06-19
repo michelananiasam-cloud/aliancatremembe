@@ -1766,7 +1766,7 @@ function handleImportFile(file){
 }
 
 function zerarTudo(){
-  if (!confirm("Tem certeza que deseja ZERAR a LISTA atual? Esta ação não pode ser desfeita.")) {
+  if (!confirm("Tem certeza que deseja LIMPAR a PROGRAMAÇÃO atual?")) {
     return;
   }
   try {
@@ -1774,7 +1774,7 @@ function zerarTudo(){
     localStorage.removeItem(HIST_KEY);
     atualizarTitulos();
     renderizarLista();
-    alert("Pronto! Lista foi zerada.");
+    alert("Programação Limpa, um exelente planejamento!");
   } catch (e) {
     console.error(e);
     alert("Não foi possível zerar. Tente novamente.");
