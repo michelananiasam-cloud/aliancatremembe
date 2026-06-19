@@ -926,7 +926,8 @@ body{
 	  <label for="data">Data</label>
 	  <input type="date" id="data" title="Selecione a data da atividade">
 	</div>
-	
+
+	  <!--
 	<div class="field col-4">
 	  <label for="tipo">Tipo</label>
 	  <select id="tipo" title="Escolha o tipo da atividade">
@@ -954,12 +955,20 @@ body{
 		<option value="Partilha">Partilha</option>
 	  </select>
 	</div>
-   
-	<div class="field col-4">
-	  <label for="nome">Nome da Atividade</label>
-	  <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
-	</div>
-   
+   -->
+
+<div class="field col-4">
+	<label for="tipo">Tipo de Atividade</label>
+	<div class="field  <select id="tipo" title="Selecione o Tipo da Atividade">
+    <option value="">Selecione o Tipo..</option>
+  </select>
+</div>
+
+  
+
+	  
+
+	  
 	<div class="field col-6">
 	  <label for="servo">Servo</label>
 	  <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
@@ -1831,6 +1840,20 @@ function importarJSONDireto(json) {
     alert("Erro ao importar JSON do servidor!");
   }
 }
+
+function preencherTipos() {
+  const select = document.getElementById('tipo');
+
+  // limpa e mantém o primeiro item
+  select.innerHTML = '<option value="">Selecione o Tipo..</option>';
+
+  tiposAtividade.forEach(tipo => {
+    const option = document.createElement('option');
+    option.value = tipo;
+    option.textContent = tipo;
+    select.appendChild(option);
+  });
+}	
 	
 function escolherAtualizacaoJSON() {
   fetch('import/option.json?v=' + Date.now())
@@ -1876,6 +1899,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   atualizarTitulos();
   renderizarLista();
+  preencherTipos(); 
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
