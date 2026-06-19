@@ -948,7 +948,7 @@ body{
 		<option value="Pausa">Pausa</option>
 		<option value="Intervalo">Intervalo</option>
 		<option value="Almoço">Almoço</option>
-		<option value="Café">Café</option>
+		<option value=""></option>
 		<option value="Jantar">Jantar</option>
 		<option value="Palestra">Palestra</option>
 		<option value="Partilha">Partilha</option>
@@ -1056,7 +1056,17 @@ body{
 <script>
 let atividadeAtual = null;	
 let isPrinting = false; // 👈 ADICIONE AQUI
-const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
+const tiposAtividade = [
+  "Introdução", "Adoração", "Acolhida", "Acolhida dos Participantes", "Animação", "Almoço",
+  "Café da Manhã", "Despertar dos Servos", "Chegada dos Servos",
+  "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha",
+  "Monólogo", "Oração", "Oração dos Servos", "Oração de Cura Interior",
+  "Oração de Renúncia", "Oração de Descontaminação",
+  "Pausa", "Intervalo", "Intervalo com Lanche", "Intervalo Água e Banheiro",
+  "Palestra", "Partilha", "Pregação", "Testemunho",
+  "Santa Missa", "Encerramento", "Organização do Local"
+].sort((a, b) => a.localeCompare(b));
+
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
 const HIST_KEY  = "historicos";
