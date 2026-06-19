@@ -1846,71 +1846,26 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar opções"));
 }
 
+window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
+
 function baixarPDF() {
   setTimeout(() => {
     window.print();
   }, 100);
 }
-
-function atualizarJSONAutomatico() {
-
-  fetch('import/option.json?v=' + Date.now())
-    .then(res => res.json())
-    .then(opcoes => {
-
-      if (!Array.isArray(opcoes) || opcoes.length === 0) {
-        console.warn("Nenhuma opção encontrada");
-        return;
-      }
-
-      // ✅ primeira opção da lista (índice 0)
-      const opcaoPadrao = opcoes[0];
-
-      const caminho = "import/" + opcaoPadrao.arquivo;
-
-      fetch(caminho)
-        .then(r => r.json())
-        .then(importarJSONDireto)
-        .catch(() => console.error("Erro ao carregar JSON principal"));
-
-    })
-    .catch(() => console.error("Erro ao carregar option.json"));
-
-}
-
-window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 window.baixarPDF = baixarPDF;
-window.atualizarJSONAutomatico = atualizarJSONAutomatico;
-
 	
-document.addEventListener("DOMContentLoaded", () => {document.addEventListener("DOMContentLoaded",ECTA MOBILE
-  const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-
-  // ===============================
-  // 📱 MOBILE: força atualização remota
-  // ===============================
-  if (isMobile) {
-    // opcional: limpa cache local
-    localStorage.removeItem(LIST_KEY);
-
-    atualizarJSONAutomatico(); // ✅ puxa do servidor
-  }
+document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
   // 🔹 INICIALIZA
   // ===============================
   const ev = getEvangelizacao();
   const input = document.getElementById("evangelizacao");
-
   if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
 
   atualizarTitulos();
-
-  // ✅ IMPORTANTE:
-  // só renderiza direto se NÃO for mobile
-  if (!isMobile) {
-    renderizarLista();
-  }
+  renderizarLista();
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
@@ -1941,7 +1896,7 @@ document.addEventListener("DOMContentLoaded", () => {document.addEventListener("
   }
 
   // ===============================
-  // 🔥 LOOPS
+  // 🔥 LOOPS (CORRIGIDO)
   // ===============================
   iniciarLoops();
 
@@ -1949,25 +1904,28 @@ document.addEventListener("DOMContentLoaded", () => {document.addEventListener("
   // 🖨 PRINT CONTROL
   // ===============================
 
-  window.addEventListener("beforeprint", () => {
+window.addEventListener("beforeprint", () => {
 
-    isPrinting = true;
-    pararLoops();
-    renderizarLista();
+  isPrinting = true;
 
-  });
+  pararLoops();
 
-  window.addEventListener("afterprint", () => {
-
-    isPrinting = false;
-    renderizarLista();
-    iniciarLoops();
-
-  });
+  renderizarLista();
 
 });
 
+window.addEventListener("afterprint", () => {
 
+  isPrinting = false;
+
+  renderizarLista();
+
+  iniciarLoops();
+
+});
+
+});
+	
 </script>
 
   <div class="watermark">TK JOVEM</div>
