@@ -926,15 +926,41 @@ body{
 	  <label for="data">Data</label>
 	  <input type="date" id="data" title="Selecione a data da atividade">
 	</div>
-
-<div class="field col-4">
-	<label for="tipo">Tipo de Atividade</label>
-	<div class="field  <select id="tipo" title="Selecione o Tipo da Atividade">
-    <option value="">Selecione o Tipo..</option>
-  </select>
-</div>
-
-  	<div class="field col-6">
+	
+	<div class="field col-4">
+	  <label for="tipo">Tipo</label>
+	  <select id="tipo" title="Escolha o tipo da atividade">
+		<option value="" disabled selected>Selecione o Tipo..</option>
+		<option value="Introdução">Introdução</option>
+		<option value="Pregação">Pregação</option>
+		<option value="Oração">Oração</option>
+		<option value="Acolhida">Acolhida</option>
+		<option value="Animação">Animação</option>
+		<option value="Adoração">Adoração</option>
+		<option value="Dinâmica">Dinâmica</option>
+		<option value="Testemunho">Testemunho</option>
+		<option value="Santa Missa">Santa Missa</option>
+		<option value="Momento">Momento</option>
+		<option value="Historinha">Historinha</option>
+		<option value="Monólogo">Monólogo</option>
+		<option value="Efusão">Efusão</option>
+		<option value="Teatro">Teatro</option>
+		<option value="Pausa">Pausa</option>
+		<option value="Intervalo">Intervalo</option>
+		<option value="Almoço">Almoço</option>
+		<option value="Café">Café</option>
+		<option value="Jantar">Jantar</option>
+		<option value="Palestra">Palestra</option>
+		<option value="Partilha">Partilha</option>
+	  </select>
+	</div>
+   
+	<div class="field col-4">
+	  <label for="nome">Nome da Atividade</label>
+	  <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
+	</div>
+   
+	<div class="field col-6">
 	  <label for="servo">Servo</label>
 	  <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
 	</div>
@@ -1030,17 +1056,7 @@ body{
 <script>
 let atividadeAtual = null;	
 let isPrinting = false; // 👈 ADICIONE AQUI
-
-const tiposAtividade = [
-  "Introdução", "Adoração", "Acolhida", "Acolhida dos Participantes", "Acolhida dos Familiares", "Animação", "Almoço", "Café", "Café da Manhã", "Café da Tarde",
-  "Despertar dos Servos", "Despertar dos Participantes", "Chegada dos Servos", "Dinâmica", "Efusão", "Jantar", "Teatro",
-  "Momento", "Historinha", "Monólogo", "Oração", "Oração da Manhã", "Oração dos Servos",
-  "Oração de Cura Interior", "Oração de Renúncia", "Oração de Descontaminação",
-  "Pausa", "Intervalo", "Intervalo com Lanche", "Intervalo Água e Banheiro",
-  "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa",
-  "Encerramento", "Organização do Local"
-].sort((a, b) => a.localeCompare(b));
-
+const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
 const HIST_KEY  = "historicos";
@@ -1805,20 +1821,6 @@ function importarJSONDireto(json) {
     alert("Erro ao importar JSON do servidor!");
   }
 }
-
-function preencherTipos() {
-  const select = document.getElementById('tipo');
-
-  // limpa e mantém o primeiro item
-  select.innerHTML = '<option value="">Selecione o Tipo..</option>';
-
-  tiposAtividade.forEach(tipo => {
-    const option = document.createElement('option');
-    option.value = tipo;
-    option.textContent = tipo;
-    select.appendChild(option);
-  });
-}	
 	
 function escolherAtualizacaoJSON() {
   fetch('import/option.json?v=' + Date.now())
@@ -1864,7 +1866,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   atualizarTitulos();
   renderizarLista();
-  preencherTipos(); 
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
