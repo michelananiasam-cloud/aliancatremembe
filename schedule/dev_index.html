@@ -926,7 +926,7 @@ body{
 	  <label for="data">Data</label>
 	  <input type="date" id="data" title="Selecione a data da atividade">
 	</div>
-	
+	<!--
 	<div class="field col-4">
 	  <label for="tipo">Tipo</label>
 	  <select id="tipo" title="Escolha o tipo da atividade">
@@ -954,6 +954,25 @@ body{
 		<option value="Partilha">Partilha</option>
 	  </select>
 	</div>
+-->
+	
+<div class="field col-4">
+  <label for="tipo">Tipo</label>
+
+  <select id="tipo" onchange="checkOutro()">
+    <option value="">Selecione...</option>
+    <option value="Outro">Outro...</option>
+  </select>
+
+  <input 
+    type="text" 
+    id="tipoOutro" 
+    style="display:none; margin-top:5px;" 
+    placeholder="Digite o tipo"
+  >
+</div>
+
+  
    
 	<div class="field col-4">
 	  <label for="nome">Nome da Atividade</label>
@@ -1056,7 +1075,15 @@ body{
 <script>
 let atividadeAtual = null;	
 let isPrinting = false; // 👈 ADICIONE AQUI
-const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
+
+<!-- ✅ Lista de Tipos de Atividade -->
+const tiposAtividade = [
+  "Introdução", "Adoração", "Acolhida", "Acolhida dos Participantes", "Animação", "Almoço", "Café da Manhã", "Despertar dos Servos", "Chegada dos Servos",
+  "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha",
+  "Monólogo", "Oração", "Oração dos Servos", "Oração de Cura Interior", "Oração de Renúncia", "Oração de Descontaminação", "Pausa", "Intervalo", "Intervalo com Lanche","Intervalo Água e Banheiro", "Palestra", "Partilha",
+  "Pregação", "Testemunho", "Santa Missa", "Encerramento", "Organização do Local"
+].sort((a, b) => a.localeCompare(b));
+	
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
 const HIST_KEY  = "historicos";
