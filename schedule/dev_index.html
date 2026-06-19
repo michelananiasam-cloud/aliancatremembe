@@ -927,33 +927,51 @@ body{
 	  <input type="date" id="data" title="Selecione a data da atividade">
 	</div>
 	
-	<div class="field col-4">
-	  <label for="tipo">Tipo</label>
-	  <select id="tipo" title="Escolha o tipo da atividade">
-		<option value="" disabled selected>Selecione o Tipo..</option>
-		<option value="Introdução">Introdução</option>
-		<option value="Pregação">Pregação</option>
-		<option value="Oração">Oração</option>
-		<option value="Acolhida">Acolhida</option>
-		<option value="Animação">Animação</option>
-		<option value="Adoração">Adoração</option>
-		<option value="Dinâmica">Dinâmica</option>
-		<option value="Testemunho">Testemunho</option>
-		<option value="Santa Missa">Santa Missa</option>
-		<option value="Momento">Momento</option>
-		<option value="Historinha">Historinha</option>
-		<option value="Monólogo">Monólogo</option>
-		<option value="Efusão">Efusão</option>
-		<option value="Teatro">Teatro</option>
-		<option value="Pausa">Pausa</option>
-		<option value="Intervalo">Intervalo</option>
-		<option value="Almoço">Almoço</option>
-		<option value=""></option>
-		<option value="Jantar">Jantar</option>
-		<option value="Palestra">Palestra</option>
-		<option value="Partilha">Partilha</option>
-	  </select>
-	</div>
+<div class="field col-4">
+  <label for="tipo">Tipo de Atividade</label>
+  <select id="tipo" title="Escolha o tipo da atividade">
+    <option value="" disabled selected>Selecione o Tipo..</option>
+
+    <option value="Acolhida">Acolhida</option>
+    <option value="Acolhida dos Familiares">Acolhida dos Familiares</option>
+    <option value="Acolhida dos Participantes">Acolhida dos Participantes</option>
+    <option value="Adoração">Adoração</option>
+    <option value="Almoço">Almoço</option>
+    <option value="Animação">Animação</option>
+    <option value="Café">Café</option>
+    <option value="Café da Manhã">Café da Manhã</option>
+    <option value="Café da Tarde">Café da Tarde</option>
+    <option value="Chegada dos Servos">Chegada dos Servos</option>
+    <option value="Despertar dos Participantes">Despertar dos Participantes</option>
+    <option value="Despertar dos Servos">Despertar dos Servos</option>
+    <option value="Dinâmica">Dinâmica</option>
+    <option value="Efusão">Efusão</option>
+    <option value="Encerramento">Encerramento</option>
+    <option value="Historinha">Historinha</option>
+    <option value="Intervalo">Intervalo</option>
+    <option value="Intervalo Água e Banheiro">Intervalo Água e Banheiro</option>
+    <option value="Intervalo com Lanche">Intervalo com Lanche</option>
+    <option value="Introdução">Introdução</option>
+    <option value="Jantar">Jantar</option>
+    <option value="Momento">Momento</option>
+    <option value="Monólogo">Monólogo</option>
+    <option value="Oração">Oração</option>
+    <option value="Oração da Manhã">Oração da Manhã</option>
+    <option value="Oração de Cura Interior">Oração de Cura Interior</option>
+    <option value="Oração de Descontaminação">Oração de Descontaminação</option>
+    <option value="Oração de Renúncia">Oração de Renúncia</option>
+    <option value="Oração dos Servos">Oração dos Servos</option>
+    <option value="Organização do Local">Organização do Local</option>
+    <option value="Palestra">Palestra</option>
+    <option value="Partilha">Partilha</option>
+    <option value="Pausa">Pausa</option>
+    <option value="Pregação">Pregação</option>
+    <option value="Santa Missa">Santa Missa</option>
+    <option value="Teatro">Teatro</option>
+    <option value="Testemunho">Testemunho</option>
+
+  </select>
+</div>
    
 	<div class="field col-4">
 	  <label for="nome">Nome da Atividade</label>
@@ -1055,16 +1073,46 @@ body{
 
 <script>
 let atividadeAtual = null;	
-let isPrinting = false; // 👈 ADICIONE AQUI
+let isPrinting = false; 
+	
 const tiposAtividade = [
-  "Introdução", "Adoração", "Acolhida", "Acolhida dos Participantes", "Animação", "Almoço",
-  "Café da Manhã", "Despertar dos Servos", "Chegada dos Servos",
-  "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha",
-  "Monólogo", "Oração", "Oração dos Servos", "Oração de Cura Interior",
-  "Oração de Renúncia", "Oração de Descontaminação",
-  "Pausa", "Intervalo", "Intervalo com Lanche", "Intervalo Água e Banheiro",
-  "Palestra", "Partilha", "Pregação", "Testemunho",
-  "Santa Missa", "Encerramento", "Organização do Local"
+  "Acolhida",
+  "Acolhida dos Familiares",
+  "Acolhida dos Participantes",
+  "Adoração",
+  "Almoço",
+  "Animação",
+  "Café",
+  "Café da Manhã",
+  "Café da Tarde",
+  "Chegada dos Servos",
+  "Despertar dos Participante",
+  "Despertar dos Servos",
+  "Dinâmica",
+  "Efusão",
+  "Encerramento",
+  "Historinha",
+  "Intervalo",
+  "Intervalo Água e Banheiro",
+  "Intervalo com Lanche",
+  "Introdução",
+  "Jantar",
+  "Momento",
+  "Monólogo",
+  "Oração",
+  "Oração da Manhã",
+  "Oração de Cura Interior",
+  "Oração de Descontaminação",
+  "Oração de Renúncia",
+  "Oração dos Servos",
+  "Organização do Local",
+  "Palestra",
+  "Partilha",
+  "Pausa",
+  "Pregação",
+  "Santa Missa",
+  "Teatro",
+  "Testemunho"
 ].sort((a, b) => a.localeCompare(b));
 
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
