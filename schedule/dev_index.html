@@ -1846,14 +1846,42 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar opções"));
 }
 
-window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
-
 function baixarPDF() {
   setTimeout(() => {
     window.print();
   }, 100);
 }
+
+function atualizarJSONAutomatico() {
+
+  fetch('import/option.json?v=' + Date.now())
+    .then(res => res.json())
+    .then(opcoes => {
+
+      if (!Array.isArray(opcoes) || opcoes.length === 0) {
+        console.warn("Nenhuma opção encontrada");
+        return;
+      }
+
+      // ✅ primeira opção da lista (índice 0)
+      const opcaoPadrao = opcoes[0];
+
+      const caminho = "import/" + opcaoPadrao.arquivo;
+
+      fetch(caminho)
+        .then(r => r.json())
+        .then(importarJSONDireto)
+        .catch(() => console.error("Erro ao carregar JSON principal"));
+
+    })
+    .catch(() => console.error("Erro ao carregar option.json"));
+
+}
+
+window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 window.baixarPDF = baixarPDF;
+window.atualizarJSONAutomatico = atualizarJSONAutomatico;
+
 	
 document.addEventListener("DOMContentLoaded", () => {document.addEventListener("DOMContentLoaded",ECTA MOBILE
   const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
@@ -1938,27 +1966,8 @@ document.addEventListener("DOMContentLoaded", () => {document.addEventListener("
   });
 
 });
-  
-function atualizarJSONAutomatico() {
 
-  fetch('import/option.json?v=' + Date.now())
-    .then(res => res.json())
-    .then(opcoes => {
 
-      if (!opcoes.length) return;
-
-      const primeiro = opcoes[0];
-      const caminho = "import/" + primeiro.arquivo;
-
-      fetch(caminho)
-        .then(r => r.json())
-        .then(importarJSONDireto)
-        .catch(() => console.log("Erro ao carregar JSON"));
-
-    })
-    .catch(() => console.log("Erro ao carregar opções"));
-}
-	
 </script>
 
   <div class="watermark">TK JOVEM</div>
