@@ -1663,56 +1663,73 @@ function pararLoops() {
   intervalGlobal = null;
 
 }
-	function editarAtividade(index){
+	
+let editandoIndex = null;	
+
+function editarAtividade(index){
 
   const lista = carregarLista();
   const p = lista[index];
 
-  const dataBrAtual = isoParaBr(p.data);
+  editandoIndex = index;
 
-  const entradaDataBr = prompt("Editar data (DD/MM/AAAA):", dataBrAtual);
-  if (entradaDataBr === null) return;
+  // ✅ Tipo (com proteção)
+  const selectTipo = document.getElementById("tipo");
 
-  const novaDataIso = brParaIso(entradaDataBr);
-  if (!novaDataIso) {
-    alert("Data inválida.");
-    return;
+  const existe = Array.from(selectTipo.options)
+    .some(opt => opt.value === p.tipo);
+
+  if (!existe && p.tipo) {
+    const option = document.createElement("option");
+    option.value = p.tipo;
+    option.textContent = p.tipo + " (custom)";
+    selectTipo.appendChild(option);
   }
 
-  const novoTipo = prompt("Tipo da atividade:", p.tipo || "");
-  if (novoTipo === null) return;
+  selectTipo.value = p.tipo;
 
-  const novoNome = prompt("Nome da Atividade:", p.nome || "");
-  if (novoNome === null) return;
+  // ✅ Outros campos
+  document.getElementById("nome").value = p.nome;
+  document.getElementById("servo").value = p.servo;
+  document.getElementById("inicio").value = p.inicio;
+  document.getElementById("fim").value = p.fim;
+  document.getElementById("obs").value = p.obs || "";
 
-  const novoServo = prompt("Servo:", p.servo || "");
-  if (novoServo === null) return;
+  if (document.getElementById("data")) {
+    document.getElementById("data").value = p.data;
+  }
 
-  const novoInicio = prompt("Hora início:", p.inicio);
-  if (novoInicio === null) return;
+  // ✅ UX (opcional, mas MUITO bom)
+  document.querySelector(".add").textContent = "Atualizar Atividade";
+}
 
-  const novoFim = prompt("Hora fim:", p.fim);
-  if (novoFim === null) return;
+function salvarAtividade() {
 
-  // ✅ OBSERVAÇÃO INCLUÍDA (CORRETAMENTE)
-  const novaObs = prompt("Observação:", p.obs || "");
-  if (novaObs === null) return;
+  const lista = carregarLista();
 
-  const textoObs = novaObs.trim();
-
-  // ✅ ATUALIZA SEM PERDER DADOS
-  lista[index] = {
-    ...p,
-    dia: diaDaSemanaPorData(novaDataIso),
-    data: novaDataIso,
-    tipo: novoTipo,
-    nome: novoNome.trim(),
-    servo: novoServo.trim(),
-    inicio: novoInicio,
-    fim: novoFim,
-    obs: textoObs,
-    destaque: textoObs.length > 0
+  const atividade = {
+    tipo: document.getElementById("tipo").value,
+    nome: document.getElementById("nome").value.trim(),
+    servo: document.getElementById("servo").value.trim(),
+    inicio: document.getElementById("inicio").value,
+    fim: document.getElementById("fim").value,
+    obs: document.getElementById("obs").value.trim()
   };
+
+  if (editandoIndex !== null) {
+
+    lista[editandoIndex] = {
+      ...lista[editandoIndex],
+      ...atividade
+    };
+
+    editandoIndex = null;
+
+  } else {
+
+    lista.push(atividade);
+
+  }
 
   salvarLista(lista);
   renderizarLista();
