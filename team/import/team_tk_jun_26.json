@@ -86,7 +86,7 @@
       "title": "Servo",
       "parentId": "12",
       "confirmado": true,
-      "isReferencia": true
+      "isReferencia": false
     },
     {
       "id": "14",
@@ -102,7 +102,7 @@
       "title": "Servo",
       "parentId": "12",
       "confirmado": true,
-      "isReferencia": false
+      "isReferencia": true
     },
     {
       "id": "16",
@@ -251,7 +251,7 @@
       "name": "Matheus SJC🎤🎸🎹",
       "title": "Servo",
       "parentId": "33",
-      "confirmado": true,
+      "confirmado": false,
       "isReferencia": false
     },
     {
