@@ -2265,7 +2265,7 @@ function escolherAtualizacaoJSON() {
     .then(opcoes => {
 
       const escolha = prompt(
-        "Escolha o arquivo:\n\n" +
+        "Escolha a Equipe:\n\n" +
         opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
       );
 
@@ -2278,10 +2278,10 @@ function escolherAtualizacaoJSON() {
       fetch(caminho)
         .then(r => r.json())
         .then(importarJSONDireto)
-        .catch(() => alert("Erro ao carregar arquivo"));
+        .catch(() => alert("Erro ao carregar equipes"));
 
     })
-    .catch(() => alert("Erro ao carregar opções"));
+    .catch(() => alert("Erro ao carregar as opções"));
 }
 
 function escolherAtualizacaoJSON() {
@@ -2290,7 +2290,7 @@ function escolherAtualizacaoJSON() {
     .then(opcoes => {
 
       const escolha = prompt(
-        "Escolha o arquivo:\n\n" +
+        "Escolha a Equipe:\n\n" +
         opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
       );
 
@@ -2303,10 +2303,10 @@ function escolherAtualizacaoJSON() {
       fetch(caminho)
         .then(r => r.json())
         .then(importarJSONDireto)
-        .catch(() => alert("Erro ao carregar arquivo"));
+        .catch(() => alert("Erro ao carregar Equipes"));
 
     })
-    .catch(() => alert("Erro ao carregar opções"));
+    .catch(() => alert("Erro ao carregar as opções"));
 }
 
 function baixarPDF() {
