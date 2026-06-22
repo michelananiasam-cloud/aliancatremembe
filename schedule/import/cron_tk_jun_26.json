@@ -1,20 +1,9 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-18T21:49:45.449Z",
+  "exportedAt": "2026-06-22T13:17:02.821Z",
   "current": {
-    "evangelizacao": "Thalita Kum Junho/26",
+    "evangelizacao": "Thalita Kum Jovem - Junho/26",
     "lista": [
-      {
-        "dia": "Quinta",
-        "data": "2026-06-18",
-        "tipo": "Introdução",
-        "nome": "REUNIÃO DOS SERVOS",
-        "servo": "",
-        "inicio": "20:00",
-        "fim": "21:00",
-        "destaque": true,
-        "obs": "Gerar Link para reunião"
-      },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
@@ -185,10 +174,10 @@
         "data": "2026-06-27",
         "tipo": "Teatro",
         "nome": "\"Monólogo do Barro\"",
-        "servo": "Letícia Ferreira*",
+        "servo": "Missionária*",
         "inicio": "14:00",
         "fim": "14:30",
-        "obs": "Letícia Ferreira a confirmar, caso contrário Paulo Passos",
+        "obs": "Lina irá verificar qual missionária da casa irá fazer o monólogo.",
         "destaque": true
       },
       {
@@ -229,8 +218,8 @@
         "servo": "Felipe Miojo e Michele",
         "inicio": "15:40",
         "fim": "16:20",
-        "obs": "A conformar com Felipe Miojo e Michele",
-        "destaque": true
+        "obs": "",
+        "destaque": false
       },
       {
         "dia": "Sábado",
