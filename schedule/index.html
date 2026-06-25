@@ -13,11 +13,12 @@
 ================================*/
 /* ❌ ENCERRADO (hoje + anteriores) */
 .item.encerrado {
-  border-left: 5px solid #28a745;
-  background: rgba(40,167,69,0.10);
-  opacity: 0.7;
+  border-left: 5px solid rgba(40,167,69,0.7); /* old: border-left: 5px solid #28a745;*/
+  background: rgba(40,167,69,0.06); /* ✅ mais suave  antigo: background: rgba(40,167,69,0.10);*/
+  opacity: 1; /* ✅ NÃO use opacity geral antigo: opacity: 0.7;*/
 }
 
+	
 /* 🟡 FUTURO (hoje e dias futuros igual, sem diferença) */
 .item.futuro {
   border-left: 5px solid transparent;
