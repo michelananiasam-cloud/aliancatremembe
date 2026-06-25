@@ -91,7 +91,7 @@
   border-radius: 999px;
   overflow: hidden;
 
-  flex-shrink: 0; /* 🔥 IMPORTANTE: evita sumir em flex */
+  flex-shrink: 0; /* ✨ IMPORTANTE: evita sumir em flex */
 }
 
 /* BASE DA BARRA */
@@ -1159,9 +1159,9 @@ function getTempoRestante(data, inicio, fim) {
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
 
-    if (h > 0) return `🔥✨💫 ${h}h ${m}min ${s}seg restantes`;
-    if (m > 0) return `🔥✨💫 ${m}min ${s}seg restantes`;
-    return `🔥✨💫 ${s}seg restantes`;
+    if (h > 0) return `✨ ${h}h ${m}min ${s}seg restantes`;
+    if (m > 0) return `✨ ${m}min ${s}seg restantes`;
+    return `✨ ${s}seg restantes`;
   }
 
   // ✅ ENCERRADO
@@ -1463,7 +1463,7 @@ function renderizarLista() {
       if (!isPrinting && timer) {
 
         // 🔵 EM ANDAMENTO
-        if (timer.startsWith("🔥✨💫")) {
+        if (timer.startsWith("✨✨💫")) {
           texto += ` • ${timer}`;
         }
 
@@ -1473,7 +1473,7 @@ function renderizarLista() {
         }
 
         // 🌟 PRÓXIMA
-        else if (isProxima && timer.startsWith("⏱️")) {
+        else if (isProxima && timer.startsWith("⏳")) {
           texto += ` • ${timer}`;
         }
       }
@@ -1618,13 +1618,13 @@ function renderizarLista() {
 
       if (!isPrinting && timer) {
 
-        if (timer.startsWith("🔥")) {
+        if (timer.startsWith("✨")) {
           texto += ` • ${timer}`;
         }
         else if (timer.startsWith("✅")) {
           texto += ` • ${timer}`;
         }
-        else if (isProxima && timer.startsWith("⏱️")) {
+        else if (isProxima && timer.startsWith("⏳")) {
           texto += ` • ${timer}`;
         }
       }
@@ -2121,7 +2121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // 🔥 LOOPS (CORRIGIDO)
+  // ✨ LOOPS (CORRIGIDO)
   // ===============================
   iniciarLoops();
 
