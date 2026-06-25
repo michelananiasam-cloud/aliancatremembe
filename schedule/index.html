@@ -1484,8 +1484,43 @@ const divBtns = el(
   [bEdit, bDelete, bClone]
 );
 
-      li.appendChild(divInfo);
-      li.appendChild(divBtns);
+li.appendChild(divInfo);
+
+// ✅ PROGRESSO
+const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+if (status === "em-andamento") {
+
+  const barraContainer = el("div", {
+    className: "progress-container"
+  });
+
+  let classeBarra = "progress-bar ativo";
+
+  const fimDate = parseDateTime(p.data, p.fim);
+  const agora = Date.now();
+  const diff = fimDate - agora;
+
+  const minutosRestantes = diff / (1000 * 60);
+
+  if (minutosRestantes <= 5) {
+    classeBarra = "progress-bar danger";
+  }
+  else if (minutosRestantes <= 10) {
+    classeBarra = "progress-bar warning";
+  }
+
+  const barra = el("div", {
+    className: classeBarra,
+    style: `width: ${progresso}%`
+  });
+
+  barraContainer.appendChild(barra);
+  li.appendChild(barraContainer);
+}
+
+// ✅ botões continuam depois
+li.appendChild(divBtns);
 
       ul.appendChild(li);
 
