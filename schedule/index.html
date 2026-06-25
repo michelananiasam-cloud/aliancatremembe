@@ -1176,31 +1176,26 @@ function parseDateTime(data, hora) {
   if (!data || !hora) return null;
   return new Date(`${data}T${hora}:00`);
 }
-	
-function getStatusAtividade(data, inicio, fim) {
+	function getStatusAtividade(data, inicio, fim) {
 
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
-  // 🔴 segurança: dados inválidos
   if (!inicioDate || !fimDate) {
-    return "futuro";
+    return "futuro"; // ✅ fallback seguro
   }
 
   const agora = Date.now();
 
-  // 🔵 EM ANDAMENTO
   if (agora >= inicioDate && agora <= fimDate) {
     return "em-andamento";
   }
 
-  // ❌ ENCERRADO
   if (agora > fimDate) {
     return "encerrado";
   }
 
-  // 🟡 FUTURO
-  return "futuro";
+  return "futuro"; // ✅ sempre retorna algo
 }
 
 function marcarProximaAtividade(lista) {
