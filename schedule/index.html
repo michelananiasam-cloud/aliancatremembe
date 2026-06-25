@@ -1365,6 +1365,29 @@ function buildInfo(p) {
   return texto;
 }
 
+function scrollParaAtividade() {
+
+  const atual = document.getElementById("atividade-atual");
+
+  if (atual) {
+    atual.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+    return;
+  }
+
+  // se não tiver atividade atual → vai pra próxima
+  const proxima = document.getElementById("proxima-atividade");
+
+  if (proxima) {
+    proxima.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
+	
 function getProgresso(data, inicio, fim){
 
   const hoje = new Date().toISOString().split("T")[0];
@@ -1437,6 +1460,14 @@ function renderizarLista() {
           ${p.destaque ? "destaque" : ""}
         `
       });
+
+// ✅ MARCA PARA SCROLL
+if (status === "em-andamento") {
+  li.setAttribute("id", "atividade-atual");
+}
+else if (isProxima) {
+  li.setAttribute("id", "proxima-atividade");
+}
 
       // 💬 Observação
       const temObs = (p.obs || "").trim().length > 0;
@@ -2091,6 +2122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   atualizarTitulos();
   renderizarLista();
+  scrollParaAtividade(); 
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
