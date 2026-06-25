@@ -1367,7 +1367,7 @@ function getProgresso(data, inicio, fim){
 
   return Math.floor(((agora - i) / (f - i)) * 100);
 }
-
+/*
 function renderizarLista() {
 
   const listaDiv = document.getElementById("lista");
@@ -1492,7 +1492,10 @@ if (status === "em-andamento") {
     className: "progress-container"
   });
 
-  let classeBarra = "progress-bar ativo";
+
+let classeBarra = "progress-bar ativo";
+let classeItemExtra = "";
+
 
   const fimDate = parseDateTime(p.data, p.fim);
   const agora = Date.now();
@@ -1529,7 +1532,154 @@ li.appendChild(divBtns);
   });
 
 }
+*/
 
+function renderizarLista() {
+
+  const listaDiv = document.getElementById("lista");
+  listaDiv.innerHTML = "";
+
+  const lista = ordenarLista(carregarLista());
+  const proximaIndex = marcarProximaAtividade(lista);
+
+  const grupos = {};
+
+  lista.forEach(p => {
+    if (!grupos[p.data]) grupos[p.data] = [];
+    grupos[p.data].push(p);
+  });
+
+  const datasOrdenadas = Object.keys(grupos).sort();
+
+  datasOrdenadas.forEach(data => {
+
+    const atividadesDoDia = grupos[data];
+
+    const containerDia = el("section", {
+      className: "pagina-detalhe"
+    });
+
+    const dataBr = data.split("-").reverse().join("/");
+    const diaSemana = diaDaSemanaPorData(data);
+
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
+    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
+
+    containerDia.appendChild(h2Titulo);
+    containerDia.appendChild(hDia);
+
+    const ul = el("ul", { className: "lista-atividades" });
+
+    atividadesDoDia.forEach(p => {
+
+      const idxReal = lista.findIndex(item => item.id === p.id);
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+      const isProxima = (idxReal === proximaIndex);
+
+      const li = el("li", {
+        className: `
+          item 
+          ${status} 
+          ${isProxima ? "proxima" : ""}
+          ${p.destaque ? "destaque" : ""}
+        `
+      });
+
+      // 💬 OBS
+      if ((p.obs || "").trim()) {
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
+        iconObs.setAttribute("title", p.obs);
+        iconObs.addEventListener("click", () => editarObservacao(p.id));
+        li.appendChild(iconObs);
+      }
+
+      // ✅ TEXTO BASE
+      let texto = buildInfo(p);
+
+      const timer = getTempoRestante(p.data, p.inicio, p.fim);
+
+      if (!isPrinting && timer) {
+
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
+        else if (isProxima && timer.startsWith("⏱️")) {
+          texto += ` • ${timer}`;
+        }
+      }
+
+      const divInfo = el("div", {
+        className: "item-info"
+      }, texto);
+
+      li.appendChild(divInfo);
+
+      // ✅ ===== PROGRESSO + COR DINÂMICA =====
+      if (status === "em-andamento") {
+
+        const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+        let classeBarra = "progress-bar ativo";
+        let classeItemExtra = "ativo";
+
+        const fimDate = parseDateTime(p.data, p.fim);
+        const agora = Date.now();
+        const minutosRestantes = (fimDate - agora) / (1000 * 60);
+
+        if (minutosRestantes <= 5) {
+          classeBarra = "progress-bar danger";
+          classeItemExtra = "danger";
+        }
+        else if (minutosRestantes <= 10) {
+          classeBarra = "progress-bar warning";
+          classeItemExtra = "warning";
+        }
+
+        const barraContainer = el("div", {
+          className: "progress-container"
+        });
+
+        const barra = el("div", {
+          className: classeBarra,
+          style: `width: ${progresso}%`
+        });
+
+        barraContainer.appendChild(barra);
+        li.appendChild(barraContainer);
+
+        // ✅ sincroniza borda lateral
+        li.classList.add(classeItemExtra);
+      }
+
+      // ✅ BOTÕES (PADRÃO CORRETO COM ID)
+      const bEdit = el("button", { className: "edit" }, "Editar");
+      bEdit.addEventListener("click", () => editarAtividade(p.id));
+
+      const bDelete = el("button", { className: "delete" }, "Excluir");
+      bDelete.addEventListener("click", () => excluirAtividade(p.id));
+
+      const bClone = el("button", { className: "clone" }, "Clonar");
+      bClone.addEventListener("click", () => clonarAtividade(p.id));
+
+      const divBtns = el("div", {
+        className: "item-botoes"
+      }, [bEdit, bDelete, bClone]);
+
+      li.appendChild(divBtns);
+
+      ul.appendChild(li);
+
+    });
+
+    containerDia.appendChild(ul);
+    listaDiv.appendChild(containerDia);
+
+  });
+
+}	
 
 
 function adicionarAtividade(){
