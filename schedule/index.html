@@ -1301,7 +1301,7 @@ function getDuracao(inicio, fim) {
   return `${m}mim`;
 }
 
-function buildInfo(p) {
+function buildInfo(p, isProxima) {
 
   const duracao = getDuracao(p.inicio, p.fim);
 
@@ -1328,20 +1328,17 @@ function buildInfo(p) {
   /* ===============================
      TIMER (NÃO APARECE NO PRINT)
   ============================== */
-  if (!isPrinting) {
+if (!isPrinting && isProxima) {
 
-    const timer = getTempoRestante(
-      p.data,
-      p.inicio,
-      p.fim
-    );
+  const timer = getTempoRestante(
+    p.data,
+    p.inicio,
+    p.fim
+  );
 
-    if (timer) {
-      texto += ` • ${timer}`;
-    }
+  if (timer && timer.startsWith("⏱️")) {
+    texto += ` • ${timer}`;
   }
-
-  return texto;
 }
 
 function getProgresso(data, inicio, fim){
@@ -1439,11 +1436,11 @@ function renderizarLista() {
         li.appendChild(iconObs);
       }
 
-      const divInfo = el(
-        "div",
-        { className: "item-info" },
-        buildInfo(p)
-      );
+const divInfo = el(
+  "div",
+  { className: "item-info" },
+  buildInfo(p, isProxima)
+);
 
       const bEdit = el("button", { className: "edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
