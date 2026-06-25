@@ -1447,12 +1447,17 @@ const timer = getTempoRestante(
   p.fim
 );
 
-// 🔵 ATIVIDADE EM ANDAMENTO → mostra 🔥
+// 🔵 EM ANDAMENTO
 if (timer && timer.startsWith("🔥")) {
   texto += ` • ${timer}`;
 }
 
-// 🌟 PRÓXIMA → mostra ⏱️
+// ✅ ENCERRADO
+else if (timer && timer.startsWith("✅")) {
+  texto += ` • ${timer}`;
+}
+
+// 🌟 PRÓXIMA
 else if (isProxima && timer && timer.startsWith("⏱️")) {
   texto += ` • ${timer}`;
 }
