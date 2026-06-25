@@ -1234,19 +1234,25 @@ function salvarLista(lista){
 }
 
 function carregarLista(){
-  try{
+  try {
 
     const lista = localStorage.getItem(LIST_KEY);
     const dados = lista ? JSON.parse(lista) : [];
 
-    // ✅ garante obs em todos os itens
     dados.forEach(item => {
+
       if (item.obs === undefined) item.obs = "";
+
+      // ✅ garante ID único
+      if (!item.id) {
+        item.id = `id_${Date.now()}_${Math.random()}`;
+      }
+
     });
 
     return dados;
 
-  }catch(e){
+  } catch(e){
     return [];
   }
 }
@@ -1512,6 +1518,7 @@ function adicionarAtividade(){
   const lista = carregarLista();
 
   lista.push({
+    id: `id_${Date.now()}_${Math.random()}`, // ✅ ID único
     dia,
     data,
     tipo,
@@ -1519,21 +1526,12 @@ function adicionarAtividade(){
     servo,
     inicio,
     fim,
-
-    destaque: false,  // ✅ para marcar com ⚠️
-    obs: ""           // ✅ armazenar comentário 💬
+    destaque: false,
+    obs: ""
   });
 
   salvarLista(lista);
   renderizarLista();
-
-  // ✅ limpa campos
-  document.getElementById("data").value = "";
-  document.getElementById("tipo").selectedIndex = 0;
-  document.getElementById("nome").value = "";
-  document.getElementById("servo").value = "";
-  document.getElementById("inicio").value = "";
-  document.getElementById("fim").value = "";
 }
 
 function editarObservacao(index){
@@ -1612,7 +1610,10 @@ function editarAtividade(id){
   const lista = carregarLista();
 
   const index = lista.findIndex(item => item.id === id);
-  if (index === -1) return;
+  if (index === -1) {
+    alert("Erro: atividade não encontrada");
+    return;
+  }
 
   const p = lista[index];
 
@@ -1682,13 +1683,16 @@ function clonarAtividade(id){
   const lista = carregarLista();
 
   const index = lista.findIndex(item => item.id === id);
-  if (index === -1) return;
+  if (index === -1) {
+    alert("Erro ao clonar");
+    return;
+  }
 
   const original = lista[index];
 
   const novoItem = {
     ...original,
-    id: Date.now() + Math.random()
+    id: `id_${Date.now()}_${Math.random()}` // ✅ novo ID
   };
 
   lista.push(novoItem);
