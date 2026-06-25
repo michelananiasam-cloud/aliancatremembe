@@ -1144,9 +1144,9 @@ function getTempoRestante(data, inicio, fim) {
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
 
-    if (h > 0) return `🔥 ${h}h ${m}min ${s}seg restantes`;
-    if (m > 0) return `🔥 ${m}min ${s}seg restantes`;
-    return `🔥 ${s}seg restantes`;
+    if (h > 0) return `🔥✨💫 ${h}h ${m}min ${s}seg restantes`;
+    if (m > 0) return `🔥✨💫 ${m}min ${s}seg restantes`;
+    return `🔥✨💫 ${s}seg restantes`;
   }
 
   // ✅ ENCERRADO
@@ -1448,7 +1448,7 @@ function renderizarLista() {
       if (!isPrinting && timer) {
 
         // 🔵 EM ANDAMENTO
-        if (timer.startsWith("🔥")) {
+        if (timer.startsWith("🔥✨💫")) {
           texto += ` • ${timer}`;
         }
 
