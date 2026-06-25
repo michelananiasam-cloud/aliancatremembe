@@ -1251,9 +1251,12 @@ function carregarLista(){
 
     dados.forEach(item => {
 
-      if (item.obs === undefined) item.obs = "";
+      // ✅ garante observação
+      if (item.obs === undefined) {
+        item.obs = "";
+      }
 
-      // ✅ garante ID único
+      // ✅ garante ID (ESSENCIAL)
       if (!item.id) {
         item.id = `id_${Date.now()}_${Math.random()}`;
       }
@@ -1263,6 +1266,7 @@ function carregarLista(){
     return dados;
 
   } catch(e){
+    console.error(e);
     return [];
   }
 }
