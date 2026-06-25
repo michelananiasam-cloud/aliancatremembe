@@ -1463,20 +1463,20 @@ function renderizarLista() {
         texto
       );
 
-      const bEdit = el("button", { className: "edit" }, "Editar");
-      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+const bEdit = el("button", { className: "edit" }, "Editar");
+bEdit.addEventListener("click", () => editarAtividade(p.id));
 
-      const bDelete = el("button", { className: "delete" }, "Excluir");
-      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+const bDelete = el("button", { className: "delete" }, "Excluir");
+bDelete.addEventListener("click", () => excluirAtividade(p.id));
 
-      const bClone = el("button", { className: "clone" }, "Clonar");
-      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+const bClone = el("button", { className: "clone" }, "Clonar");
+bClone.addEventListener("click", () => clonarAtividade(p.id));
 
-      const divBtns = el(
-        "div",
-        { className: "item-botoes" },
-        [bEdit, bDelete, bClone]
-      );
+const divBtns = el(
+  "div",
+  { className: "item-botoes" },
+  [bEdit, bDelete, bClone]
+);
 
       li.appendChild(divInfo);
       li.appendChild(divBtns);
@@ -1606,9 +1606,14 @@ function pararLoops() {
   intervalGlobal = null;
 
 }
-	function editarAtividade(index){
+
+function editarAtividade(id){
 
   const lista = carregarLista();
+
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) return;
+
   const p = lista[index];
 
   const dataBrAtual = isoParaBr(p.data);
@@ -1637,13 +1642,11 @@ function pararLoops() {
   const novoFim = prompt("Hora fim:", p.fim);
   if (novoFim === null) return;
 
-  // ✅ OBSERVAÇÃO INCLUÍDA (CORRETAMENTE)
   const novaObs = prompt("Observação:", p.obs || "");
   if (novaObs === null) return;
 
   const textoObs = novaObs.trim();
 
-  // ✅ ATUALIZA SEM PERDER DADOS
   lista[index] = {
     ...p,
     dia: diaDaSemanaPorData(novaDataIso),
@@ -1662,17 +1665,34 @@ function pararLoops() {
 }
 
 
-function excluirAtividade(index){
+function excluirAtividade(id){
+
   if(!confirm("Deseja realmente excluir esta atividade?")) return;
+
   const lista = carregarLista();
-  lista.splice(index,1);
-  salvarLista(lista);
+
+  const novaLista = lista.filter(item => item.id !== id);
+
+  salvarLista(novaLista);
   renderizarLista();
 }
 
-function clonarAtividade(index){
+function clonarAtividade(id){
+
   const lista = carregarLista();
-  lista.push({...lista[index], data: lista[index].data});
+
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) return;
+
+  const original = lista[index];
+
+  const novoItem = {
+    ...original,
+    id: Date.now() + Math.random()
+  };
+
+  lista.push(novoItem);
+
   salvarLista(lista);
   renderizarLista();
 }
