@@ -1367,7 +1367,7 @@ function buildInfo(p) {
 
 function scrollParaAtividade() {
 
-  const atual = document.getElementById("atividade-atual");
+  const atual = document.querySelector("#atividade-atual");
 
   if (atual) {
     atual.scrollIntoView({
@@ -1377,8 +1377,7 @@ function scrollParaAtividade() {
     return;
   }
 
-  // se não tiver atividade atual → vai pra próxima
-  const proxima = document.getElementById("proxima-atividade");
+  const proxima = document.querySelector("#proxima-atividade");
 
   if (proxima) {
     proxima.scrollIntoView({
@@ -2122,7 +2121,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   atualizarTitulos();
   renderizarLista();
-  scrollParaAtividade(); 
+
+  setTimeout(() => {
+    scrollParaAtividade();
+  }, 200);
 
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
