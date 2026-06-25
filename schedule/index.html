@@ -1371,7 +1371,6 @@ function renderizarLista() {
   listaDiv.innerHTML = "";
 
   const lista = ordenarLista(carregarLista());
-  const agoraGlobal = Date.now();
   const proximaIndex = marcarProximaAtividade(lista);
 
   const grupos = {};
@@ -1418,55 +1417,51 @@ function renderizarLista() {
         `
       });
 
-      // ✅ ICONE 💬 CORRETO
+      // 💬 Observação
       const temObs = (p.obs || "").trim().length > 0;
 
       if (temObs) {
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
 
-        const iconObs = el(
-          "span",
-          { className: "icon-obs" },
-          "💬"
-        );
-
-        iconObs.addEventListener(
-          "click",
-          () => editarObservacao(idxReal)
-        );
-
+        iconObs.addEventListener("click", () => editarObservacao(idxReal));
         iconObs.setAttribute("title", p.obs);
 
         li.appendChild(iconObs);
       }
 
-let texto = buildInfo(p);
+      // ✅ TEXTO BASE
+      let texto = buildInfo(p);
 
-const timer = getTempoRestante(
-  p.data,
-  p.inicio,
-  p.fim
-);
+      // ✅ TIMER CONTROLADO
+      const timer = getTempoRestante(
+        p.data,
+        p.inicio,
+        p.fim
+      );
 
-// 🔵 EM ANDAMENTO
-if (timer && timer.startsWith("🔥")) {
-  texto += ` • ${timer}`;
-}
+      if (!isPrinting && timer) {
 
-// ✅ ENCERRADO
-else if (timer && timer.startsWith("✅")) {
-  texto += ` • ${timer}`;
-}
+        // 🔵 EM ANDAMENTO
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
 
-// 🌟 PRÓXIMA
-else if (isProxima && timer && timer.startsWith("⏱️")) {
-  texto += ` • ${timer}`;
-}
+        // ✅ ENCERRADO
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
 
-const divInfo = el(
-  "div",
-  { className: "item-info" },
-  texto
-);
+        // 🌟 PRÓXIMA
+        else if (isProxima && timer.startsWith("⏱️")) {
+          texto += ` • ${timer}`;
+        }
+      }
+
+      const divInfo = el(
+        "div",
+        { className: "item-info" },
+        texto
+      );
 
       const bEdit = el("button", { className: "edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(idxReal));
@@ -1476,9 +1471,6 @@ const divInfo = el(
 
       const bClone = el("button", { className: "clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(idxReal));
-
-      const bObs = el("button", { className: "obs" }, "💬");
-      bObs.addEventListener("click", () => editarObservacao(idxReal));
 
       const divBtns = el(
         "div",
@@ -1497,7 +1489,9 @@ const divInfo = el(
     listaDiv.appendChild(containerDia);
 
   });
+
 }
+
 
 
 function adicionarAtividade(){
@@ -1599,10 +1593,8 @@ function buildInfo(p) {
     texto += ` (${p.servo.trim()})`;
   }
 
-  // 🚫 REMOVIDO: timer daqui
-
   return texto;
-}	
+}
 	
 function pararLoops() {
 
