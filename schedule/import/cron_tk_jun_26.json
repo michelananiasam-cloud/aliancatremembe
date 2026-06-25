@@ -1,20 +1,9 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-22T13:17:02.821Z",
+  "exportedAt": "2026-06-25T22:52:17.423Z",
   "current": {
-    "evangelizacao": "Thalita Kum Jovem - Junho/26",
+    "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
-      {
-        "dia": "Sábado",
-        "data": "2026-06-27",
-        "tipo": "Acolhida",
-        "nome": "Chegada dos Servos",
-        "servo": "",
-        "inicio": "07:00",
-        "fim": "07:30",
-        "destaque": false,
-        "obs": ""
-      },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
@@ -24,7 +13,8 @@
         "inicio": "07:30",
         "fim": "08:00",
         "destaque": false,
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.25809635102791395"
       },
       {
         "dia": "Sábado",
@@ -35,7 +25,8 @@
         "inicio": "08:00",
         "fim": "08:30",
         "destaque": false,
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.5273611642234103"
       },
       {
         "dia": "Sábado",
@@ -45,7 +36,8 @@
         "servo": "João e Lina",
         "inicio": "08:30",
         "fim": "08:40",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.4141507059855668"
       },
       {
         "dia": "Sábado",
@@ -55,7 +47,8 @@
         "servo": "",
         "inicio": "08:40",
         "fim": "09:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.37057847346665096"
       },
       {
         "dia": "Sábado",
@@ -65,7 +58,8 @@
         "servo": "Lina",
         "inicio": "09:00",
         "fim": "09:30",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.49114459047946957"
       },
       {
         "dia": "Sábado",
@@ -75,18 +69,20 @@
         "servo": "",
         "inicio": "09:30",
         "fim": "09:40",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.11702978469761205"
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Amor do Pai",
-        "servo": "Jonatan Gabriel e Letícia Ferreira",
+        "servo": "Michelle e Letícia Ferreira",
         "inicio": "09:40",
         "fim": "10:20",
         "obs": "",
-        "destaque": false
+        "destaque": false,
+        "id": "id_1782426914241_0.8434652426228499"
       },
       {
         "dia": "Sábado",
@@ -96,7 +92,8 @@
         "servo": "",
         "inicio": "10:20",
         "fim": "10:40",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.9062464916578088"
       },
       {
         "dia": "Sábado",
@@ -106,7 +103,8 @@
         "servo": "",
         "inicio": "10:40",
         "fim": "10:50",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.6947074077212573"
       },
       {
         "dia": "Sábado",
@@ -116,7 +114,8 @@
         "servo": "",
         "inicio": "10:50",
         "fim": "11:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.31024868351912716"
       },
       {
         "dia": "Sábado",
@@ -126,7 +125,8 @@
         "servo": "",
         "inicio": "11:00",
         "fim": "11:15",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.7295370562621508"
       },
       {
         "dia": "Sábado",
@@ -136,7 +136,8 @@
         "servo": "Karine e Matheus Victal",
         "inicio": "11:15",
         "fim": "12:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.2640461550285538"
       },
       {
         "dia": "Sábado",
@@ -146,7 +147,8 @@
         "servo": "",
         "inicio": "12:00",
         "fim": "13:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.6052664433691275"
       },
       {
         "dia": "Sábado",
@@ -156,29 +158,32 @@
         "servo": "",
         "inicio": "13:00",
         "fim": "13:20",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.05115392163561272"
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Pecado e Salvação",
-        "servo": "Tati e Michel*",
+        "servo": "Tati e João",
         "inicio": "13:20",
         "fim": "14:00",
-        "obs": "Dedfinir se será Tati com Michel ou outro pregador",
-        "destaque": true
+        "obs": "",
+        "destaque": false,
+        "id": "id_1782426914241_0.48776853578022283"
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Teatro",
         "nome": "\"Monólogo do Barro\"",
-        "servo": "Missionária*",
+        "servo": "Luna",
         "inicio": "14:00",
         "fim": "14:30",
-        "obs": "Lina irá verificar qual missionária da casa irá fazer o monólogo.",
-        "destaque": true
+        "obs": "",
+        "destaque": false,
+        "id": "id_1782426914241_0.22116211471374203"
       },
       {
         "dia": "Sábado",
@@ -188,7 +193,8 @@
         "servo": "",
         "inicio": "14:30",
         "fim": "15:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.4945356524007638"
       },
       {
         "dia": "Sábado",
@@ -198,7 +204,8 @@
         "servo": "",
         "inicio": "15:00",
         "fim": "15:20",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.3392910868289336"
       },
       {
         "dia": "Sábado",
@@ -208,18 +215,20 @@
         "servo": "",
         "inicio": "15:20",
         "fim": "15:40",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.05203138044462918"
       },
       {
         "dia": "Sábado",
         "data": "2026-06-27",
         "tipo": "Pregação",
         "nome": "Senhorio de Jesus",
-        "servo": "Felipe Miojo e Michele",
+        "servo": "Lina e Gustavo",
         "inicio": "15:40",
         "fim": "16:20",
         "obs": "",
-        "destaque": false
+        "destaque": false,
+        "id": "id_1782426914241_0.8085791061481169"
       },
       {
         "dia": "Sábado",
@@ -229,7 +238,8 @@
         "servo": "",
         "inicio": "16:20",
         "fim": "17:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.46343580122901007"
       },
       {
         "dia": "Sábado",
@@ -239,7 +249,8 @@
         "servo": "",
         "inicio": "17:00",
         "fim": "17:20",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.73898088444342"
       },
       {
         "dia": "Sábado",
@@ -249,7 +260,8 @@
         "servo": "",
         "inicio": "17:20",
         "fim": "17:40",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.9943200089360081"
       },
       {
         "dia": "Sábado",
@@ -259,7 +271,8 @@
         "servo": "Rafa e Evelyn",
         "inicio": "17:50",
         "fim": "18:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.6539974929930199"
       },
       {
         "dia": "Sábado",
@@ -269,7 +282,8 @@
         "servo": "Rafa e Evelyn",
         "inicio": "18:00",
         "fim": "18:40",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.1885439794641488"
       },
       {
         "dia": "Sábado",
@@ -279,7 +293,8 @@
         "servo": "",
         "inicio": "18:40",
         "fim": "19:20",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.6627042436469772"
       },
       {
         "dia": "Sábado",
@@ -289,7 +304,8 @@
         "servo": "",
         "inicio": "19:20",
         "fim": "20:20",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.3601783971283188"
       },
       {
         "dia": "Sábado",
@@ -299,7 +315,8 @@
         "servo": "",
         "inicio": "20:20",
         "fim": "20:30",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.028226891148035782"
       },
       {
         "dia": "Sábado",
@@ -309,7 +326,8 @@
         "servo": "",
         "inicio": "20:30",
         "fim": "20:50",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.9526525403857921"
       },
       {
         "dia": "Sábado",
@@ -319,7 +337,8 @@
         "servo": "Wilson e Paula",
         "inicio": "20:50",
         "fim": "21:30",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.19962152923628018"
       },
       {
         "dia": "Sábado",
@@ -329,7 +348,8 @@
         "servo": "",
         "inicio": "21:30",
         "fim": "22:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.5727299817061959"
       },
       {
         "dia": "Sábado",
@@ -339,7 +359,8 @@
         "servo": "",
         "inicio": "22:00",
         "fim": "22:30",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.9826728971533483"
       },
       {
         "dia": "Domingo",
@@ -349,7 +370,8 @@
         "servo": "",
         "inicio": "07:30",
         "fim": "08:00",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.27275427123413"
       },
       {
         "dia": "Domingo",
@@ -360,7 +382,8 @@
         "inicio": "08:00",
         "fim": "08:20",
         "obs": "",
-        "destaque": false
+        "destaque": false,
+        "id": "id_1782426914241_0.4114654497331399"
       },
       {
         "dia": "Domingo",
@@ -370,7 +393,8 @@
         "servo": "",
         "inicio": "08:20",
         "fim": "08:50",
-        "obs": ""
+        "obs": "",
+        "id": "id_1782426914241_0.9813247139949051"
       },
       {
         "dia": "Domingo",
@@ -381,18 +405,20 @@
         "inicio": "08:50",
         "fim": "09:00",
         "obs": "",
-        "destaque": false
+        "destaque": false,
+        "id": "id_1782426914241_0.46900238385128246"
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Promessa do Pai",
-        "servo": "Angélica e *",
+        "servo": "Angélica e Caio",
         "inicio": "09:00",
         "fim": "09:30",
-        "obs": "Definir quem prega com a Angélica.",
-        "destaque": true
+        "obs": "",
+        "destaque": false,
+        "id": "id_1782426914241_0.9591139069231157"
       },
       {
         "dia": "Domingo",
@@ -401,18 +427,22 @@
         "nome": "Efusão",
         "servo": "",
         "inicio": "09:30",
-        "fim": "10:20",
-        "obs": ""
+        "fim": "10:00",
+        "obs": "",
+        "id": "id_1782426914241_0.6208655766546215",
+        "destaque": false
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Intervalo",
-        "nome": "Lanche",
+        "nome": "Água e Banheiro",
         "servo": "",
-        "inicio": "10:20",
-        "fim": "10:40",
-        "obs": ""
+        "inicio": "10:00",
+        "fim": "10:10",
+        "obs": "",
+        "id": "id_1782426914241_0.3654537553558407",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -420,20 +450,23 @@
         "tipo": "Momento",
         "nome": "Partilha Direcionada",
         "servo": "Pastores",
-        "inicio": "10:40",
-        "fim": "11:10",
-        "obs": ""
+        "inicio": "10:10",
+        "fim": "10:40",
+        "obs": "",
+        "id": "id_1782426914241_0.4321564212343203",
+        "destaque": false
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Se Lançar",
-        "servo": "Michel e Marília",
-        "inicio": "11:10",
-        "fim": "11:50",
+        "servo": "Leandro e Marília",
+        "inicio": "10:40",
+        "fim": "11:20",
         "obs": "",
-        "destaque": false
+        "destaque": false,
+        "id": "id_1782426914241_0.3362622060555923"
       },
       {
         "dia": "Domingo",
@@ -441,9 +474,11 @@
         "tipo": "Dinâmica",
         "nome": "Se Lançar",
         "servo": "",
-        "inicio": "11:50",
-        "fim": "12:50",
-        "obs": ""
+        "inicio": "11:20",
+        "fim": "12:20",
+        "obs": "",
+        "id": "id_1782426914241_0.8577163274746209",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -451,29 +486,23 @@
         "tipo": "Almoço",
         "nome": "",
         "servo": "",
-        "inicio": "13:00",
-        "fim": "14:00",
-        "obs": ""
-      },
-      {
-        "dia": "Domingo",
-        "data": "2026-06-28",
-        "tipo": "Animação",
-        "nome": "",
-        "servo": "",
-        "inicio": "14:00",
-        "fim": "14:10",
-        "obs": ""
+        "inicio": "12:20",
+        "fim": "13:20",
+        "obs": "",
+        "id": "id_1782426914241_0.8740547144620254",
+        "destaque": false
       },
       {
         "dia": "Domingo",
         "data": "2026-06-28",
         "tipo": "Pregação",
         "nome": "Vida Nova",
-        "servo": "Wilson e Gabi",
-        "inicio": "14:10",
-        "fim": "14:50",
-        "obs": ""
+        "servo": "Sheila e Gabi",
+        "inicio": "13:20",
+        "fim": "14:00",
+        "obs": "",
+        "id": "id_1782426914241_0.03837109303595798",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -481,9 +510,11 @@
         "tipo": "Momento",
         "nome": "Retrospectiva + Cartas",
         "servo": "Animadores",
-        "inicio": "14:50",
-        "fim": "15:20",
-        "obs": ""
+        "inicio": "14:00",
+        "fim": "14:30",
+        "obs": "",
+        "id": "id_1782426914241_0.5775718029909195",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -491,19 +522,11 @@
         "tipo": "Momento",
         "nome": "Pais e Família",
         "servo": "",
-        "inicio": "15:20",
-        "fim": "15:40",
-        "obs": ""
-      },
-      {
-        "dia": "Domingo",
-        "data": "2026-06-28",
-        "tipo": "Intervalo",
-        "nome": "Preparação para Santa Missa",
-        "servo": "",
-        "inicio": "15:40",
-        "fim": "16:00",
-        "obs": ""
+        "inicio": "14:30",
+        "fim": "14:50",
+        "obs": "",
+        "id": "id_1782426914241_0.27487292719028966",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -511,9 +534,11 @@
         "tipo": "Santa Missa",
         "nome": "",
         "servo": "",
-        "inicio": "16:00",
-        "fim": "17:00",
-        "obs": ""
+        "inicio": "15:00",
+        "fim": "16:00",
+        "obs": "",
+        "id": "id_1782426914241_0.7959680863676338",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -521,9 +546,23 @@
         "tipo": "",
         "nome": "Foto Oficial + Encerramento + Organização do Local",
         "servo": "Todos os Servos",
-        "inicio": "17:00",
-        "fim": "18:00",
-        "obs": ""
+        "inicio": "16:00",
+        "fim": "17:00",
+        "obs": "",
+        "id": "id_1782426914241_0.6656642731304973",
+        "destaque": false
+      },
+      {
+        "dia": "Sábado",
+        "data": "2026-06-27",
+        "tipo": "Acolhida",
+        "nome": "Chegada dos Servos",
+        "servo": "",
+        "inicio": "07:00",
+        "fim": "07:30",
+        "destaque": false,
+        "obs": "",
+        "id": "id_1782426938688_0.1824272194921882"
       }
     ]
   }
