@@ -79,7 +79,6 @@
 }
 
 /* BASE DA BARRA */
-/* BASE DA BARRA */
 .progress-bar {
   height: 100%;
   transition: width 0.3s linear;
@@ -101,6 +100,7 @@
 
 /* 🟡 ÚLTIMOS 10 MINUTOS */
 .progress-bar.warning{
+  animation: piscar-warning 2s infinite;
   background: linear-gradient(
     90deg,
     #ffc107,
@@ -110,6 +110,7 @@
 
 /* 🔴 ÚLTIMOS 5 MINUTOS */
 .progress-bar.danger{
+  animation: piscar-danger 1s infinite;
   background: linear-gradient(
     90deg,
     #dc3545,
