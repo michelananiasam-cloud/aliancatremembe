@@ -1301,7 +1301,7 @@ function getDuracao(inicio, fim) {
   return `${m}mim`;
 }
 
-function buildInfo(p, isProxima) {
+function buildInfo(p) {
 
   const duracao = getDuracao(p.inicio, p.fim);
 
@@ -1325,8 +1325,10 @@ function buildInfo(p, isProxima) {
     texto += ` (${p.servo.trim()})`;
   }
 
-  // ✅ AQUI é seu filtro novo
-  if (!isPrinting && isProxima) {
+  /* ===============================
+     TIMER (NÃO APARECE NO PRINT)
+  ============================== */
+  if (!isPrinting) {
 
     const timer = getTempoRestante(
       p.data,
@@ -1334,14 +1336,14 @@ function buildInfo(p, isProxima) {
       p.fim
     );
 
-    if (timer && timer.startsWith("⏱️")) {
+    if (timer) {
       texto += ` • ${timer}`;
     }
   }
 
-  return texto; // ✅ FUNDAMENTAL
+  return texto;
 }
-	
+
 function getProgresso(data, inicio, fim){
 
   const hoje = new Date().toISOString().split("T")[0];
@@ -1437,10 +1439,28 @@ function renderizarLista() {
         li.appendChild(iconObs);
       }
 
+let texto = buildInfo(p);
+
+const timer = getTempoRestante(
+  p.data,
+  p.inicio,
+  p.fim
+);
+
+// 🔵 ATIVIDADE EM ANDAMENTO → mostra 🔥
+if (timer && timer.startsWith("🔥")) {
+  texto += ` • ${timer}`;
+}
+
+// 🌟 PRÓXIMA → mostra ⏱️
+else if (isProxima && timer && timer.startsWith("⏱️")) {
+  texto += ` • ${timer}`;
+}
+
 const divInfo = el(
   "div",
   { className: "item-info" },
-  buildInfo(p, isProxima)
+  texto
 );
 
       const bEdit = el("button", { className: "edit" }, "Editar");
@@ -1550,7 +1570,34 @@ let intervalTimers = null;
 let intervalProgresso = null;
 let intervalGlobal = null;
 
+function buildInfo(p) {
 
+  const duracao = getDuracao(p.inicio, p.fim);
+
+  let texto = `[${p.inicio} – ${p.fim}`;
+
+  if (duracao) {
+    texto += ` (Total: ${duracao})`;
+  }
+
+  texto += `]`;
+
+  if (p.tipo) {
+    texto += ` ${p.tipo}`;
+  }
+
+  if (p.nome?.trim()) {
+    texto += `: ${p.nome.trim()}`;
+  }
+
+  if (p.servo?.trim()) {
+    texto += ` (${p.servo.trim()})`;
+  }
+
+  // 🚫 REMOVIDO: timer daqui
+
+  return texto;
+}	
 	
 function pararLoops() {
 
