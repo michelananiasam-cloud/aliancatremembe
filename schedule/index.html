@@ -1364,6 +1364,35 @@ function buildInfo(p) {
   return texto;
 }
 
+	/*
+function buildInfo(p) {
+
+  const duracao = getDuracao(p.inicio, p.fim);
+
+  let texto = `[${p.inicio} – ${p.fim}`;
+
+  if (duracao) {
+    texto += ` (Total: ${duracao})`;
+  }
+
+  texto += `]`;
+
+  if (p.tipo) {
+    texto += ` ${p.tipo}`;
+  }
+
+  if (p.nome?.trim()) {
+    texto += `: ${p.nome.trim()}`;
+  }
+
+  if (p.servo?.trim()) {
+    texto += ` (${p.servo.trim()})`;
+  }
+
+  return texto;
+}
+	*/
+
 function scrollParaAtividade() {
 
   const atual = document.querySelector("#atividade-atual");
@@ -1796,33 +1825,7 @@ let intervalTimers = null;
 let intervalProgresso = null;
 let intervalGlobal = null;
 
-function buildInfo(p) {
 
-  const duracao = getDuracao(p.inicio, p.fim);
-
-  let texto = `[${p.inicio} – ${p.fim}`;
-
-  if (duracao) {
-    texto += ` (Total: ${duracao})`;
-  }
-
-  texto += `]`;
-
-  if (p.tipo) {
-    texto += ` ${p.tipo}`;
-  }
-
-  if (p.nome?.trim()) {
-    texto += `: ${p.nome.trim()}`;
-  }
-
-  if (p.servo?.trim()) {
-    texto += ` (${p.servo.trim()})`;
-  }
-
-  return texto;
-}
-	
 function pararLoops() {
 
   if (!intervalGlobal) {
