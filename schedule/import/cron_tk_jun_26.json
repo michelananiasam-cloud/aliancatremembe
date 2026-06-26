@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-26T12:21:06.185Z",
+  "exportedAt": "2026-06-26T15:31:54.837Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
@@ -563,6 +563,42 @@
         "destaque": false,
         "obs": "",
         "id": "id_1782426938688_0.1824272194921882"
+      },
+      {
+        "dia": "Sexta",
+        "data": "2026-06-26",
+        "tipo": "Acolhida",
+        "nome": "Teste Agenda",
+        "servo": "",
+        "inicio": "12:00",
+        "fim": "13:00",
+        "destaque": false,
+        "obs": "",
+        "id": "id_1782487690356_0.8251650312162012"
+      },
+      {
+        "dia": "Sexta",
+        "data": "2026-06-26",
+        "tipo": "Acolhida",
+        "nome": "Teste Agenda 2",
+        "servo": "",
+        "inicio": "13:00",
+        "fim": "13:30",
+        "destaque": false,
+        "obs": "",
+        "id": "id_1782487748395_0.7876374090432827"
+      },
+      {
+        "dia": "Sexta",
+        "data": "2026-06-26",
+        "tipo": "Acolhida",
+        "nome": "Teste Agenda 3",
+        "servo": "",
+        "inicio": "13:30",
+        "fim": "14:00",
+        "destaque": false,
+        "obs": "",
+        "id": "id_1782487789258_0.35777432052689484"
       }
     ]
   }
