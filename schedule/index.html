@@ -893,6 +893,16 @@ body{
 
 @media (max-width:520px){
 
+  /* ❌ esconder encerradas */
+  .item.encerrado {
+    display: none !important;
+  }
+
+  /* ❌ esconder futuras que NÃO são próxima */
+  .item.futuro:not(.proxima) {
+    display: none !important;
+  }
+
   /* ✅ esconde rodapé */
   #menu-rodape{
     display: none !important;
