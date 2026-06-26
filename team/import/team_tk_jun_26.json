@@ -1,458 +1,458 @@
 {
-  "título": "Thalita Kum Jovem Jun/2026",
-  "nós": [
+  "titulo": "Thalita Kum Jovem Jun/2026",
+  "nodes": [
     {
       "id": "1",
-      "nome": "Coordenação",
-      "título": "Coordenação"
+      "name": "Coordenação",
+      "title": "Coordenação"
     },
     {
       "id": "2",
-      "nome": "Wilson",
-      "título": "Coordenador",
+      "name": "Wilson",
+      "title": "Coordenador",
       "parentId": "1"
     },
     {
       "id": "3",
-      "nome": "Interna",
+      "name": "Interna",
       "title": "Referência Interna",
       "parentId": "1"
     },
     {
       "id": "4",
-      "nome": "Maria Lívia",
-      "título": "Referência",
+      "name": "Maria Lívia",
+      "title": "Referência",
       "parentId": "3"
     },
     {
       "id": "5",
-      "nome": "Michel",
-      "título": "Referência",
+      "name": "Michel",
+      "title": "Referência",
       "parentId": "3"
     },
     {
       "id": "6",
-      "nome": "Animadores🧑🏻‍🎤",
+      "name": "Animadores🧑🏻‍🎤",
       "title": "Animadores🧑🏻‍🎤",
       "parentId": "3"
     },
     {
       "id": "7",
-      "nome": "João",
-      "título": "Servo",
+      "name": "João",
+      "title": "Servo",
       "parentId": "6",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "8",
-      "nome": "Lina",
-      "título": "Servo",
+      "name": "Lina",
+      "title": "Servo",
       "parentId": "6",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "9",
-      "nome": "Baliza⏱️",
-      "título": "Baliza⏱️",
+      "name": "Baliza⏱️",
+      "title": "Baliza⏱️",
       "parentId": "3"
     },
     {
       "id": "10",
-      "nome": "Matheus Victal",
-      "título": "Servo",
+      "name": "Matheus Victal",
+      "title": "Servo",
       "parentId": "9",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "11",
-      "nome": "Letícia Ferreira",
-      "título": "Servo",
+      "name": "Letícia Ferreira",
+      "title": "Servo",
       "parentId": "9",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "12",
-      "nome": "Comunite📷",
-      "título": "Comunite📷",
+      "name": "Comunicação📷",
+      "title": "Comunicação📷",
       "parentId": "3"
     },
     {
       "id": "13",
-      "nome": "Thais Costa",
-      "título": "Servo",
+      "name": "Thais Costa",
+      "title": "Servo",
       "parentId": "12",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "14",
-      "nome": "Isadora Righi",
-      "título": "Servo",
+      "name": "Isadora Righi",
+      "title": "Servo",
       "parentId": "12",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "15",
-      "nome": "Dança💃",
-      "título": "Dança💃",
+      "name": "Dança💃",
+      "title": "Dança💃",
       "parentId": "3"
     },
     {
       "id": "16",
-      "nome": "Karine",
-      "título": "Servo",
+      "name": "Karine",
+      "title": "Servo",
       "parentId": "15",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "17",
-      "nome": "Luna",
-      "título": "Servo",
+      "name": "Luna",
+      "title": "Servo",
       "parentId": "15",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "18",
-      "nome": "Caio",
-      "título": "Servo",
+      "name": "Caio",
+      "title": "Servo",
       "parentId": "15",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "19",
-      "nome": "Interg🛐",
-      "título": "Interg🛐",
+      "name": "Intercessão🛐",
+      "title": "Intercessão🛐",
       "parentId": "3"
     },
     {
       "id": "20",
-      "nome": "Fatinha",
-      "título": "Servo",
+      "name": "Fatinha",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "21",
-      "nome": "Jaque",
-      "título": "Servo",
+      "name": "Jaque",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "22",
-      "nome": "Marília",
-      "título": "Servo",
+      "name": "Marília",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "23",
-      "nome": "Célia",
-      "título": "Servo",
+      "name": "Célia",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "24",
-      "nome": "Fernanda",
-      "título": "Servo",
+      "name": "Fernanda",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "25",
-      "nome": "Maria Angélica",
-      "título": "Servo",
+      "name": "Maria Angélica",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "26",
-      "nome": "Nita",
-      "título": "Servo",
+      "name": "Nita",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "27",
-      "nome": "Dorotéia (Dom.)",
-      "título": "Servo",
+      "name": "Dorotéia (Dom.)",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "28",
-      "nome": "Leandro",
-      "título": "Servo",
+      "name": "Leandro",
+      "title": "Servo",
       "parentId": "19",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "29",
-      "nome": "Liturgia🕯️",
-      "título": "Liturgia🕯️",
+      "name": "Liturgia🕯️",
+      "title": "Liturgia🕯️",
       "parentId": "3"
     },
     {
       "id": "30",
-      "nome": "Ana Dayse",
-      "título": "Servo",
+      "name": "Ana Dayse",
+      "title": "Servo",
       "parentId": "29",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "31",
-      "nome": "Michelle",
-      "título": "Servo",
+      "name": "Michelle",
+      "title": "Servo",
       "parentId": "29",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "32",
-      "nome": "Lojinha🛍️",
-      "título": "Lojinha🛍️",
+      "name": "Lojinha🛍️",
+      "title": "Lojinha🛍️",
       "parentId": "3"
     },
     {
       "id": "33",
-      "nome": "Sara",
-      "título": "Servo",
+      "name": "Sara",
+      "title": "Servo",
       "parentId": "32",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "34",
-      "nome": "Ana Aline",
-      "título": "Servo",
+      "name": "Ana Aline",
+      "title": "Servo",
       "parentId": "32",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "35",
-      "nome": "Música🎶",
-      "título": "Música🎶",
+      "name": "Música🎶",
+      "title": "Música🎶",
       "parentId": "3"
     },
     {
       "id": "36",
-      "nome": "Angélica🎤🎸",
-      "título": "Servo",
+      "name": "Angélica🎤🎸",
+      "title": "Servo",
       "parentId": "35",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "37",
-      "nome": "Biel🎤🎸🥁",
-      "título": "Servo",
+      "name": "Biel🎤🎸🥁",
+      "title": "Servo",
       "parentId": "35",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "38",
-      "nome": "Felipe Sousa🎸🥁",
-      "título": "Servo",
+      "name": "Felipe Sousa🎸🥁",
+      "title": "Servo",
       "parentId": "35",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "39",
-      "nome": "Letícia Paula🎤",
-      "título": "Servo",
+      "name": "Letícia Paula🎤",
+      "title": "Servo",
       "parentId": "35",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "40",
-      "nome": "Tati🎤🎹🎸",
-      "título": "Servo",
+      "name": "Tati🎤🎹🎸",
+      "title": "Servo",
       "parentId": "35",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "41",
-      "nome": "Gustavo🎤🎸",
-      "título": "Servo",
+      "name": "Gustavo🎤🎸",
+      "title": "Servo",
       "parentId": "35",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "42",
-      "nome": "Pastores🐑",
-      "título": "Pastores🐑",
+      "name": "Pastores🐑",
+      "title": "Pastores🐑",
       "parentId": "3"
     },
     {
       "id": "43",
-      "nome": "Karine",
-      "título": "Servo",
+      "name": "Karine",
+      "title": "Servo",
       "parentId": "42",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "44",
-      "nome": "Michelle",
-      "título": "Servo",
+      "name": "Michelle",
+      "title": "Servo",
       "parentId": "42",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "45",
-      "nome": "Junior",
-      "título": "Servo",
+      "name": "Junior",
+      "title": "Servo",
       "parentId": "42",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "46",
-      "nome": "Cely",
-      "título": "Servo",
+      "name": "Cely",
+      "title": "Servo",
       "parentId": "42",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "47",
-      "nome": "Sheila",
-      "título": "Servo",
+      "name": "Sheila",
+      "title": "Servo",
       "parentId": "42",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "48",
-      "nome": "Caio",
-      "título": "Servo",
+      "name": "Caio",
+      "title": "Servo",
       "parentId": "42",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "49",
-      "nome": "Técnica💻",
-      "título": "Técnica💻",
+      "name": "Técnica💻",
+      "title": "Técnica💻",
       "parentId": "3"
     },
     {
       "id": "50",
-      "nome": "Vando",
-      "título": "Servo",
+      "name": "Vando",
+      "title": "Servo",
       "parentId": "49",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "51",
-      "nome": "Externa",
+      "name": "Externa",
       "title": "Referência Externa",
       "parentId": "1"
     },
     {
       "id": "52",
-      "nome": "Mircis",
-      "título": "Referência",
+      "name": "Mircis",
+      "title": "Referência",
       "parentId": "51"
     },
     {
       "id": "53",
-      "nome": "Teresinha",
-      "título": "Referência",
+      "name": "Teresinha",
+      "title": "Referência",
       "parentId": "51"
     },
     {
       "id": "54",
-      "nome": "Cozinha👨‍🍳",
+      "name": "Cozinha👨‍🍳",
       "title": "Cozinha👨‍🍳",
       "parentId": "51"
     },
     {
       "id": "55",
-      "nome": "Lindalva",
-      "título": "Servo",
+      "name": "Lindalva",
+      "title": "Servo",
       "parentId": "54",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "56",
-      "nome": "Heitor",
-      "título": "Servo",
+      "name": "Heitor",
+      "title": "Servo",
       "parentId": "54",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "57",
-      "nome": "Tamires",
-      "título": "Servo",
+      "name": "Tamires",
+      "title": "Servo",
       "parentId": "54",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "58",
-      "nome": "César",
-      "título": "Servo",
+      "name": "César",
+      "title": "Servo",
       "parentId": "54",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "59",
-      "nome": "Decoração✨",
-      "título": "Decoração✨",
+      "name": "Decoração✨",
+      "title": "Decoração✨",
       "parentId": "51"
     },
     {
       "id": "60",
-      "nome": "Andréa",
-      "título": "Servo",
+      "name": "Andréa",
+      "title": "Servo",
       "parentId": "59",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "61",
-      "nome": "Enfermagem🩺",
-      "título": "Enfermagem🩺",
+      "name": "Enfermagem🩺",
+      "title": "Enfermagem🩺",
       "parentId": "51"
     },
     {
       "id": "62",
-      "nome": "Maria Angélica",
-      "título": "Servo",
+      "name": "Maria Angélica",
+      "title": "Servo",
       "parentId": "61",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "63",
@@ -462,116 +462,116 @@
     },
     {
       "id": "64",
-      "nome": "Everton",
-      "título": "Servo",
+      "name": "Everton",
+      "title": "Servo",
       "parentId": "63",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "65",
-      "nome": "Débora",
-      "título": "Servo",
+      "name": "Débora",
+      "title": "Servo",
       "parentId": "63",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "66",
-      "nome": "Giovana",
-      "título": "Servo",
+      "name": "Giovana",
+      "title": "Servo",
       "parentId": "63",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "67",
-      "nome": "Stéfany",
-      "título": "Servo",
+      "name": "Stéfany",
+      "title": "Servo",
       "parentId": "63",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "68",
-      "nome": "Salão☕",
-      "título": "Salão☕",
+      "name": "Salão☕",
+      "title": "Salão☕",
       "parentId": "51"
     },
     {
       "id": "69",
-      "nome": "André",
-      "título": "Servo",
+      "name": "André",
+      "title": "Servo",
       "parentId": "68",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "70",
-      "nome": "Marcia Novikof",
-      "título": "Servo",
+      "name": "Marcia Novikof",
+      "title": "Servo",
       "parentId": "68",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "71",
-      "nome": "Isadora",
-      "título": "Servo",
+      "name": "Isadora",
+      "title": "Servo",
       "parentId": "68",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "72",
-      "nome": "Cainan",
-      "título": "Servo",
+      "name": "Cainan",
+      "title": "Servo",
       "parentId": "68",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "73",
-      "nome": "André AX",
-      "título": "Servo",
+      "name": "André AX",
+      "title": "Servo",
       "parentId": "68",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "74",
-      "nome": "Secretaria📚",
-      "título": "Secretaria📚",
+      "name": "Secretaria📚",
+      "title": "Secretaria📚",
       "parentId": "51"
     },
     {
       "id": "75",
-      "nome": "Mariana",
-      "título": "Servo",
+      "name": "Mariana",
+      "title": "Servo",
       "parentId": "74",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "76",
-      "nome": "Regiane",
-      "título": "Servo",
+      "name": "Regiane",
+      "title": "Servo",
       "parentId": "74",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "77",
-      "nome": "Gabi(dom.)",
-      "título": "Servo",
+      "name": "Gabi(dom.)",
+      "title": "Servo",
       "parentId": "74",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "78",
-      "nome": "Apoio",
-      "título": "Apoio",
+      "name": "Apoio",
+      "title": "Apoio",
       "parentId": "1"
     },
     {
@@ -582,89 +582,89 @@
     },
     {
       "id": "80",
-      "nome": "André AX",
-      "título": "Servo",
+      "name": "André AX",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "81",
-      "nome": "Heitor",
-      "título": "Servo",
+      "name": "Heitor",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "82",
-      "nome": "Everton",
-      "título": "Servo",
+      "name": "Everton",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "83",
-      "nome": "César",
-      "título": "Servo",
+      "name": "César",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "84",
-      "nome": "Cainan",
-      "título": "Servo",
+      "name": "Cainan",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "85",
-      "nome": "André",
-      "título": "Servo",
+      "name": "André",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "86",
-      "nome": "Fabiano",
-      "título": "Servo",
+      "name": "Fabiano",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "87",
-      "nome": "Matheus Victal",
-      "título": "Servo",
+      "name": "Matheus Victal",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "88",
-      "nome": "Junior",
-      "título": "Servo",
+      "name": "Junior",
+      "title": "Servo",
       "parentId": "79",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     },
     {
       "id": "89",
-      "nome": "Suporte🛠️",
-      "título": "Suporte🛠️",
+      "name": "Suporte🛠️",
+      "title": "Suporte🛠️",
       "parentId": "78"
     },
     {
       "id": "90",
-      "nome": "Fabiano",
-      "título": "Servo",
+      "name": "Fabiano",
+      "title": "Servo",
       "parentId": "89",
-      "confirmado": verdadeiro,
-      "isReferencia": verdadeiro
+      "confirmado": true,
+      "isReferencia": true
     },
     {
       "id": "91",
@@ -674,23 +674,23 @@
     },
     {
       "id": "92",
-      "nome": "Jaime",
-      "título": "Servo",
+      "name": "Jaime",
+      "title": "Servo",
       "parentId": "91",
-      "confirmado": verdadeiro,
-      "isReferencia": falso
+      "confirmado": true,
+      "isReferencia": false
     }
   ],
   "links": [
     {
-      "de": "78",
-      "para": "3",
-      "tipo": "responde_para"
+      "from": "78",
+      "to": "3",
+      "type": "responde_para"
     },
     {
-      "de": "78",
-      "para": "51",
-      "tipo": "responde_para"
+      "from": "78",
+      "to": "51",
+      "type": "responde_para"
     }
   ]
 }
