@@ -893,9 +893,19 @@ body{
 
 @media (max-width:520px){
 
+  /*esconde lista vazia */
+  .lista-atividades:empty {
+    display: none;
+  }
+	
   /* ✅ esconde apenas botões das atividades */
   .item-botoes {
     display: none !important;
+  }
+
+  /* ✅ esconde o container inteiro quando não houver itens */
+  .pagina-detalhe:has(.lista-atividades:empty) {
+    display: none;
   }
 
   /* ❌ esconder encerradas */
@@ -903,7 +913,7 @@ body{
     display: none !important;
   }
 
-  /* ❌ esconder futuras que NÃO são próxima */
+  /* ✅ esconder futuras que NÃO são próxima */
   .item.futuro:not(.proxima) {
     display: none !important;
   }
