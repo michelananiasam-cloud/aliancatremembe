@@ -1119,20 +1119,14 @@ function getTempoRestante(data, inicio, fim) {
 
   if (!data || !inicio || !fim) return "";
 
-  const hoje = new Date().toISOString().split("T")[0];
-
-  // ❌ só calcula se for hoje
-  if (data !== hoje) return "";
-
   const agora = Date.now();
 
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
-  // 🔴 segurança: dados inválidos
   if (!inicioDate || !fimDate) return "";
 
-  // 🟡 FUTURO (ainda não começou)
+  // ✅ não depende de comparar string de data
   if (agora < inicioDate) {
 
     const diff = inicioDate - agora;
@@ -1146,7 +1140,6 @@ function getTempoRestante(data, inicio, fim) {
     return `⏳ Inicia em ${s}seg`;
   }
 
-  // 🔵 EM ANDAMENTO
   if (agora >= inicioDate && agora <= fimDate) {
 
     const diff = fimDate - agora;
@@ -1160,7 +1153,6 @@ function getTempoRestante(data, inicio, fim) {
     return `🔥 ${s}seg restantes`;
   }
 
-  // ✅ ENCERRADO
   return `✅ Encerrado`;
 }
 
@@ -1341,53 +1333,8 @@ function buildInfo(p) {
     texto += ` (${p.servo.trim()})`;
   }
 
-  /* ===============================
-     TIMER (NÃO APARECE NO PRINT)
-  ============================== */
-  if (!isPrinting) {
-
-    const timer = getTempoRestante(
-      p.data,
-      p.inicio,
-      p.fim
-    );
-
-    if (timer) {
-      texto += ` • ${timer}`;
-    }
-  }
-
   return texto;
 }
-
-	/*
-function buildInfo(p) {
-
-  const duracao = getDuracao(p.inicio, p.fim);
-
-  let texto = `[${p.inicio} – ${p.fim}`;
-
-  if (duracao) {
-    texto += ` (Total: ${duracao})`;
-  }
-
-  texto += `]`;
-
-  if (p.tipo) {
-    texto += ` ${p.tipo}`;
-  }
-
-  if (p.nome?.trim()) {
-    texto += `: ${p.nome.trim()}`;
-  }
-
-  if (p.servo?.trim()) {
-    texto += ` (${p.servo.trim()})`;
-  }
-
-  return texto;
-}
-	*/
 
 function scrollParaAtividade() {
 
@@ -1517,7 +1464,7 @@ else if (isProxima) {
       if (!isPrinting && timer) {
 
         // 🔵 EM ANDAMENTO
-        if (timer.startsWith("🔥🔥💫")) {
+        if (timer.startsWith("🔥")) {
           texto += ` • ${timer}`;
         }
 
