@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-27T02:03:26.603Z",
+  "exportedAt": "2026-06-27T12:03:41.238Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
@@ -34,10 +34,11 @@
         "tipo": "Acolhida",
         "nome": "Animação e Apresentação",
         "servo": "João e Lina",
-        "inicio": "08:30",
-        "fim": "08:40",
+        "inicio": "09:00",
+        "fim": "09:05",
         "obs": "",
-        "id": "id_1782426914241_0.4141507059855668"
+        "id": "id_1782426914241_0.4141507059855668",
+        "destaque": false
       },
       {
         "dia": "Sábado",
@@ -56,10 +57,11 @@
         "tipo": "Dinâmica",
         "nome": "Desafio",
         "servo": "Lina",
-        "inicio": "09:00",
-        "fim": "09:30",
+        "inicio": "09:05",
+        "fim": "09:35",
         "obs": "",
-        "id": "id_1782426914241_0.49114459047946957"
+        "id": "id_1782426914241_0.49114459047946957",
+        "destaque": false
       },
       {
         "dia": "Sábado",
