@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-06-27T12:30:13.458Z",
+  "exportedAt": "2026-06-27T13:15:21.255Z",
   "current": {
     "evangelizacao": "Thalita Kum Junho/26",
     "lista": [
@@ -70,7 +70,7 @@
         "nome": "\"Ele existe - O cientista e o filho\"",
         "servo": "",
         "inicio": "09:35",
-        "fim": "09:40",
+        "fim": "09:50",
         "obs": "",
         "id": "id_1782426914241_0.11702978469761205",
         "destaque": false
@@ -81,8 +81,8 @@
         "tipo": "Pregação",
         "nome": "Amor do Pai",
         "servo": "Michelle e Wilson",
-        "inicio": "09:40",
-        "fim": "10:20",
+        "inicio": "09:55",
+        "fim": "10:35",
         "obs": "",
         "destaque": false,
         "id": "id_1782426914241_0.8434652426228499"
@@ -93,10 +93,11 @@
         "tipo": "Intervalo",
         "nome": "com Lanche",
         "servo": "",
-        "inicio": "10:20",
-        "fim": "10:40",
+        "inicio": "10:35",
+        "fim": "10:45",
         "obs": "",
-        "id": "id_1782426914241_0.9062464916578088"
+        "id": "id_1782426914241_0.9062464916578088",
+        "destaque": false
       },
       {
         "dia": "Sábado",
@@ -104,10 +105,11 @@
         "tipo": "Animação",
         "nome": "",
         "servo": "",
-        "inicio": "10:40",
+        "inicio": "10:45",
         "fim": "10:50",
         "obs": "",
-        "id": "id_1782426914241_0.6947074077212573"
+        "id": "id_1782426914241_0.6947074077212573",
+        "destaque": false
       },
       {
         "dia": "Sábado",
