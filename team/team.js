@@ -466,7 +466,7 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
   box.style.padding = "16px";
   box.style.borderRadius = "12px";
 
-  const diasSemana = ["Seg.","Ter.","Qua.","Qui.","Sex.","Sáb.","Dom."];
+  const diasSemana = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
   const atual = new Set(pessoaObj.dias || []);
 
   diasSemana.forEach(d => {
@@ -579,13 +579,17 @@ if (pessoaObj.dias && pessoaObj.dias.length){
 
   const diasWrap = el("div", { className:"chip-days" });
 
-  ordenarDias(pessoaObj.dias).forEach(d => {
-    const classeDia = "chip-day " + normalizarDia(d);
 
-    diasWrap.appendChild(
-      el("span", { className: classeDia }, d)
-    );
-  });
+ordenarDias(pessoaObj.dias).forEach(d => {
+  const classeDia = "chip-day " + normalizarDia(d);
+
+  const textoDia = d + "."; // ✅ adiciona ponto
+
+  diasWrap.appendChild(
+    el("span", { className: classeDia }, textoDia)
+  );
+});
+
 
   chip.appendChild(diasWrap);
 }
