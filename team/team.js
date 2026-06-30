@@ -981,6 +981,73 @@ function makeResponsaveisRow(areaKey, arr){
 }
 
 
+function renderPrintEscala2(){
+  const org = ORG.load();
+  const wrap = document.getElementById("print-lists");
+
+  if (!wrap) return;
+
+  wrap.innerHTML = "";
+
+  const servos = coletarServosComDias(org);
+
+  const container = document.createElement("div");
+  container.className = "escala-box";
+
+  // cabeçalho
+  const header = document.createElement("div");
+  header.className = "escala-header";
+  header.innerHTML = `
+    <span class="col-nome">Servo</span>
+    <span class="col-dia">Sábado</span>
+    <span class="col-dia">Domingo</span>
+  `;
+  container.appendChild(header);
+
+  const sep = document.createElement("div");
+  sep.className = "escala-sep";
+  sep.textContent = "----------------------------------";
+  container.appendChild(sep);
+
+  servos.forEach(s => {
+    const row = document.createElement("div");
+    row.className = "escala-row";
+
+    row.innerHTML = `
+      <span class="col-nome">${s.nome}</span>
+      <span class="col-dia">${s.sab ? "[✔]" : "[❌]"}</span>
+      <span class="col-dia">${s.dom ? "[✔]" : "[❌]"}</span>
+    `;
+
+    container.appendChild(row);
+  });
+
+  wrap.appendChild(container);
+}
+
+function coletarServosComDias(org){
+  const lista = [];
+
+  ["interna","externa","apoio"].forEach(area => {
+    org[area].equipes.forEach(eq => {
+      eq.pessoas.forEach(p => {
+        lista.push({
+          nome: p.nome,
+          sab: p.dias?.includes("Sáb"),
+          dom: p.dias?.includes("Dom")
+        });
+      });
+    });
+  });
+
+  const map = new Map();
+  lista.forEach(p => map.set(p.nome, p));
+
+  return Array.from(map.values())
+    .sort((a,b) => sortByNamePT(a.nome,b.nome));
+}
+
+
 /* ------------------------------------------------------------
    UTIL: Contagem de pessoas distintas (por nome)
    - Conta TOTAL (Coordenação + Interna + Externa + Apoio)
@@ -1140,75 +1207,7 @@ function renderPrintVersion(org){
         wrap.appendChild(box);
     }
 
-function coletarServosComDias(org){
-  const lista = [];
-
-  ["interna","externa","apoio"].forEach(area => {
-    org[area].equipes.forEach(eq => {
-      eq.pessoas.forEach(p => {
-        lista.push({
-          nome: p.nome,
-          sab: p.dias?.includes("Sáb"),
-          dom: p.dias?.includes("Dom")
-        });
-      });
-    });
-  });
-
-  const map = new Map();
-  lista.forEach(p => map.set(p.nome, p));
-
-  return Array.from(map.values())
-    .sort((a,b) => sortByNamePT(a.nome,b.nome));
-}
-
-	
-function renderPrintEscala2(){
-  const org = ORG.load();
-  const wrap = document.getElementById("print-lists");
-
-  if (!wrap) return;
-
-  wrap.innerHTML = "";
-
-  const servos = coletarServosComDias(org);
-
-  const container = document.createElement("div");
-  container.className = "escala-box";
-
-  // cabeçalho
-  const header = document.createElement("div");
-  header.className = "escala-header";
-  header.innerHTML = `
-    <span class="col-nome">Servo</span>
-    <span class="col-dia">Sábado</span>
-    <span class="col-dia">Domingo</span>
-  `;
-  container.appendChild(header);
-
-  const sep = document.createElement("div");
-  sep.className = "escala-sep";
-  sep.textContent = "----------------------------------";
-  container.appendChild(sep);
-
-  servos.forEach(s => {
-    const row = document.createElement("div");
-    row.className = "escala-row";
-
-    row.innerHTML = `
-      <span class="col-nome">${s.nome}</span>
-      <span class="col-dia">${s.sab ? "[✔]" : "[❌]"}</span>
-      <span class="col-dia">${s.dom ? "[✔]" : "[❌]"}</span>
-    `;
-
-    container.appendChild(row);
-  });
-
-  wrap.appendChild(container);
-}
-
-
-    function mkTeam(eq){
+   function mkTeam(eq){
         const outer = document.createElement("div");
         outer.className = "print-team-outer";
 
@@ -2597,7 +2596,8 @@ window.baixarJSONEquipes = baixarJSONEquipes;
 window.baixarMermaidA4 = baixarMermaidA4;
 window.baixarPDF = baixarPDF;
 window.baixarPDFEscala = baixarPDFEscala;
-
+window.renderPrintEscala2 = renderPrintEscala2;
+window.coletarServosComDias = coletarServosComDias;
 /* render principal */
 window.render = render;
 
