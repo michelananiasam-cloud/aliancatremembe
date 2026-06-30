@@ -1140,6 +1140,38 @@ function renderPrintVersion(org){
         wrap.appendChild(box);
     }
 
+function renderPrintEscala2(){
+  const org = ORG.load();
+  const wrap = document.getElementById("print-lists");
+
+  wrap.innerHTML = "";
+
+  const servos = coletarServosComDias(org);
+
+  const container = el("div", { className:"escala-box" });
+
+  // cabeçalho
+  container.appendChild(el("div", { className:"escala-header" }, [
+    el("span", { className:"col-nome" }, "Servo"),
+    el("span", { className:"col-dia" }, "Sábado"),
+    el("span", { className:"col-dia" }, "Domingo")
+  ]));
+
+  container.appendChild(el("div", { className:"escala-sep" }, "----------------------------------"));
+
+  // linhas
+  servos.forEach(s => {
+    container.appendChild(el("div", { className:"escala-row" }, [
+      el("span", { className:"col-nome" }, s.nome),
+      el("span", { className:"col-dia" }, s.sab ? "[✔]" : "[❌]"),
+      el("span", { className:"col-dia" }, s.dom ? "[✔]" : "[❌]")
+    ]));
+  });
+
+  wrap.appendChild(container);
+}
+
+
     function mkTeam(eq){
         const outer = document.createElement("div");
         outer.className = "print-team-outer";
@@ -2503,7 +2535,16 @@ function baixarPDF() {
   }, 100);
 }
 
+function baixarPDFEscala() {
 
+  // ✅ renderiza o layout de escala
+  renderPrintEscala2();
+
+  // ✅ pequena pausa pra renderizar antes de imprimir
+  setTimeout(() => {
+    window.print();
+  }, 100);
+}
 
 /* ============================================
    EXPOR FUNÇÕES PARA HTML (OBRIGATÓRIO)
@@ -2519,6 +2560,7 @@ window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 window.baixarJSONEquipes = baixarJSONEquipes;
 window.baixarMermaidA4 = baixarMermaidA4;
 window.baixarPDF = baixarPDF;
+window.baixarPDFEscala = baixarPDFEscala;
 
 /* render principal */
 window.render = render;
