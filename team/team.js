@@ -233,7 +233,13 @@ function upsertEquipe(refKey, nomeEquipe, pessoaOpcional, marcarRef){
 
   if (pessoaOpcional){
     if (!eq.pessoas.some(p => p.nome === pessoaOpcional)) {
-      eq.pessoas.push({ nome: pessoaOpcional, confirmado: null });
+      
+eq.pessoas.push({ 
+  nome: pessoaOpcional, 
+  confirmado: null,
+  dias: [] // ✅
+});
+
     }
   }
 
@@ -274,7 +280,13 @@ function addPessoaToEquipe(refKey, nomeEquipe, pessoa, marcarRef){
   if (!eq) return;
 
   if (!eq.pessoas.some(p => p.nome === pessoa)) {
-    eq.pessoas.push({ nome:pessoa, confirmado:null });
+    
+eq.pessoas.push({ 
+  nome: pessoa, 
+  confirmado: null,
+  dias: [] // ✅ IMPORTANTE
+});
+
   }
 
   if (marcarRef) eq.referencia = pessoa;
@@ -497,7 +509,7 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
     const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
     const p = eq.pessoas.find(p => p.nome === pessoaObj.nome);
 
-    p.dias = Array.from(atual);
+    p.dias = ordenarDias(Array.from(atual));
 
     saveOrg(org);
     document.body.removeChild(overlay);
@@ -1730,20 +1742,24 @@ function gerarJSONEquipesComLinks() {
                 parentId: idArea
             });
 
-		(eq.pessoas || []).forEach(p => {
-			nodes.push({
-				id: nextId(),
-				name: p.nome,
-				title: "Servo",
-				parentId: idEq,
-		
-				// 🔥 NOVOS CAMPOS
-				confirmado: p.confirmado === true ? true :
-							p.confirmado === false ? false : null,
-		
-				isReferencia: eq.referencia === p.nome
-			});
-		});
+(eq.pessoas || []).forEach(p => {
+    nodes.push({
+        id: nextId(),
+        name: p.nome,
+        title: "Servo",
+        parentId: idEq,
+
+        // ✅ CAMPOS EXISTENTES
+        confirmado: p.confirmado === true ? true :
+                    p.confirmado === false ? false : null,
+
+        isReferencia: eq.referencia === p.nome,
+
+        // ✅ NOVO CAMPO (IMPORTANTE)
+        dias: Array.isArray(p.dias) ? p.dias : []
+    });
+});
+
         });
 
         return idArea;
@@ -2282,12 +2298,16 @@ function importarJSONEquipes(file) {
 
                         pessoas.forEach(p => {
 
-                            const pessoa = {
-                                nome: p.name,
-                                confirmado:
-                                    p.confirmado === true ? true :
-                                    p.confirmado === false ? false : null
-                            };
+const pessoa = {
+    nome: p.name,
+    confirmado:
+        p.confirmado === true ? true :
+        p.confirmado === false ? false : null,
+
+    // ✅ NOVO CAMPO
+    dias: Array.isArray(p.dias) ? p.dias : []
+};
+
 
                             eq.pessoas.push(pessoa);
 
@@ -2384,10 +2404,13 @@ function importarJSONDireto(json) {
           );
 
           pessoas.forEach(p => {
-            eq.pessoas.push({
-              nome: p.name,
-              confirmado: p.confirmado ?? null
-            });
+eq.pessoas.push({
+  nome: p.name,
+  confirmado: p.confirmado ?? null,
+
+  // ✅ NOVO CAMPO
+  dias: Array.isArray(p.dias) ? p.dias : []
+});
 
             if (p.isReferencia) {
               eq.referencia = p.name;
