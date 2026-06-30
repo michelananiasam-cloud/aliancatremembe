@@ -713,23 +713,31 @@ button.primary{
   /* ----------- CHIPS ----------- */
   .chip-ok  { border:2px solid #28a745 !important; }
   .chip-pend{ border:2px solid #dc3545 !important; }
+  .chip {gap: 6px;}
+	
 /* ===============================
    DIAS DA SEMANA (NOVO)
 ================================*/
 
 .chip-days {
   display: flex;
-  gap: 4px;
-  margin-top: 4px;
+  gap: 6px;              /* ✅ mais espaço */
+  margin-top: 6px;       /* ✅ separa do nome */
   flex-wrap: wrap;
 }
 
 .chip-day {
-  font-size: 10px;
+  font-size: 9px;        /* ✅ menor que o nome */
   padding: 2px 6px;
-  border-radius: 8px;
-  background: rgba(0,0,0,0.08);
+  border-radius: 6px;
+
+  background: rgba(0,0,0,0.06);
   border: 1px solid rgba(0,0,0,0.1);
+
+  line-height: 1;
+  font-weight: 500;
+
+  white-space: nowrap;   /* ✅ evita quebrar dentro */
 }
 
 /* 🎨 CORES POR DIA */
