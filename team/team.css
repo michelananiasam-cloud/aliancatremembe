@@ -293,57 +293,53 @@ button.primary{
     pointer-events: auto !important;
   }
 
-  /* ✅ BOTÕES MOBILE */
-  #btn-atualizar-mobile,
-  #btn-pdf-mobile {
-    display: block !important;
-    position: fixed !important;
+/* ✅ BOTÕES MOBILE */
+#btn-atualizar-mobile,
+#btn-pdf-mobile,
+#btn-pdf-escala-mobile {
+  display: block !important;
+  position: fixed !important;
 
-    bottom: 16px !important;
+  bottom: 16px !important;
 
-    z-index: 9999999 !important;
+  z-index: 9999999 !important;
 
-    background: var(--brand) !important;
-    color: #fff !important;
+  background: var(--brand) !important;
+  color: #fff !important;
 
-    padding: 8px 12px;
-    border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
 
-    font-size: 0.9rem;
-    font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 600;
 
-    border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 
-    opacity: 0.95;
-    transition: 0.2s;
-  }
-
-  /* ✅ POSIÇÃO (SEM SOBREPOR) */
-  #btn-atualizar-mobile {
-    right: 16px !important;
-  }
-
-  #btn-pdf-mobile {
-    right: 120px !important;
-  }
-
-  /* ✅ Clique */
-  #btn-atualizar-mobile:active, 
-  #btn-pdf-mobile:active {
-    transform: scale(0.96);
-  }
+  opacity: 0.95;
+  transition: 0.2s;
 }
 
-/* ===============================
-   BASE (DESKTOP)
-================================*/
-#btn-atualizar-mobile,
-#btn-pdf-mobile {
-  display: none;
-}	
+/* ✅ POSIÇÃO (SEM SOBREPOR) */
+#btn-atualizar-mobile {
+  right: 16px !important;
+}
 
+#btn-pdf-mobile {
+  right: 120px !important;
+}
+
+#btn-pdf-escala-mobile {
+  right: 240px !important; /* ✅ NOVO: deslocado corretamente */
+}
+
+/* ✅ Clique (efeito de pressão) */
+#btn-atualizar-mobile:active, 
+#btn-pdf-mobile:active,
+#btn-pdf-escala-mobile:active {
+  transform: scale(0.96);
+}
 	
 /* ===============================
    EQUIPES
