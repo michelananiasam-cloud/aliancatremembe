@@ -466,7 +466,7 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
   box.style.padding = "16px";
   box.style.borderRadius = "12px";
 
-  const diasSemana = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+  const diasSemana = ["Seg.","Ter.","Qua.","Qui.","Sex.","Sáb.","Dom."];
   const atual = new Set(pessoaObj.dias || []);
 
   diasSemana.forEach(d => {
