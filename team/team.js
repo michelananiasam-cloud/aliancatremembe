@@ -1,2528 +1,815 @@
+<style>
 
-const MOBILE_EDITABLE = false;  /* true para liberar edição no mobile */
 
-function isMobileEditAllowed() {
-  return MOBILE_EDITABLE;
-}
+/* ===============================
+   FIXAR HEADER WEB NO TOPO
+================================*/
 
-function canEdit() {
-  return !(window.innerWidth <= 760 && !isMobileEditAllowed());
-}
-	
-/* ============================================================
-   PARTE 3 — Modelo de dados, storage e utilitários
-   - Tema e rodapé já vieram nas Partes 1 e 2
-   - Aqui focamos em: dados, ordenações, edição inline e ações
-============================================================ */
-
-/* ---------- CHAVES ---------- */
-var TITLE_KEY = "Equipes_titulo";
-var TITLE_DEFAULT = "Equipe Movimento Tremembé";
-var ORG_KEY = "Equipes_dados_v2"; // v2 p/ evitar conflito com versões antigas
-
-/* ---------- MODELO PADRÃO ---------- */
-function defaultModel(){
-  return {
-    coordenacao: [],
-    interna: { responsaveis: [], equipes: [] },
-    externa: { responsaveis: [], equipes: [] },
-    apoio:   { responsaveis: [], equipes: [] }
-  };
-}
-
-/* ---------- TITLE: GET/SET + UI ---------- */
-function getTitulo(){
-  try {
-    var v = (localStorage.getItem(TITLE_KEY) || "").trim();
-    return v || TITLE_DEFAULT;
-  } catch { return TITLE_DEFAULT; }
-}
-function setTitulo(v){
-  try { localStorage.setItem(TITLE_KEY, (v||"").trim()); } catch {}
+#web-header{
+    position:sticky;
+    top:0;
+    backdrop-filter:blur(6px);
+    background:rgba(255,255,255,0.75);
+	z-index: 9999 !important;
 }
 
 
-function atualizarTitulos(){
-  var h1 = document.getElementById("titulo-web");
-  var tituloFmt = getTituloFormatado();
-  if (h1) h1.textContent = tituloFmt;
-  document.title = tituloFmt;
+/* ===============================
+   VARIÁVEIS E TEMA
+================================*/
+:root{
+  /* ✅ FLAG watermark-display (Marca D'Água) */
+  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
+  --watermark-display: flex;	
+  --bg:#ffffff;
+  --text:#111;
+  --muted:#666;
+  --card:#f5f5f7;
+  --brand:#2d6cdf;
+  --warn:#ffc107;
+  --danger:#dc3545;
+  --radius:10px;
+  --space-1:0.25rem;
+  --space-2:0.5rem;
+  --space-3:0.75rem;
+  --space-4:1rem;
+  --space-5:1.25rem;
+  --space-6:1.5rem;
+  --space-8:2rem;
+  --font-base:16px;
 }
 
-
-function initTituloInput(){
-  var inp = document.getElementById("evangelizacao");
-  if (!inp) return;
-  var t = getTitulo(); // mantém o nome puro no input
-  inp.value = (t === TITLE_DEFAULT ? "Movimento Tremembé" : t);
-}
-
-function alterarTitulo(e){
-  if (e) e.preventDefault();
-  var inp = document.getElementById("evangelizacao");
-  var novo = (inp && inp.value || "").trim();
-  setTitulo(novo);        // salva só o nome
-  atualizarTitulos();     // mostra "Equipe <nome>"
-}
-
-
-/* ---------- STORAGE: LOAD/SAVE/NORMALIZE ---------- */
-function normalizeModel(m){
-  if (!m || typeof m !== "object") return defaultModel();
-  if (!Array.isArray(m.coordenacao)) m.coordenacao = [];
-
-  ["interna","externa","apoio"].forEach(function(key){
-    if (!m[key] || typeof m[key] !== "object") m[key] = { responsaveis: [], equipes: [] };
-    if (!Array.isArray(m[key].responsaveis)) m[key].responsaveis = [];
-    if (!Array.isArray(m[key].equipes)) m[key].equipes = [];
-
-    m[key].equipes.forEach(function(eq){
-      if (!eq || typeof eq !== "object") return;
-
-      if (typeof eq.nome !== "string") eq.nome = "";
-      if (typeof eq.referencia === "undefined") eq.referencia = null;
-
-      eq.pessoas = (eq.pessoas || []).map(function(p){
-        if (typeof p === "string") {
-          return { nome: p, confirmado: null };
-        } else if (typeof p === "object") {
-          return {
-            nome: p.nome || "",
-            confirmado: (p.confirmado === true
-                          ? true
-                          : p.confirmado === false
-                            ? false
-                            : null),
-			dias: Array.isArray(p.dias) ? p.dias : []
-          };
-        }
-        return { nome: "", confirmado: null };
-      });
-    });
-  });
-
-  return m;
-}
-
-function loadOrg(){
-  try{
-    var raw = localStorage.getItem(ORG_KEY);
-    if (!raw) return defaultModel();
-    var m = JSON.parse(raw);
-    return normalizeModel(m);
-  }catch{
-    return defaultModel();
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0b0c;
+    --text:#f1f1f1;
+    --muted:#aaa;
+    --card:#141416;
+    --brand:#5a8dff;
   }
-}
-function saveOrg(m){
-  try{
-    localStorage.setItem(ORG_KEY, JSON.stringify(normalizeModel(m)));
-  }catch{
-    alert("Não foi possível salvar localmente.");
-  }
-}
-
-/* ---------- ORDENADORES ---------- */
-function sortByNamePT(a,b){
-  return String(a||"").localeCompare(String(b||""), "pt-BR", {sensitivity:"base"});
-}
-function uniquePush(list, name){
-  if (!name) return;
-  if (list.indexOf(name) === -1) list.push(name);
-}
-
-/* Pessoas para exibição: referência sempre no topo; demais em ordem A–Z */
-function orderPeopleForDisplay(eq){
-  const pessoas = eq.pessoas || [];
-  const ref = eq.referencia || null;
-
-  // separar referência
-  const refObj = ref ? pessoas.find(p => p.nome === ref) : null;
-
-  const restantes = pessoas
-    .filter(p => p.nome !== ref)
-    .sort((a,b)=> sortByNamePT(a.nome, b.nome));
-
-  return refObj ? [refObj, ...restantes] : restantes;
-}
-
-/* ---------- BUSCAS ---------- */
-function findEquipe(arr, nome){
-  var n = (nome||"").toLowerCase();
-  for (var i=0;i<(arr||[]).length;i++){
-    var it = arr[i];
-    if (it && String(it.nome||"").toLowerCase() === n) return it;
-  }
-  return null;
-}
-
-/* ============================================================
-   função para alterar dias
-============================================================ */
-function toggleDiaPessoa(refKey, nomeEquipe, pessoaNome, dia){
-  const org = loadOrg();
-  const eq = findEquipe(org[refKey].equipes, nomeEquipe);
-  if (!eq) return;
-
-  const pessoa = eq.pessoas.find(p => p.nome === pessoaNome);
-  if (!pessoa) return;
-
-  if (!Array.isArray(pessoa.dias)) pessoa.dias = [];
-
-  if (pessoa.dias.includes(dia)) {
-    pessoa.dias = pessoa.dias.filter(d => d !== dia);
-  } else {
-    pessoa.dias.push(dia);
-  }
-
-  saveOrg(org);
-}
-
-/* ============================================================
-   AÇÕES DE PESSOAS‑CHAVE (Coordenação / Responsáveis)
-============================================================ */
-function addPessoaChave(area, nome){
-  if (!nome) return;
-  var org = loadOrg();
-  if (area === "coordenacao"){
-    uniquePush(org.coordenacao, nome);
-    org.coordenacao.sort(sortByNamePT);
-  } else {
-    uniquePush(org[area].responsaveis, nome);
-    org[area].responsaveis.sort(sortByNamePT);
-  }
-  saveOrg(org);
-}
-function removePessoaChave(area, nome){
-  var org = loadOrg();
-  if (area === "coordenacao"){
-    org.coordenacao = (org.coordenacao||[]).filter(function(p){ return p !== nome; });
-  } else {
-    org[area].responsaveis = (org[area].responsaveis||[]).filter(function(p){ return p !== nome; });
-  }
-  saveOrg(org);
-}
-function renamePessoaChave(area, oldName, newName){
-  newName = (newName||"").trim();
-  if (!newName) return;
-  var org = loadOrg();
-  var list = (area === "coordenacao") ? org.coordenacao : org[area].responsaveis;
-
-  var idx = list.indexOf(oldName);
-  if (idx >= 0){
-    if (!list.includes(newName)){
-      list[idx] = newName;
-      list.sort(sortByNamePT);
-      saveOrg(org);
-    }
-  }
-}
-
-/* ============================================================
-   AÇÕES DE EQUIPES E PESSOAS DA EQUIPE
-============================================================ */
-function upsertEquipe(refKey, nomeEquipe, pessoaOpcional, marcarRef){
-  var org = loadOrg();
-  var list = org[refKey].equipes;
-  var eq = findEquipe(list, nomeEquipe);
-  if (!eq){
-    eq = { nome: nomeEquipe, pessoas: [], referencia: null };
-    list.push(eq);
-    list.sort((a,b)=> sortByNamePT(a.nome, b.nome));
-  }
-
-  if (pessoaOpcional){
-    if (!eq.pessoas.some(p => p.nome === pessoaOpcional)) {
-      eq.pessoas.push({ nome: pessoaOpcional, confirmado: null });
-    }
-  }
-
-  if (marcarRef && pessoaOpcional){
-    eq.referencia = pessoaOpcional;
-  }
-
-  saveOrg(org);
-}
-
-function deleteEquipe(refKey, nomeEquipe){
-  var org = loadOrg();
-  org[refKey].equipes = (org[refKey].equipes||[]).filter(function(e){ return e.nome !== nomeEquipe; });
-  saveOrg(org);
-}
-function renameEquipe(refKey, oldName, newName){
-  newName = (newName||"").trim();
-  if (!newName) return;
-  var org = loadOrg();
-  var list = org[refKey].equipes;
-  var eq = findEquipe(list, oldName);
-  if (!eq) return;
-
-  // impedir duplicação de nomes
-  if (findEquipe(list, newName)) return;
-
-  eq.nome = newName;
-  // reordena por nome
-  list.sort(function(a,b){ return sortByNamePT(a.nome, b.nome); });
-  saveOrg(org);
-}
-function addPessoaToEquipe(refKey, nomeEquipe, pessoa, marcarRef){
-  pessoa = (pessoa||"").trim();
-  if (!pessoa) return;
-
-  var org = loadOrg();
-  var eq = findEquipe(org[refKey].equipes, nomeEquipe);
-  if (!eq) return;
-
-  if (!eq.pessoas.some(p => p.nome === pessoa)) {
-    eq.pessoas.push({ nome:pessoa, confirmado:null });
-  }
-
-  if (marcarRef) eq.referencia = pessoa;
-
-  saveOrg(org);
-}
-function removePessoaFromEquipe(refKey, nomeEquipe, pessoa){
-  var org = loadOrg();
-  var eq = findEquipe(org[refKey].equipes, nomeEquipe);
-  if (!eq) return;
-
-  eq.pessoas = eq.pessoas.filter(p => p.nome !== pessoa);
-
-  if (eq.referencia === pessoa) eq.referencia = null;
-
-  saveOrg(org);
-}
-function renamePessoaInEquipe(refKey, nomeEquipe, oldName, newName){
-  newName = (newName || "").trim();
-  if (!newName) return;
-
-  var org = loadOrg();
-  var eq = findEquipe(org[refKey].equipes, nomeEquipe);
-  if (!eq) return;
-
-  var idx = eq.pessoas.findIndex(p => p.nome === oldName);
-  if (idx < 0) return;
-
-  if (!eq.pessoas.some(p => p.nome === newName)){
-    eq.pessoas[idx].nome = newName;
-    if (eq.referencia === oldName) eq.referencia = newName;
-  }
-
-  saveOrg(org);
-}
-
-function toggleReferencia(refKey, nomeEquipe, pessoa){
-  var org = loadOrg();
-  var eq = findEquipe(org[refKey].equipes, nomeEquipe);
-  if (!eq) return;
-  eq.referencia = (eq.referencia === pessoa) ? null : pessoa;
-  saveOrg(org);
-}
-
-/* ============================================================
-   EDIÇÃO INLINE (duplo clique ou via ícones) — genérico
-============================================================ */
-function startInlineEdit(targetEl, initialText, onSave, opts){
-  // opts: {placeholder, selectAll}
-  opts = opts || {};
-  var parent = targetEl.parentNode;
-  if (!parent) return;
-
-  var input = document.createElement("input");
-  input.type = "text";
-  input.value = initialText || "";
-  input.placeholder = opts.placeholder || "";
-  input.style.minWidth = "120px";
-  input.style.fontSize = "inherit";
-  input.style.padding = "4px 6px";
-  input.style.borderRadius = "6px";
-  input.style.border = "1px solid rgba(0,0,0,.2)";
-  input.style.background = "var(--bg)";
-  input.style.color = "var(--text)";
-
-  // troca o nó
-  parent.replaceChild(input, targetEl);
-  if (opts.selectAll !== false){
-    setTimeout(function(){
-      input.focus();
-      input.select();
-    }, 0);
-  } else {
-    setTimeout(function(){ input.focus(); }, 0);
-  }
-
-  function commit(){
-    var v = (input.value||"").trim();
-    try { onSave(v); } finally {
-      // restaura nó original (será atualizado no render)
-    }
-  }
-  function cancel(){
-    // apenas re-render lá fora
-  }
-
-  input.addEventListener("keydown", function(e){
-    if (e.key === "Enter"){ e.preventDefault(); commit(); }
-    if (e.key === "Escape"){ e.preventDefault(); cancel(); /* re-render */ render(); }
-  });
-  input.addEventListener("blur", function(){ commit(); });
-
-  return input; // caso queira manipular
-}
-
-
-/* ============================================================
-   EXPOSE (para a Parte 4 usar)
-============================================================ */
-window.ORG = {
-  // storage/title
-  getTitulo: getTitulo,
-  setTitulo: setTitulo,
-  atualizarTitulos: atualizarTitulos,
-  initTituloInput: initTituloInput,
-  alterarTitulo: alterarTitulo,
-
-  // model
-  load: loadOrg,
-  save: saveOrg,
-  orderPeopleForDisplay: orderPeopleForDisplay,
-  sortByNamePT: sortByNamePT,
-
-  // pessoas‑chave
-  addPessoaChave: addPessoaChave,
-  removePessoaChave: removePessoaChave,
-  renamePessoaChave: renamePessoaChave,
-
-  // equipes
-  upsertEquipe: upsertEquipe,
-  deleteEquipe: deleteEquipe,
-  renameEquipe: renameEquipe,
-  addPessoaToEquipe: addPessoaToEquipe,
-  removePessoaFromEquipe: removePessoaFromEquipe,
-  renamePessoaInEquipe: renamePessoaInEquipe,
-  toggleReferencia: toggleReferencia,
-
-  // busca
-  findEquipe: findEquipe,
-
-  // inline edit
-  startInlineEdit: startInlineEdit
-};
-
-/* ============================================================
-   PARTE 4.1 — Funções utilitárias de renderização visual
-   (Criar elementos e estruturas HTML dos cartões)
-============================================================ */
-
-/* Criador rápido de elementos */
-function el(tag, attrs, children){
-  if(!attrs) attrs = {};
-  if(!children) children = [];
-  const E = document.createElement(tag);
-
-  for(const k in attrs){
-    const v = attrs[k];
-    if(k === "className") E.className = v;
-    else if(k.startsWith("on") && typeof v === "function"){
-      E.addEventListener(k.slice(2), v);
-    } else {
-      E.setAttribute(k, v);
-    }
-  }
-
-  if(!Array.isArray(children)) children = [children];
-  children.forEach(c=>{
-    if(typeof c === "string") E.appendChild(document.createTextNode(c));
-    else if(c) E.appendChild(c);
-  });
-
-  return E;
-}
-
-function abrirSeletorDias(refKey, equipeName, pessoaObj){
-  const overlay = document.createElement("div");
-  overlay.style.position = "fixed";
-  overlay.style.inset = "0";
-  overlay.style.background = "rgba(0,0,0,.4)";
-  overlay.style.display = "flex";
-  overlay.style.alignItems = "center";
-  overlay.style.justifyContent = "center";
-  overlay.style.zIndex = "9999";
-
-  const box = document.createElement("div");
-  box.style.background = "#fff";
-  box.style.padding = "16px";
-  box.style.borderRadius = "12px";
-
-  const diasSemana = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
-  const atual = new Set(pessoaObj.dias || []);
-
-  diasSemana.forEach(d => {
-    const btn = document.createElement("button");
-    btn.textContent = d;
-    btn.style.margin = "4px";
-    btn.style.padding = "6px 10px";
-    btn.style.borderRadius = "6px";
-    btn.style.border = "1px solid #ccc";
-
-    if (atual.has(d)){
-      btn.style.background = "#4caf50";
-      btn.style.color = "#fff";
-    }
-
-    btn.onclick = () => {
-      if (atual.has(d)){
-        atual.delete(d);
-        btn.style.background = "";
-        btn.style.color = "";
-      } else {
-        atual.add(d);
-        btn.style.background = "#4caf50";
-        btn.style.color = "#fff";
-      }
-    };
-
-    box.appendChild(btn);
-  });
-
-  // botão salvar
-  const salvar = document.createElement("button");
-  salvar.textContent = "Salvar";
-  salvar.style.display = "block";
-  salvar.style.marginTop = "12px";
-
-  salvar.onclick = () => {
-
-    const org = ORG.load();
-    const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
-    const p = eq.pessoas.find(p => p.nome === pessoaObj.nome);
-
-    p.dias = Array.from(atual);
-
-    saveOrg(org);
-    document.body.removeChild(overlay);
-    render();
-  };
-
-  // botão cancelar
-  const cancelar = document.createElement("button");
-  cancelar.textContent = "Cancelar";
-  cancelar.style.marginTop = "8px";
-
-  cancelar.onclick = () => {
-    document.body.removeChild(overlay);
-  };
-
-  box.appendChild(salvar);
-  box.appendChild(cancelar);
-  overlay.appendChild(box);
-
-  document.body.appendChild(overlay);
-}
-
-function normalizarDia(d){
-  return d
-    .toLowerCase()
-    .replace("á","a")
-    .replace("ã","a")
-    .replace("â","a")
-    .replace("é","e")
-    .replace("í","i")
-    .replace("ó","o")
-    .replace("ú","u");
-}
-
-/* ------------------------------------------------------------
-   CRIA CHIP DE PESSOA (com suporte a dias + ações)
------------------------------------------------------------- */
-
-function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
-  const nome = pessoaObj.nome;
-
-  const classes = ["chip"];
-  if (pessoaObj.confirmado === true) classes.push("chip-ok");
-  else if (pessoaObj.confirmado === false) classes.push("chip-pend");
-
-  const chip = el("div", { className: classes.join(" ") });
-
-  const nameSpan = el("span", { className:"chip-name" }, nome);
-
-  // ✅ edição inline
-  nameSpan.ondblclick = function(e){
-    e.stopPropagation();
-    ORG.startInlineEdit(
-      nameSpan,
-      nome,
-      (newName)=>{
-        ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
-        render();
-      }
-    );
-  };
-
-  // 🔥 LINHA SUPERIOR (nome + estrela + ações)
-  const topLine = el("div", {
-    style:"display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px;"
-  });
-
-  const left = el("div", {
-    style:"display:flex; align-items:center; gap:6px;"
-  });
-
-  left.appendChild(nameSpan);
-
-  if (isRef){
-    left.appendChild(el("span", { className:"chip-star" }, "⭐"));
-  }
-
-  // ✅ ações
-  const actions = el("div", { className:"chip-actions" });
-
-  // EDITAR
-  actions.appendChild(
-    el("button", {
-      title:"Editar",
-      onclick:(e)=>{
-        e.stopPropagation();
-        ORG.startInlineEdit(
-          nameSpan,
-          nome,
-          (newName)=>{
-            ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
-            render();
-          }
-        );
-      }
-    }, "✎")
-  );
-
-  // 📅 DIAS
-  actions.appendChild(
-    el("button", {
-      title:"Definir dias disponíveis",
-      onclick:(e)=>{
-        e.stopPropagation();
-        if (!canEdit()) return;
-        abrirSeletorDias(refKey, equipeName, pessoaObj);
-      }
-    }, "📅")
-  );
-
-  // REFERÊNCIA
-  actions.appendChild(
-    el("button", {
-      title:"Referência",
-      onclick:(e)=>{
-        e.stopPropagation();
-        ORG.toggleReferencia(refKey, equipeName, nome);
-        render();
-      }
-    }, "⭐")
-  );
-
-  // REMOVER
-  actions.appendChild(
-    el("button", {
-      title:"Remover",
-      onclick:(e)=>{
-        e.stopPropagation();
-        if(confirm("Remover " + nome + "?")){
-          ORG.removePessoaFromEquipe(refKey, equipeName, nome);
-          render();
-        }
-      }
-    }, "✕")
-  );
-
-  topLine.appendChild(left);
-  topLine.appendChild(actions);
-
-  chip.appendChild(topLine);
-
-  // ✅ DIAS (linha separada)
-  if (pessoaObj.dias && pessoaObj.dias.length){
-
-    const diasWrap = el("div", { className:"chip-days" });
-
-    pessoaObj.dias.forEach(d => {
-      const classeDia = "chip-day " + normalizarDia(d);
-
-      diasWrap.appendChild(
-        el("span", { className: classeDia }, d)
-      );
-    });
-
-    chip.appendChild(diasWrap);
-  }
-
-  // ✅ CLICK → alterna confirmado
-  chip.addEventListener("click", function(){
-
-    if (!canEdit()) return;
-
-    if (pessoaObj.confirmado === null) pessoaObj.confirmado = true;
-    else if (pessoaObj.confirmado === true) pessoaObj.confirmado = false;
-    else pessoaObj.confirmado = null;
-
-    const org = ORG.load();
-    const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
-    const pessoa = eq.pessoas.find(p => p.nome === nome);
-    pessoa.confirmado = pessoaObj.confirmado;
-
-    saveOrg(org);
-    render();
-  });
-
-  return chip;
-}
-
-/* ------------------------------------------------------------
-   LINHA DA EQUIPE (B2 — ícones ao lado do nome no hover)
-   -> Sem estrela no nome da equipe; mostra contagem (N)
------------------------------------------------------------- */
-function makeEquipeHeader(refKey, equipe){
-  const line = el("div", {className:"team-line"});
-
-  const qtd = countDistinctInEquipe(equipe);
-  const nameSpan = el("span", {className:"team-name"}, `${equipe.nome} (${qtd})`);
-
-  // ✅ Duplo clique protegido
-  nameSpan.ondblclick = function(){
-
-    if (!canEdit()) return;
-
-    ORG.startInlineEdit(
-      nameSpan,
-      equipe.nome,
-      function(newName){
-        ORG.renameEquipe(refKey, equipe.nome, newName);
-        render();
-      }
-    );
-  };
-
-  line.appendChild(nameSpan);
-
-  const acts = el("div", {className:"team-actions"});
-
-  // ✅ EDITAR
-  const btnEdit = el("button", {
-    title:"Editar nome da equipe",
-    onclick:function(){
-
-      if (!canEdit()) return;
-
-      ORG.startInlineEdit(
-        nameSpan,
-        equipe.nome,
-        function(newName){
-          ORG.renameEquipe(refKey, equipe.nome, newName);
-          render();
-        }
-      );
-    }
-  }, "✎");
-
-  // ✅ ADD PESSOA
-  const btnAdd = el("button", {
-    title:"Adicionar pessoa à equipe",
-    onclick:function(){
-
-      if (!canEdit()) return;
-
-      const p = prompt("Nome da nova pessoa:");
-      if(p){
-        ORG.addPessoaToEquipe(refKey, equipe.nome, p, false);
-        render();
-      }
-    }
-  }, "＋");
-
-  // ✅ REFERÊNCIA
-  const btnFav = el("button", {
-    title:"Marcar / desmarcar como referência da equipe",
-    onclick:function(){
-
-      if (!canEdit()) return;
-
-      if (!equipe.pessoas || !equipe.pessoas.length) {
-        alert("Adicione pelo menos 1 pessoa antes de marcar referência.");
-        return;
-      }
-
-      if (equipe.referencia) {
-        ORG.toggleReferencia(refKey, equipe.nome, equipe.referencia);
-      } else {
-        const p = prompt("Digite o nome da pessoa que será a referência:\n" + (equipe.pessoas||[]).join("\n"));
-        if (p && equipe.pessoas.includes(p)) {
-          ORG.toggleReferencia(refKey, equipe.nome, p);
-        } else if (p) {
-          alert("Essa pessoa não pertence à equipe.");
-        }
-      }
-
-      render();
-    }
-  }, "⭐");
-
-  // ✅ EXCLUIR
-  const btnDel = el("button", {
-    title:"Excluir equipe",
-    onclick:function(){
-
-      if (!canEdit()) return;
-
-      if(confirm(`Excluir a equipe "${equipe.nome}"?`)){
-        ORG.deleteEquipe(refKey, equipe.nome);
-        render();
-      }
-    }
-  }, "🗑");
-
-  acts.appendChild(btnEdit);
-  acts.appendChild(btnAdd);
-  acts.appendChild(btnFav);
-  acts.appendChild(btnDel);
-
-  line.appendChild(acts);
-
-  return line;
-}
-
-
-
-/* ============================================================
-   PARTE 4.2 — Gerador dos cartões e de toda a árvore visual
-   (Coordenação, Interna, Externa, Apoio + Equipes + Pessoas)
-============================================================ */
-
-/* ------------------------------------------------------------
-   RENDER CHIPS DE PESSOAS
------------------------------------------------------------- */
-function renderPeople(refKey, equipeName, eq){
-  const ordered = ORG.orderPeopleForDisplay(eq);
-  const wrap = el("div", {className:"people"});
-
-  ordered.forEach(function(p){
-
-const isRef = (eq.referencia === p.nome);
-const chip = makePessoaChip(refKey, equipeName, p, isRef);
-
-    wrap.appendChild(chip);
-  });
-
-  return wrap;
-}
-
-/* ------------------------------------------------------------
-   CARD DE UMA REFERÊNCIA (IN/EX/APOIO)
------------------------------------------------------------- */
-function renderRefCard(label, refKey, dataRef){
-  const card = el("section", {className:"card" + (refKey==="apoio"?" ref-apoio":"")});
-
-  /* Título + chips (responsáveis) ao lado */
-  const titleBar = el("div", {className:"card-title"}, [
-
-    // Badge com o nome da referência
-    el("span", {className:"badge"}, label),
-
-    // Área de responsáveis
-    el("div", {className:"right"},
-      makeResponsaveisRow(refKey, dataRef.responsaveis)
-    ),
-
-    // Hover actions (add responsável + add equipe)
-    el("div", {className:"ref-actions"}, [
-
-      // Adicionar responsável
-      el("button", {
-        className: "ref-btn",
-        title: "Adicionar responsável",
-        onclick: function(){
-          const nome = prompt("Nome do responsável:");
-          if(nome && nome.trim()){
-            ORG.addPessoaChave(refKey, nome.trim());
-            render();
-          }
-        }
-      }, "🙋‍＋"),
-
-      // Adicionar equipe (AGORA INLINE E CORRETO)
-      el("button", {
-        className: "ref-btn",
-        title: "Adicionar nova equipe",
-        onclick: function(){
-          const nomeEq = prompt("Nome da nova equipe:");
-          if (!nomeEq || !nomeEq.trim()) return;
-
-          ORG.upsertEquipe(refKey, nomeEq.trim(), null, false);
-          render();
-        }
-      }, "📋＋")
-    ])
-  ]);
-
-  card.appendChild(titleBar);
-
-  /* Agora renderizar as equipes deste bloco */
-  if (!dataRef.equipes || dataRef.equipes.length === 0){
-    card.appendChild(
-      el("p", {style:"color:var(--muted);margin-top:12px;"},
-      "Nenhuma equipe cadastrada.")
-    );
-    return card;
-  }
-
-  /* Para cada equipe */
-  dataRef.equipes
-    .slice()
-    .sort(function(a,b){ return ORG.sortByNamePT(a.nome,b.nome); })
-    .forEach(function(eq){
-      const eqContainer = el("div", {className:"team-container"});
-
-      /* Linha do nome + ícones */
-      eqContainer.appendChild(makeEquipeHeader(refKey, eq));
-
-      /* Chips das pessoas */
-      eqContainer.appendChild(renderPeople(refKey, eq.nome, eq));
-
-      card.appendChild(eqContainer);
-    });
-
-  return card;
-}
-
-/* ------------------------------------------------------------
-   LINHA DE RESPONSÁVEIS DAS REFERÊNCIAS E DA COORDENAÇÃO
-   (nome ao lado da badge)
------------------------------------------------------------- */
-function makeResponsaveisRow(areaKey, arr){
-  const wrap = el("div", {className:"people"});
-
-  if (!arr || arr.length === 0){
-    return wrap; 
-  }
-
-  arr
-    .slice()
-    .sort(function(a,b){ return ORG.sortByNamePT(a,b); })
-    .forEach(function(name){
-
-      const chip = el("div", {className:"chip"});
-      const nameSpan = el("span", {className:"chip-name"}, name);
-
-      // ✅ Duplo clique protegido
-      nameSpan.ondblclick = function(){
-
-        if (!canEdit()) return;
-
-        ORG.startInlineEdit(
-          nameSpan,
-          name,
-          function(newName){
-            ORG.renamePessoaChave(areaKey, name, newName);
-            render();
-          }
-        );
-      };
-
-      const actions = el("div", {className:"chip-actions"});
-
-      // ✅ EDITAR
-      actions.appendChild(
-        el("button", {
-          title:"Editar",
-          onclick:function(e){
-
-            e.stopPropagation();
-            if (!canEdit()) return;
-
-            ORG.startInlineEdit(
-              nameSpan,
-              name,
-              function(newName){
-                ORG.renamePessoaChave(areaKey, name, newName);
-                render();
-              }
-            );
-          }
-        }, "✎")
-      );
-
-      // ✅ EXCLUIR
-      actions.appendChild(
-        el("button", {
-          title:"Excluir",
-          onclick:function(e){
-
-            e.stopPropagation();
-            if (!canEdit()) return;
-
-            if(confirm(`Excluir "${name}" desta função?`)){
-              ORG.removePessoaChave(areaKey, name);
-              render();
-            }
-          }
-        }, "✕")
-      );
-
-      chip.appendChild(nameSpan);
-      chip.appendChild(actions);
-
-      wrap.appendChild(chip);
-    });
-
-  return wrap;
-}
-
-
-/* ------------------------------------------------------------
-   UTIL: Contagem de pessoas distintas (por nome)
-   - Conta TOTAL (Coordenação + Interna + Externa + Apoio)
-   - Conta por referência: Interna, Externa, Apoio
-   - Case-insensitive (normaliza para comparar)
------------------------------------------------------------- */
-
-// normaliza chave de comparação para evitar contagem duplicada por variações
-function normalizeNameKey(name){
-  return String(name || "").trim().toLowerCase();
-}
-
-// coleta nomes distintos de uma referência (responsáveis + todas as equipes/pessoas)
-function collectDistinctFromRef(ref){
-  const set = new Set();
-
-  // responsáveis (strings)
-  (ref?.responsaveis || []).forEach(n => {
-    if (n && n.trim()) set.add(n.trim().toLowerCase());
-  });
-
-  // equipes
-  (ref?.equipes || []).forEach(eq => {
-    (eq?.pessoas || []).forEach(p => {
-      if (p && p.nome){
-        set.add(p.nome.trim().toLowerCase());
-      }
-    });
-  });
-
-  return set;
-}
-
-// computa contagens: total e por referência
-function getDistinctCounts(org){
-  const internaSet = collectDistinctFromRef(org.interna);
-  const externaSet = collectDistinctFromRef(org.externa);
-  const apoioSet   = collectDistinctFromRef(org.apoio);
-
-  // Total agrega coordenação + todas as referências
-  const totalSet = new Set();
-  (org.coordenacao || []).forEach(n => { if(n && n.trim()) totalSet.add(normalizeNameKey(n)); });
-  [internaSet, externaSet, apoioSet].forEach(s => { s.forEach(k => totalSet.add(k)); });
-
-  return {
-    total: totalSet.size,
-    interna: internaSet.size,
-    externa: externaSet.size,
-    apoio: apoioSet.size
-  };
-}
-
-/* ------------------------------------------------------------
-   RENDER PRINCIPAL (WEB)
------------------------------------------------------------- */
-function render(){
-  const root = document.getElementById("org");
-  root.innerHTML = "";
-
-  const org = ORG.load();
-
-  /* (Opcional, mas recomendado) Atualiza título do H1 e da aba */
-  //const tituloAtual = ORG.getTitulo ? ORG.getTitulo() : document.title;
-  //const h1 = document.getElementById("titulo-web");
-  //if (h1 && tituloAtual) h1.textContent = tituloAtual;
-  //if (tituloAtual) document.title = tituloAtual;
-  
-/* Atualiza título do H1 e da aba */
-atualizarTitulos();
-
-
-  /* Card Coordenação */
-  const cardCoord = el("section", {className:"card"});
-
-  cardCoord.appendChild(
-    el("div", {className:"card-title"}, [
-      // Badge
-      el("span", {className:"badge"}, "Coordenação"),
-
-      // Chips (coordenadores)
-      el("div", {className:"right"},
-        makeResponsaveisRow("coordenacao", org.coordenacao)
-      ),
-
-      // Ações no hover (igual às referências)
-      el("div", {className:"ref-actions"}, [
-        // Adicionar coordenador(a) — mesma lógica do "Adicionar responsável"
-        el("button", {
-          className: "ref-btn",
-          title: "Adicionar coordenador(a)",
-          onclick: function(){
-            const nome = prompt("Nome do(a) coordenador(a):");
-            if (nome && nome.trim()){
-              ORG.addPessoaChave("coordenacao", nome.trim());
-              render();
-            }
-          }
-        }, "👤＋")
-      ])
-    ])
-  );
-
-  root.appendChild(cardCoord);
-
-  /* Grid de referências */
-  const grid = el("div", {className:"grid-refs"});
-  grid.appendChild(renderRefCard("Interna", "interna", org.interna));
-  grid.appendChild(renderRefCard("Externa", "externa", org.externa));
-  grid.appendChild(renderRefCard("Apoio",   "apoio",   org.apoio));
-  root.appendChild(grid);
-
-  /* Totais (pessoas distintas) no fim da página web */
-  const counts = getDistinctCounts(org);
-  root.appendChild(renderCountsWeb(counts));
-
-  /* Gera versão textual p/ impressão */
-  renderPrintVersion(org);
-}
-
-
-function renderPrintVersion(org){
-    const wrap = document.getElementById("print-lists");
-    if (!wrap) return;
-
-    wrap.innerHTML = "";
-
-    /* ======================================================
-       ESPAÇADOR REAL SOMENTE PARA A PRIMEIRA PÁGINA
-    ====================================================== */
-    const firstSpacer = document.createElement("div");
-    firstSpacer.style.height = "26mm"; 
-    firstSpacer.style.display = "block";
-    wrap.appendChild(firstSpacer);
-
-    /* ======================================================
-       FUNÇÕES DE SUPORTE
-    ====================================================== */
-
-    function secTitle(txt){
-        const h = document.createElement("div");
-        h.className = "print-section-title";
-        h.textContent = txt;
-        wrap.appendChild(h);
-    }
-
-    function mkList(items){
-        const box = document.createElement("div");
-        box.className = "print-list-block";
-
-        items.forEach(t => {
-            const line = document.createElement("div");
-            line.className = "print-line";
-            line.textContent = t;
-            box.appendChild(line);
-        });
-
-        wrap.appendChild(box);
-    }
-
-    function mkTeam(eq){
-        const outer = document.createElement("div");
-        outer.className = "print-team-outer";
-
-        const qtd = countDistinctInEquipe(eq);
-        const ref = eq.referencia ? ` — Ref.: ${eq.referencia}` : "";
-
-        const title = document.createElement("div");
-        title.className = "team-title";
-        title.textContent = `${eq.nome} (${qtd} servos)${ref}`;
-        outer.appendChild(title);
-
-        const ordered = ORG.orderPeopleForDisplay(eq).map(p => p.nome);
-        let text = "";
-
-        if (ordered.length === 1){
-            text = ordered[0] + ".";
-        } 
-        else if (ordered.length === 2){
-            text = ordered[0] + " e " + ordered[1] + ".";
-        } 
-        else if (ordered.length > 2){
-            const before = ordered.slice(0,-1).join(", ");
-            const last = ordered.at(-1);
-            text = `${before} e ${last}.`;
-        }
-
-        const ppl = document.createElement("div");
-        ppl.className = "team-members-inline";
-        ppl.textContent = text;
-        outer.appendChild(ppl);
-
-        wrap.appendChild(outer);
-    }
-
-    function pageBreak(){
-        const d = document.createElement("div");
-        d.className = "print-break";
-        return d;
-    }
-
-    /* ======================================================
-       PÁGINA 1 — COORDENAÇÃO + INTERNA
-    ====================================================== */
-
-    secTitle("Coordenação Thalita Kum");
-    mkList(
-        org.coordenacao.length
-        ? org.coordenacao.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Referência [Interna]");
-    mkList(
-        org.interna.responsaveis.length
-        ? org.interna.responsaveis.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Equipes [Interna]");
-    org.interna.equipes
-      .slice()
-      .sort((a,b) => ORG.sortByNamePT(a.nome, b.nome))
-      .forEach(mkTeam);
-
-    /* ======================================================
-       PÁGINA 2 — EXTERNA
-    ====================================================== */
-
-    wrap.appendChild(pageBreak());
-    const spacer2 = document.createElement("div");
-    spacer2.style.height = "26mm";
-    spacer2.style.display = "block";
-    wrap.appendChild(spacer2);
-
-    secTitle("Coordenação Thalita Kum");
-    mkList(
-        org.coordenacao.length
-        ? org.coordenacao.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Referência [Externa]");
-    mkList(
-        org.externa.responsaveis.length
-        ? org.externa.responsaveis.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Equipes [Externa]");
-    org.externa.equipes
-      .slice()
-      .sort((a,b) => ORG.sortByNamePT(a.nome,b.nome))
-      .forEach(mkTeam);
-
-    /* ======================================================
-       PÁGINA 3 — GERAL + TOTAIS
-    ====================================================== */
-
-    wrap.appendChild(pageBreak());
-    const spacer3 = document.createElement("div");
-    spacer3.style.height = "26mm";
-    spacer3.style.display = "block";
-    wrap.appendChild(spacer3);
-
-    secTitle("Coordenação — Thalita Kum");
-    mkList(
-        org.coordenacao.length
-        ? org.coordenacao.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    /* sem responsáveis no Apoio */
-    secTitle("Equipes [Apoio]");
-    org.apoio.equipes
-      .slice()
-      .sort((a,b) => ORG.sortByNamePT(a.nome,b.nome))
-      .forEach(mkTeam);
-
-    /* ====== TOTAIS ====== */
-    const totals = getDistinctCounts(org);
-
-    secTitle("Número de Servos");
-    mkList([
-        "Total geral: " + totals.total,
-        "Interna: "     + totals.interna,
-        "Externa: "     + totals.externa,
-        "Apoio: "       + totals.apoio
-    ]);
-}	
-/* ------------------------------------------------------------
-   HANDLERS DE FORMULÁRIOS (Pessoas‑chave e Equipes)
------------------------------------------------------------- */
-function handleAddPessoaChave(e){
-  if (e) e.preventDefault();
-  var area = document.getElementById("chave-area");
-  var nome = document.getElementById("chave-nome");
-  var a = area ? area.value : "coordenacao";
-  var n = (nome ? nome.value : "").trim();
-  if (!n){ alert("Informe o nome."); return; }
-  ORG.addPessoaChave(a, n);
-  if (nome) nome.value = "";
-  render();
-}
-
-function handleUpsertEquipe(e){
-  if (e) e.preventDefault();
-  var ref   = document.getElementById("eq-ref")?.value || "interna";
-  var nome  = (document.getElementById("eq-nome")?.value || "").trim();
-  var pessoa= (document.getElementById("eq-pessoa")?.value || "").trim();
-  var marcar= !!document.getElementById("eq-marcar-ref")?.checked;
-
-  if (!nome){ alert("Informe o nome da equipe."); return; }
-
-  ORG.upsertEquipe(ref, nome, pessoa, marcar);
-
-  // limpa só o campo pessoa, mantém nome e referência selecionada
-  var pessoaEl = document.getElementById("eq-pessoa");
-  var checkEl  = document.getElementById("eq-marcar-ref");
-  if (pessoaEl) pessoaEl.value = "";
-  if (checkEl) checkEl.checked = false;
-
-  render();
-}
-
-/* ------------------------------------------------------------
-   RODAPÉ: título + limpar
------------------------------------------------------------- */
-function handleRodapeSubmit(e){
-  ORG.alterarTitulo(e);
-}
-function handleClearAll(){
-  if (!confirm("Tem certeza que deseja LIMPAR todas as informações do Equipes?")) return;
-  localStorage.removeItem("Equipes_dados_v2");
-  var reset = confirm("Deseja TAMBÉM resetar o título para o padrão?");
-  if (reset){
-    ORG.setTitulo("Equipe Movimento Tremembé");
-    var inp = document.getElementById("evangelizacao");
-    if (inp) inp.value = "";
-  }
-  ORG.atualizarTitulos();
-  render();
-}
-
-/* ------------------------------------------------------------
-   BINDs e Inicialização
------------------------------------------------------------- */
-function bindUI() {
-
-  // Botões principais
-  const btnChave   = document.getElementById("btn-add-chave");
-  const btnEquipe  = document.getElementById("btn-add-equipe");
-  const formRodape = document.getElementById("form-rodape");
-  const btnZerar   = document.getElementById("btn-zerar");
-
-  if (btnChave)   btnChave.addEventListener("click", handleAddPessoaChave);
-  if (btnEquipe)  btnEquipe.addEventListener("click", handleUpsertEquipe);
-  if (formRodape) formRodape.addEventListener("submit", handleRodapeSubmit);
-  if (btnZerar)   btnZerar.addEventListener("click", handleClearAll);
-
-
-  // Enter → adicionar pessoa-chave
-  const inpPessoaChave = document.getElementById("chave-nome");
-  if (inpPessoaChave){
-    inpPessoaChave.addEventListener("keydown", ev => {
-      if (ev.key === "Enter"){ 
-        ev.preventDefault(); 
-        handleAddPessoaChave(); 
-      }
-    });
-  }
-
-  // Enter → adicionar pessoa na equipe
-  const inpEqPessoa = document.getElementById("eq-pessoa");
-  if (inpEqPessoa){
-    inpEqPessoa.addEventListener("keydown", ev => {
-      if (ev.key === "Enter"){ 
-        ev.preventDefault(); 
-        handleUpsertEquipe(); 
-      }
-    });
-  }
-
-  // Enter → adicionar equipe
-  const inpEqNome = document.getElementById("eq-nome");
-  if (inpEqNome){
-    inpEqNome.addEventListener("keydown", ev => {
-      if (ev.key === "Enter"){ 
-        ev.preventDefault(); 
-        handleUpsertEquipe(); 
-      }
-    });
-  }
-
-
-// ===============================
-// 🆕 BOTÕES DE EXPORTAÇÃO
-// ===============================
-
-// Exportar Mermaid A4
-const btnExportMermaid = document.getElementById("btn-export-mermaid");
-if (btnExportMermaid){
-  btnExportMermaid.addEventListener("click", baixarMermaidA4);
-}
-
-// Exportar JSON
-const btnExportJSON = document.getElementById("btn-export-json");
-if (btnExportJSON){
-  btnExportJSON.addEventListener("click", baixarJSONEquipes);
-}
-
-
-// ===============================
-// 🆕 BOTÃO IMPORTAR JSON
-// ===============================
-
-const btnImport = document.getElementById("btn-import-json");
-const inputImport = document.getElementById("input-import-json");
-
-if (btnImport && inputImport) {
-    btnImport.addEventListener("click", () => {
-        inputImport.click();
-    });
-
-    inputImport.addEventListener("change", (e) => {
-    	const file = e.target.files?.[0];
-
-    	if (!file) {
-        	alert("Nenhum arquivo selecionado.");
-        	return;
-    	}
-
-    	importarJSONEquipes(file);
-
-    	inputImport.value = ""; // permite reimportar
-	});
-}
-  
-}
-
-// Retorna sempre no formato "Equipe <nome>"
-function getTituloFormatado(){
-  var base = getTitulo();
-  base = (base || "").trim();
-  var nome = base && base !== TITLE_DEFAULT ? base : TITLE_DEFAULT.replace(/^Equipes\s*/i, "");
-  return "Equipe " + nome;
-}
-
-
-function initApp(){
-  ORG.atualizarTitulos();
-  ORG.initTituloInput();
-  bindUI();
-  render();
-  syncPrintHeaderTitle(); // <--- garantir aqui
-}
-
-function handleSalvarTitulo() {
-    ORG.salvarTitulo();
-    render();
-    syncPrintHeaderTitle();
-}
-
-function syncPrintHeaderTitle() {
-    try {
-        const h = document.getElementById("print-title");
-        if (!h) return;
-
-        const titulo = getTituloFormatado();
-        h.textContent = titulo;
-
-        void h.offsetHeight; // força re-render antes da impressão
-    } catch(e) {
-        console.error("Erro ao atualizar título de impressão:", e);
-    }
-}
-/* ------------------------------------------------------------
-   UTIL: contagem distinta por equipe (case-insensitive)
------------------------------------------------------------- */
-function countDistinctInEquipe(eq){
-  const set = new Set();
-  (eq?.pessoas || []).forEach(p => {
-    if (p && p.nome){
-      set.add(p.nome.trim().toLowerCase());
-    }
-  });
-  return set.size;
-}
-
-// ------------------------------------------------------------
-// RENDER: Cartão com contagens (versão web)
-// ------------------------------------------------------------
-function renderCountsWeb(counts){
-  // Cria um card com 4 chips: Total / Interna / Externa / Apoio
-  const card = el("section", {className:"card counts-card"});
-
-  card.appendChild(
-    el("div", {className:"card-title"}, [
-      el("span", {className:"badge"}, "Número de Servos")
-    ])
-  );
-
-  const row = el("div", {className:"people"}, [
-    el("div", {className:"chip"}, "Total: "   + counts.total),
-    el("div", {className:"chip"}, "Interna: " + counts.interna),
-    el("div", {className:"chip"}, "Externa: " + counts.externa),
-    el("div", {className:"chip"}, "Apoio: "   + counts.apoio),
-  ]);
-
-  card.appendChild(row);
-  return card;
-}
-
-function baixarJSONEquipes() {
-    const json = gerarJSONEquipesComLinks();
-    const conteudo = JSON.stringify(json, null, 2);
-
-    let nomeArquivo = getTitulo();
-
-    nomeArquivo = nomeArquivo
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9]/g, "_")
-        .replace(/_+/g, "_")
-        .replace(/^_|_$/g, "")
-        .toLowerCase(); // ✅ garante minúsculo
-
-    if (!nomeArquivo) nomeArquivo = "Equipes";
-
-    const blob = new Blob([conteudo], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = nomeArquivo + ".json";
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-function baixarMermaidA4() {
-    let txt = gerarMermaidA4();
-
-    // 🔥 Remove a dupla escapagem que QUEBRA o Mermaid
-    txt = txt
-        .replace(/&amp;lt;/g, "<;")
-        .replace(/&amp;gt;/g, ">;");
-
-    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes_a4_mermaid.txt";
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-// Aproximação: conversão mm -> px (96dpi ~ 3.78 px/mm)
-const MM_TO_PX = 3.78;
-
-// Ajuste aqui se você alterar margens do @page ou a altura do header/padding
-const PAGE_HEIGHT_MM   = 297; // A4
-const MARGIN_TOP_MM    = 18;  // @page margin-top
-const MARGIN_BOTTOM_MM = 15;  // @page margin-bottom
-const HEADER_MM        = 34;  // seu header fixo + padding-top (ajuste se mudou)
-
-// Altura útil aproximada do conteúdo por página (em px)
-function getUsablePagePx(){
-  const usableMM = PAGE_HEIGHT_MM - MARGIN_TOP_MM - MARGIN_BOTTOM_MM - HEADER_MM;
-  return usableMM * MM_TO_PX;
 }
 
 /* ===============================
-document.addEventListener("DOMContentLoaded", () => {
+   BASE
+================================*/
+*{ box-sizing:border-box; }
+html, body { min-height:100%; height:auto; }
 
-  // 🔥 PRIMEIRO: inicializa tudo
-  initApp();
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: var(--font-base);
+  line-height:1.45;
+  color:var(--text);
+  background:var(--bg);
+  margin:0;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
 
-  // 🔥 DEPOIS: tenta carregar JSON
-  fetch('./data/Equipes_model.json')
-    .then(res => {
-      if (!res.ok) throw new Error("JSON não encontrado");
-      return res.json();
-    })
-    .then(json => {
-      const temDados = localStorage.getItem("Equipes_dados_v2");
+h1,h2,h3{ margin:0 0 var(--space-4); line-height:1.2; }
+h1{ font-size:1.6rem; font-weight:700; }
 
-      if (!temDados) {
-        importarJSONDireto(json);
-      }
-    })
-    .catch(err => {
-      console.warn("Falha ao carregar JSON:", err);
-    });
+.container{ max-width:1100px; margin:0 auto; }
 
-  // 🔥 VOLTA O TOGGLE
-  const btn = document.getElementById("toggle-form");
-  const bloco = document.getElementById("form-bloco");
+/* ===============================
+   CABEÇALHO WEB
+================================*/
+#web-header{
+  display:flex;
+  gap: var(--space-4);
+  align-items:center;
+  justify-content:center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  backdrop-filter: blur(6px);
+}
+#web-header img{ width:120px; height:auto; }
 
-  if (btn && bloco) {
-      bloco.classList.add("collapsed");
-      btn.textContent = "+";
+/* ===============================
+   FORMULÁRIOS (com seta no canto)
+================================*/
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field label{ font-weight:600; font-size:0.92rem; }
 
-      btn.addEventListener("click", () => {
-          const isOpen = bloco.classList.contains("expanded");
+input, select{
+  width:100%;
+  padding:0.7rem 0.8rem;
+  border:1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:8px;
+  font-size:1rem;
+}
 
-          if (isOpen) {
-              bloco.classList.remove("expanded");
-              bloco.classList.add("collapsed");
-              btn.textContent = "+";
-          } else {
-              bloco.classList.remove("collapsed");
-              bloco.classList.add("expanded");
-              btn.textContent = "-";
-          }
-      });
+
+#form-bloco{
+  display:block;
+  position:relative;
+  padding: var(--space-6) var(--space-4);
+}
+
+#form-bloco .card{
+  margin-bottom:16px;
+}
+
+
+#form-bloco-inner {
+   display:grid;
+   gap:16px;
+}
+
+/* 🔥 SETA MINIMALISTA — APENAS - / + */
+.toggle-form-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:none;
+  border:none;
+  color:var(--text);
+  font-size:22px;
+  font-weight:bold;
+  cursor:pointer;
+  padding:0;
+  margin:0;
+  line-height:1;
+  transition:0.2s;
+  z-index:10;
+}
+.toggle-form-btn:hover{
+  opacity:0.6;
+}
+
+/* animação de abrir/fechar o menu de adição */
+#form-bloco.expanded{
+  max-height:5000px;
+  opacity:1;
+  transition:all .35s ease;
+}
+
+#form-bloco.collapsed{
+  display:block !important;
+  height:20px !important; /* altura da barra visível */
+  max-height:48px !important;
+  overflow:hidden !important;
+
+  padding: var(--space-6) var(--space-4) !important;
+  padding-top:10px !important; /* espaço para a seta */
+
+  background: var(--card);
+  border-radius: var(--radius);
+  border:1px solid color-mix(in srgb, var(--text) 10%, transparent);
+
+  position:relative;
+  opacity:1 !important;
+  transition:all .35s ease;
+}
+
+/* ESCONDE TODO CONTEÚDO INTERNO */
+#form-bloco.collapsed > *:not(.toggle-form-btn){
+  opacity:0 !important;
+  visibility:hidden !important;
+  height:0 !important;
+  max-height:0 !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  margin:0 !important;
+  pointer-events:none !important;
+}
+
+/* MANTÉM A SETA VISÍVEL */
+#form-bloco.collapsed .toggle-form-btn{
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+button.primary{
+  padding:0.9rem 1rem;
+  background:var(--brand);
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:1rem;
+}
+
+/* ===============================
+   CARTÕES
+================================*/
+.card{
+  background:var(--bg);
+  border:1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.card-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:10px;
+}
+.badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:0.85rem;
+  font-weight:600;
+  background: color-mix(in srgb, var(--brand) 15%, transparent);
+  border:1px solid color-mix(in srgb, var(--brand) 28%, transparent);
+}
+
+/* ===============================
+   GRID DE REFERÊNCIAS
+================================*/
+.grid-refs{
+  display:grid;
+  gap:16px;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+.ref-apoio{ grid-column:1/-1; }
+@media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
+
+/* ===============================
+   MOBILE READ-ONLY FINAL (CORRETO)
+================================*/
+@media (max-width: 760px) {
+
+  /* ✅ Espaçamento */
+  body {
+    padding: 8px 12px 80px !important;
+    overflow-x: hidden;
   }
 
-});
-================================ */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  initApp();
-
-  // ✅ CARREGA AUTOMÁTICO PRIMEIRA OPÇÃO
-  fetch('import/option.json?v=' + Date.now())
-    .then(res => res.json())
-    .then(opcoes => {
-
-      const primeira = opcoes[0];
-
-      if (!primeira) return;
-
-      const caminho = "import/" + primeira.arquivo;
-
-      const temDados = localStorage.getItem("Equipes_dados_v2");
-
-      if (!temDados) {
-        fetch(caminho)
-          .then(r => r.json())
-          .then(importarJSONDireto)
-          .catch(() => console.warn("Erro ao carregar JSON inicial"));
-      }
-
-    })
-    .catch(() => console.warn("Erro ao carregar option.json"));
-
-  // ✅ TOGGLE
-  const btn = document.getElementById("toggle-form");
-  const bloco = document.getElementById("form-bloco");
-
-  if (btn && bloco) {
-    bloco.classList.add("collapsed");
-    btn.textContent = "+";
-
-    btn.addEventListener("click", () => {
-      const isOpen = bloco.classList.contains("expanded");
-
-      if (isOpen) {
-        bloco.classList.remove("expanded");
-        bloco.classList.add("collapsed");
-        btn.textContent = "+";
-      } else {
-        bloco.classList.remove("collapsed");
-        bloco.classList.add("expanded");
-        btn.textContent = "-";
-      }
-    });
+  /* ✅ Header */
+  #web-header {
+    border-bottom: none !important;
+    backdrop-filter: none !important;
   }
 
-});	
+  /* ❌ Remove formulário */
+  #form-bloco,
+  #form-bloco.collapsed {
+    display: none !important;
+  }
+
+  /* ❌ Remove botão +/- */
+  .toggle-form-btn {
+    display: none !important;
+  }
+
+  /* ✅ Limpa rodapé */
+  #menu-rodape {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ❌ Esconde rodapé */
+  .menu-rodape-content {
+    display: none !important;
+  }
+
+  /* ❌ Remove ações */
+  .team-actions,
+  .chip-actions,
+  .ref-actions {
+    display: none !important;
+  }
+
+  /* ❌ BLOQUEIA INTERAÇÃO GLOBAL (FORMA SEGURA) */
+  input,
+  select,
+  button,
+  .chip {
+    pointer-events: none !important;
+  }
+
+  /* ✅ LIBERA APENAS OS BOTÕES MOBILE */
+  #btn-atualizar-mobile,
+  #btn-pdf-mobile {
+    pointer-events: auto !important;
+  }
+
+  /* ✅ BOTÕES MOBILE */
+  #btn-atualizar-mobile,
+  #btn-pdf-mobile {
+    display: block !important;
+    position: fixed !important;
+
+    bottom: 16px !important;
+
+    z-index: 9999999 !important;
+
+    background: var(--brand) !important;
+    color: #fff !important;
+
+    padding: 8px 12px;
+    border-radius: 8px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+    opacity: 0.95;
+    transition: 0.2s;
+  }
+
+  /* ✅ POSIÇÃO (SEM SOBREPOR) */
+  #btn-atualizar-mobile {
+    right: 16px !important;
+  }
+
+  #btn-pdf-mobile {
+    right: 120px !important;
+  }
+
+  /* ✅ Clique */
+  #btn-atualizar-mobile:active, 
+  #btn-pdf-mobile:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ===============================
+   BASE (DESKTOP)
+================================*/
+#btn-atualizar-mobile,
+#btn-pdf-mobile {
+  display: none;
+}	
+
 	
-function getTeamStats(org){
-    const stats = {
-        interna: { equipes: 0, servos: 0 },
-        externa: { equipes: 0, servos: 0 },
-        apoio:   { equipes: 0, servos: 0 }
-    };
+/* ===============================
+   EQUIPES
+================================*/
+.team-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 4px;
+  margin-bottom:6px;
+  border-bottom:1px dashed color-mix(in srgb, var(--text) 12%, transparent);
+}
+.team-line:hover .team-actions{ opacity:1; pointer-events:auto; }
+.team-name{
+  font-size:1rem;
+  font-weight:600;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.team-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.team-actions button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:1rem;
+  color:var(--text);
+  opacity:0.85;
+}
+.team-actions button:hover{ opacity:1; }
 
-    ["interna","externa","apoio"].forEach(area => {
-        stats[area].equipes = org[area].equipes.length;
-        org[area].equipes.forEach(eq => {
-            stats[area].servos += countDistinctInEquipe(eq);
-        });
-    });
+/* ===============================
+   CHIPS
+================================*/
+.people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.chip{
+  display:flex;
+  flex-direction: column;   /* ✅ NOVO */
+  align-items:flex-start;   /* ✅ NOVO */
+  gap:6px;
 
-    const totalServos = getDistinctCounts(org).total;
+  padding:6px 10px;
+  border-radius:999px;
+  background:var(--card);
+  border:2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
 
-    const totalAreas = {
-        internaPct: Math.round((stats.interna.servos / totalServos) * 100),
-        externaPct: Math.round((stats.externa.servos / totalServos) * 100),
-        apoioPct:   Math.round((stats.apoio.servos   / totalServos) * 100),
-        totalServos,
-    };
-
-    return { stats, totalAreas };
+  font-size:0.92rem;
+  transition: border-color 0.25s linear;
 }
 
-function gerarJSONEquipesComLinks() {
-    const org = ORG.load();
+.chip-ok{ border-color:#28a745 !important; }
+.chip-pend{ border-color:#dc3545 !important; }
+.chip:hover .chip-actions{ opacity:1; pointer-events:auto; }
+.chip-actions{
+  display:flex;
+  gap:4px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.chip-actions button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:0.85rem;
+  opacity:0.85;
+  color:var(--text);
+}
+.chip-star{ color:var(--warn); font-size:1rem; }
+/* ===============================
+   DIAS DA SEMANA
+================================*/
 
-    let idCounter = 1;
-    const nextId = () => String(idCounter++);
-
-    const nodes = [];
-    const links = [];
-
-    // --- Nó raiz: Coordenação ---
-    const idCoord = nextId();
-    nodes.push({
-        id: idCoord,
-        name: "Coordenação",
-        title: "Coordenação"
-    });
-
-    // --- Coordenadores ---
-    org.coordenacao.forEach(nome => {
-        nodes.push({
-            id: nextId(),
-            name: nome,
-            title: "Coordenador",
-            parentId: idCoord
-        });
-    });
-
-
-    // --- Monta Interna e Externa normalmente ---
-    function processArea(areaObj, areaNome, areaTitle) {
-        const idArea = nextId();
-        nodes.push({
-            id: idArea,
-            name: areaNome,
-            title: areaTitle,
-            parentId: idCoord
-        });
-
-        (areaObj.responsaveis || []).forEach(nome => {
-            nodes.push({
-                id: nextId(),
-                name: nome,
-                title: "Referência",
-                parentId: idArea
-            });
-        });
-
-        (areaObj.equipes || []).forEach(eq => {
-            const idEq = nextId();
-            nodes.push({
-                id: idEq,
-                name: eq.nome,
-                title: eq.nome,
-                parentId: idArea
-            });
-
-		(eq.pessoas || []).forEach(p => {
-			nodes.push({
-				id: nextId(),
-				name: p.nome,
-				title: "Servo",
-				parentId: idEq,
-		
-				// 🔥 NOVOS CAMPOS
-				confirmado: p.confirmado === true ? true :
-							p.confirmado === false ? false : null,
-		
-				isReferencia: eq.referencia === p.nome
-			});
-		});
-        });
-
-        return idArea;
-    }
-
-    const idInterna = processArea(org.interna, "Interna", "Referência Interna");
-    const idExterna = processArea(org.externa, "Externa", "Referência Externa");
-
-
-    // --- Área Apoio (SEM responsáveis) ---
-    const idApoio = nextId();
-    nodes.push({
-        id: idApoio,
-        name: "Apoio",
-        title: "Apoio",
-        parentId: idCoord
-    });
-
-    (org.apoio.equipes || []).forEach(eq => {
-        const idEq = nextId();
-        nodes.push({
-            id: idEq,
-            name: eq.nome,
-            title: eq.nome,
-            parentId: idApoio
-        });
-
-		(eq.pessoas || []).forEach(p => {
-			nodes.push({
-				id: nextId(),
-				name: p.nome,
-				title: "Servo",
-				parentId: idEq,
-		
-				// 🔥 NOVOS CAMPOS
-				confirmado: p.confirmado === true ? true :
-							p.confirmado === false ? false : null,
-		
-				isReferencia: eq.referencia === p.nome
-			});
-		});
-    });
-
-    // --- Ligações cruzadas (Apoio → Interna, Externa) ---
-    links.push({ from: idApoio, to: idInterna, type: "responde_para" });
-    links.push({ from: idApoio, to: idExterna, type: "responde_para" });
-
-    return {
-    titulo: getTitulo(),   // 🔥 AQUI
-    nodes, 
-    links 
-	};
+.chip-days{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;            /* ✅ separa os dias */
+  margin-top:2px;
 }
 
-function gerarLinkMermaid(mermaidCode) {
-    // Mermaid.live exige DEFLATE RAW
-    const compressed = pako.deflateRaw(mermaidCode, { level: 9 });
+.chip-day{
+  display:inline-block;  /* ✅ cada dia vira um bloco */
 
-    let binary = "";
-    compressed.forEach(b => {
-        binary += String.fromCharCode(b);
-    });
+  font-size:10px;
+  padding:3px 7px;
 
-    let base64 = btoa(binary)
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
+  border-radius:6px;
 
-    return "https://mermaid.live/edit#pako:" + base64;
+  background:rgba(0,0,0,.06);
+  border:1px solid rgba(0,0,0,.12);
+
+  line-height:1;
+  white-space:nowrap;
 }
 
-function testarJSON() {
-    const json = gerarJSONEquipesComLinks();
-    console.log(json);
+.chip-day.seg { background:#e3f2fd; }
+.chip-day.ter { background:#e8f5e9; }
+.chip-day.qua { background:#fff3e0; }
+.chip-day.qui { background:#f3e5f5; }
+.chip-day.sex { background:#fce4ec; }
+.chip-day.sab { background:#e0f7fa; }
+.chip-day.dom { background:#ede7f6; }
+
+/* ===============================
+   MENU DE RODAPÉ – VERSÃO FINAL
+================================*/
+#menu-rodape{
+  position: fixed;
+  inset: auto 0 0 0;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+  z-index: 1000;
+
+  -webkit-overflow-scrolling: touch;
+  contain: layout paint;
 }
 
-function abrirMermaid() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-    const codigo = gerarMermaidAPartirDoJSON(nodes, links);
-    const url = gerarLinkMermaid(codigo);
-    window.open(url, "_blank");
+/* Linha principal do rodapé */
+.menu-rodape-content{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  max-width: 1100px;
+  margin: 0 auto;
+  min-width: 0;
 }
 
-function gerarMermaidAPartirDoJSON(nodes, links) {
-    let linhas = ["flowchart TB"];
+/* Campo inline (label + input) */
+.field-inline{
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    // Criar nós com prefixo n_
-    nodes.forEach(n => {
-        const id = "n" + n.id;
-        const label = `${n.name}\\n(${n.title})`;
-        linhas.push(`    ${id}["${label}"]`);
-    });
-
-    // Hierarquia
-    nodes.forEach(n => {
-        if (n.parentId) {
-            const pai = "n" + n.parentId;
-            const filho = "n" + n.id;
-            linhas.push(`    ${pai} --> ${filho}`);
-        }
-    });
-
-    // Ligações cruzadas
-    links.forEach(l => {
-        const from = "n" + l.from;
-        const to = "n" + l.to;
-        linhas.push(`    ${from} -.-> ${to}`);
-    });
-
-    return linhas.join("\n");
+  min-width: 0;
+  flex: 0 1 auto;
 }
 
-function baixarMermaidTXT() {
-    // 1. pega seus dados reais
-    const { nodes, links } = gerarJSONEquipesComLinks();
-
-    // 2. converte em texto Mermaid
-    const mermaid = gerarMermaidTexto(nodes, links);
-
-    // 3. cria um arquivo TXT para download
-    const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    
-    // 4. cria o link invisível para baixar
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes.mmd.txt";
-    document.body.appendChild(a);
-    a.click();
-    
-    // 5. limpa
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+/* input no rodapé */
+#menu-rodape label{
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-function gerarMermaidTexto(nodes, links) {
-    let out = "flowchart TB\n";
-
-    // cria nós
-    nodes.forEach(n => {
-        const id = "n" + n.id;
-        const label = `${n.name}\\n(${n.title})`;
-        out += `${id}["${label}"]\n`;
-    });
-
-    // hierarquia (parentId)
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
+#menu-rodape input{
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: var(--bg);
+  color: var(--text);
+  min-width: 140px;
+  max-width: 220px;
+  width: 100%;
 }
 
-function normalizarNos(nodes) {
-    const mapa = new Map(); // evita duplicações por nome + title
-  
-    nodes.forEach(n => {
-        const key = (n.name + "|" + n.title).toLowerCase();
-        if (!mapa.has(key)) mapa.set(key, n);
-    });
+/* A área de botões */
+.rodape-actions{
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    return Array.from(mapa.values());
+  flex: 1 1 auto;
+  justify-content: flex-end;
+
+  min-width: 0;
+  flex-wrap: nowrap;
 }
 
-function gerarMermaidEquipes(nodes, links) {
-    // remove duplicações automáticas
-    nodes = normalizarNos(nodes);
-
-    let out = "flowchart TB\n";
-
-    // cria nós
-    nodes.forEach(n => {
-        const id = "n" + n.id;
-        const label = `${n.name}\\n(${n.title})`;
-        out += `${id}["${label}"]\n`;
-    });
-
-    // hierarquia parentId
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
+/* Botões */
+.btn_rodape,
+.sec-btn{
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  color: var(--text);
 }
 
-function baixarMermaidRealTXT() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-    const mermaid = gerarMermaidEquipes(nodes, links);
-
-    const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-  
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes_real.mmd.txt";
-    document.body.appendChild(a);
-    a.click();
-  
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+.btn_rodape{
+  background: var(--brand);
+  color:#fff;
 }
 
-function gerarMermaidPorEquipes(nodes, links) {
-    let out = "flowchart TB\n";
-
-    // 1. Gerar caixas
-    nodes.forEach(n => {
-
-        // Se for equipe e tiver servos
-        if (n.title.toLowerCase().includes("equipe") && n.pessoas && n.pessoas.length > 0) {
-
-            const listaServos = n.pessoas
-                .map(p => `• ${p.nome}`)
-                .join("\\n");
-
-            const label = `${n.name}\\n------------------\\n${listaServos}`;
-
-            out += `n${n.id}["${label}"]\n`;
-        }
-        else {
-            // Caixas normais (coordenação, referências, apoio)
-            const label = `${n.name}\\n(${n.title})`;
-            out += `n${n.id}["${label}"]\n`;
-        }
-    });
-
-    // 2. Criar ligações (hierarquia principal)
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // 3. Links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
+.sec-btn{
+  background: var(--danger);
+  color:#fff;
 }
 
-function baixarMermaidEquipesTXT() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-    const mermaid = gerarMermaidPorEquipes(nodes, links);
-
-    const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes_equipes.mmd.txt";
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+.btn_rodape.brand{
+  border-color: color-mix(in srgb, var(--brand) 60%, transparent);
+  color:#fff;
 }
 
-function gerarMermaidEquipesSimplificado() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-
-    // index para consultar servos associados a cada equipe
-    const mapaServos = {};
-    nodes.forEach(n => {
-        if (n.title === "Servo" && n.parentId) {
-            if (!mapaServos[n.parentId]) mapaServos[n.parentId] = [];
-            mapaServos[n.parentId].push(n.name);
-        }
-    });
-
-    let out = "flowchart TB\n";
-
-    nodes.forEach(n => {
-
-        // Se for equipe, criar caixa única com lista de servos
-        if (n.title.toLowerCase().includes("equipe")) {
-            const servos = mapaServos[n.id] || [];
-            const lista = servos.length 
-                ? "\\n------------------\\n" + servos.map(s => "• " + s).join("\\n") 
-                : "";
-
-            out += `n${n.id}["${n.name}${lista}"]\n`;
-        
-        } else {
-            // Coordenação, Referência, Apoio
-            out += `n${n.id}["${n.name}\\n(${n.title})"]\n`;
-        }
-    });
-
-    // Hierarquia
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // Links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
+.sec-btn.danger{
+  border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+  color:#fff;
 }
 
-
-function gerarMermaidA4() {
-    const org = ORG.load();
-
-    function idSafe(str) {
-        return String(str || "")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-zA-Z0-9_]/g, "_");
-    }
-
-    function esc(str) {
-        return String(str || "").replace(/`/g, "\\`");
-    }
-
-    const BR = "<br/>";
-
-    function caixaEquipe(eq) {
-        const lista = (eq.pessoas && eq.pessoas.length)
-            ? eq.pessoas
-                .map(p => {
-                    const estrela = eq.referencia === p.nome ? " ⭐" : "";
-                    return `• ${esc(p.nome)}${estrela}`;
-                })
-                .join(BR)
-            : "(vazio)";
-
-        return `\`**${esc(eq.nome)}**${BR}${lista}\``;
-    }
-
-    function caixaReferencias(titulo, lista) {
-        const nomes = (lista && lista.length)
-            ? lista.map(n => esc(n)).join(BR)
-            : "(vazio)";
-        return `\`${esc(titulo)}${BR}${nomes}\``;
-    }
-
-    function blocoEquipes(nome, equipes) {
-        let out = `    subgraph ${nome} ["${nome}"]:::area\n`;
-        out += `    direction LR\n`;
-        equipes.forEach(eq => {
-            out += `        n_${nome}_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe\n`;
-        });
-        out += "    end\n";
-        return out;
-    }
-
-    const coord   = esc(org.coordenacao[0] || "—");
-    const refInt  = org.interna.responsaveis || [];
-    const refExt  = org.externa.responsaveis || [];
-    const eqInt   = org.interna.equipes || [];
-    const eqExt   = org.externa.equipes || [];
-    const eqApo   = org.apoio.equipes || [];
-
-    let txt = `flowchart TB
-%% Equipes A4 – AUTO GERADO DINAMICAMENTE
-%% https://mermaid.live/
-
-
-linkStyle default curve:linear
-
-classDef coord   fill:#dbe8ff,stroke:#6a9eff,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:14px;
-classDef apoio   fill:#efe6ff,stroke:#b18cff,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:14px;
-classDef interna fill:#e8f8e8,stroke:#6cbf6c,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:13px;
-classDef externa fill:#fff3e2,stroke:#e7b26b,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:13px;
-
-classDef equipe  fill:#ffffff,stroke:#00000022,stroke-width:1px,color:#222,rx:3,ry:3,font-size:11px;
-classDef invis   fill:none,stroke:none,color:#0000;
-
-
-%% COORDENAÇÃO
-n0["\`Coordenação${BR}${coord}\`"]:::coord
-
-%% INTERNAS + REFERÊNCIAS + EXTERNAS
-subgraph GRUPOS_INTER [ ]
-direction LR
-
-    iL:::invis
-
-    %% INTERNAS
-    subgraph INTERNA ["INTERNA"]
-    direction LR
-${eqInt.map(eq =>
-`        n_INTERNA_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe`
-).join("\n")}
-    end
-
-    %% REFERÊNCIAS CENTRALIZADAS
-    subgraph CENTRO ["Referências"]
-    direction TB
-        n_ref_int["${caixaReferencias("Ref. Interna", refInt)}"]:::refInt
-        n_ref_ext["${caixaReferencias("Ref. Externa", refExt)}"]:::refExt
-    end
-
-    %% EXTERNAS
-    subgraph EXTERNA ["EXTERNA"]
-    direction LR
-${eqExt.map(eq =>
-`        n_EXTERNA_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe`
-).join("\n")}
-    end
-
-    iR:::invis
-end
-
-%% Ligações coord --&gt; referências
-n0 --&gt; n_ref_int
-n0 --&gt; n_ref_ext
-
-%% Interna liga às equipes internas
-${eqInt.map(eq => `n_ref_int --&gt; n_INTERNA_${idSafe(eq.nome)}`).join("\n")}
-
-%% Externa liga às equipes externas
-${eqExt.map(eq => `n_ref_ext --&gt; n_EXTERNA_${idSafe(eq.nome)}`).join("\n")}
-
-%% APOIO
-n_apoio["Apoio"]:::header
-n_ref_int --&gt; n_apoio
-n_ref_ext --&gt; n_apoio
-
-%% EQUIPES APOIO (lado a lado)
-subgraph APOIO_EQ [" "]
-direction LR
-${eqApo.map(eq =>
-`    n_APOIO_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::apoio`
-).join("\n")}
-end
-
-${eqApo.map(eq => `n_apoio --&gt; n_APOIO_${idSafe(eq.nome)}`).join("\n")}
-`;
-
-    // === CORREÇÃO FINAL: garantir SEMPRE &lt;br/&gt; ===
-    txt = txt
-        .replace(/--&gt;/g, "-->");
-
-    return txt;
-}
-
-window.addEventListener("beforeprint", () => {
-    syncPrintHeaderTitle();
-});
-
-function importarJSONEquipes(file) {
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-        try {
-            const json = JSON.parse(e.target.result);
-
-            // valida estrutura mínima do JSON
-            if (!json || !Array.isArray(json.nodes)) {
-                alert("JSON inválido.");
-                return;
-            }
-
-            const novoModel = defaultModel();
-
-            // aplica título (evangelização), se existir
-            if (typeof json.titulo === "string") {
-                setTitulo(json.titulo);
-
-                const inp = document.getElementById("evangelizacao");
-                if (inp) inp.value = json.titulo;
-            }
-
-            // --- COORDENAÇÃO ---
-            json.nodes
-                .filter(n => n.title === "Coordenador")
-                .forEach(n => {
-                    novoModel.coordenacao.push(n.name);
-                });
-
-            // --- MAPEAMENTO DE ÁREAS ---
-            const areasMap = {
-                "Interna": "interna",
-                "Externa": "externa",
-                "Apoio": "apoio"
-            };
-
-            json.nodes.forEach(n => {
-                const areaKey = areasMap[n.name];
-                if (!areaKey) return;
-
-                // --- RESPONSÁVEIS ---
-                json.nodes
-                    .filter(x =>
-                        x.parentId === n.id &&
-                        x.title === "Referência"
-                    )
-                    .forEach(ref => {
-                        novoModel[areaKey].responsaveis.push(ref.name);
-                    });
-
-                // --- EQUIPES ---
-                json.nodes
-                    .filter(x =>
-                        x.parentId === n.id &&
-                        x.title !== "Referência" &&
-                        x.title !== "Servo"
-                    )
-                    .forEach(eqNode => {
-
-                        const eq = {
-                            nome: eqNode.name,
-                            pessoas: [],
-                            referencia: null
-                        };
-
-                        // coleta pessoas da equipe (uma única varredura)
-                        const pessoas = json.nodes.filter(p =>
-                            p.parentId === eqNode.id &&
-                            p.title === "Servo"
-                        );
-
-                        let encontrouRef = false;
-
-                        pessoas.forEach(p => {
-
-                            const pessoa = {
-                                nome: p.name,
-                                confirmado:
-                                    p.confirmado === true ? true :
-                                    p.confirmado === false ? false : null
-                            };
-
-                            eq.pessoas.push(pessoa);
-
-                            if (p.isReferencia === true) {
-                                eq.referencia = pessoa.nome;
-                                encontrouRef = true;
-                            }
-                        });
-
-                        // fallback: nenhum marcado como referência
-                        if (!encontrouRef) {
-                            eq.referencia = null;
-                        }
-
-                        novoModel[areaKey].equipes.push(eq);
-                    });
-            });
-
-            // salva dados e atualiza interface
-            saveOrg(novoModel);
-            atualizarTitulos();
-            render();
-
-            alert("Importação concluída!");
-
-        } catch (err) {
-            console.error(err);
-            alert("Erro ao importar JSON.");
-        }
-    };
-
-    reader.readAsText(file);
-}
-
-function carregarJSONDoRepositorio() {
-  fetch('import/thalita_kum_modelo.json')
-    .then(res => res.json())
-    .then(json => {
-      importarJSONDireto(json);
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Erro ao carregar JSON do repositório");
-    });
-}
-
-function importarJSONDireto(json) {
-  try {
-    const novoModel = defaultModel();
-
-    if (typeof json.titulo === "string") {
-      setTitulo(json.titulo);
-    }
-
-    const areasMap = {
-      "Interna": "interna",
-      "Externa": "externa",
-      "Apoio": "apoio"
-    };
-
-    // coordenação
-    json.nodes
-      .filter(n => n.title === "Coordenador")
-      .forEach(n => {
-        novoModel.coordenacao.push(n.name);
-      });
-
-    // resto
-    json.nodes.forEach(n => {
-      const areaKey = areasMap[n.name];
-      if (!areaKey) return;
-
-      json.nodes
-        .filter(x => x.parentId === n.id && x.title === "Referência")
-        .forEach(ref => {
-          novoModel[areaKey].responsaveis.push(ref.name);
-        });
-
-      json.nodes
-        .filter(x =>
-          x.parentId === n.id &&
-          x.title !== "Referência" &&
-          x.title !== "Servo"
-        )
-        .forEach(eqNode => {
-          const eq = {
-            nome: eqNode.name,
-            pessoas: [],
-            referencia: null
-          };
-
-          const pessoas = json.nodes.filter(p =>
-            p.parentId === eqNode.id && p.title === "Servo"
-          );
-
-          pessoas.forEach(p => {
-            eq.pessoas.push({
-              nome: p.name,
-              confirmado: p.confirmado ?? null
-            });
-
-            if (p.isReferencia) {
-              eq.referencia = p.name;
-            }
-          });
-
-          novoModel[areaKey].equipes.push(eq);
-        });
-    });
-
-    saveOrg(novoModel);
-    atualizarTitulos();
-    render();
-
-    alert("✅ Equipe Atualizada com Sucesso!");
-  } catch (e) {
-    console.error(e);
-    alert("Erro ao importar JSON do Servidor!");
+/* Mobile: empilha */
+@media (max-width: 720px){
+  .menu-rodape-content{
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .field-inline{
+    flex: 1 1 100%;
+  }
+
+  .rodape-actions{
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #menu-rodape input{
+    max-width: 100%;
   }
 }
 
-function carregarJSON() {
-  fetch('./import/thalita_kum_modelo.json')
-    .then(res => res.json())
-    .then(importarJSONDireto)
-    .catch(() => {
-      console.warn("usando localStorage");
-      render(); // usa dados salvos
-    });
+/* ===============================
+   AÇÕES HOVER
+================================*/
+.ref-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
 }
-
-function escolherAtualizacaoJSON() {
-
-  fetch('import/option.json?v=' + Date.now()) // 🔥 força atualização
-    .then(res => res.json())
-    .then(opcoes => {
-
-      const escolha = prompt(
-        "Escolha a Equipe:\n\n" +
-        opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
-      );
-
-      const idx = parseInt(escolha) - 1;
-
-      if (!opcoes[idx]) return;
-
-      const caminho = "import/" + opcoes[idx].arquivo;
-
-      fetch(caminho)
-        .then(r => r.json())
-        .then(importarJSONDireto)
-        .catch(() => alert("Erro ao carregar equipes"));
-
-    })
-    .catch(() => alert("Erro ao carregar as opções"));
+.card:hover .ref-actions{ opacity:1; pointer-events:auto; }
+.ref-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:1.25rem;
+  color:var(--text);
+  opacity:0.85;
 }
+.ref-btn:hover{ opacity:1; }
 
-function escolherAtualizacaoJSON() {
-  fetch('import/option.json?v=' + Date.now())
-    .then(res => res.json())
-    .then(opcoes => {
+/* ===============================
+   IMPRESSÃO – BLOCO FINAL CONSOLIDADO
+================================*/
 
-      const escolha = prompt(
-        "Escolha a Equipe:\n\n" +
-        opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
-      );
-
-      const idx = parseInt(escolha) - 1;
-
-      if (!opcoes[idx]) return;
-
-      const caminho = "import/" + opcoes[idx].arquivo;
-
-      fetch(caminho)
-        .then(r => r.json())
-        .then(importarJSONDireto)
-        .catch(() => alert("Erro ao carregar Equipes"));
-
-    })
-    .catch(() => alert("Erro ao carregar as opções"));
-}
-
-function baixarPDF() {
-  setTimeout(() => {
-    window.print();
-  }, 100);
-}
-
-
+#print-header{ display:none !important; }
+.print-only{ display:none !important; }
 
 /* ============================================
-   EXPOR FUNÇÕES PARA HTML (OBRIGATÓRIO)
-============================================ */
+   IMPRESSÃO — VERSÃO FINAL (100% CORRIGIDA)
+=========================================== */
+@media print {
+
+  /* ----------- Pagina ----------- */
+  @page {
+      size: auto;
+      margin: 5mm 8mm 8mm 8mm !important;
+  }
+
+  /* ----------- OCULTAR INTERFACE WEB ----------- */
+  #form-bloco,
+  #form-bloco *,
+  #toggle-form,
+  #web-header,
+  #menu-rodape,
+  #org {
+      display:none !important;
+  }
+
+  .print-only {
+      display:block !important;
+  }
+
+  /* ----------- CABEÇALHO FIXO ----------- */
+  #print-header {
+      position:fixed !important;
+      top:0; left:0; right:0;
+
+      height:22mm !important;
+      padding:4mm 0 !important;
+
+      display:flex !important;
+      justify-content:center;
+      align-items:center;
+
+      background:#fff !important;
+      z-index:9999 !important;
+
+      border:none !important; /* impede linha invasiva */
+  }
+
+  #print-header img {
+      position:absolute !important;
+      top:1mm;
+      left:0mm;
+      max-height:22mm !important;
+  }
+
+  /* ----------- ZERAR BODY ----------- */
+  body {
+      margin:0 !important;
+      padding:0 !important;
+      background:#fff !important;
+  }
+
+  /* ----------- CONTAINER DAS PÁGINAS ----------- */
+  #print-lists {
+      margin:0 !important;
+      padding:0 !important;
+  }
+
+  /* ----------- QUEBRA DE PÁGINA REAL ----------- */
+  .print-break {
+      page-break-before:always !important;
+      break-before:page !important;
+  }
+
+  /* ------ NOTA IMPORTANTE ------
+     Não usamos ::before nem padding-top aqui,
+     pois o espaçamento correto é feito SOMENTE
+     pelo JS usando divs reais (firstSpacer/spacer2/spacer3).
+  -------------------------------- */
+
+  /* ----------- TÍTULOS DE SEÇÃO ----------- */
+  .print-section-title {
+      display:block !important;
+      font-size:16px !important;
+      font-weight:700 !important;
+
+      background:#eef3ff !important;
+      border-left:4px solid #2a5bd7 !important;
+
+      padding:2mm 1mm !important;
+      margin:6mm 0 4mm 0 !important;
+
+      page-break-inside:avoid !important;
+  }
+
+  /* ----------- LISTAS ----------- */
+  .print-list-block {
+      margin:1mm 0 2mm 0 !important;
+  }
+
+  .print-line {
+      font-size:14px !important;
+      margin:1mm 0 !important;
+  }
+
+  /* ----------- EQUIPES (inline, sem quebra) ----------- */
+  .print-team-outer {
+      display:block !important;
+      page-break-inside:avoid !important;
+      break-inside:avoid !important;
+      orphans:999 !important;
+      widows:999 !important;
+
+      margin:3mm 0 !important;
+      padding-bottom:1mm !important;
+
+      border-top:none !important;
+      border-bottom:1px dashed #999 !important;
+  }
+
+  .print-team-outer:last-of-type {
+      border-bottom:none !important;
+  }
+
+  .team-title {
+      font-size:14px !important;
+      font-weight:700 !important;
+
+      border-bottom:1px solid #ddd !important;
+      padding-bottom:1mm !important;
+      margin-bottom:1mm !important;
+  }
+
+  .team-members-inline {
+      font-size:12.5px !important;
+      line-height:1.3 !important;
+      word-break:break-word !important;
+      white-space:normal !important;
+  }
+
+  /* ----------- CHIPS ----------- */
+  .chip-ok  { border:2px solid #28a745 !important; }
+  .chip-pend{ border:2px solid #dc3545 !important; }
+
+}
 
 
-/* ============================================================
-   🔥 FIX GLOBAL — NECESSÁRIO PARA JS EXTERNO
-============================================================ */
 
-/* funções chamadas no HTML */
-window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
-window.baixarJSONEquipes = baixarJSONEquipes;
-window.baixarMermaidA4 = baixarMermaidA4;
-window.baixarPDF = baixarPDF;
+.watermark {
+  display: var(--watermark-display);
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 999999;
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.06);
+  transform: rotate(-30deg);
+}
+@media print { .watermark { display:none!important; } }
 
-/* render principal */
-window.render = render;
+#custom-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999999;
+}
 
-/* storage (usados indiretamente) */
-window.saveOrg = saveOrg;
-window.loadOrg = loadOrg;
+.modal-box{
+  background:var(--bg);
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
 
-/* import */
-window.importarJSONDireto = importarJSONDireto;
-window.importarJSONEquipes = importarJSONEquipes;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
 
-/* handlers */
-window.handleAddPessoaChave = handleAddPessoaChave;
-window.handleUpsertEquipe = handleUpsertEquipe;
+.modal-logo{
+  width:80px;
+  margin-bottom:10px;
+}
 
-/* título */
-window.getTitulo = getTitulo;
-window.setTitulo = setTitulo;
-window.getTituloFormatado = getTituloFormatado;
-window.atualizarTitulos = atualizarTitulos;
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:15px;
+}
 
-/* debug opcional */
-window.DEBUG = {
-  render,
-  loadOrg,
-  saveOrg
-};
+.modal-actions button{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+}
 
 
-
-
+</style>
