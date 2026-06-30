@@ -603,6 +603,39 @@ button.primary{
 .ref-btn:hover{ opacity:1; }
 
 /* ===============================
+   ESCALA DE SERVOS (IMPRESSÃO 2)
+================================*/
+
+.escala-box{
+  font-family: monospace;
+  font-size: 13px;
+
+  column-count: 2;
+  column-gap: 40px;
+}
+
+.escala-header,
+.escala-row{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  break-inside: avoid;
+}
+
+.col-nome{
+  width: 55%;
+}
+
+.col-dia{
+  width: 20%;
+  text-align: center;
+}
+
+.escala-sep{
+  margin: 6px 0;
+}
+
+/* ===============================
    IMPRESSÃO – BLOCO FINAL CONSOLIDADO
 ================================*/
 
