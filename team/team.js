@@ -1140,32 +1140,68 @@ function renderPrintVersion(org){
         wrap.appendChild(box);
     }
 
+function coletarServosComDias(org){
+  const lista = [];
+
+  ["interna","externa","apoio"].forEach(area => {
+    org[area].equipes.forEach(eq => {
+      eq.pessoas.forEach(p => {
+        lista.push({
+          nome: p.nome,
+          sab: p.dias?.includes("Sáb"),
+          dom: p.dias?.includes("Dom")
+        });
+      });
+    });
+  });
+
+  const map = new Map();
+  lista.forEach(p => map.set(p.nome, p));
+
+  return Array.from(map.values())
+    .sort((a,b) => sortByNamePT(a.nome,b.nome));
+}
+
+	
 function renderPrintEscala2(){
   const org = ORG.load();
   const wrap = document.getElementById("print-lists");
+
+  if (!wrap) return;
 
   wrap.innerHTML = "";
 
   const servos = coletarServosComDias(org);
 
-  const container = el("div", { className:"escala-box" });
+  const container = document.createElement("div");
+  container.className = "escala-box";
 
   // cabeçalho
-  container.appendChild(el("div", { className:"escala-header" }, [
-    el("span", { className:"col-nome" }, "Servo"),
-    el("span", { className:"col-dia" }, "Sábado"),
-    el("span", { className:"col-dia" }, "Domingo")
-  ]));
+  const header = document.createElement("div");
+  header.className = "escala-header";
+  header.innerHTML = `
+    <span class="col-nome">Servo</span>
+    <span class="col-dia">Sábado</span>
+    <span class="col-dia">Domingo</span>
+  `;
+  container.appendChild(header);
 
-  container.appendChild(el("div", { className:"escala-sep" }, "----------------------------------"));
+  const sep = document.createElement("div");
+  sep.className = "escala-sep";
+  sep.textContent = "----------------------------------";
+  container.appendChild(sep);
 
-  // linhas
   servos.forEach(s => {
-    container.appendChild(el("div", { className:"escala-row" }, [
-      el("span", { className:"col-nome" }, s.nome),
-      el("span", { className:"col-dia" }, s.sab ? "[✔]" : "[❌]"),
-      el("span", { className:"col-dia" }, s.dom ? "[✔]" : "[❌]")
-    ]));
+    const row = document.createElement("div");
+    row.className = "escala-row";
+
+    row.innerHTML = `
+      <span class="col-nome">${s.nome}</span>
+      <span class="col-dia">${s.sab ? "[✔]" : "[❌]"}</span>
+      <span class="col-dia">${s.dom ? "[✔]" : "[❌]"}</span>
+    `;
+
+    container.appendChild(row);
   });
 
   wrap.appendChild(container);
