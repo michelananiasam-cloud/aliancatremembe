@@ -567,7 +567,7 @@ if (pessoaObj.dias && pessoaObj.dias.length){
 
   const diasWrap = el("div", { className:"chip-days" });
 
-  pessoaObj.dias.forEach(d => {
+  ordenarDias(pessoaObj.dias).forEach(d => {
     const classeDia = "chip-day " + normalizarDia(d);
 
     diasWrap.appendChild(
@@ -1254,6 +1254,15 @@ function renderPrintVersion(org){
         "Apoio: "       + totals.apoio
     ]);
 }	
+
+
+const ORDEM_DIAS = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+
+function ordenarDias(dias){
+  return dias.slice().sort((a,b)=>{
+    return ORDEM_DIAS.indexOf(a) - ORDEM_DIAS.indexOf(b);
+  });
+}
 /* ------------------------------------------------------------
    HANDLERS DE FORMULÁRIOS (Pessoas‑chave e Equipes)
 ------------------------------------------------------------ */
