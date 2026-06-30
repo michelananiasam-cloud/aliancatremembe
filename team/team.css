@@ -713,9 +713,35 @@ button.primary{
   /* ----------- CHIPS ----------- */
   .chip-ok  { border:2px solid #28a745 !important; }
   .chip-pend{ border:2px solid #dc3545 !important; }
+/* ===============================
+   DIAS DA SEMANA (NOVO)
+================================*/
 
+.chip-days {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+  flex-wrap: wrap;
 }
 
+.chip-day {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* 🎨 CORES POR DIA */
+.chip-day.seg { background: #e3f2fd; } /* azul */
+.chip-day.ter { background: #e8f5e9; } /* verde */
+.chip-day.qua { background: #fff3e0; } /* laranja */
+.chip-day.qui { background: #f3e5f5; } /* roxo */
+.chip-day.sex { background: #fce4ec; } /* rosa */
+.chip-day.sab { background: #e0f7fa; } /* ciano */
+.chip-day.dom { background: #ede7f6; } /* lilás */
+
+}
 
 
 .watermark {
