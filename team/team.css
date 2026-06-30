@@ -647,6 +647,10 @@ button.primary{
 =========================================== */
 @media print {
 
+.escala-box{
+  display:block !important;
+}
+
   /* ----------- Pagina ----------- */
   @page {
       size: auto;
