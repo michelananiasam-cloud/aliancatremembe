@@ -562,27 +562,21 @@ function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
 
   chip.appendChild(nameSpan);
 
-  // ✅ MOSTRAR DIAS
-  if (pessoaObj.dias && pessoaObj.dias.length){
-    chip.appendChild(
-      el("div", {
-        className:"chip-days",
-        style:"font-size:10px;opacity:.7;margin-top:2px"
-      }, 
-const diasWrap = el("div", { className:"chip-days" });
+// ✅ MOSTRAR DIAS
+if (pessoaObj.dias && pessoaObj.dias.length){
 
-pessoaObj.dias.forEach(d => {
-  diasWrap.appendChild(
-const classeDia = "chip-day " + normalizarDia(d);
+  const diasWrap = el("div", { className:"chip-days" });
 
-el("span", { className: classeDia }, d)
-  );
-});
+  pessoaObj.dias.forEach(d => {
+    const classeDia = "chip-day " + normalizarDia(d);
 
-chip.appendChild(diasWrap);		
-		)
+    diasWrap.appendChild(
+      el("span", { className: classeDia }, d)
     );
-  }
+  });
+
+  chip.appendChild(diasWrap);
+}
 
   // ✅ CLICK → alterna confirmado
   chip.addEventListener("click", function(){
