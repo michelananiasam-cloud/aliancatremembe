@@ -92,7 +92,8 @@ function normalizeModel(m){
                           ? true
                           : p.confirmado === false
                             ? false
-                            : null)
+                            : null),
+			dias: Array.isArray(p.dias) ? p.dias : []
           };
         }
         return { nome: "", confirmado: null };
@@ -153,6 +154,28 @@ function findEquipe(arr, nome){
     if (it && String(it.nome||"").toLowerCase() === n) return it;
   }
   return null;
+}
+
+/* ============================================================
+   função para alterar dias
+============================================================ */
+function toggleDiaPessoa(refKey, nomeEquipe, pessoaNome, dia){
+  const org = loadOrg();
+  const eq = findEquipe(org[refKey].equipes, nomeEquipe);
+  if (!eq) return;
+
+  const pessoa = eq.pessoas.find(p => p.nome === pessoaNome);
+  if (!pessoa) return;
+
+  if (!Array.isArray(pessoa.dias)) pessoa.dias = [];
+
+  if (pessoa.dias.includes(dia)) {
+    pessoa.dias = pessoa.dias.filter(d => d !== dia);
+  } else {
+    pessoa.dias.push(dia);
+  }
+
+  saveOrg(org);
 }
 
 /* ============================================================
@@ -416,8 +439,101 @@ function el(tag, attrs, children){
   return E;
 }
 
+function abrirSeletorDias(refKey, equipeName, pessoaObj){
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,.4)";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.zIndex = "9999";
+
+  const box = document.createElement("div");
+  box.style.background = "#fff";
+  box.style.padding = "16px";
+  box.style.borderRadius = "12px";
+
+  const diasSemana = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+  const atual = new Set(pessoaObj.dias || []);
+
+  diasSemana.forEach(d => {
+    const btn = document.createElement("button");
+    btn.textContent = d;
+    btn.style.margin = "4px";
+    btn.style.padding = "6px 10px";
+    btn.style.borderRadius = "6px";
+    btn.style.border = "1px solid #ccc";
+
+    if (atual.has(d)){
+      btn.style.background = "#4caf50";
+      btn.style.color = "#fff";
+    }
+
+    btn.onclick = () => {
+      if (atual.has(d)){
+        atual.delete(d);
+        btn.style.background = "";
+        btn.style.color = "";
+      } else {
+        atual.add(d);
+        btn.style.background = "#4caf50";
+        btn.style.color = "#fff";
+      }
+    };
+
+    box.appendChild(btn);
+  });
+
+  // botão salvar
+  const salvar = document.createElement("button");
+  salvar.textContent = "Salvar";
+  salvar.style.display = "block";
+  salvar.style.marginTop = "12px";
+
+  salvar.onclick = () => {
+
+    const org = ORG.load();
+    const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
+    const p = eq.pessoas.find(p => p.nome === pessoaObj.nome);
+
+    p.dias = Array.from(atual);
+
+    saveOrg(org);
+    document.body.removeChild(overlay);
+    render();
+  };
+
+  // botão cancelar
+  const cancelar = document.createElement("button");
+  cancelar.textContent = "Cancelar";
+  cancelar.style.marginTop = "8px";
+
+  cancelar.onclick = () => {
+    document.body.removeChild(overlay);
+  };
+
+  box.appendChild(salvar);
+  box.appendChild(cancelar);
+  overlay.appendChild(box);
+
+  document.body.appendChild(overlay);
+}
+
+function normalizarDia(d){
+  return d
+    .toLowerCase()
+    .replace("á","a")
+    .replace("ã","a")
+    .replace("â","a")
+    .replace("é","e")
+    .replace("í","i")
+    .replace("ó","o")
+    .replace("ú","u");
+}
+
 /* ------------------------------------------------------------
-   CRIA CHIP DE PESSOA (com hover C2 → edição inline ou ícones)
+   CRIA CHIP DE PESSOA (com suporte a dias + ações)
 ------------------------------------------------------------ */
 
 function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
@@ -431,6 +547,7 @@ function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
 
   const nameSpan = el("span", { className:"chip-name" }, nome);
 
+  // ✅ edição inline
   nameSpan.ondblclick = function(e){
     e.stopPropagation();
     ORG.startInlineEdit(
@@ -445,29 +562,54 @@ function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
 
   chip.appendChild(nameSpan);
 
-chip.addEventListener("click", function(){
+  // ✅ MOSTRAR DIAS
+  if (pessoaObj.dias && pessoaObj.dias.length){
+    chip.appendChild(
+      el("div", {
+        className:"chip-days",
+        style:"font-size:10px;opacity:.7;margin-top:2px"
+      }, 
+const diasWrap = el("div", { className:"chip-days" });
 
-  if (!canEdit()) return;  // ✅ ADICIONE ISSO
+pessoaObj.dias.forEach(d => {
+  diasWrap.appendChild(
+const classeDia = "chip-day " + normalizarDia(d);
 
-  if (pessoaObj.confirmado === null) pessoaObj.confirmado = true;
-  else if (pessoaObj.confirmado === true) pessoaObj.confirmado = false;
-  else pessoaObj.confirmado = null;
-
-  const org = ORG.load();
-  const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
-  const pessoa = eq.pessoas.find(p => p.nome === nome);
-  pessoa.confirmado = pessoaObj.confirmado;
-
-  saveOrg(org);
-  render();
+el("span", { className: classeDia }, d)
+  );
 });
 
+chip.appendChild(diasWrap);		
+		)
+    );
+  }
+
+  // ✅ CLICK → alterna confirmado
+  chip.addEventListener("click", function(){
+
+    if (!canEdit()) return;
+
+    if (pessoaObj.confirmado === null) pessoaObj.confirmado = true;
+    else if (pessoaObj.confirmado === true) pessoaObj.confirmado = false;
+    else pessoaObj.confirmado = null;
+
+    const org = ORG.load();
+    const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
+    const pessoa = eq.pessoas.find(p => p.nome === nome);
+    pessoa.confirmado = pessoaObj.confirmado;
+
+    saveOrg(org);
+    render();
+  });
+
+  // ✅ estrela referência
   if (isRef){
     chip.appendChild(el("span", { className:"chip-star" }, "⭐"));
   }
 
   const actions = el("div", { className:"chip-actions" });
 
+  // ✅ EDITAR
   actions.appendChild(
     el("button", {
       title:"Editar",
@@ -485,6 +627,20 @@ chip.addEventListener("click", function(){
     }, "✎")
   );
 
+  // ✅ 📅 AGORA CHAMA A FUNÇÃO EXTERNA
+  actions.appendChild(
+    el("button", {
+      title:"Definir dias disponíveis",
+      onclick:(e)=>{
+        e.stopPropagation();
+        if (!canEdit()) return;
+
+        abrirSeletorDias(refKey, equipeName, pessoaObj);
+      }
+    }, "📅")
+  );
+
+  // ✅ REFERÊNCIA
   actions.appendChild(
     el("button", {
       title:"Referência",
@@ -496,6 +652,7 @@ chip.addEventListener("click", function(){
     }, "⭐")
   );
 
+  // ✅ REMOVER
   actions.appendChild(
     el("button", {
       title:"Remover",
@@ -513,6 +670,7 @@ chip.addEventListener("click", function(){
 
   return chip;
 }
+
 /* ------------------------------------------------------------
    LINHA DA EQUIPE (B2 — ícones ao lado do nome no hover)
    -> Sem estrela no nome da equipe; mostra contagem (N)
