@@ -560,23 +560,100 @@ function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
     );
   };
 
-  chip.appendChild(nameSpan);
-
-// ✅ MOSTRAR DIAS
-if (pessoaObj.dias && pessoaObj.dias.length){
-
-  const diasWrap = el("div", { className:"chip-days" });
-
-  pessoaObj.dias.forEach(d => {
-    const classeDia = "chip-day " + normalizarDia(d);
-
-    diasWrap.appendChild(
-      el("span", { className: classeDia }, d)
-    );
+  // 🔥 LINHA SUPERIOR (nome + estrela + ações)
+  const topLine = el("div", {
+    style:"display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px;"
   });
 
-  chip.appendChild(diasWrap);
-}
+  const left = el("div", {
+    style:"display:flex; align-items:center; gap:6px;"
+  });
+
+  left.appendChild(nameSpan);
+
+  if (isRef){
+    left.appendChild(el("span", { className:"chip-star" }, "⭐"));
+  }
+
+  // ✅ ações
+  const actions = el("div", { className:"chip-actions" });
+
+  // EDITAR
+  actions.appendChild(
+    el("button", {
+      title:"Editar",
+      onclick:(e)=>{
+        e.stopPropagation();
+        ORG.startInlineEdit(
+          nameSpan,
+          nome,
+          (newName)=>{
+            ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
+            render();
+          }
+        );
+      }
+    }, "✎")
+  );
+
+  // 📅 DIAS
+  actions.appendChild(
+    el("button", {
+      title:"Definir dias disponíveis",
+      onclick:(e)=>{
+        e.stopPropagation();
+        if (!canEdit()) return;
+        abrirSeletorDias(refKey, equipeName, pessoaObj);
+      }
+    }, "📅")
+  );
+
+  // REFERÊNCIA
+  actions.appendChild(
+    el("button", {
+      title:"Referência",
+      onclick:(e)=>{
+        e.stopPropagation();
+        ORG.toggleReferencia(refKey, equipeName, nome);
+        render();
+      }
+    }, "⭐")
+  );
+
+  // REMOVER
+  actions.appendChild(
+    el("button", {
+      title:"Remover",
+      onclick:(e)=>{
+        e.stopPropagation();
+        if(confirm("Remover " + nome + "?")){
+          ORG.removePessoaFromEquipe(refKey, equipeName, nome);
+          render();
+        }
+      }
+    }, "✕")
+  );
+
+  topLine.appendChild(left);
+  topLine.appendChild(actions);
+
+  chip.appendChild(topLine);
+
+  // ✅ DIAS (linha separada)
+  if (pessoaObj.dias && pessoaObj.dias.length){
+
+    const diasWrap = el("div", { className:"chip-days" });
+
+    pessoaObj.dias.forEach(d => {
+      const classeDia = "chip-day " + normalizarDia(d);
+
+      diasWrap.appendChild(
+        el("span", { className: classeDia }, d)
+      );
+    });
+
+    chip.appendChild(diasWrap);
+  }
 
   // ✅ CLICK → alterna confirmado
   chip.addEventListener("click", function(){
@@ -595,72 +672,6 @@ if (pessoaObj.dias && pessoaObj.dias.length){
     saveOrg(org);
     render();
   });
-
-  // ✅ estrela referência
-  if (isRef){
-    chip.appendChild(el("span", { className:"chip-star" }, "⭐"));
-  }
-
-  const actions = el("div", { className:"chip-actions" });
-
-  // ✅ EDITAR
-  actions.appendChild(
-    el("button", {
-      title:"Editar",
-      onclick:(e)=>{
-        e.stopPropagation();
-        ORG.startInlineEdit(
-          nameSpan,
-          nome,
-          (newName)=>{
-            ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
-            render();
-          }
-        );
-      }
-    }, "✎")
-  );
-
-  // ✅ 📅 AGORA CHAMA A FUNÇÃO EXTERNA
-  actions.appendChild(
-    el("button", {
-      title:"Definir dias disponíveis",
-      onclick:(e)=>{
-        e.stopPropagation();
-        if (!canEdit()) return;
-
-        abrirSeletorDias(refKey, equipeName, pessoaObj);
-      }
-    }, "📅")
-  );
-
-  // ✅ REFERÊNCIA
-  actions.appendChild(
-    el("button", {
-      title:"Referência",
-      onclick:(e)=>{
-        e.stopPropagation();
-        ORG.toggleReferencia(refKey, equipeName, nome);
-        render();
-      }
-    }, "⭐")
-  );
-
-  // ✅ REMOVER
-  actions.appendChild(
-    el("button", {
-      title:"Remover",
-      onclick:(e)=>{
-        e.stopPropagation();
-        if(confirm("Remover " + nome + "?")){
-          ORG.removePessoaFromEquipe(refKey, equipeName, nome);
-          render();
-        }
-      }
-    }, "✕")
-  );
-
-  chip.appendChild(actions);
 
   return chip;
 }
