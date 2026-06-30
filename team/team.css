@@ -242,9 +242,7 @@ button.primary{
 
 /* MOBILE */
 @media (max-width: 760px){
-body {
-  padding-bottom: 80px !important;
-}
+
   #mobile-bar{
     position: fixed;
     bottom: 0;
@@ -253,7 +251,6 @@ body {
 
     display: flex;
     justify-content: space-around;
-    align-items: center;
 
     padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
 
@@ -265,13 +262,12 @@ body {
 
   #mobile-bar button{
     flex: 1;
+    margin: 0 4px;
 
     background: var(--brand);
     color:#fff;
 
-    margin: 0 4px;
     padding: 10px 6px;
-
     border-radius: 8px;
 
     font-size: 0.85rem;
@@ -283,8 +279,7 @@ body {
   #mobile-bar button:active{
     transform: scale(0.96);
   }
-
-}	
+}
 
 /* ===============================
    EQUIPES
