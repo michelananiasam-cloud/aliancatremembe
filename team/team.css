@@ -293,56 +293,43 @@ button.primary{
     pointer-events: auto !important;
   }
 
-/* ✅ BOTÕES MOBILE */
-#btn-atualizar-mobile,
-#btn-pdf-mobile,
-#btn-pdf-escala-mobile {
-  display: block !important;
-  position: fixed !important;
+/* ✅ MOBILE BOTÕES AGRUPADOS */
 
-  bottom: 16px !important;
+#mobile-actions{
+  display:none;
+}
 
-  z-index: 9999999 !important;
+@media (max-width: 760px){
+  #mobile-actions{
+    display:flex;
+  }
+}
 
-  background: var(--brand) !important;
-  color: #fff !important;
 
-  padding: 8px 12px;
+/* botões */
+#mobile-actions button{
+  background: var(--brand);
+  color:#fff;
+
+  padding: 8px 10px;
   border-radius: 8px;
 
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight:600;
 
-  border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
+  border:1px solid color-mix(in srgb, var(--brand) 60%, transparent);
 
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 
-  opacity: 0.95;
+  cursor:pointer;
+
   transition: 0.2s;
 }
 
-/* ✅ POSIÇÃO (SEM SOBREPOR) */
-#btn-atualizar-mobile {
-  right: 16px !important;
-}
-
-#btn-pdf-mobile {
-  right: 120px !important;
-}
-
-#btn-pdf-escala-mobile {
-  right: 240px !important; /* ✅ NOVO: deslocado corretamente */
-}
-
-/* ✅ Clique (efeito de pressão) */
-#btn-atualizar-mobile:active, 
-#btn-pdf-mobile:active,
-#btn-pdf-escala-mobile:active {
+#mobile-actions button:active{
   transform: scale(0.96);
 }
-
-}
-
+	
 /* ===============================
    EQUIPES
 ================================*/
