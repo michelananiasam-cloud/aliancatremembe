@@ -392,15 +392,19 @@ button.primary{
 }
 .chip{
   display:flex;
-  align-items:center;
+  flex-direction: column;   /* ✅ NOVO */
+  align-items:flex-start;   /* ✅ NOVO */
   gap:6px;
+
   padding:6px 10px;
   border-radius:999px;
   background:var(--card);
   border:2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
+
   font-size:0.92rem;
   transition: border-color 0.25s linear;
 }
+
 .chip-ok{ border-color:#28a745 !important; }
 .chip-pend{ border-color:#dc3545 !important; }
 .chip:hover .chip-actions{ opacity:1; pointer-events:auto; }
@@ -420,6 +424,39 @@ button.primary{
   color:var(--text);
 }
 .chip-star{ color:var(--warn); font-size:1rem; }
+/* ===============================
+   DIAS DA SEMANA
+================================*/
+
+.chip-days{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;            /* ✅ separa os dias */
+  margin-top:2px;
+}
+
+.chip-day{
+  display:inline-block;  /* ✅ cada dia vira um bloco */
+
+  font-size:10px;
+  padding:3px 7px;
+
+  border-radius:6px;
+
+  background:rgba(0,0,0,.06);
+  border:1px solid rgba(0,0,0,.12);
+
+  line-height:1;
+  white-space:nowrap;
+}
+
+.chip-day.seg { background:#e3f2fd; }
+.chip-day.ter { background:#e8f5e9; }
+.chip-day.qua { background:#fff3e0; }
+.chip-day.qui { background:#f3e5f5; }
+.chip-day.sex { background:#fce4ec; }
+.chip-day.sab { background:#e0f7fa; }
+.chip-day.dom { background:#ede7f6; }
 
 /* ===============================
    MENU DE RODAPÉ – VERSÃO FINAL
@@ -713,43 +750,9 @@ button.primary{
   /* ----------- CHIPS ----------- */
   .chip-ok  { border:2px solid #28a745 !important; }
   .chip-pend{ border:2px solid #dc3545 !important; }
-  .chip {gap: 6px;}
-	
-/* ===============================
-   DIAS DA SEMANA (NOVO)
-================================*/
-
-.chip-days {
-  display: flex;
-  gap: 6px;              /* ✅ mais espaço */
-  margin-top: 6px;       /* ✅ separa do nome */
-  flex-wrap: wrap;
-}
-
-.chip-day {
-  font-size: 9px;        /* ✅ menor que o nome */
-  padding: 2px 6px;
-  border-radius: 6px;
-
-  background: rgba(0,0,0,0.06);
-  border: 1px solid rgba(0,0,0,0.1);
-
-  line-height: 1;
-  font-weight: 500;
-
-  white-space: nowrap;   /* ✅ evita quebrar dentro */
-}
-
-/* 🎨 CORES POR DIA */
-.chip-day.seg { background: #e3f2fd; } /* azul */
-.chip-day.ter { background: #e8f5e9; } /* verde */
-.chip-day.qua { background: #fff3e0; } /* laranja */
-.chip-day.qui { background: #f3e5f5; } /* roxo */
-.chip-day.sex { background: #fce4ec; } /* rosa */
-.chip-day.sab { background: #e0f7fa; } /* ciano */
-.chip-day.dom { background: #ede7f6; } /* lilás */
 
 }
+
 
 
 .watermark {
