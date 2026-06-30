@@ -235,91 +235,57 @@ button.primary{
 /* ===============================
    MOBILE READ-ONLY FINAL (CORRETO)
 ================================*/
-@media (max-width: 760px) {
+/* escondido no desktop */
+#mobile-bar{
+  display:none;
+}
 
-  body {
-    padding: 8px 12px 80px !important;
-    overflow-x: hidden;
-  }
-
-  #web-header {
-    border-bottom: none !important;
-    backdrop-filter: none !important;
-  }
-
-  #form-bloco,
-  #form-bloco.collapsed {
-    display: none !important;
-  }
-
-  .toggle-form-btn {
-    display: none !important;
-  }
-
-  #menu-rodape {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .menu-rodape-content {
-    display: none !important;
-  }
-
-  .team-actions,
-  .chip-actions,
-  .ref-actions {
-    display: none !important;
-  }
-
-  input,
-  select,
-  button,
-  .chip {
-    pointer-events: none !important;
-  }
-
-  /* ✅ LIBERA MOBILE ACTIONS */
-  #mobile-actions {
-    pointer-events: auto !important;
-  }
-
-  /* ✅ MOSTRA BOTÕES MOBILE */
-  #mobile-actions {
-    display: flex;
-
+/* MOBILE */
+@media (max-width: 760px){
+body {
+  padding-bottom: 80px !important;
+}
+  #mobile-bar{
     position: fixed;
-    bottom: 16px;
-    right: 16px;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-    gap: 8px;
-    z-index: 9999999;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+
+    background: var(--card);
+    border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+
+    z-index: 999999;
   }
 
-  #mobile-actions button {
+  #mobile-bar button{
+    flex: 1;
+
     background: var(--brand);
     color:#fff;
 
-    padding: 8px 10px;
+    margin: 0 4px;
+    padding: 10px 6px;
+
     border-radius: 8px;
 
     font-size: 0.85rem;
     font-weight:600;
 
-    border:1px solid color-mix(in srgb, var(--brand) 60%, transparent);
-
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-
-    cursor:pointer;
-    transition: 0.2s;
+    border:none;
   }
 
-  #mobile-actions button:active {
+  #mobile-bar button:active{
     transform: scale(0.96);
   }
 
-} 
-	
+}	
+
 /* ===============================
    EQUIPES
 ================================*/
