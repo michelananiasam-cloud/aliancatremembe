@@ -54,6 +54,7 @@ button:hover{
 
 .erro{
     color:#c00;
+    white-space:pre-wrap;
 }
 </style>
 
@@ -68,42 +69,59 @@ button:hover{
 
 <script>
 
-const supabaseUrl =
-    "https://fmyxypykokxfeojmdsuu.supabase.co";
+const supabaseUrl = "https://fmyxypykokxfeojmdsuu.supabase.co";
 
-const supabaseKey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
 
-const supabase =
-    window.supabase.createClient(
-        supabaseUrl,
-        supabaseKey
-    );
+const supabase = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
 
-async function carregarSanto() {
+async function carregarSanto(){
 
-    try {
+    const container = document.getElementById("santoDoDia");
 
-        const hoje =
-            new Date().toISOString().split("T")[0];
+    try{
+
+        // Data no formato YYYY-MM-DD
+        const hoje = new Date().toISOString().split("T")[0];
+
+        console.log("Buscando data:", hoje);
 
         const { data, error } = await supabase
             .from("santos_do_dia")
             .select("*")
             .eq("data", hoje)
-            .single();
+            .maybeSingle();
 
-        if (error) {
+        console.log("Resultado:", data);
+        console.log("Erro:", error);
+
+        if(error){
             throw error;
         }
 
-        const resumo =
-            data.texto.length > 1000
-                ? data.texto.substring(0, 1000) + "..."
-                : data.texto;
+        if(!data){
 
-        document.getElementById("santoDoDia").innerHTML = `
-            <h2>🙏 ${data.titulo}</h2>
+            container.innerHTML = `
+                <h2>🙏 Santo do Dia</h2>
+                <p>Nenhum santo cadastrado para hoje (${hoje}).</p>
+            `;
+
+            return;
+        }
+
+        const texto = data.texto || "";
+        const titulo = data.titulo || "Sem título";
+
+        const resumo =
+            texto.length > 1000
+                ? texto.substring(0,1000) + "..."
+                : texto;
+
+        container.innerHTML = `
+            <h2>🙏 ${titulo}</h2>
 
             <div class="data">
                 <strong>Data:</strong> ${data.data}
@@ -114,40 +132,42 @@ async function carregarSanto() {
             </div>
 
             ${
-                data.texto.length > 1000
+                texto.length > 1000
                 ? '<button id="btnExpandir">Ler mais</button>'
                 : ''
             }
         `;
 
-        const btn =
-            document.getElementById("btnExpandir");
+        const botao = document.getElementById("btnExpandir");
 
-        if (btn) {
+        if(botao){
 
-            btn.addEventListener("click", () => {
+            botao.addEventListener("click", ()=>{
 
-                document.getElementById(
-                    "textoSanto"
-                ).innerHTML = data.texto;
+                document.getElementById("textoSanto").innerHTML = texto;
 
-                btn.remove();
+                botao.remove();
 
             });
 
         }
 
-    } catch (erro) {
+    }catch(err){
 
-        console.error(erro);
+        console.error(err);
 
-        document.getElementById("santoDoDia").innerHTML = `
+        container.innerHTML = `
             <div class="erro">
-                <h2>Erro</h2>
-                <pre>${JSON.stringify(erro, null, 2)}</pre>
+                <h2>Erro ao consultar o Supabase</h2>
+
+                <p><strong>Mensagem:</strong></p>
+
+                <pre>${err.message || JSON.stringify(err,null,2)}</pre>
             </div>
         `;
+
     }
+
 }
 
 carregarSanto();
