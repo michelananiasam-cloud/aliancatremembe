@@ -140,11 +140,11 @@ input[type=date]{
 
             console.log("Buscando:",dataConsulta);
 
-            const {data,error} = await supabaseClient
-                .from("santos_do_dia")
-                .select("titulo,texto,data")
-                .eq("data",dataConsulta)
-                .maybeSingle();
+const {data,error} = await supabaseClient
+    .from("santos_do_dia")
+    .select("titulo,texto,data,outros_santos")
+    .eq("data",dataConsulta)
+    .maybeSingle();
 
             if(error){
                 throw error;
@@ -174,6 +174,17 @@ input[type=date]{
                 ? texto.substring(0,1000)+"..."
                 : texto;
 
+let outrosSantos = [];
+
+if (Array.isArray(data.outros_santos)) {
+
+    outrosSantos = data.outros_santos.filter(item =>
+        item &&
+        item.trim() !== ""
+    );
+
+}
+
             container.innerHTML=`
 
                 <h2>🙏 Santo do Dia - ${dataFormatada}</h2>
@@ -195,7 +206,24 @@ input[type=date]{
             `;
 
             document.getElementById("textoSanto").textContent = resumo;
+            
+if (outrosSantos.length > 0) {
 
+    const lista = document.getElementById("listaOutrosSantos");
+
+    outrosSantos.forEach(santo => {
+
+        const li = document.createElement("li");
+
+        li.textContent = santo;
+
+        li.style.marginBottom = "8px";
+
+        lista.appendChild(li);
+
+    });
+
+}
             const btn=document.getElementById("btnExpandir");
 
             if(btn){
