@@ -7,10 +7,10 @@
 
 <style>
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#f4f6f9;
-    padding:20px;
     margin:0;
+    padding:20px;
 }
 
 .card{
@@ -22,10 +22,7 @@ body{
     box-shadow:0 2px 8px rgba(0,0,0,.1);
 }
 
-h2{
-    margin-top:0;
-    color:#333;
-}
+h2{margin-top:0;color:#333;}
 
 .data{
     color:#666;
@@ -68,110 +65,114 @@ button:hover{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-const supabaseUrl = "https://fmyxypykokxfeojmdsuu.supabase.co";
-
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
-
-const supabase = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
-
-async function carregarSanto(){
+(() => {
 
     const container = document.getElementById("santoDoDia");
 
-    try{
+    const SUPABASE_URL =
+        "https://fmyxypykokxfeojmdsuu.supabase.co";
 
-        // Data no formato YYYY-MM-DD
-        const hoje = new Date().toISOString().split("T")[0];
+    const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
 
-        console.log("Buscando data:", hoje);
+    async function carregarSanto() {
 
-        const { data, error } = await supabase
-            .from("santos_do_dia")
-            .select("*")
-            .eq("data", hoje)
-            .maybeSingle();
+        try {
 
-        console.log("Resultado:", data);
-        console.log("Erro:", error);
+            if (!window.supabase) {
+                throw new Error("Biblioteca do Supabase não foi carregada.");
+            }
 
-        if(error){
-            throw error;
-        }
+            const supabaseClient = window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
 
-        if(!data){
+            const hoje = new Date().toISOString().split("T")[0];
+
+            console.log("Buscando:", hoje);
+
+            const { data, error } = await supabaseClient
+                .from("santos_do_dia")
+                .select("*")
+                .eq("data", hoje)
+                .maybeSingle();
+
+            console.log(data);
+            console.log(error);
+
+            if (error) {
+                throw error;
+            }
+
+            if (!data) {
+                container.innerHTML = `
+                    <h2>🙏 Santo do Dia</h2>
+                    <p>Nenhum registro encontrado para <strong>${hoje}</strong>.</p>
+                `;
+                return;
+            }
+
+            const titulo = data.titulo ?? "Sem título";
+            const texto = data.texto ?? "";
+
+            const resumo =
+                texto.length > 1000
+                    ? texto.substring(0,1000) + "..."
+                    : texto;
 
             container.innerHTML = `
-                <h2>🙏 Santo do Dia</h2>
-                <p>Nenhum santo cadastrado para hoje (${hoje}).</p>
+                <h2>🙏 ${titulo}</h2>
+
+                <div class="data">
+                    <strong>Data:</strong> ${data.data}
+                </div>
+
+                <div id="textoSanto" class="texto">
+                    ${resumo}
+                </div>
+
+                ${
+                    texto.length > 1000
+                    ? '<button id="btnExpandir">Ler mais</button>'
+                    : ''
+                }
             `;
 
-            return;
-        }
+            const btn = document.getElementById("btnExpandir");
 
-        const texto = data.texto || "";
-        const titulo = data.titulo || "Sem título";
+            if(btn){
 
-        const resumo =
-            texto.length > 1000
-                ? texto.substring(0,1000) + "..."
-                : texto;
+                btn.addEventListener("click", () => {
 
-        container.innerHTML = `
-            <h2>🙏 ${titulo}</h2>
+                    document.getElementById("textoSanto").textContent = texto;
 
-            <div class="data">
-                <strong>Data:</strong> ${data.data}
-            </div>
+                    btn.remove();
 
-            <div id="textoSanto" class="texto">
-                ${resumo}
-            </div>
+                });
 
-            ${
-                texto.length > 1000
-                ? '<button id="btnExpandir">Ler mais</button>'
-                : ''
             }
-        `;
 
-        const botao = document.getElementById("btnExpandir");
+        } catch (erro) {
 
-        if(botao){
+            console.error(erro);
 
-            botao.addEventListener("click", ()=>{
+            container.innerHTML = `
+                <div class="erro">
+                    <h2>Erro ao consultar o Supabase</h2>
 
-                document.getElementById("textoSanto").innerHTML = texto;
+                    <strong>${erro.message || "Erro desconhecido"}</strong>
 
-                botao.remove();
-
-            });
-
+                    <pre>${JSON.stringify(erro,null,2)}</pre>
+                </div>
+            `;
         }
-
-    }catch(err){
-
-        console.error(err);
-
-        container.innerHTML = `
-            <div class="erro">
-                <h2>Erro ao consultar o Supabase</h2>
-
-                <p><strong>Mensagem:</strong></p>
-
-                <pre>${err.message || JSON.stringify(err,null,2)}</pre>
-            </div>
-        `;
 
     }
 
-}
+    carregarSanto();
 
-carregarSanto();
-
+})();
 </script>
 
 </body>
