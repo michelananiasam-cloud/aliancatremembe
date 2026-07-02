@@ -1,19 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santo do Dia</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    padding:20px;
+    margin:0;
+}
+
+.card{
+    max-width:900px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h2{
+    margin-top:0;
+    color:#333;
+}
+
+.data{
+    color:#666;
+    margin-bottom:15px;
+}
+
+.texto{
+    white-space:pre-wrap;
+    line-height:1.7;
+    color:#444;
+}
+
+button{
+    margin-top:15px;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    background:#0b5ed7;
+    color:#fff;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#084298;
+}
+
+.erro{
+    color:#c00;
+}
+</style>
+
+</head>
 <body>
 
-<script src.jsdelivr.net/npm/@supabase/supabase-js@2script>
+<div id="santoDoDia" class="card">
+    Carregando Santo do Dia...
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-console.log(window.supabase);
+const supabaseUrl =
+    "https://fmyxypykokxfeojmdsuu.supabase.co";
 
-const supabase = window.supabase.createClient(
-  "https://fmyxypykokxfeojmdsuu.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ"
-);
+const supabaseKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
 
-console.log("OK");
+const supabase =
+    window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
+
+async function carregarSanto() {
+
+    try {
+
+        const hoje =
+            new Date().toISOString().split("T")[0];
+
+        const { data, error } = await supabase
+            .from("santos_do_dia")
+            .select("*")
+            .eq("data", hoje)
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        const resumo =
+            data.texto.length > 1000
+                ? data.texto.substring(0, 1000) + "..."
+                : data.texto;
+
+        document.getElementById("santoDoDia").innerHTML = `
+            <h2>🙏 ${data.titulo}</h2>
+
+            <div class="data">
+                <strong>Data:</strong> ${data.data}
+            </div>
+
+            <div id="textoSanto" class="texto">
+                ${resumo}
+            </div>
+
+            ${
+                data.texto.length > 1000
+                ? '<button id="btnExpandir">Ler mais</button>'
+                : ''
+            }
+        `;
+
+        const btn =
+            document.getElementById("btnExpandir");
+
+        if (btn) {
+
+            btn.addEventListener("click", () => {
+
+                document.getElementById(
+                    "textoSanto"
+                ).innerHTML = data.texto;
+
+                btn.remove();
+
+            });
+
+        }
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        document.getElementById("santoDoDia").innerHTML = `
+            <div class="erro">
+                <h2>Erro</h2>
+                <pre>${JSON.stringify(erro, null, 2)}</pre>
+            </div>
+        `;
+    }
+}
+
+carregarSanto();
 
 </script>
 
