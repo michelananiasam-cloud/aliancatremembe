@@ -1,52 +1,128 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Santo do Dia - Supabase</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    padding:20px;
+}
+
+.card{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h2{
+    margin-top:0;
+}
+
+.texto{
+    white-space:pre-line;
+    line-height:1.6;
+}
+
+button{
+    margin-top:15px;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    background:#0b5ed7;
+    color:white;
+    cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div id="santoDoDia" class="card">
+    Carregando...
+</div>
+
+https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2
 
 <script>
 
-const supabaseUrl =
-  "https://fmyxypykokxfeojmdsuu.supabase.co";
+const supabase = window.supabase.createClient(
+    "https://fmyxypykokxfeojmdsuu.supabase.co",
+    "COLE_AQUI_SUA_ANON_KEY"
+);
 
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
+async function carregarSanto() {
 
-const supabase =
-  window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-  );
+    const hoje =
+        new Date().toISOString().split("T")[0];
 
-async function carregarSantoHoje() {
+    const { data, error } = await supabase
+        .from("santos_do_dia")
+        .select("*")
+        .eq("data", hoje)
+        .single();
 
-  const hoje = new Date()
-    .toISOString()
-    .split("T")[0];
+    console.log(data);
+    console.log(error);
 
-  const { data, error } = await supabase
-    .from("santos_do_dia")
-    .select("*")
-    .eq("data", hoje)
-    .single();
+    if (error || !data) {
 
-  console.log(data);
-  console.log(error);
+        document.getElementById("santoDoDia").innerHTML = `
+            <h2>Santo do Dia</h2>
+            <p>Nenhum registro encontrado.</p>
+        `;
 
-  if (error) {
+        return;
+    }
 
-    document.getElementById(
-      "santoDoDia"
-    ).innerHTML =
-      "Santo não encontrado";
+    const resumo =
+        data.texto.substring(0, 1000) + "...";
 
-    return;
-  }
+    document.getElementById("santoDoDia").innerHTML = `
+        <h2>${data.titulo}</h2>
 
-  document.getElementById(
-    "santoDoDia"
-  ).innerHTML = `
-      <h2>${data.titulo}</h2>
-      <p>${data.texto}</p>
-  `;
+        <p>
+            <strong>Data:</strong>
+            ${data.data}
+        </p>
+
+        <div id="textoSanto" class="texto">
+            ${resumo}
+        </div>
+
+        <button id="btnExpandir">
+            Ler mais
+        </button>
+    `;
+
+    document
+        .getElementById("btnExpandir")
+        .addEventListener("click", () => {
+
+            document.getElementById(
+                "textoSanto"
+            ).innerHTML =
+                data.texto;
+
+            document
+                .getElementById(
+                    "btnExpandir"
+                )
+                .remove();
+
+        });
 }
 
-carregarSantoHoje();
+carregarSanto();
 
 </script>
+
+</body>
+</html>
