@@ -1,8 +1,52 @@
+<script src="https://cdn.jsdelivr.net/npm/@supabase/
+
 <script>
-fetch(
-  "https://api-liturgia-diaria.vercel.app/?date=2026-07-02"
-)
-.then(r => r.json())
-.then(console.log)
-.catch(console.error);
+
+const supabaseUrl =
+  "https://fmyxypykokxfeojmdsuu.supabase.co";
+
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
+
+const supabase =
+  window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+  );
+
+async function carregarSantoHoje() {
+
+  const hoje = new Date()
+    .toISOString()
+    .split("T")[0];
+
+  const { data, error } = await supabase
+    .from("santos_do_dia")
+    .select("*")
+    .eq("data", hoje)
+    .single();
+
+  console.log(data);
+  console.log(error);
+
+  if (error) {
+
+    document.getElementById(
+      "santoDoDia"
+    ).innerHTML =
+      "Santo não encontrado";
+
+    return;
+  }
+
+  document.getElementById(
+    "santoDoDia"
+  ).innerHTML = `
+      <h2>${data.titulo}</h2>
+      <p>${data.texto}</p>
+  `;
+}
+
+carregarSantoHoje();
+
 </script>
