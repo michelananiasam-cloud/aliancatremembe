@@ -519,10 +519,11 @@ aplicarCorLiturgica(
 
             <h2>${celebracao.liturgia || "-"}</h2>
 
-            <p>
-                <strong>Data:</strong>
-                ${json.data || "-"}
-            </p>
+<p>
+    <strong>
+        ${formatarDataExtenso(json.data)}
+    </strong>
+</p>
 
             <div class="cor">
                 ${celebracao.cor || "-"}
