@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liturgia Diária</title>
+<--!> https://liturgia.up.railway.app/v3/ </--!>
+
+</head>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #222;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+header h1 {
+    margin-bottom: 15px;
+}
+
+.busca {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #0b5ed7;
+    color: white;
+    border-radius: 8px;
+}
+
+button:hover {
+    background: #084298;
+}
+
+.loading {
+    text-align: center;
+    margin: 20px 0;
+    display: none;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.cor {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #e9ecef;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.leitura {
+    border-left: 4px solid #0b5ed7;
+    padding-left: 15px;
+    margin-top: 15px;
+}
+
+.leitura h3 {
+    color: #0b5ed7;
+}
+
+.ref {
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.texto {
+    white-space: pre-line;
+    line-height: 1.6;
+}
+
+.opcao {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.oracao {
+    margin-bottom: 20px;
+}
+
+.antifona {
+    margin-bottom: 15px;
+}
+</style>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Liturgia Diária</h1>
+
+            <div class="busca">
+                <input type="date" id="dataLiturgia">
+                <button id="btnBuscar">
+                    Buscar
+                </button>
+            </div>
+        </header>
+
+        <div id="loading" class="loading">
+            Carregando...
+        </div>
+
+
+<div id="conteudo"></div>
+<div id="santoDoDia"></div>
+
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase
+<script>
+
+const SUPABASE_URL =
+    "https://fmyxypykokxfeojmdsuu.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "SUA_ANON_KEY";
+
+const supabase =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+const FUNCTION_URL =
+    "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/liturgia-diaria";
+const API_BASE = "https://liturgia.up.railway.app/v3";
+
+const conteudo =
+    document.getElementById("conteudo");
+
+const loading =
+    document.getElementById("loading");
+
+const dataInput =
+    document.getElementById("dataLiturgia");
+
+const btnBuscar =
+    document.getElementById("btnBuscar");
+
+function obterDataHoje() {
+    const hoje = new Date();
+
+    return hoje.toISOString().split("T")[0];
+}
+
+async function buscarNoBanco(dataBanco) {
+
+    const { data, error } =
+        await supabase
+            .from("liturgia_diaria")
+            .select("json_completo")
+            .eq("data", dataBanco)
+            .single();
+
+    if (error) {
+        return null;
+    }
+
+    return data.json_completo;
+}
+
+async function gravarNoBanco(data) {
+
+    const [ano, mes, dia] = data.split("-");
+
+    const url =
+        `${FUNCTION_URL}?dia=${dia}&mes=${mes}&ano=${ano}`;
+
+    const response =
+        await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(
+            "Não foi possível gerar a liturgia."
+        );
+    }
+
+    return await response.json();
+}
+
+async function carregarLiturgia(data) {
+
+    try {
+
+        loading.style.display = "block";
+
+        conteudo.innerHTML = "";
+
+        const dataBanco = data;
+
+        console.log(
+            "Procurando no banco:",
+            dataBanco
+        );
+
+        let json =
+            await buscarNoBanco(dataBanco);
+
+        if (!json) {
+
+            console.log(
+                "Não encontrado. Chamando função..."
+            );
+
+            await gravarNoBanco(data);
+
+            json =
+                await buscarNoBanco(dataBanco);
+        }
+
+        if (!json) {
+
+            throw new Error(
+                "Não foi possível obter a liturgia."
+            );
+        }
+
+        renderizar(json);
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        conteudo.innerHTML = `
+            <div class="card">
+                <h2>Erro</h2>
+                <p>${erro.message}</p>
+            </div>
+        `;
+
+    } finally {
+
+        loading.style.display = "none";
+
+    }
+}
+
+
+async function carregarSantoDoDia() {
+
+    try {
+
+        const response = await fetch(
+            "https://api-liturgia-diaria.vercel.app/santo-do-dia"
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Erro ${response.status}`
+            );
+        }
+
+        const json = await response.json();
+
+        const santo = json.today;
+
+        const resumo =
+            santo.full_text.substring(0, 500) + "...";
+
+        document.getElementById("santoDoDia").innerHTML = `
+            <div class="card">
+
+                <h2>🙏 Santo do Dia</h2>
+
+                <h3>${santo.title}</h3>
+
+                <p>
+                    <strong>Data:</strong>
+                    ${santo.day}/${santo.month}/${santo.year}
+                </p>
+
+                <div id="textoSanto" class="texto">
+                    ${resumo}
+                </div>
+
+                <br>
+
+                <button id="btnExpandir">
+                    Ler mais
+                </button>
+
+            </div>
+        `;
+
+        document
+            .getElementById("btnExpandir")
+            .addEventListener("click", () => {
+
+                document.getElementById("textoSanto").innerHTML =
+                    santo.full_text.replace(/\n/g, "<br>");
+
+                document
+                    .getElementById("btnExpandir")
+                    .remove();
+
+            });
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar santo:",
+            erro
+        );
+
+        document.getElementById("santoDoDia").innerHTML = `
+            <div class="card">
+                <h2>🙏 Santo do Dia</h2>
+                <p>Não foi possível carregar as informações.</p>
+            </div>
+        `;
+    }
+}
+
+function renderizar(json) {
+
+    console.log(
+        "JSON COMPLETO:",
+        JSON.stringify(json, null, 2)
+    );
+
+    const celebracao =
+        json.celebracoes?.find(c => c.principal)
+        || json.celebracoes?.[0];
+
+    console.log("Celebração:", celebracao);
+
+    if (!celebracao) {
+
+        conteudo.innerHTML = `
+            <div class="card">
+                <h2>Nenhuma celebração encontrada</h2>
+            </div>
+        `;
+
+        return;
+    }
+
+    let html = "";
+
+    html += `
+        <div class="card">
+            <h2>${celebracao.liturgia || "-"}</h2>
+
+            <p>
+                <strong>Data:</strong>
+                ${json.data || "-"}
+            </p>
+
+            <div class="cor">
+                ${celebracao.cor || "-"}
+            </div>
+        </div>
+    `;
+
+    if (celebracao.antifonas) {
+
+        html += `
+            <div class="card">
+                <h2>Antífonas</h2>
+
+                <div class="antifona">
+                    <strong>Entrada</strong>
+                    <p>${celebracao.antifonas.entrada || "-"}</p>
+                </div>
+
+                <div class="antifona">
+                    <strong>Comunhão</strong>
+                    <p>${celebracao.antifonas.comunhao || "-"}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    if (celebracao.oracoes) {
+
+        html += `
+            <div class="card">
+                <h2>Orações</h2>
+        `;
+
+        if (celebracao.oracoes.coleta) {
+            html += `
+                <div class="oracao">
+                    <h3>Coleta</h3>
+                    <p>${celebracao.oracoes.coleta}</p>
+                </div>
+            `;
+        }
+
+        if (celebracao.oracoes.oferendas) {
+            html += `
+                <div class="oracao">
+                    <h3>Oferendas</h3>
+                    <p>${celebracao.oracoes.oferendas}</p>
+                </div>
+            `;
+        }
+
+        if (celebracao.oracoes.comunhao) {
+            html += `
+                <div class="oracao">
+                    <h3>Comunhão</h3>
+                    <p>${celebracao.oracoes.comunhao}</p>
+                </div>
+            `;
+        }
+
+        html += `</div>`;
+    }
+
+    if (
+        celebracao.leituras &&
+        Array.isArray(celebracao.leituras)
+    ) {
+
+        html += `
+            <div class="card">
+                <h2>Liturgia da Palavra</h2>
+        `;
+
+        celebracao.leituras
+            .sort((a, b) => (a.ordem || 0) - (b.ordem || 0))
+            .forEach(item => {
+
+                html += `
+                    <div class="leitura">
+                        <h3>${item.rotulo || item.tipo || "Leitura"}</h3>
+                `;
+
+                if (item.opcoes && Array.isArray(item.opcoes)) {
+
+                    item.opcoes.forEach(opcao => {
+
+                        html += `
+                            <div class="opcao">
+                        `;
+
+                        if (opcao.referencia) {
+                            html += `
+                                <div class="ref">
+                                    ${opcao.referencia}
+                                </div>
+                            `;
+                        }
+
+                        if (opcao.refrao) {
+                            html += `
+                                <p>
+                                    <strong>Refrão:</strong>
+                                    ${opcao.refrao}
+                                </p>
+                                <br>
+                            `;
+                        }
+
+                        if (opcao.titulo) {
+                            html += `
+                                <p>
+                                    <strong>
+                                        ${opcao.titulo}
+                                    </strong>
+                                </p>
+                                <br>
+                            `;
+                        }
+
+                        if (opcao.texto) {
+                            html += `
+                                <div class="texto">
+                                    ${opcao.texto}
+                                </div>
+                            `;
+                        }
+
+                        html += `
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `
+                    </div>
+                `;
+            });
+
+        html += `
+            </div>
+        `;
+    }
+
+    conteudo.innerHTML = html;
+}
+
+btnBuscar.addEventListener(
+    "click",
+    () => carregarLiturgia(dataInput.value)
+);
+
+window.addEventListener("load", () => {
+
+    const hoje = obterDataHoje();
+
+    dataInput.value = hoje;
+
+    carregarSantoDoDia();
+
+    carregarLiturgia(hoje);
+
+});
+
+</script>
+
+</body>
+</html>
