@@ -454,6 +454,30 @@ function aplicarCorLiturgica(cor) {
     }
 }
 
+function formatarDataExtenso(data) {
+
+    if (!data) return "-";
+
+    const [dia, mes, ano] =
+        data.split("/");
+
+    const d =
+        new Date(ano, mes - 1, dia);
+
+    const semana =
+        d.toLocaleDateString(
+            "pt-BR",
+            {
+                weekday: "long"
+            }
+        );
+
+    return `${
+        semana.charAt(0).toUpperCase() +
+        semana.slice(1)
+    }, ${data}`;
+}
+    
 function renderizar(json) {
 
     celebracoesDia = json.celebracoes || [];
