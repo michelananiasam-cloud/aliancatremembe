@@ -151,14 +151,15 @@ button:hover {
 <div id="santoDoDia"></div>
 
     </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 
 const SUPABASE_URL =
     "https://fmyxypykokxfeojmdsuu.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "SUA_ANON_KEY";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
 
 const supabase =
     window.supabase.createClient(
@@ -168,7 +169,6 @@ const supabase =
 
 const FUNCTION_URL =
     "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/liturgia-diaria";
-const API_BASE = "https://liturgia.up.railway.app/v3";
 
 const conteudo =
     document.getElementById("conteudo");
@@ -195,9 +195,11 @@ async function buscarNoBanco(dataBanco) {
             .from("liturgia_diaria")
             .select("json_completo")
             .eq("data", dataBanco)
-            .single();
+            .maybeSingle();
 
-    if (error) {
+    console.log("BUSCA", data, error);
+
+    if (error || !data) {
         return null;
     }
 
@@ -208,19 +210,24 @@ async function gravarNoBanco(data) {
 
     const [ano, mes, dia] = data.split("-");
 
-    const url =
-        `${FUNCTION_URL}?dia=${dia}&mes=${mes}&ano=${ano}`;
-
     const response =
-        await fetch(url);
+        await fetch(
+            `${FUNCTION_URL}?dia=${dia}&mes=${mes}&ano=${ano}`
+        );
+
+    const resultado =
+        await response.json();
+
+    console.log("FUNÇÃO:", resultado);
 
     if (!response.ok) {
         throw new Error(
-            "Não foi possível gerar a liturgia."
+            resultado.erro ||
+            "Erro ao gerar liturgia"
         );
     }
 
-    return await response.json();
+    return resultado;
 }
 
 async function carregarLiturgia(data) {
@@ -231,32 +238,25 @@ async function carregarLiturgia(data) {
 
         conteudo.innerHTML = "";
 
-        const dataBanco = data;
-
-        console.log(
-            "Procurando no banco:",
-            dataBanco
-        );
-
         let json =
-            await buscarNoBanco(dataBanco);
+            await buscarNoBanco(data);
 
         if (!json) {
 
             console.log(
-                "Não encontrado. Chamando função..."
+                "Não encontrado no banco."
             );
 
             await gravarNoBanco(data);
 
             json =
-                await buscarNoBanco(dataBanco);
+                await buscarNoBanco(data);
         }
 
         if (!json) {
 
             throw new Error(
-                "Não foi possível obter a liturgia."
+                "Não foi possível carregar a liturgia."
             );
         }
 
