@@ -17,7 +17,12 @@ body {
     background: #f4f6f9;
     color: #222;
 }
-
+:root {
+    --cor-principal: #0b5ed7;
+    --cor-secundaria: #084298;
+    --cor-borda: #0b5ed7;
+    --cor-chip: #e9ecef;
+}
 .container {
     max-width: 1000px;
     margin: 30px auto;
@@ -51,13 +56,13 @@ button {
     padding: 10px 20px;
     cursor: pointer;
     border: none;
-    background: #0b5ed7;
+    background: var(--cor-principal); /*background: #0b5ed7;*/
     color: white;
     border-radius: 8px;
 }
 
 button:hover {
-    background: #084298;
+    background: var(--cor-secundaria); /*background: #084298;*/
 }
 
 .loading {
@@ -85,19 +90,19 @@ button:hover {
 .cor {
     display: inline-block;
     padding: 6px 12px;
-    background: #e9ecef;
+    background: var(--cor-chip); /*background: #e9ecef;*/
     border-radius: 20px;
     margin-top: 10px;
 }
 
 .leitura {
-    border-left: 4px solid #0b5ed7;
+    border-left: 4px solid var(--cor-borda); /*border-left: 4px solid #0b5ed7;*/
     padding-left: 15px;
     margin-top: 15px;
 }
 
 .leitura h3 {
-    color: #0b5ed7;
+    color: var(--cor-principal); /*color: #0b5ed7;*/
 }
 
 .ref {
@@ -297,7 +302,157 @@ async function carregarLiturgia(data) {
     }
 }
 
+function aplicarCorLiturgica(cor) {
 
+    const root =
+        document.documentElement;
+
+    switch ((cor || "").toLowerCase()) {
+
+        case "verde":
+
+            root.style.setProperty(
+                "--cor-principal",
+                "#2e7d32"
+            );
+
+            root.style.setProperty(
+                "--cor-secundaria",
+                "#1b5e20"
+            );
+
+            root.style.setProperty(
+                "--cor-borda",
+                "#2e7d32"
+            );
+
+            root.style.setProperty(
+                "--cor-chip",
+                "#e8f5e9"
+            );
+
+            break;
+
+        case "vermelho":
+
+            root.style.setProperty(
+                "--cor-principal",
+                "#c62828"
+            );
+
+            root.style.setProperty(
+                "--cor-secundaria",
+                "#8e0000"
+            );
+
+            root.style.setProperty(
+                "--cor-borda",
+                "#c62828"
+            );
+
+            root.style.setProperty(
+                "--cor-chip",
+                "#ffebee"
+            );
+
+            break;
+
+        case "roxo":
+
+            root.style.setProperty(
+                "--cor-principal",
+                "#6a1b9a"
+            );
+
+            root.style.setProperty(
+                "--cor-secundaria",
+                "#4a148c"
+            );
+
+            root.style.setProperty(
+                "--cor-borda",
+                "#6a1b9a"
+            );
+
+            root.style.setProperty(
+                "--cor-chip",
+                "#f3e5f5"
+            );
+
+            break;
+
+        case "rosa":
+
+            root.style.setProperty(
+                "--cor-principal",
+                "#d81b60"
+            );
+
+            root.style.setProperty(
+                "--cor-secundaria",
+                "#ad1457"
+            );
+
+            root.style.setProperty(
+                "--cor-borda",
+                "#d81b60"
+            );
+
+            root.style.setProperty(
+                "--cor-chip",
+                "#fce4ec"
+            );
+
+            break;
+
+        case "branco":
+
+            root.style.setProperty(
+                "--cor-principal",
+                "#607d8b"
+            );
+
+            root.style.setProperty(
+                "--cor-secundaria",
+                "#455a64"
+            );
+
+            root.style.setProperty(
+                "--cor-borda",
+                "#607d8b"
+            );
+
+            root.style.setProperty(
+                "--cor-chip",
+                "#eceff1"
+            );
+
+            break;
+
+        default:
+
+            root.style.setProperty(
+                "--cor-principal",
+                "#0b5ed7"
+            );
+
+            root.style.setProperty(
+                "--cor-secundaria",
+                "#084298"
+            );
+
+            root.style.setProperty(
+                "--cor-borda",
+                "#0b5ed7"
+            );
+
+            root.style.setProperty(
+                "--cor-chip",
+                "#e9ecef"
+            );
+
+    }
+}
 
 function renderizar(json) {
 
@@ -328,6 +483,10 @@ function renderizar(json) {
 
     const celebracao =
         celebracoesDia[indiceCelebracaoAtual];
+
+aplicarCorLiturgica(
+    celebracao.cor
+);
 
     let html = "";
 
