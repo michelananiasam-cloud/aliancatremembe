@@ -168,6 +168,21 @@ const sb =
         SUPABASE_ANON_KEY
     );
 
+const FUNCTION_URL =
+    "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/liturgia-diaria";
+
+const conteudo =
+    document.getElementById("conteudo");
+
+const loading =
+    document.getElementById("loading");
+
+const dataInput =
+    document.getElementById("dataLiturgia");
+
+const btnBuscar =
+    document.getElementById("btnBuscar");
+
 console.log("CLIENTE:", sb);
 console.log("FROM:", typeof sb.from);
 
@@ -183,19 +198,19 @@ async function buscarNoBanco(dataBanco) {
     console.log("Procurando:", dataBanco);
 
     const { data, error } =
-        await supabase
+        await sb
             .from("liturgia_diaria")
             .select("*")
-            .eq("data", dataBanco);
+            .eq("data", dataB*nco);
 
-    console.log("RETORNO:", data);
-    console.log("ERRO:", error);
+    console.log("RETORNO:",*data);
+    console.log("ERRO:", er*or);
 
-    if (error || !data || data.length === 0) {
-        return null;
+    if (error || !data || da*a.length === 0) {
+        return n*ll;
     }
 
-    return data[0].json_completo;
+    return data[0].json*completo;
 }
     
 async function gravarNoBanco(data) {
