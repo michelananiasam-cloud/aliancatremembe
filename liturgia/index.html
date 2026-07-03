@@ -194,22 +194,24 @@ function obterDataHoje() {
 
 async function buscarNoBanco(dataBanco) {
 
+    console.log("Procurando:", dataBanco);
+
     const { data, error } =
-        await sb
+        await supabase
             .from("liturgia_diaria")
-            .select("json_completo")
-            .eq("data", dataBanco)
-            .maybeSingle();
+            .select("*")
+            .eq("data", dataBanco);
 
-    console.log("BUSCA:", data, error);
+    console.log("RETORNO:", data);
+    console.log("ERRO:", error);
 
-    if (error || !data) {
+    if (error || !data || data.length === 0) {
         return null;
     }
 
-    return data.json_completo;
+    return data[0].json_completo;
 }
-
+    
 async function gravarNoBanco(data) {
 
     const [ano, mes, dia] =
@@ -291,81 +293,6 @@ async function carregarLiturgia(data) {
 }
 
 
-
-async function carregarSantoDoDia() {
-
-    try {
-
-        const response = await fetch(
-            "https://api-liturgia-diaria.vercel.app/santo-do-dia"
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                `Erro ${response.status}`
-            );
-        }
-
-        const json = await response.json();
-
-        const santo = json.today;
-
-        const resumo =
-            santo.full_text.substring(0, 500) + "...";
-
-        document.getElementById("santoDoDia").innerHTML = `
-            <div class="card">
-
-                <h2>🙏 Santo do Dia</h2>
-
-                <h3>${santo.title}</h3>
-
-                <p>
-                    <strong>Data:</strong>
-                    ${santo.day}/${santo.month}/${santo.year}
-                </p>
-
-                <div id="textoSanto" class="texto">
-                    ${resumo}
-                </div>
-
-                <br>
-
-                <button id="btnExpandir">
-                    Ler mais
-                </button>
-
-            </div>
-        `;
-
-        document
-            .getElementById("btnExpandir")
-            .addEventListener("click", () => {
-
-                document.getElementById("textoSanto").innerHTML =
-                    santo.full_text.replace(/\n/g, "<br>");
-
-                document
-                    .getElementById("btnExpandir")
-                    .remove();
-
-            });
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao carregar santo:",
-            erro
-        );
-
-        document.getElementById("santoDoDia").innerHTML = `
-            <div class="card">
-                <h2>🙏 Santo do Dia</h2>
-                <p>Não foi possível carregar as informações.</p>
-            </div>
-        `;
-    }
-}
 
 function renderizar(json) {
 
@@ -557,8 +484,6 @@ window.addEventListener("load", () => {
     const hoje = obterDataHoje();
 
     dataInput.value = hoje;
-
-    carregarSantoDoDia();
 
     carregarLiturgia(hoje);
 
