@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liturgia Diária</title>
+</head>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #222;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+header h1 {
+    margin-bottom: 15px;
+}
+
+.busca {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #0b5ed7;
+    color: white;
+    border-radius: 8px;
+}
+
+button:hover {
+    background: #084298;
+}
+
+.loading {
+    text-align: center;
+    margin: 20px 0;
+    display: none;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.cor {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #e9ecef;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.leitura {
+    border-left: 4px solid #0b5ed7;
+    padding-left: 15px;
+    margin-top: 15px;
+}
+
+.leitura h3 {
+    color: #0b5ed7;
+}
+
+.ref {
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.texto {
+    white-space: pre-line;
+    line-height: 1.6;
+}
+
+.opcao {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.oracao {
+    margin-bottom: 20px;
+}
+
+.antifona {
+    margin-bottom: 15px;
+}
+</style>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Liturgia Diária</h1>
+
+            <div class="busca">
+                <input type="date" id="dataLiturgia">
+                <button id="btnBuscar">
+                    Buscar
+                </button>
+            </div>
+        </header>
+
+        <div id="loading" class="loading">
+            Carregando...
+        </div>
+
+
+<div id="conteudo"></div>
+<div id="santoDoDia"></div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://fmyxypykokxfeojmdsuu.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
+
+const sb =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+const FUNCTION_URL =
+    "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/liturgia-diaria";
+
+const conteudo =
+    document.getElementById("conteudo");
+
+const loading =
+    document.getElementById("loading");
+
+const dataInput =
+    document.getElementById("dataLiturgia");
+
+const btnBuscar =
+    document.getElementById("btnBuscar");
+
+//console.log("CLIENTE:", sb);
+//console.log("FROM:", typeof sb.from);
+
+function obterDataHoje() {
+
+    const hoje = new Date();
+
+    return hoje.toLocaleDateString(
+        "en-CA",
+        {
+            timeZone: "America/Sao_Paulo"
+        }
+    );
+}
+
+async function buscarNoBanco(dataBanco) {
+
+    //console.log("Procurando:", dataBanco);
+
+    const { data, error } =
+        await sb
+            .from("liturgia_diaria")
+            .select("*")
+            .eq("data", dataBanco);
+
+    //console.log("RETORNO:", data);
+    //console.log("ERRO:", error);
+
+    if (error || !data || data.length === 0) {
+        return null;
+    }
+
+    return data[0].json_completo;
+}
+    
+async function gravarNoBanco(data) {
+
+    const [ano, mes, dia] =
+        data.split("-");
+
+    const response =
+        await fetch(
+            `${FUNCTION_URL}?dia=${dia}&mes=${mes}&ano=${ano}`
+        );
+
+    const resultado =
+        await response.json();
+
+    //console.log(
+    //    "FUNÇÃO:",
+    //    resultado
+    //);
+
+    if (!response.ok) {
+
+        throw new Error(
+            resultado.erro ||
+            "Erro ao gerar liturgia"
+        );
+
+    }
+
+    return resultado;
+}
+
+async function carregarLiturgia(data) {
+
+    try {
+
+        loading.style.display = "block";
+
+        conteudo.innerHTML = "";
+
+        let json =
+            await buscarNoBanco(data);
+
+        if (!json) {
+
+            //console.log(
+            //    "Não encontrado no banco."
+            //);
+
+            await gravarNoBanco(data);
+
+            json =
+                await buscarNoBanco(data);
+        }
+
+        if (!json) {
+
+            throw new Error(
+                "Não foi possível carregar a liturgia."
+            );
+        }
+
+        renderizar(json);
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        conteudo.innerHTML = `
+            <div class="card">
+                <h2>Erro</h2>
+                <p>${erro.message}</p>
+            </div>
+        `;
+
+    } finally {
+
+        loading.style.display = "none";
+
+    }
+}
+
+
+let celebracoesDia = [];
+function renderizar(json) {
+
+    celebracoesDia =
+        json.celebracoes || [];
+
+    const celebracao =
+        celebracoesDia.find(
+            c => c.principal
+        ) || celebracoesDia[0];
+
+    renderizarCelebracao(
+        json,
+        celebracao
+    );
+}
+
+function renderizarCelebracao(json, celebracao) {
+
+    let html = "";
+
+    if (celebracoesDia.length > 1) {
+
+        html += `
+            <div class="card">
+                <h2>Celebrações do Dia</h2>
+
+                <select id="celebracaoSelect">
+
+                    ${celebracoesDia.map((c, index) => `
+                        <option value="${index}"
+                            ${c.id === celebracao.id ? "selected" : ""}>
+                            ${c.liturgia}
+                        </option>
+                    `).join("")}
+
+                </select>
+            </div>
+        `;
+    }
+
+    html += `
+        <div class="card">
+            <h2>${celebracao.liturgia || "-"}</h2>
+
+            <p>
+                <strong>Data:</strong>
+                ${json.data || "-"}
+            </p>
+
+            <div class="cor">
+                ${celebracao.cor || "-"}
+            </div>
+        </div>
+    `;
+
+    // cole aqui todo o restante do seu código
+    // de antífonas, orações e leituras
+
+    conteudo.innerHTML = html;
+
+    configurarSeletor(json);
+}
+
+function configurarSeletor(json) {
+
+    const select =
+        document.getElementById(
+            "celebracaoSelect"
+        );
+
+    if (!select) return;
+
+    select.addEventListener(
+        "change",
+        (e) => {
+
+            const indice =
+                Number(e.target.value);
+
+            const celebracao =
+                celebracoesDia[indice];
+
+            renderizarCelebracao(
+                json,
+                celebracao
+            );
+        }
+    );
+}
+    
+    
+btnBuscar.addEventListener(
+    "click",
+    () => carregarLiturgia(dataInput.value)
+);
+
+window.addEventListener("load", () => {
+
+    const hoje = obterDataHoje();
+
+    dataInput.value = hoje;
+
+    carregarLiturgia(hoje);
+
+});
+
+</script>
+
+</body>
+</html>
