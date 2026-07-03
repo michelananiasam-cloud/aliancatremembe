@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liturgia Diária</title>
-<--!> https://liturgia.up.railway.app/v3/ </--!>
-
 </head>
 <style>
 * {
@@ -201,16 +199,16 @@ async function buscarNoBanco(dataBanco) {
         await sb
             .from("liturgia_diaria")
             .select("*")
-            .eq("data", dataB*nco);
+            .eq("data", dataBanco);
 
-    console.log("RETORNO:",*data);
-    console.log("ERRO:", er*or);
+    console.log("RETORNO:", data);
+    console.log("ERRO:", error);
 
-    if (error || !data || da*a.length === 0) {
-        return n*ll;
+    if (error || !data || data.length === 0) {
+        return null;
     }
 
-    return data[0].json*completo;
+    return data[0].json_completo;
 }
     
 async function gravarNoBanco(data) {
