@@ -301,36 +301,9 @@ async function carregarLiturgia(data) {
 
 function renderizar(json) {
 
-    celebracoesDia =
-        json.celebracoes || [];
+    celebracoesDia = json.celebracoes || [];
 
-    const principal =
-        celebracoesDia.findIndex(
-            c => c.principal
-        );
-
-    if (
-        indiceCelebracaoAtual === 0 &&
-        principal >= 0
-    ) {
-        indiceCelebracaoAtual = principal;
-    }
-
-    const celebracao =
-        celebracoesDia[indiceCelebracaoAtual]
-        || celebracoesDia[0];
-
-    console.log(
-        "JSON COMPLETO:",
-        JSON.stringify(json, null, 2)
-    );
-
-    console.log(
-        "Celebração:",
-        celebracao
-    );
-
-    if (!celebracao) {
+    if (!celebracoesDia.length) {
 
         conteudo.innerHTML = `
             <div class="card">
@@ -340,6 +313,21 @@ function renderizar(json) {
 
         return;
     }
+
+    const principal =
+        celebracoesDia.findIndex(
+            c => c.principal
+        );
+
+    if (
+        indiceCelebracaoAtual >= celebracoesDia.length
+    ) {
+        indiceCelebracaoAtual =
+            principal >= 0 ? principal : 0;
+    }
+
+    const celebracao =
+        celebracoesDia[indiceCelebracaoAtual];
 
     let html = "";
 
@@ -409,7 +397,6 @@ function renderizar(json) {
 
         html += `
             <div class="card">
-
                 <h2>Orações</h2>
         `;
 
@@ -452,7 +439,6 @@ function renderizar(json) {
 
         html += `
             <div class="card">
-
                 <h2>Liturgia da Palavra</h2>
         `;
 
@@ -484,7 +470,6 @@ function renderizar(json) {
                         `;
 
                         if (opcao.referencia) {
-
                             html += `
                                 <div class="ref">
                                     ${opcao.referencia}
@@ -493,7 +478,6 @@ function renderizar(json) {
                         }
 
                         if (opcao.refrao) {
-
                             html += `
                                 <p>
                                     <strong>Refrão:</strong>
@@ -504,7 +488,6 @@ function renderizar(json) {
                         }
 
                         if (opcao.titulo) {
-
                             html += `
                                 <p>
                                     <strong>
@@ -516,7 +499,6 @@ function renderizar(json) {
                         }
 
                         if (opcao.texto) {
-
                             html += `
                                 <div class="texto">
                                     ${opcao.texto}
@@ -543,9 +525,7 @@ function renderizar(json) {
     conteudo.innerHTML = html;
 
     const select =
-        document.getElementById(
-            "celebracaoSelect"
-        );
+        document.getElementById("celebracaoSelect");
 
     if (select) {
 
