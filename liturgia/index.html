@@ -164,7 +164,7 @@ const SUPABASE_ANON_KEY =
 
 const { createClient } = window.supabase;
 
-const supabase =
+window.sb =
     createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY
@@ -195,7 +195,7 @@ function obterDataHoje() {
 async function buscarNoBanco(dataBanco) {
 
     const { data, error } =
-        await supabase
+        await sb
             .from("liturgia_diaria")
             .select("json_completo")
             .eq("data", dataBanco)
