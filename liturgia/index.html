@@ -151,6 +151,7 @@ button:hover {
 <div id="santoDoDia"></div>
 
     </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -161,8 +162,10 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ";
 
+const { createClient } = window.supabase;
+
 const supabase =
-    window.supabase.createClient(
+    createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY
     );
@@ -183,6 +186,7 @@ const btnBuscar =
     document.getElementById("btnBuscar");
 
 function obterDataHoje() {
+
     const hoje = new Date();
 
     return hoje.toISOString().split("T")[0];
@@ -197,7 +201,7 @@ async function buscarNoBanco(dataBanco) {
             .eq("data", dataBanco)
             .maybeSingle();
 
-    console.log("BUSCA", data, error);
+    console.log("BUSCA:", data, error);
 
     if (error || !data) {
         return null;
@@ -208,7 +212,8 @@ async function buscarNoBanco(dataBanco) {
 
 async function gravarNoBanco(data) {
 
-    const [ano, mes, dia] = data.split("-");
+    const [ano, mes, dia] =
+        data.split("-");
 
     const response =
         await fetch(
@@ -218,13 +223,18 @@ async function gravarNoBanco(data) {
     const resultado =
         await response.json();
 
-    console.log("FUNÇÃO:", resultado);
+    console.log(
+        "FUNÇÃO:",
+        resultado
+    );
 
     if (!response.ok) {
+
         throw new Error(
             resultado.erro ||
             "Erro ao gerar liturgia"
         );
+
     }
 
     return resultado;
@@ -279,6 +289,7 @@ async function carregarLiturgia(data) {
 
     }
 }
+
 
 
 async function carregarSantoDoDia() {
