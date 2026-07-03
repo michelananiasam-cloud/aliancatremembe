@@ -153,7 +153,8 @@ button:hover {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
+let celebracoesDia = [];
+let indiceCelebracaoAtual = 0;
 const SUPABASE_URL =
     "https://fmyxypykokxfeojmdsuu.supabase.co";
 
@@ -300,18 +301,9 @@ async function carregarLiturgia(data) {
 
 function renderizar(json) {
 
-    //console.log(
-    //    "JSON COMPLETO:",
-    //    JSON.stringify(json, null, 2)
-    //);
+    celebracoesDia = json.celebracoes || [];
 
-    const celebracao =
-        json.celebracoes?.find(c => c.principal)
-        || json.celebracoes?.[0];
-
-    //console.log("Celebração:", celebracao);
-
-    if (!celebracao) {
+    if (!celebracoesDia.length) {
 
         conteudo.innerHTML = `
             <div class="card">
@@ -322,10 +314,50 @@ function renderizar(json) {
         return;
     }
 
+    const principal =
+        celebracoesDia.findIndex(
+            c => c.principal
+        );
+
+    if (
+        indiceCelebracaoAtual >= celebracoesDia.length
+    ) {
+        indiceCelebracaoAtual =
+            principal >= 0 ? principal : 0;
+    }
+
+    const celebracao =
+        celebracoesDia[indiceCelebracaoAtual];
+
     let html = "";
+
+    if (celebracoesDia.length > 1) {
+
+        html += `
+            <div class="card">
+
+                <h2>Celebrações do Dia</h2>
+
+                <select id="celebracaoSelect">
+
+                    ${celebracoesDia.map((c, i) => `
+                        <option
+                            value="${i}"
+                            ${i === indiceCelebracaoAtual ? "selected" : ""}
+                        >
+                            ${c.liturgia}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+        `;
+    }
 
     html += `
         <div class="card">
+
             <h2>${celebracao.liturgia || "-"}</h2>
 
             <p>
@@ -336,6 +368,7 @@ function renderizar(json) {
             <div class="cor">
                 ${celebracao.cor || "-"}
             </div>
+
         </div>
     `;
 
@@ -343,6 +376,7 @@ function renderizar(json) {
 
         html += `
             <div class="card">
+
                 <h2>Antífonas</h2>
 
                 <div class="antifona">
@@ -354,6 +388,7 @@ function renderizar(json) {
                     <strong>Comunhão</strong>
                     <p>${celebracao.antifonas.comunhao || "-"}</p>
                 </div>
+
             </div>
         `;
     }
@@ -392,7 +427,9 @@ function renderizar(json) {
             `;
         }
 
-        html += `</div>`;
+        html += `
+            </div>
+        `;
     }
 
     if (
@@ -406,15 +443,25 @@ function renderizar(json) {
         `;
 
         celebracao.leituras
-            .sort((a, b) => (a.ordem || 0) - (b.ordem || 0))
+            .sort(
+                (a, b) =>
+                    (a.ordem || 0) -
+                    (b.ordem || 0)
+            )
             .forEach(item => {
 
                 html += `
                     <div class="leitura">
-                        <h3>${item.rotulo || item.tipo || "Leitura"}</h3>
+
+                        <h3>
+                            ${item.rotulo || item.tipo || "Leitura"}
+                        </h3>
                 `;
 
-                if (item.opcoes && Array.isArray(item.opcoes)) {
+                if (
+                    item.opcoes &&
+                    Array.isArray(item.opcoes)
+                ) {
 
                     item.opcoes.forEach(opcao => {
 
@@ -476,8 +523,24 @@ function renderizar(json) {
     }
 
     conteudo.innerHTML = html;
-}
 
+    const select =
+        document.getElementById("celebracaoSelect");
+
+    if (select) {
+
+        select.onchange = (e) => {
+
+            indiceCelebracaoAtual =
+                Number(e.target.value);
+
+            renderizar(json);
+
+        };
+    }
+}
+   
+    
 btnBuscar.addEventListener(
     "click",
     () => carregarLiturgia(dataInput.value)
