@@ -153,7 +153,8 @@ button:hover {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
+let celebracoesDia = [];
+let indiceCelebracaoAtual = 0;
 const SUPABASE_URL =
     "https://fmyxypykokxfeojmdsuu.supabase.co";
 
@@ -297,24 +298,48 @@ async function carregarLiturgia(data) {
 }
 
 
-let celebracoesDia = [];
+
 function renderizar(json) {
 
     celebracoesDia =
         json.celebracoes || [];
 
-    const celebracao =
-        celebracoesDia.find(
+    const principal =
+        celebracoesDia.findIndex(
             c => c.principal
-        ) || celebracoesDia[0];
+        );
 
-    renderizarCelebracao(
-        json,
+    if (
+        indiceCelebracaoAtual === 0 &&
+        principal >= 0
+    ) {
+        indiceCelebracaoAtual = principal;
+    }
+
+    const celebracao =
+        celebracoesDia[indiceCelebracaoAtual]
+        || celebracoesDia[0];
+
+    console.log(
+        "JSON COMPLETO:",
+        JSON.stringify(json, null, 2)
+    );
+
+    console.log(
+        "Celebração:",
         celebracao
     );
-}
 
-function renderizarCelebracao(json, celebracao) {
+    if (!celebracao) {
+
+        conteudo.innerHTML = `
+            <div class="card">
+                <h2>Nenhuma celebração encontrada</h2>
+            </div>
+        `;
+
+        return;
+    }
 
     let html = "";
 
@@ -322,24 +347,29 @@ function renderizarCelebracao(json, celebracao) {
 
         html += `
             <div class="card">
+
                 <h2>Celebrações do Dia</h2>
 
                 <select id="celebracaoSelect">
 
-                    ${celebracoesDia.map((c, index) => `
-                        <option value="${index}"
-                            ${c.id === celebracao.id ? "selected" : ""}>
+                    ${celebracoesDia.map((c, i) => `
+                        <option
+                            value="${i}"
+                            ${i === indiceCelebracaoAtual ? "selected" : ""}
+                        >
                             ${c.liturgia}
                         </option>
                     `).join("")}
 
                 </select>
+
             </div>
         `;
     }
 
     html += `
         <div class="card">
+
             <h2>${celebracao.liturgia || "-"}</h2>
 
             <p>
@@ -350,44 +380,186 @@ function renderizarCelebracao(json, celebracao) {
             <div class="cor">
                 ${celebracao.cor || "-"}
             </div>
+
         </div>
     `;
 
-    // cole aqui todo o restante do seu código
-    // de antífonas, orações e leituras
+    if (celebracao.antifonas) {
+
+        html += `
+            <div class="card">
+
+                <h2>Antífonas</h2>
+
+                <div class="antifona">
+                    <strong>Entrada</strong>
+                    <p>${celebracao.antifonas.entrada || "-"}</p>
+                </div>
+
+                <div class="antifona">
+                    <strong>Comunhão</strong>
+                    <p>${celebracao.antifonas.comunhao || "-"}</p>
+                </div>
+
+            </div>
+        `;
+    }
+
+    if (celebracao.oracoes) {
+
+        html += `
+            <div class="card">
+
+                <h2>Orações</h2>
+        `;
+
+        if (celebracao.oracoes.coleta) {
+            html += `
+                <div class="oracao">
+                    <h3>Coleta</h3>
+                    <p>${celebracao.oracoes.coleta}</p>
+                </div>
+            `;
+        }
+
+        if (celebracao.oracoes.oferendas) {
+            html += `
+                <div class="oracao">
+                    <h3>Oferendas</h3>
+                    <p>${celebracao.oracoes.oferendas}</p>
+                </div>
+            `;
+        }
+
+        if (celebracao.oracoes.comunhao) {
+            html += `
+                <div class="oracao">
+                    <h3>Comunhão</h3>
+                    <p>${celebracao.oracoes.comunhao}</p>
+                </div>
+            `;
+        }
+
+        html += `
+            </div>
+        `;
+    }
+
+    if (
+        celebracao.leituras &&
+        Array.isArray(celebracao.leituras)
+    ) {
+
+        html += `
+            <div class="card">
+
+                <h2>Liturgia da Palavra</h2>
+        `;
+
+        celebracao.leituras
+            .sort(
+                (a, b) =>
+                    (a.ordem || 0) -
+                    (b.ordem || 0)
+            )
+            .forEach(item => {
+
+                html += `
+                    <div class="leitura">
+
+                        <h3>
+                            ${item.rotulo || item.tipo || "Leitura"}
+                        </h3>
+                `;
+
+                if (
+                    item.opcoes &&
+                    Array.isArray(item.opcoes)
+                ) {
+
+                    item.opcoes.forEach(opcao => {
+
+                        html += `
+                            <div class="opcao">
+                        `;
+
+                        if (opcao.referencia) {
+
+                            html += `
+                                <div class="ref">
+                                    ${opcao.referencia}
+                                </div>
+                            `;
+                        }
+
+                        if (opcao.refrao) {
+
+                            html += `
+                                <p>
+                                    <strong>Refrão:</strong>
+                                    ${opcao.refrao}
+                                </p>
+                                <br>
+                            `;
+                        }
+
+                        if (opcao.titulo) {
+
+                            html += `
+                                <p>
+                                    <strong>
+                                        ${opcao.titulo}
+                                    </strong>
+                                </p>
+                                <br>
+                            `;
+                        }
+
+                        if (opcao.texto) {
+
+                            html += `
+                                <div class="texto">
+                                    ${opcao.texto}
+                                </div>
+                            `;
+                        }
+
+                        html += `
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `
+                    </div>
+                `;
+            });
+
+        html += `
+            </div>
+        `;
+    }
 
     conteudo.innerHTML = html;
-
-    configurarSeletor(json);
-}
-
-function configurarSeletor(json) {
 
     const select =
         document.getElementById(
             "celebracaoSelect"
         );
 
-    if (!select) return;
+    if (select) {
 
-    select.addEventListener(
-        "change",
-        (e) => {
+        select.onchange = (e) => {
 
-            const indice =
+            indiceCelebracaoAtual =
                 Number(e.target.value);
 
-            const celebracao =
-                celebracoesDia[indice];
+            renderizar(json);
 
-            renderizarCelebracao(
-                json,
-                celebracao
-            );
-        }
-    );
+        };
+    }
 }
-    
+   
     
 btnBuscar.addEventListener(
     "click",
