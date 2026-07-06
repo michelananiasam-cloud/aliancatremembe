@@ -126,6 +126,60 @@ input[type=date]{
 
     });
 
+async function buscarSantoNoBancoOuAtualizar(
+    supabaseClient,
+    dataConsulta
+){
+
+    let { data, error } = await supabaseClient
+        .from("santos_do_dia")
+        .select("titulo,texto,data,outros_santos")
+        .eq("data", dataConsulta)
+        .maybeSingle();
+
+    if (error) {
+        throw error;
+    }
+
+    if (data) {
+        return data;
+    }
+
+    const hojeBrasil = new Date()
+        .toLocaleDateString("en-CA");
+
+    if (dataConsulta !== hojeBrasil) {
+        return null;
+    }
+
+    console.log(
+        "Não encontrado para hoje. Tentando atualizar..."
+    );
+
+    await fetch(
+        "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/santo-do-dia",
+        {
+            method: "POST"
+        }
+    );
+
+    await new Promise(resolve =>
+        setTimeout(resolve, 3000)
+    );
+
+    const resultado = await supabaseClient
+        .from("santos_do_dia")
+        .select("titulo,texto,data,outros_santos")
+        .eq("data", dataConsulta)
+        .maybeSingle();
+
+    if (resultado.error) {
+        throw resultado.error;
+    }
+
+    return resultado.data;
+}
+    
     async function carregarSanto(){
 
         try{
@@ -141,15 +195,10 @@ input[type=date]{
 
             console.log("Buscando:",dataConsulta);
 
-const {data,error} = await supabaseClient
-    .from("santos_do_dia")
-    .select("titulo,texto,data,outros_santos")
-    .eq("data",dataConsulta)
-    .maybeSingle();
-
-            if(error){
-                throw error;
-            }
+const data = await buscarSantoNoBancoOuAtualizar(
+    supabaseClient,
+    dataConsulta
+);
 
             const dataFormatada = new Date(dataConsulta+"T00:00:00")
                 .toLocaleDateString("pt-BR");
