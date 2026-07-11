@@ -1,1 +1,5 @@
+uuid()
 
+sleep()
+
+capitalize()
