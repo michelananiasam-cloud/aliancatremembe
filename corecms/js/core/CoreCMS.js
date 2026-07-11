@@ -1,10 +1,13 @@
 import config from "../../config/config.js";
+import ServiceContainer from "./ServiceContainer.js";
 
 export default class CoreCMS {
 
     constructor() {
 
         this.config = config;
+
+        this.services = new ServiceContainer();
 
         this.startedAt = null;
 
@@ -14,9 +17,11 @@ export default class CoreCMS {
 
         this.startedAt = performance.now();
 
-        console.log(`🚀 ${this.config.appName} v${this.config.version} iniciado.`);
+        console.log(`🚀 ${this.config.appName} v${this.config.version}`);
 
         this.initializeDocument();
+
+        await this.services.initAll();
 
         this.renderHome();
 
@@ -33,18 +38,14 @@ export default class CoreCMS {
         document.title = `${this.config.appName} ${this.config.version}`;
 
         document.body.dataset.app = this.config.appName;
-
         document.body.dataset.version = this.config.version;
-
         document.body.dataset.theme = this.config.theme;
 
     }
 
     renderHome() {
 
-        const app = document.getElementById("app");
-
-        app.innerHTML = `
+        document.getElementById("app").innerHTML = `
 
             <section>
 
