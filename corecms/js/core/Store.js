@@ -1,3 +1,7 @@
+set()
 
+get()
 
-        
+remove()
+
+clear()
