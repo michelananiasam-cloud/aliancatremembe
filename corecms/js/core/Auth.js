@@ -1,1 +1,1 @@
-
+Auth inicializado
