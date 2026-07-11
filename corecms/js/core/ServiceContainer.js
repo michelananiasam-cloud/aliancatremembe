@@ -6,19 +6,29 @@ export default class ServiceContainer {
         this.services = new Map();
     }
 
-    register(name, service) {
+    register(name, instance) {
 
         if (this.services.has(name)) {
             throw new Error(`O serviço "${name}" já está registrado.`);
         }
 
-        this.services.set(name, service);
+        this.services.set(name, {
+            name,
+            instance,
+            status: "registered",
+            initialized: false,
+            startedAt: null,
+            finishedAt: null,
+            duration: null
+        });
 
     }
 
     get(name) {
 
-        return this.services.get(name);
+        const service = this.services.get(name);
+
+        return service ? service.instance : null;
 
     }
 
@@ -26,9 +36,20 @@ export default class ServiceContainer {
 
         for (const service of this.services.values()) {
 
-            if (typeof service.init === "function") {
-                await service.init();
+            service.status = "starting";
+            service.startedAt = performance.now();
+
+            if (typeof service.instance.init === "function") {
+                await service.instance.init();
             }
+
+            service.finishedAt = performance.now();
+
+            service.duration =
+                +(service.finishedAt - service.startedAt).toFixed(2);
+
+            service.status = "running";
+            service.initialized = true;
 
         }
 
@@ -38,11 +59,30 @@ export default class ServiceContainer {
 
         for (const service of this.services.values()) {
 
-            if (typeof service.destroy === "function") {
-                await service.destroy();
+            if (typeof service.instance.destroy === "function") {
+                await service.instance.destroy();
             }
 
+            service.status = "stopped";
+            service.initialized = false;
+
         }
+
+    }
+
+    list() {
+
+        return [...this.services.values()].map(service => ({
+
+            name: service.name,
+
+            status: service.status,
+
+            initialized: service.initialized,
+
+            duration: service.duration
+
+        }));
 
     }
 
