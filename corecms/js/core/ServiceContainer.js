@@ -6,6 +6,11 @@ export default class ServiceContainer {
         this.services = new Map();
     }
 
+    /**
+     * Registra um serviço no container.
+     * @param {string} name
+     * @param {object} instance
+     */
     register(name, instance) {
 
         if (this.services.has(name)) {
@@ -24,6 +29,11 @@ export default class ServiceContainer {
 
     }
 
+    /**
+     * Retorna a instância de um serviço.
+     * @param {string} name
+     * @returns {object|null}
+     */
     get(name) {
 
         const service = this.services.get(name);
@@ -32,6 +42,9 @@ export default class ServiceContainer {
 
     }
 
+    /**
+     * Inicializa todos os serviços registrados.
+     */
     async initAll() {
 
         for (const service of this.services.values()) {
@@ -45,8 +58,8 @@ export default class ServiceContainer {
 
             service.finishedAt = performance.now();
 
-            service.duration =
-                +(service.finishedAt - service.startedAt).toFixed(2);
+            // Guarda o valor real (sem arredondar)
+            service.duration = service.finishedAt - service.startedAt;
 
             service.status = "running";
             service.initialized = true;
@@ -55,6 +68,9 @@ export default class ServiceContainer {
 
     }
 
+    /**
+     * Finaliza todos os serviços registrados.
+     */
     async destroyAll() {
 
         for (const service of this.services.values()) {
@@ -70,6 +86,10 @@ export default class ServiceContainer {
 
     }
 
+    /**
+     * Lista os serviços para exibição.
+     * @returns {Array}
+     */
     list() {
 
         return [...this.services.values()].map(service => ({
@@ -80,7 +100,9 @@ export default class ServiceContainer {
 
             initialized: service.initialized,
 
-            duration: service.duration
+            duration: service.duration !== null
+                ? Number(service.duration.toFixed(2))
+                : null
 
         }));
 
