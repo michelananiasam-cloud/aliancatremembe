@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EngajaKum - Movimento Tremembé</title>
+<title>Player Seguro - Teste yt-dlp</title>
 
 <style>
 
@@ -307,19 +307,18 @@ function carregarVideo(){
             dados.url_youtube ||
             `https://youtu.be/${dados.youtube_id}`;
 
-        fetch(
-            "/api/stream",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-                body: JSON.stringify({
-                    youtubeUrl
-                })
-            }
-        )
+fetch(
+    "https://vd-engajakum.up.railway.app/api/stream",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            youtubeUrl
+        })
+    }
+)
         .then(r => r.json())
         .then(retorno => {
 
@@ -961,3 +960,5 @@ function atualizarMensagemPadrao(){
 
 </body>
 </html>
+
+
