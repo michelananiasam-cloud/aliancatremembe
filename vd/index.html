@@ -1,158 +1,961 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YouTube Embed Tester</title>
+
+<title>EngajaKum - Movimento Tremembé</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #f5f5f5;
+
+*{
+    box-sizing:border-box;
+    user-select:none;
+    -webkit-user-select:none;
 }
 
-h1 {
-    margin-bottom: 20px;
+body{
+    font-family:Arial,sans-serif;
+    max-width:1200px;
+    margin:20px auto;
+    padding:20px;
+    background:#f5f5f5;
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+textarea{
+    width:100%;
+    height:250px;
+    font-family:Consolas,monospace;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
+button{
+    margin-top:10px;
+    padding:12px 24px;
+    cursor:pointer;
 }
 
-.buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+.card{
+    display:none;
+    margin-top:20px;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
-button {
-    padding: 12px 20px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    font-weight: bold;
+.player-wrapper{
+    position:relative;
+    background:#000;
 }
 
-.btn-normal {
-    background: #d32f2f;
+video{
+    width:100%;
+    display:block;
+    background:#000;
+    transition:filter .3s ease;
 }
 
-.btn-nocookie {
-    background: #1976d2;
+#bloqueio{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0);
+    z-index:1000;
+    pointer-events:none;
+    transition:background .3s ease;
 }
 
-.url-box {
-    background: #eee;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    word-break: break-all;
+#watermark{
+
+    position:absolute;
+
+    top:30%;
+    left:25%;
+
+    z-index:2147483647;
+
+    color:rgba(255,255,255,.55);
+
+    font-size:24px;
+    font-weight:bold;
+
+    text-align:center;
+
+    text-shadow:
+        2px 2px 5px rgba(0,0,0,.8);
+
+    transform:rotate(-25deg);
+
+    pointer-events:none;
+
+    transition:all .6s ease;
 }
 
-.player {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
+.info{
+    padding:20px;
 }
 
-.player iframe {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: none;
+.meta{
+    margin-bottom:10px;
 }
+
+.error{
+    color:red;
+    margin-top:10px;
+}
+
+#mensagemProgresso{
+    margin-top:10px;
+    color:#666;
+    font-size:14px;
+}
+
+#btnNext{
+    display:none;
+}
+
 </style>
+
 </head>
+
 <body>
 
-<div class="card">
+<h1>Player Seguro - Teste yt-dlp</h1>
 
-    <h1>YouTube Embed Tester</h1>
+<textarea
+    id="jsonInput"
+    placeholder="Cole aqui o JSON">
+</textarea>
 
-    <input
-        id="youtubeUrl"
-        type="text"
-        placeholder="Cole a URL do YouTube aqui"
-    >
+<br>
 
-    <div class="buttons">
-        <button class="btn-normal" onclick="gerarEmbed(false)">
-            Testar Embed Padrão
-        </button>
+<button onclick="carregarVideo()">
+    Carregar Vídeo
+</button>
 
-        <button class="btn-nocookie" onclick="gerarEmbed(true)">
-            Testar NoCookie
-        </button>
-    </div>
+<div id="erro" class="error"></div>
 
-    <div id="embedUrl" class="url-box">
-        URL de embed aparecerá aqui...
-    </div>
+<div id="card" class="card">
 
-    <div class="player">
-        <iframe
+    <div class="player-wrapper">
+
+        <div id="bloqueio"></div>
+
+        <div id="watermark"></div>
+
+        <video
             id="player"
-            allowfullscreen
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-        </iframe>
+            controls
+            controlsList="nodownload noplaybackrate"
+            disablePictureInPicture
+            disableRemotePlayback
+            preload="metadata"
+            playsinline
+            draggable="false">
+        </video>
+
+    </div>
+
+    <div class="info">
+
+        <h2 id="titulo"></h2>
+
+        <div class="meta">
+            Canal:
+            <strong id="canal"></strong>
+        </div>
+
+        <div class="meta">
+            Duração:
+            <strong id="duracao"></strong>
+        </div>
+
+        <div class="meta">
+            YouTube ID:
+            <strong id="youtubeId"></strong>
+        </div>
+
+        <div class="meta">
+            Aproveitamento:
+            <strong id="progresso">0%</strong>
+        </div>
+		
+		<div
+			id="mensagemProgresso"
+			style="
+				margin-top:10px;
+				color:#666;
+				font-size:14px;
+			">
+		</div>
+        <button id="btnNext">
+            Próximo
+        </button>
+
     </div>
 
 </div>
 
 <script>
-function extrairVideoId(url) {
 
-    const patterns = [
-        /youtube\.com\/watch\?v=([^&]+)/,
-        /youtu\.be\/([^?&]+)/,
-        /youtube\.com\/embed\/([^?&]+)/
-    ];
+let PercentualAssistido = 90;
+let watermarkModoAlerta = false;
+let intervalWatermark = null;
 
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) {
-            return match[1];
-        }
+let VideoConcluido = false;
+let segundosAssistidos = 0;
+
+function formatarDuracao(segundos){
+
+    if(!segundos) return "";
+
+    const h =
+        Math.floor(segundos / 3600);
+
+    const m =
+        Math.floor(
+            (segundos % 3600) / 60
+        );
+
+    const s =
+        segundos % 60;
+
+    if(h > 0){
+
+        return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+
     }
 
-    return null;
+    return `${m}:${String(s).padStart(2,"0")}`;
 }
 
-function gerarEmbed(useNoCookie) {
+function carregarVideo(){
 
-    const input = document.getElementById("youtubeUrl").value.trim();
+    try{
 
-    const videoId = extrairVideoId(input);
+        const dados =
+            JSON.parse(
+                document.getElementById(
+                    "jsonInput"
+                ).value
+            );
 
-    if (!videoId) {
-        alert("Não foi possível identificar o ID do vídeo.");
-        return;
+        VideoConcluido = false;
+        segundosAssistidos = 0;
+
+        const player =
+            document.getElementById(
+                "player"
+            );
+
+        document.getElementById(
+            "progresso"
+        ).innerText =
+            "0%";
+
+        document.getElementById(
+            "btnNext"
+        ).style.display =
+            "none";
+
+        document.getElementById(
+            "mensagemProgresso"
+        ).innerHTML =
+            `Para garantir o melhor aproveitamento, assista ao menos ${PercentualAssistido}% do vídeo para liberar o próximo conteúdo.`;
+
+        player.pause();
+
+        player.poster =
+            dados.thumbnail || "";
+
+        document.getElementById(
+            "titulo"
+        ).innerText =
+            dados.titulo || "";
+
+        document.getElementById(
+            "canal"
+        ).innerText =
+            dados.canal || "";
+
+        document.getElementById(
+            "duracao"
+        ).innerText =
+            formatarDuracao(
+                dados.duracao
+            );
+
+        document.getElementById(
+            "youtubeId"
+        ).innerText =
+            dados.youtube_id || "";
+
+        document.getElementById(
+            "card"
+        ).style.display =
+            "block";
+
+        document.getElementById(
+            "erro"
+        ).innerText =
+            "";
+
+        atualizarWatermark();
+
+        const youtubeUrl =
+            dados.url_youtube ||
+            `https://youtu.be/${dados.youtube_id}`;
+
+        fetch(
+            "/api/stream",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    youtubeUrl
+                })
+            }
+        )
+        .then(r => r.json())
+        .then(retorno => {
+
+            if(!retorno.ok){
+
+                document.getElementById(
+                    "erro"
+                ).innerText =
+                    retorno.erro;
+
+                return;
+
+            }
+
+            player.src =
+                retorno.stream_url;
+
+            player.load();
+
+        })
+        .catch(err => {
+
+            document.getElementById(
+                "erro"
+            ).innerText =
+                err.message;
+
+        });
+
+    }
+    catch(ex){
+
+        document.getElementById(
+            "erro"
+        ).innerText =
+            "JSON inválido: " +
+            ex.message;
+
     }
 
-    const baseUrl = useNoCookie
-        ? "https://www.youtube-nocookie.com/embed/"
-        : "https://www.youtube.com/embed/";
+}
 
-    const embedUrl =
-        `${baseUrl}${videoId}?rel=0&modestbranding=1`;
+function atualizarWatermark(){
 
-    document.getElementById("player").src = embedUrl;
-    document.getElementById("embedUrl").textContent = embedUrl;
+    const wm =
+        document.getElementById(
+            "watermark"
+        );
+
+    if(!wm) return;
+
+    const canal =
+        document.getElementById(
+            "canal"
+        ).innerText ||
+        "Canal Original";
+
+    wm.innerHTML = `
+        © Todos os direitos reservados<br>
+        ${canal}<br>
+        ${new Date().toLocaleString("pt-BR")}
+    `;
+
+}
+
+function moverWatermark(){
+
+    const wm =
+        document.getElementById(
+            "watermark"
+        );
+
+    if(!wm) return;
+
+    wm.style.top =
+        (10 + Math.random() * 70) + "%";
+
+    wm.style.left =
+        (10 + Math.random() * 70) + "%";
+
+}
+
+function ativarModoAlerta(){
+
+    if(
+        watermarkModoAlerta
+    ) return;
+
+    watermarkModoAlerta =
+        true;
+
+    const wm =
+        document.getElementById(
+            "watermark"
+        );
+
+    wm.style.color =
+        "rgba(255,0,0,.55)";
+
+    wm.style.fontSize =
+        "32px";
+
+    moverWatermark();
+
+    intervalWatermark =
+        setInterval(
+            moverWatermark,
+            2000
+        );
+
+}
+
+function desativarModoAlerta(){
+
+    watermarkModoAlerta =
+        false;
+
+    clearInterval(
+        intervalWatermark
+    );
+
+    const wm =
+        document.getElementById(
+            "watermark"
+        );
+
+    wm.style.color =
+        "rgba(255,255,255,.55)";
+
+    wm.style.fontSize =
+        "24px";
+
+    wm.style.top =
+        "30%";
+
+    wm.style.left =
+        "25%";
+
+}
+
+const player =
+    document.getElementById(
+        "player"
+    );
+
+setInterval(
+    () => {
+
+        if(
+            !player.paused &&
+            !player.ended &&
+            player.readyState >= 2
+        ){
+
+            segundosAssistidos++;
+
+        }
+
+    },
+    1000
+);
+
+setInterval(
+    atualizarWatermark,
+    1000
+);
+
+player.addEventListener(
+    "contextmenu",
+    (e) => {
+        e.preventDefault();
+    }
+);
+
+player.addEventListener(
+    "timeupdate",
+    () => {
+
+        if(
+            !player.duration
+        ) return;
+
+        const percentual =
+            Math.min(
+                100,
+                Math.floor(
+                    (
+                        segundosAssistidos /
+                        player.duration
+                    ) * 100
+                )
+            );
+
+        document.getElementById(
+            "progresso"
+        ).innerText =
+            percentual + "%";
+
+        if(
+            percentual >= PercentualAssistido &&
+            !VideoConcluido
+        ){
+
+            VideoConcluido =
+                true;
+
+            document.getElementById(
+                "btnNext"
+            ).style.display =
+                "inline-block";
+
+            document.getElementById(
+                "mensagemProgresso"
+            ).innerHTML =
+                "✅ Vídeo concluído. Próxima etapa liberada.";
+
+        }
+
+    }
+);
+
+player.addEventListener(
+    "ended",
+    () => {
+
+        document.getElementById(
+            "btnNext"
+        ).style.display =
+            "inline-block";
+
+    }
+);
+
+document.addEventListener(
+    "dragstart",
+    (e) => {
+        e.preventDefault();
+    }
+);
+
+player.draggable = false;
+
+player.addEventListener(
+    "dragstart",
+    (e) => {
+        e.preventDefault();
+    }
+);
+
+document.addEventListener(
+    "copy",
+    (e) => {
+
+        if(
+            e.target.id === "jsonInput"
+        ){
+            return;
+        }
+
+        e.preventDefault();
+
+    }
+);
+
+document.addEventListener(
+    "cut",
+    (e) => {
+
+        if(
+            e.target.id === "jsonInput"
+        ){
+            return;
+        }
+
+        e.preventDefault();
+
+        player.pause();
+
+        ativarModoAlerta();
+
+        const mensagem =
+            document.getElementById(
+                "mensagemProgresso"
+            );
+
+        if(mensagem){
+
+            mensagem.innerHTML =
+                "⚠️ Recorte bloqueado durante a reprodução do vídeo.";
+
+            setTimeout(
+                () => {
+
+                    if(
+                        !VideoConcluido
+                    ){
+
+                        atualizarMensagemPadrao();
+
+                    }
+
+                },
+                5000
+            );
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "paste",
+    (e) => {
+
+        if(
+            e.target.id === "jsonInput"
+        ){
+            return;
+        }
+
+        e.preventDefault();
+
+    }
+);
+
+player.playbackRate = 1;
+
+player.addEventListener(
+    "ratechange",
+    () => {
+
+        if(
+            player.playbackRate !== 1
+        ){
+
+            player.playbackRate = 1;
+
+            player.pause();
+
+            ativarModoAlerta();
+
+        }
+
+    }
+);
+
+document.addEventListener(
+    "keydown",
+    (e) => {
+
+        const key =
+            e.key.toUpperCase();
+
+        /*
+         * Exceções permitidas apenas
+         * para o campo JSON
+         */
+        if(
+            e.target.id === "jsonInput" &&
+            e.ctrlKey &&
+            ["A", "C", "V", "X", "Z", "Y"]
+                .includes(key)
+        ){
+            return;
+        }
+
+        const teclasEspeciais = [
+            "ESCAPE",
+            "CONTEXTMENU",
+            "PRINTSCREEN",
+            "INSERT",
+            "DELETE"
+        ];
+
+        const bloqueado =
+
+            // F1-F12
+            /^F([1-9]|1[0-2])$/.test(key)
+
+            // Ctrl + letra
+            || (
+                e.ctrlKey &&
+                /^[A-Z]$/.test(key)
+            )
+
+            // Ctrl + Shift + letra
+            || (
+                e.ctrlKey &&
+                e.shiftKey &&
+                /^[A-Z]$/.test(key)
+            )
+
+            // Ctrl + Alt + letra
+            || (
+                e.ctrlKey &&
+                e.altKey &&
+                /^[A-Z]$/.test(key)
+            )
+
+            // Teclas especiais
+            || teclasEspeciais.includes(key);
+
+        if(!bloqueado){
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        player.pause();
+
+        ativarModoAlerta();
+
+        const mensagem =
+            document.getElementById(
+                "mensagemProgresso"
+            );
+
+        if(mensagem){
+
+            mensagem.innerHTML =
+                "⚠️ Atenção! Atalho bloqueado durante a reprodução do vídeo. Clique no player para continuar assistindo.";
+
+            setTimeout(
+                () => {
+
+                    if(
+                        !VideoConcluido
+                    ){
+
+                        atualizarMensagemPadrao();
+
+                    }
+
+                },
+                5000
+            );
+
+        }
+
+        return false;
+
+    },
+    true
+);
+
+setInterval(
+    () => {
+
+        const devtoolsAberto =
+            window.outerWidth - window.innerWidth > 160 ||
+            window.outerHeight - window.innerHeight > 160;
+
+        if(devtoolsAberto){
+
+            player.pause();
+
+            ativarModoAlerta();
+
+            document.getElementById(
+                "mensagemProgresso"
+            ).innerHTML =
+                "⚠️ Ferramentas do desenvolvedor detectadas.";
+
+        }
+
+    },
+    1000
+);
+
+document.addEventListener(
+    "keyup",
+    (e) => {
+
+        if(
+            e.key === "PrintScreen"
+        ){
+
+            player.pause();
+
+            ativarModoAlerta();
+
+        }
+
+    }
+);
+
+document.addEventListener(
+    "contextmenu",
+    (e) => {
+
+        e.preventDefault();
+
+        player.pause();
+
+        ativarModoAlerta();
+
+        const mensagem =
+            document.getElementById(
+                "mensagemProgresso"
+            );
+
+        if(mensagem){
+
+            mensagem.innerHTML =
+                "⚠️ Clique direito do mouse bloqueado durante a reprodução do vídeo, clique no Player para voltar a repoduzir";
+
+            setTimeout(
+                () => {
+
+                    if(
+                        !VideoConcluido
+                    ){
+
+                        atualizarMensagemPadrao();
+
+                    }
+
+                },
+                5000
+            );
+
+        }
+
+        return false;
+
+    },
+    true
+);
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if(
+            document.hidden
+        ){
+
+            player.pause();
+
+            ativarModoAlerta();
+
+        }
+        else{
+
+            desativarModoAlerta();
+
+        }
+
+    }
+);
+
+document.addEventListener(
+    "fullscreenchange",
+    () => {
+
+        const wm =
+            document.getElementById(
+                "watermark"
+            );
+
+        if(!wm) return;
+
+        if(
+            document.fullscreenElement
+        ){
+
+            wm.style.position =
+                "fixed";
+
+            wm.style.zIndex =
+                "2147483647";
+
+        }
+        else{
+
+            wm.style.position =
+                "absolute";
+
+        }
+
+    }
+);
+
+let trocasFoco = 0;
+
+window.addEventListener(
+    "blur",
+    () => {
+
+        trocasFoco++;
+
+        player.pause();
+
+        player.style.filter =
+            "brightness(0.10)";
+
+        ativarModoAlerta();
+
+        if(
+            trocasFoco >= 5
+        ){
+
+            document.getElementById(
+                "mensagemProgresso"
+            ).innerHTML =
+                "⚠️ Muitas trocas de foco detectadas.";
+
+        }
+
+    }
+);
+
+
+
+window.addEventListener(
+    "focus",
+    () => {
+
+        player.style.filter =
+            "brightness(1)";
+
+        desativarModoAlerta();
+
+    }
+);
+
+function atualizarMensagemPadrao(){
+
+    document.getElementById(
+        "mensagemProgresso"
+    ).innerHTML =
+        `O % de aproveitamento corresponde ao tempo total assistido. Assista pelo menos ${PercentualAssistido}% do vídeo para liberar o próximo conteúdo.`;
+
 }
 </script>
 
