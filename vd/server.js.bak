@@ -1,0 +1,53 @@
+const express = require("express");
+const { execSync } = require("child_process");
+
+const app = express();
+
+app.use(express.json());
+app.use(express.static("public"));
+
+app.post("/api/stream", (req, res) => {
+
+    try {
+
+        const youtubeUrl = req.body.youtubeUrl;
+
+        console.log("URL recebida:");
+        console.log(youtubeUrl);
+
+const streamUrl = execSync(
+    `yt-dlp -f 18 -g "${youtubeUrl}"`,
+    { encoding: "utf8" }
+).trim();
+        )
+        .trim()
+        .split("\n")[0];
+
+        console.log("STREAM GERADA:");
+        console.log(streamUrl);
+
+        res.json({
+            ok: true,
+            stream_url: streamUrl
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.json({
+            ok: false,
+            erro: err.message
+        });
+
+    }
+
+});
+
+app.listen(3000, function () {
+
+    console.log(
+        "http://localhost:3000"
+    );
+
+});
