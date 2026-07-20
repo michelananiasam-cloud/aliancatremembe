@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Importar Vídeo</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    max-width:600px;
+    margin:50px auto;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+}
+
+button{
+    padding:12px 24px;
+    cursor:pointer;
+}
+
+#resultado{
+    margin-top:20px;
+}
+
+.sucesso{
+    color:green;
+}
+
+.erro{
+    color:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Importar Vídeo do YouTube</h1>
+
+<input
+    id="urlYoutube"
+    type="text"
+    placeholder="Cole a URL do vídeo">
+
+<button onclick="importarVideo()">
+    Importar
+</button>
+
+<div id="resultado"></div>
+
+<script>
+
+async function importarVideo(){
+
+    const url =
+        document
+            .getElementById(
+                "urlYoutube"
+            )
+            .value
+            .trim();
+
+    if(!url){
+
+        document.getElementById(
+            "resultado"
+        ).innerHTML =
+            "<p class='erro'>Informe uma URL.</p>";
+
+        return;
+    }
+
+    try{
+
+        document.getElementById(
+            "resultado"
+        ).innerHTML =
+            "Importando vídeo...";
+
+        const resp =
+            await fetch(
+                "/api/importar-video",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        url
+                    })
+                }
+            );
+
+        const dados =
+            await resp.json();
+
+        if(!resp.ok){
+
+            throw new Error(
+                dados.erro ||
+                "Falha ao importar."
+            );
+
+        }
+
+        document.getElementById(
+            "resultado"
+        ).innerHTML =
+        `
+            <div class="sucesso">
+
+                <h3>Vídeo importado</h3>
+
+                <p>
+                    <strong>ID:</strong>
+                    ${dados.id}
+                </p>
+
+                <p>
+                    <strong>Título:</strong>
+                    ${dados.titulo}
+                </p>
+
+            </div>
+        `;
+
+    }
+    catch(ex){
+
+        document.getElementById(
+            "resultado"
+        ).innerHTML =
+        `
+            <div class="erro">
+                ${ex.message}
+            </div>
+        `;
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>
