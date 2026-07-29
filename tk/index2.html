@@ -1,17 +1,15 @@
-html
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movimento Aliança de Misericórdia - Tremembé/SP</title>
-    
-    <!-- Favicon na pasta assets conforme combinado -->
-    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <title>Aliança de Misericórdia - Movimento Tremembé/SP</title>
 
-    <!-- Fontes: Montserrat (Títulos) e Roboto (Corpo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    
+    assets/favicon.png
+
+    https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;700&display=swap
+
     <style>
         :root {
             --azul-anunciadores: #0077C2;
@@ -23,226 +21,549 @@ html
             --texto-escuro: #333;
         }
 
-        body { font-family: 'Roboto', sans-serif; margin: 0; color: var(--texto-escuro); background-color: var(--fundo-suave); line-height: 1.6; }
-        
-        /* Barra de Alerta (Urgência) */
-        .alert-bar { background-color: var(--laranja-urgencia); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 0.9rem; }
+        * {
+            box-sizing: border-box;
+        }
 
-        /* Hero Section Dinâmica */
-        header { background: linear-gradient(135deg, var(--azul-anunciadores), var(--rosa-construtores)); color: white; padding: 80px 20px; text-align: center; }
-        h1 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 2.8rem; margin: 0 0 20px; text-transform: uppercase; }
-        .subheadline { font-size: 1.2rem; max-width: 800px; margin: 0 auto 30px; }
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: var(--fundo-suave);
+            color: var(--texto-escuro);
+            line-height: 1.6;
+        }
 
-        .btn-cta { background-color: var(--amarelo-cta); color: #000; padding: 18px 35px; font-size: 1.3rem; font-weight: bold; text-decoration: none; border-radius: 50px; display: inline-block; transition: transform 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .btn-cta:hover { transform: scale(1.05); }
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
 
-        /* Seções Gerais */
-        section { padding: 60px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
-        h2 { font-family: 'Montserrat', sans-serif; color: var(--azul-anunciadores); font-size: 2rem; margin-bottom: 30px; text-transform: uppercase; }
+        .alert-bar {
+            background: var(--laranja-urgencia);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
 
-        /* Cards e Grids */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--azul-anunciadores); }
+        header {
+            background: linear-gradient(135deg,
+                    var(--azul-anunciadores),
+                    var(--rosa-construtores));
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
 
-<!-- Seção: Agenda Geral Tremembé -->
-<section style="padding: 60px 20px; background-color: var(--fundo-suave);">
-    <h2>Agenda Geral de Atividades</h2>
-    <div style="max-width: 900px; margin: 0 auto; text-align: left;">
-        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-            <tr style="background: var(--azul-anunciadores); color: white;">
-                <th style="padding: 15px;">Atividade</th>
-                <th style="padding: 15px;">Frequência / Data</th>
-            </tr>
-            <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 15px;"><b>JAM:</b> Jornada Aliança com a Misericórdia</td>
-                <td style="padding: 15px;">Todo 2º Domingo do Mês</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 15px;"><b>Noite de Espiritualidade:</b> Oração e Louvor</td>
-                <td style="padding: 15px;">Todas as Terças-feiras às 20h</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 15px;"><b>Ação de Rua:</b> Evangelização e Alimento</td>
-                <td style="padding: 15px;">Sábados Quinzenais</td>
-            </tr>
-            <tr>
-                <td style="padding: 15px;"><b>Próximo Retiro Ativo:</b> Thalita Kum</td>
-                <td style="padding: 15px;">Consulte o Calendário</td>
-            </tr>
-        </table>
-    </div>
-</section>        
-<!-- Seção Como Ajudar: Casa de Acolhida Feminina -->
-<section style="padding: 60px 20px; background-color: #fff; border-top: 5px solid var(--vermelho-servos);">
-    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <h2 style="color: var(--vermelho-servos);">Como Ajudar nossa Missão</h2>
-        <p>A Aliança é uma ponte entre quem pode ajudar e quem mais precisa. Conheça nossa <b>Casa de Acolhida Mãe da Ternura</b> em Tremembé [6].</p>
-        
-        <div style="background: var(--fundo-suave); padding: 30px; border-radius: 15px; margin-top: 20px; border: 1px dashed var(--vermelho-servos);">
-            <h4>Faça sua doação e contribua para nossas ações:</h4>
-            <p style="font-weight: bold; font-size: 1.1rem;">Chave PIX (CNPJ): 04.186.468/0015-79 [6]</p>
-            <p style="font-size: 0.9rem;">Associação J.MJ - Casa de Acolhida Mãe da Ternura [6]</p>
-            <!-- Espaço para QR Code do Bradesco conforme o folheto -->
-            <div style="width: 150px; height: 150px; background: #ddd; margin: 20px auto; display: flex; align-items: center; justify-content: center;">[QR Code]</div>
-        </div>
-    </div>
-</section>
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
 
-        
-        
-        /* JAM e Espiritualidade */
-        .jam-section { background-color: white; border-radius: 20px; padding: 40px; border: 2px solid var(--rosa-construtores); }
+        .subheadline {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 1.2rem;
+        }
 
-        /* Impacto Global */
-        .impact-box { background: var(--azul-anunciadores); color: white; padding: 40px; border-radius: 20px; margin-top: 40px; }
-        .stat-number { font-size: 3rem; font-weight: 900; display: block; color: var(--amarelo-cta); }
+        .btn-cta {
+            display: inline-block;
+            background: var(--amarelo-cta);
+            color: #000;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all .3s ease;
+        }
 
-        /* Formulário */
-        .form-container { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .lgpd-text { font-size: 0.75rem; color: #777; margin-top: 10px; }
+        .btn-cta:hover {
+            transform: scale(1.05);
+        }
 
-        /* WhatsApp Float */
-        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 20px; right: 20px; background-color: #25D366; color: #FFF; border-radius: 50%; text-align: center; font-size: 30px; box-shadow: 2px 2px 8px rgba(0,0,0,0.3); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        section {
+            padding: 60px 20px;
+        }
 
-        footer { background: #333; color: white; padding: 40px 20px; text-align: center; font-size: 0.9rem; }
-        footer a { color: var(--rosa-construtores); text-decoration: none; }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--azul-anunciadores);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border-top: 5px solid var(--azul-anunciadores);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+        }
+
+        .jam-section {
+            background: white;
+            border-radius: 20px;
+            border: 2px solid var(--rosa-construtores);
+            padding: 40px;
+        }
+
+        .agenda-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+        }
+
+        .agenda-table th {
+            background: var(--azul-anunciadores);
+            color: white;
+        }
+
+        .agenda-table th,
+        .agenda-table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .agenda-table tr:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+
+        .impacto {
+            background: var(--azul-anunciadores);
+            color: white;
+            text-align: center;
+        }
+
+        .impacto h2 {
+            color: white;
+        }
+
+        .impacto-sub {
+            color: var(--amarelo-cta);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .impact-card {
+            background: transparent;
+            color: white;
+            padding: 20px;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--amarelo-cta);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .doacao-box {
+            background: white;
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            border-top: 5px solid var(--vermelho-servos);
+        }
+
+        .pix-box {
+            margin-top: 20px;
+            padding: 30px;
+            border-radius: 15px;
+            background: var(--fundo-suave);
+            border: 1px dashed var(--vermelho-servos);
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .10);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .lgpd-text {
+            font-size: .8rem;
+            color: #666;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        footer a {
+            color: var(--rosa-construtores);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25D366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+            z-index: 999;
+        }
+
+        @media (max-width:768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="alert-bar">🔥 ÚLTIMAS VAGAS: Inscrições para o próximo retiro encerram em breve!</div>
+    <div class="alert-bar">
+        🔥 ÚLTIMAS VAGAS: Inscrições para o próximo retiro encerram em breve!
+    </div>
 
-    <!-- Hero Section: Retiro Ativo (Ex: Thalita Kum) -->
     <header>
         <h1>Thalita Kum: Menina, levanta-te!</h1>
-        <p class="subheadline">Experimente a força da misericórdia que já transformou mais de 5 mil vidas. Um encontro de ressurreição espiritual e restauração integral em Tremembé/SP.</p>
-        <a href="#inscricao" class="btn-cta">QUERO ME INSCREVER AGORA</a>
+
+        <p class="subheadline">
+            Experimente a força da misericórdia que já transformou mais de 5 mil vidas.
+            Um encontro de ressurreição espiritual e restauração integral em Tremembé/SP.
+        </p>
+
+        " class="btn-cta">
+            QUERO ME INSCREVER AGORA
+        </a>
     </header>
 
-    <!-- O Movimento e as 4 Escolas -->
     <section>
-        <h2>Evangelizar para Transformar</h2>
-        <p>A Aliança de Misericórdia é uma ponte entre o coração de Deus e as feridas humanas.</p>
-        <div class="grid">
-            <div class="card"><h3>Escola do Espírito</h3><p>O Espírito Santo como protagonista da nossa missão.</p></div>
-            <div class="card"><h3>Escola da Palavra</h3><p>Nossa bússola diária para escolhas e ações.</p></div>
-            <div class="card"><h3>Escola de Maria</h3><p>Sob o manto da Imaculada do Espírito Santo.</p></div>
-            <div class="card"><h3>Escola dos Pobres</h3><p>Onde o despojamento nos torna livres.</p></div>
+        <div class="container text-center">
+
+            <h2>Evangelizar para Transformar</h2>
+
+            <p>
+                A Aliança de Misericórdia é uma ponte entre o coração de Deus e as
+                feridas humanas.
+            </p>
+
+            <div class="grid">
+
+                <div class="card">
+                    <h3>Escola do Espírito</h3>
+                    <p>O Espírito Santo como protagonista da nossa missão.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Escola da Palavra</h3>
+                    <p>Nossa bússola diária para escolhas e ações.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Escola de Maria</h3>
+                    <p>Sob o manto da Imaculada do Espírito Santo.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Escola dos Pobres</h3>
+                    <p>Onde o despojamento nos torna livres.</p>
+                </div>
+
+            </div>
+
         </div>
     </section>
 
-    <!-- JAM: Jornada Aliança com a Misericórdia -->
     <section>
-        <div class="jam-section">
-            <h2>JAM: Jornada Aliança com a Misericórdia</h2>
-            <p>Nosso encontro fraterno mensal em Tremembé. Um domingo para reunir a Comunidade de Vida, Aliança, Amigos e Visitantes.</p>
-            <ul style="text-align: left; max-width: 600px; margin: 0 auto; display: block;">
-                <li>✨ <b>Fraternidade:</b> Um dia para conhecer nossa família.</li>
-                <li>📖 <b>Palavra de Vida:</b> Receba o direcionamento espiritual do mês.</li>
-                <li>🙏 <b>Adoração:</b> Tempo profundo de oração aos pés de Jesus.</li>
-            </ul>
+        <div class="container">
+
+            <div class="jam-section">
+
+                <h2>JAM</h2>
+
+                <p>
+                    Jornada Aliança com a Misericórdia.
+                </p>
+
+                <ul>
+                    <li>✨ Fraternidade</li>
+                    <li>📖 Palavra de Vida</li>
+                    <li>🙏 Adoração</li>
+                </ul>
+
+            </div>
+
         </div>
     </section>
 
-    <!-- Atividades e Evangelização (Mockup de Carrossel) -->
-    <section style="background-color: #eee; width: 100%; max-width: none;">
-        <h2>Nossa Missão Ativa</h2>
-        <div class="grid">
-            <div class="card"><h4>Noite de Espiritualidade</h4><p>Experiência carismática de oração.</p></div>
-            <div class="card"><h4>Células</h4><p>A vida comunitária em pequenos grupos (Carrossel).</p></div>
-            <div class="card"><h4>Ação de Rua</h4><p>Onde a misericórdia encontra os últimos.</p></div>
-            <div class="card"><h4>Ônibus da Misericórdia</h4><p>Evangelização social e promoção humana.</p></div>
+    <section>
+        <div class="container">
+
+            <h2>Nossa Missão Ativa</h2>
+
+            <div class="grid">
+
+                <div class="card">
+                    <h4>Noite de Espiritualidade</h4>
+                    <p>Experiência carismática de oração.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Células</h4>
+                    <p>Pequenos grupos de evangelização.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Ação de Rua</h4>
+                    <p>Onde a misericórdia encontra os últimos.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Ônibus da Misericórdia</h4>
+                    <p>Evangelização social e promoção humana.</p>
+                </div>
+
+            </div>
+
         </div>
     </section>
 
-    <!-- Impacto Global 2025 -->
-<section style="padding: 60px 20px; background-color: var(--azul-anunciadores); color: white; text-align: center;">
-    <h3 style="font-family: 'Montserrat'; font-size: 1.2rem; color: var(--amarelo-cta); text-transform: uppercase; margin-bottom: 10px;">
-        Impacto Global: Números do Thalita Kum 2025
-    </h3>
+    <section class="impacto">
 
-    <h2 style="color: white; margin-top: 0;">
-        Misericórdia que Transforma o Mundo
-    </h2>
+        <div class="container">
 
-    <div class="grid">
-<div>
-    <span class="stat-number" data-target="5162">0</span>
-    Vidas tocadas pelo amor de Deus
-</div>
+            <h3 class="impacto-sub">
+                Impacto Global: Números do Thalita Kum 2025
+            </h3>
 
-<div>
-    <span class="stat-number" data-target="9">0</span>
-    Países alcançados em 3 continentes
-</div>
+            <h2>Misericórdia que Transforma o Mundo</h2>
 
-<div>
-    <span class="stat-number" data-target="49">0</span>
-    Cidades que realizaram o retiro
-</div>
-    </div>
-</section>
+            <div class="grid">
 
+                <div class="impact-card">
+                    <span class="stat-number" data-target="5162">0</span>
+                    <strong>Vidas tocadas pelo amor de Deus</strong>
+                </div>
 
-    <!-- Formulário Único -->
+                <div class="impact-card">
+                    <span class="stat-number" data-target="9">0</span>
+                    <strong>Países alcançados em 3 continentes</strong>
+                </div>
+
+                <div class="impact-card">
+                    <span class="stat-number" data-target="49">0</span>
+                    <strong>Cidades que realizaram o retiro</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section>
+
+        <div class="container">
+
+            <h2>Agenda Geral de Atividades</h2>
+
+            <table class="agenda-table">
+                <tr>
+                    <th>Atividade</th>
+                    <th>Frequência / Data</th>
+                </tr>
+
+                <tr>
+                    <td>JAM</td>
+                    <td>Todo 2º Domingo do mês</td>
+                </tr>
+
+                <tr>
+                    <td>Noite de Espiritualidade</td>
+                    <td>Todas as terças às 20h</td>
+                </tr>
+
+                <tr>
+                    <td>Ação de Rua</td>
+                    <td>Sábados quinzenais</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </section>
+
+    <section>
+
+        <div class="doacao-box">
+
+            <h2 style="color: var(--vermelho-servos);">
+                Como Ajudar Nossa Missão
+            </h2>
+
+            <p>
+                Conheça a Casa de Acolhida Mãe da Ternura.
+            </p>
+
+            <div class="pix-box">
+
+                <h3>Chave PIX</h3>
+
+                <p>
+                    <strong>04.186.468/0015-79</strong>
+                </p>
+
+                <p>
+                    Associação J.MJ - Casa de Acolhida Mãe da Ternura
+                </p>
+
+                <div style="width:150px;height:150px;background:#ddd;margin:auto;display:flex;align-items:center;justify-content:center;">
+                    QR CODE
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
     <section id="inscricao">
-        <h2>Inicie sua Jornada</h2>
-        <div class="form-container">
-            <form action="#">
-                <input type="text" placeholder="Seu Nome Completo" required>
-                <input type="email" placeholder="Seu melhor E-mail" required>
-                <input type="tel" placeholder="WhatsApp (DDD)" required>
-                <button type="submit" class="btn-cta" style="width: 100%; border: none; cursor: pointer;">CONFIRMAR INSCRIÇÃO</button>
-                <p class="lgpd-text">Ao se inscrever, você concorda com o processamento dos seus dados conforme nossa <a href="#">Política de Privacidade</a> e <a href="#">Termos de Uso</a>.</p>
-            </form>
-        </div>
-    </section>
 
-    <!-- Botão de WhatsApp Flutuante -->
-    <a href="https://wa.me/551131209191" class="whatsapp-float" target="_blank">
-        <i style="font-style: normal;">Z</i>
-    </a>
+        <h2>Inicie Sua Jornada</h2>
+
+        <div class="form-container">
+
+            <form>
+
+                <input type="text" placeholder="Seu Nome Completo" required>
+
+                <input type="email" placeholder="Seu melhor E-mail" required>
+
+                <input type="tel" placeholder="WhatsApp" required>
+
+                <button type="submit" class="btn-cta" style="border:none;width:100%;">
+                    CONFIRMAR INSCRIÇÃO
+                </button>
+
+                <p class="lgpd-text">
+                    Ao se inscrever você concorda com nossa política de privacidade.
+                </p>
+
+            </form>
+
+        </div>
+
+    </section>
 
     <footer>
         <p>© 2026 - Aliança de Misericórdia | Tremembé/SP</p>
-        <p><a href="#">Política de Privacidade</a> | <a href="#">Termos de Uso</a> | <a href="#">Agenda Geral</a></p>
     </footer>
 
-<script>
-const counters = document.querySelectorAll('.stat-number');
+    131209191"
+       class="whatsapp-float"
+       target="_blank">
+        💬
+    </a>
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
-        if (!entry.isIntersecting) return;
+            const counters = document.querySelectorAll('.stat-number');
 
-        const counter = entry.target;
-        const target = Number(counter.dataset.target);
+            const observer = new IntersectionObserver((entries) => {
 
-        let current = 0;
+                entries.forEach(entry => {
 
-        const increment = target / 100;
+                    if (!entry.isIntersecting) return;
 
-        const updateCounter = () => {
-            current += increment;
+                    const counter = entry.target;
+                    const target = parseInt(counter.dataset.target);
 
-            if (current < target) {
-                counter.textContent = Math.floor(current).toLocaleString('pt-BR');
-                requestAnimationFrame(updateCounter);
-            } else {
-                counter.textContent = target.toLocaleString('pt-BR');
-            }
-        };
+                    const duration = 2000;
+                    const startTime = performance.now();
 
-        updateCounter();
+                    function animate(now) {
 
-        observer.unobserve(counter);
-    });
-});
+                        const progress = Math.min(
+                            (now - startTime) / duration,
+                            1
+                        );
 
-counters.forEach(counter => observer.observe(counter));
-</script>    
+                        const value = Math.floor(
+                            progress * target
+                        );
+
+                        counter.textContent =
+                            value.toLocaleString('pt-BR');
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            counter.textContent =
+                                target.toLocaleString('pt-BR');
+                        }
+                    }
+
+                    requestAnimationFrame(animate);
+
+                    observer.unobserve(counter);
+
+                });
+
+            }, {
+                threshold: 0.4
+            });
+
+            counters.forEach(counter => {
+                observer.observe(counter);
+            });
+
+        });
+    </script>
+
 </body>
-    
+
 </html>
