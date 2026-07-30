@@ -444,22 +444,26 @@ function baixarQRCode2() {
 
 function baixarQRCode() {
 
-    const qrWrapper = document.querySelector('.qr-wrapper');
+    const wrapper = document.querySelector('.qr-wrapper');
 
-    html2canvas(qrWrapper, {
-        backgroundColor: null,
-        useCORS: true
-    }).then(canvas => {
+    if (!document.getElementById('qrcode').innerHTML.trim()) {
+        alert('Gere um QR Code primeiro.');
+        return;
+    }
 
-        const a = document.createElement('a');
-        a.href = canvas.toDataURL('image/png');
-        a.download = 'whatsapp-qrcode.png';
-        a.click();
+    html2canvas(wrapper, {
+        useCORS: true,
+        backgroundColor: "#ffffff"
+    }).then(function(canvas) {
+
+        const link = document.createElement('a');
+        link.download = 'whatsapp-qrcode.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
 
     });
 
-}
-    
+}    
 /* =========================
    INICIALIZAÇÃO
 ========================= */
