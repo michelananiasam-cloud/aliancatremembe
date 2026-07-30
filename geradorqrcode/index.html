@@ -1,144 +1,394 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gerador QR Code WhatsApp</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-body{font-family:Segoe UI,Arial,sans-serif;background:#f4f7fa;padding:20px} .card{max-width:1000px;margin:auto;background:#fff;padding:25px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)} .grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:15px} input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px} button{padding:12px 20px;border:none;border-radius:8px;color:#fff;cursor:pointer;margin:5px}.p{background:#128C7E}.s{background:#25D366}.i{background:#2196F3}.box{background:#f8f8f8;padding:15px;border-radius:10px;margin-top:15px}.qr{text-align:center} @media(max-width:768px){.grid{grid-template-columns:1fr}}
-.qr-wrapper{
-    position:relative;
-    display:inline-block;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador QR Code WhatsApp</title>
 
-.logo-centro{
-    position:absolute;
-    width:60px;
-    height:60px;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    background:white;
-    border-radius:50%;
-    padding:5px;
-}
-</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        /* =========================
+           LAYOUT GERAL
+        ========================= */
+        body {
+            font-family: Segoe UI, Arial, sans-serif;
+            background: #f4f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .box {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .acoes {
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .btn-gerar { background: #128C7E; }
+        .btn-copiar { background: #2196F3; }
+        .btn-acao { background: #25D366; }
+        .btn-limpar { background: #D32F2F; }
+
+        .qr-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .qr-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-centro {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 50%;
+            padding: 4px;
+        }
+
+        .history-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        #linkResultado {
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
+
 <div class="card">
-<h1>📱 Gerador de QR Code WhatsApp</h1>
-<div class="grid">
-<div>
-    <label>🌎 País</label>
 
-    <select id="pais">
+    <h1>📱 Gerador de QR Code WhatsApp</h1>
 
-        <option value="55" selected>
-            🇧🇷 Brasil (+55)
-        </option>
+    <div class="grid">
 
-        <option value="1">
-            🇺🇸 Estados Unidos (+1)
-        </option>
+        <div>
+            <label>🌎 País</label>
+            <select id="pais">
+                <option value="55">🇧🇷 Brasil (+55)</option>
+                <option value="1">🇺🇸 Estados Unidos (+1)</option>
+                <option value="351">🇵🇹 Portugal (+351)</option>
+                <option value="54">🇦🇷 Argentina (+54)</option>
+                <option value="34">🇪🇸 Espanha (+34)</option>
+                <option value="33">🇫🇷 França (+33)</option>
+                <option value="39">🇮🇹 Itália (+39)</option>
+                <option value="49">🇩🇪 Alemanha (+49)</option>
+                <option value="44">🇬🇧 Reino Unido (+44)</option>
+                <option value="52">🇲🇽 México (+52)</option>
+            </select>
+        </div>
 
-        <option value="351">
-            🇵🇹 Portugal (+351)
-        </option>
+        <div>
+            <label>DDD</label>
+            <input id="ddd">
+        </div>
 
-        <option value="54">
-            🇦🇷 Argentina (+54)
-        </option>
-
-        <option value="34">
-            🇪🇸 Espanha (+34)
-        </option>
-
-        <option value="33">
-            🇫🇷 França (+33)
-        </option>
-
-        <option value="39">
-            🇮🇹 Itália (+39)
-        </option>
-
-        <option value="49">
-            🇩🇪 Alemanha (+49)
-        </option>
-
-        <option value="44">
-            🇬🇧 Reino Unido (+44)
-        </option>
-
-        <option value="52">
-            🇲🇽 México (+52)
-        </option>
-
-    </select>
-
-</div>
-<div><label>DDD</label><input id="ddd" value="11"></div>
-<div><label>Número</label><input id="numero" value="989269296"></div>
-</div>
-<p><label>Mensagem</label></p>
-<textarea
-    id="mensagem"
-    rows="5"
-    placeholder="Digite aqui uma mensagem opcional. Se deixar em branco, o QR Code abrirá apenas a conversa do WhatsApp.">
-</textarea>
-<div>
-<button class="p" onclick="gerarQRCode()">Gerar QR Code</button>
-<button class="i" onclick="copiarLink()">Copiar Link</button>
-<button class="s" onclick="abrirWhatsapp()">Abrir WhatsApp</button>
-<button class="s" onclick="baixarQRCode()">Baixar PNG</button>
-</div>
-<div class="box"><strong>Link:</strong><div id="linkResultado"></div></div>
-<div class="box"><strong>Mensagem:</strong><div id="previewMensagem"></div></div>
-<div class="qr-area">
-
-    <div class="qr-wrapper">
-
-        <div id="qrcode"></div>
-
-        <img
-            src="img/logo.png"
-            class="logo-centro"
-            alt="Logo">
+        <div>
+            <label>Número</label>
+            <input id="numero">
+        </div>
 
     </div>
 
+    <p><label>Mensagem</label></p>
+
+    <textarea
+        id="mensagem"
+        rows="5"
+        placeholder="Digite uma mensagem opcional. Se deixar em branco, abrirá apenas a conversa do WhatsApp."></textarea>
+
+    <div class="acoes">
+        <button class="btn-gerar" onclick="gerarQRCode()">Gerar QR Code</button>
+        <button class="btn-copiar" onclick="copiarLink()">Copiar Link</button>
+        <button class="btn-acao" onclick="abrirWhatsapp()">Abrir WhatsApp</button>
+        <button class="btn-acao" onclick="baixarQRCode()">Baixar PNG</button>
+        <button class="btn-limpar" onclick="limparHistorico()">Limpar Histórico</button>
+    </div>
+
+    <div class="box">
+        <strong>Link:</strong>
+        <div id="linkResultado"></div>
+    </div>
+
+    <div class="box">
+        <strong>Mensagem:</strong>
+        <div id="previewMensagem"></div>
+    </div>
+
+    <div class="qr-area">
+        <div class="qr-wrapper">
+            <div id="qrcode"></div>
+            <img src="img/logo.png" class="logo-centro" alt="Logo">
+        </div>
+    </div>
+
+    <div class="box">
+        <h3>Histórico</h3>
+        <div id="historico"></div>
+    </div>
+
 </div>
-<div class="box"><h3>Histórico</h3><div id="historico"></div></div>
-</div>
+
 <script>
-let linkAtual='';
-function gerarQRCode(){
-const pais=document.getElementById('pais').value.replace(/\D/g,'');
-const ddd=document.getElementById('ddd').value.replace(/\D/g,'');
-const numero=document.getElementById('numero').value.replace(/\D/g,'');
-const mensagem=document.getElementById('mensagem').value.trim();
-if (mensagem) {
+/* =========================
+   CONFIGURAÇÃO
+========================= */
+const MAX_HISTORICO = 5;
+let linkAtual = '';
 
-    linkAtual =
-        `https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`;
+/* =========================
+   LIMPEZA DE TELA
+========================= */
+function limparTela() {
 
-} else {
+    linkAtual = '';
 
-    linkAtual =
-        `https://wa.me/${pais}${ddd}${numero}`;
+    document.getElementById('qrcode').innerHTML = '';
+    document.getElementById('linkResultado').innerHTML = '';
+    document.getElementById('previewMensagem').innerHTML = '';
 
+    document.getElementById('ddd').value = '';
+    document.getElementById('numero').value = '';
+    document.getElementById('mensagem').value = '';
 }
-document.getElementById('linkResultado').innerHTML=`<a href="${linkAtual}" target="_blank">${linkAtual}</a>`;
-document.getElementById('previewMensagem').textContent=mensagem;
-const qr=document.getElementById('qrcode'); qr.innerHTML='';
-new QRCode(qr,{text:linkAtual,width:300,height:300});
-salvarHistorico(linkAtual,mensagem);
+
+/* =========================
+   GERAÇÃO QR CODE
+========================= */
+function gerarQRCode() {
+
+    const pais = document.getElementById('pais').value;
+    const ddd = document.getElementById('ddd').value.replace(/\D/g, '');
+    const numero = document.getElementById('numero').value.replace(/\D/g, '');
+    const mensagem = document.getElementById('mensagem').value.trim();
+
+    if (!ddd || !numero) {
+        alert('Informe DDD e número.');
+        return;
+    }
+
+    linkAtual = mensagem
+        ? `https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`
+        : `https://wa.me/${pais}${ddd}${numero}`;
+
+    document.getElementById('linkResultado').innerHTML =
+        `<a href="${linkAtual}" target="_blank">${linkAtual}</a>`;
+
+    document.getElementById('previewMensagem').textContent =
+        mensagem || 'Sem mensagem';
+
+    const qr = document.getElementById('qrcode');
+
+    qr.innerHTML = '';
+
+    new QRCode(qr, {
+        text: linkAtual,
+        width: 300,
+        height: 300
+    });
+
+    salvarHistorico(linkAtual, mensagem, pais, ddd, numero);
 }
-function copiarLink(){if(linkAtual){navigator.clipboard.writeText(linkAtual);alert('Link copiado!');}}
-function abrirWhatsapp(){if(linkAtual) window.open(linkAtual,'_blank');}
-function baixarQRCode(){const c=document.querySelector('#qrcode canvas'); if(!c)return alert('Gere um QR Code primeiro.'); const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='whatsapp-qrcode.png'; a.click();}
-function salvarHistorico(url,mensagem){let l=JSON.parse(localStorage.getItem('historicoQR'))||[]; l.unshift({data:new Date().toLocaleString(),url,mensagem}); l=l.slice(0,10); localStorage.setItem('historicoQR',JSON.stringify(l)); carregarHistorico();}
-function carregarHistorico(){let l=JSON.parse(localStorage.getItem('historicoQR'))||[]; const d=document.getElementById('historico'); d.innerHTML=''; l.forEach(i=>{d.innerHTML+=`<div style="margin:8px 0;padding:8px;border:1px solid #ddd"><b>${i.data}</b><br>${i.mensagem}<br><a href="${i.url}" target="_blank">Abrir WhatsApp</a></div>`})}
-window.onload=()=>{carregarHistorico(); gerarQRCode();}
+
+/* =========================
+   HISTÓRICO
+========================= */
+function salvarHistorico(url, mensagem, pais, ddd, numero) {
+
+    let lista = JSON.parse(localStorage.getItem('historicoQR')) || [];
+
+    lista.unshift({
+        id: Date.now(),
+        data: new Date().toLocaleString(),
+        pais,
+        ddd,
+        numero,
+        mensagem,
+        url
+    });
+
+    lista = lista.slice(0, MAX_HISTORICO);
+
+    localStorage.setItem('historicoQR', JSON.stringify(lista));
+
+    carregarHistorico();
+}
+
+function carregarHistorico() {
+
+    const lista = JSON.parse(localStorage.getItem('historicoQR')) || [];
+    const div = document.getElementById('historico');
+
+    div.innerHTML = '';
+
+    lista.forEach(item => {
+
+        div.innerHTML += `
+            <div class="history-item">
+                <strong>${item.data}</strong><br>
+                📱 +${item.pais} ${item.ddd} ${item.numero}<br>
+                💬 ${item.mensagem || 'Sem mensagem'}<br><br>
+                <a href="${item.url}" target="_blank">Abrir WhatsApp</a><br><br>
+                <button onclick="reutilizarQR('${item.id}')">♻ Reutilizar</button>
+                <button onclick="excluirHistorico('${item.id}')">🗑 Excluir</button>
+            </div>
+        `;
+    });
+}
+
+function reutilizarQR(id) {
+
+    const lista = JSON.parse(localStorage.getItem('historicoQR')) || [];
+    const item = lista.find(x => x.id == id);
+
+    if (!item) return;
+
+    document.getElementById('pais').value = item.pais;
+    document.getElementById('ddd').value = item.ddd;
+    document.getElementById('numero').value = item.numero;
+    document.getElementById('mensagem').value = item.mensagem || '';
+
+    gerarQRCode();
+}
+
+function excluirHistorico(id) {
+
+    let lista = JSON.parse(localStorage.getItem('historicoQR')) || [];
+
+    lista = lista.filter(x => x.id != id);
+
+    localStorage.setItem('historicoQR', JSON.stringify(lista));
+
+    carregarHistorico();
+
+    if (lista.length === 0) {
+        limparTela();
+    }
+}
+
+function limparHistorico() {
+
+    if (confirm('Deseja apagar todo o histórico?')) {
+
+        localStorage.removeItem('historicoQR');
+
+        carregarHistorico();
+        limparTela();
+    }
+}
+
+/* =========================
+   AÇÕES
+========================= */
+function copiarLink() {
+
+    if (!linkAtual) return;
+
+    navigator.clipboard.writeText(linkAtual);
+    alert('Link copiado!');
+}
+
+function abrirWhatsapp() {
+
+    if (!linkAtual) return;
+
+    window.open(linkAtual, '_blank');
+}
+
+function baixarQRCode() {
+
+    const canvas = document.querySelector('#qrcode canvas');
+
+    if (!canvas) {
+        alert('Gere um QR Code primeiro.');
+        return;
+    }
+
+    const a = document.createElement('a');
+
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'whatsapp-qrcode.png';
+
+    a.click();
+}
+
+/* =========================
+   INICIALIZAÇÃO
+========================= */
+window.onload = function () {
+    carregarHistorico();
+    limparTela();
+};
 </script>
-</body></html>
+
+</body>
+</html>
