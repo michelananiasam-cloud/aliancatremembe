@@ -189,42 +189,43 @@
     color: var(--azul-anunciadores);
 }    
 
-    /* ==========================================================================
+/* ==========================================================================
        4. CARROSSEL DE CARDS (OBRAS DE EVANGELIZAÇÃO)
        ========================================================================== */
     .carousel-container {
         position: relative;
         width: 100%;
-        padding: 10px 45px; /* Espaço para as setas laterais */
+        padding: 10px 0; /* SAIU o padding de 45px */
         margin-top: 20px;
     }
 
     .carousel-track {
         display: flex;
         gap: 20px;
-        overflow-x: auto; /* Permite arrastar / rolar suavemente */
+        overflow-x: auto;
         scroll-behavior: smooth;
-        padding: 10px 5px;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none;  /* IE/Edge */
+        scroll-snap-type: x mandatory; /* ENTROU: trava o card na tela ao rolar */
+        padding: 10px 0;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
     .carousel-track::-webkit-scrollbar {
-        display: none; /* Chrome, Safari e Opera */
+        display: none;
     }
 
     .card {
-        min-width: 290px;
-        max-width: 330px;
+        flex: 0 0 320px; /* ENTROU: substituiu min/max-width por largura base flexível */
+        max-width: 320px;
         background: white;
         padding: 25px;
         border-radius: 15px;
         border-top: 5px solid var(--azul-anunciadores);
         box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
-        flex-shrink: 0; /* Impede os cards de esmagarem */
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        scroll-snap-align: start; /* ENTROU: alinha o card perfeitamente ao arrastar */
     }
 
     .card h4 {
@@ -303,6 +304,26 @@
 
     .prev-btn { left: 0; }
     .next-btn { right: 0; }
+
+    /* ENTROU: Regra exclusiva para garantir que o card preencha a tela do celular */
+    @media (max-width: 768px) {
+        .carousel-container {
+            padding: 0;
+        }
+
+        .carousel-track {
+            gap: 15px;
+        }
+
+        .card {
+            flex: 0 0 100%; /* Faz o card ter 100% da largura da tela */
+            max-width: 100%;
+        }
+
+        .carousel-btn {
+            display: none; /* Esconde as setas no mobile para usar o toque */
+        }
+    }
 
     /* ==========================================================================
        5. OUTRAS SEÇÕES (JAM, TABELA, IMPACTO, DOAÇÃO, FORMULÁRIO, FOOTER)
