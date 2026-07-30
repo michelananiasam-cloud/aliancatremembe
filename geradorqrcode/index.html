@@ -385,7 +385,7 @@ function abrirWhatsapp() {
     window.open(linkAtual, '_blank');
 }
 
-function baixarQRCode() {
+function baixarQRCode_() {
 
     const canvas = document.querySelector('#qrcode canvas');
 
@@ -402,6 +402,45 @@ function baixarQRCode() {
     a.click();
 }
 
+function baixarQRCode() {
+    const canvas = document.querySelector('#qrcode canvas');
+
+    if (!canvas) {
+        alert('Gere um QR Code primeiro.');
+        return;
+    }
+
+    const novoCanvas = document.createElement('canvas');
+    novoCanvas.width = canvas.width;
+    novoCanvas.height = canvas.height;
+
+    const ctx = novoCanvas.getContext('2d');
+
+    // Copia o QR Code
+    ctx.drawImage(canvas, 0, 0);
+
+    // Carrega a logo
+    const logo = new Image();
+
+    logo.onload = function () {
+        const tamanhoLogo = 50;
+
+        ctx.drawImage(
+            logo,
+            (novoCanvas.width - tamanhoLogo) / 2,
+            (novoCanvas.height - tamanhoLogo) / 2,
+            tamanhoLogo,
+            tamanhoLogo
+        );
+
+        const a = document.createElement('a');
+        a.href = novoCanvas.toDataURL('image/png');
+        a.download = 'whatsapp-qrcode.png';
+        a.click();
+    };
+
+    logo.src = 'img/logo.png';
+}    
 /* =========================
    INICIALIZAÇÃO
 ========================= */
@@ -409,6 +448,7 @@ window.onload = function () {
     carregarHistorico();
     limparTela();
 };
+    
 </script>
 
 </body>
