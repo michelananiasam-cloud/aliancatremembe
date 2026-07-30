@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de QR Code WhatsApp</title>
+
+https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    box-sizing:border-box;
+}
+
+button{
+    margin-top:15px;
+    padding:12px 20px;
+    cursor:pointer;
+}
+
+#qrcode{
+    margin-top:20px;
+}
+
+#linkResultado{
+    margin-top:15px;
+    word-break: break-all;
+}
+</style>
+</head>
+<body>
+
+<h1>Gerador de QR Code WhatsApp</h1>
+
+<label>País</label>
+<input type="text" id="pais" value="55">
+
+<label>DDD</label>
+<input type="text" id="ddd" value="11">
+
+<label>Número</label>
+<input type="text" id="numero" value="989269296">
+
+<label>Mensagem</label>
+<textarea id="mensagem" rows="4">Olá! Gostaria de mais informações sobre o Retiro Thalita Kum em Tremembé.</textarea>
+
+<button onclick="gerarQRCode()">Gerar QR Code</button>
+
+<div id="linkResultado"></div>
+<div id="qrcode"></div>
+
+<script>
+function gerarQRCode() {
+
+    const pais = document.getElementById('pais').value.replace(/\D/g,'');
+    const ddd = document.getElementById('ddd').value.replace(/\D/g,'');
+    const numero = document.getElementById('numero').value.replace(/\D/g,'');
+    const mensagem = document.getElementById('mensagem').value;
+
+    const url =
+        `https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`;
+
+    document.getElementById("linkResultado").innerHTML =
+        `${url}${url}</a>`;
+
+    document.getElementById("qrcode").innerHTML = "";
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: url,
+        width: 300,
+        height: 300
+    });
+}
+</script>
+
+</body>
+</html>
