@@ -402,68 +402,66 @@ function baixarQRCode_() {
     a.click();
 }
 
-function baixarQRCode2() {
-    const canvas = document.querySelector('#qrcode canvas');
+function baixarQRCode() {
 
-    if (!canvas) {
+    const qrCanvas = document.querySelector('#qrcode canvas');
+
+    if (!qrCanvas) {
         alert('Gere um QR Code primeiro.');
         return;
     }
 
-    const novoCanvas = document.createElement('canvas');
-    novoCanvas.width = canvas.width;
-    novoCanvas.height = canvas.height;
+    const canvasFinal = document.createElement('canvas');
+    canvasFinal.width = qrCanvas.width;
+    canvasFinal.height = qrCanvas.height;
 
-    const ctx = novoCanvas.getContext('2d');
+    const ctx = canvasFinal.getContext('2d');
 
-    // Copia o QR Code
-    ctx.drawImage(canvas, 0, 0);
+    // Copia o QR Code original
+    ctx.drawImage(qrCanvas, 0, 0);
 
-    // Carrega a logo
-    const logo = new Image();
+    // Carrega a imagem que ficará no centro
+    const imagem = new Image();
 
-    logo.onload = function () {
-        const tamanhoLogo = 50;
+    imagem.onload = function () {
 
+        const tamanhoImagem = 50;
+
+        // Fundo branco circular
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(
+            canvasFinal.width / 2,
+            canvasFinal.height / 2,
+            (tamanhoImagem / 2) + 6,
+            0,
+            Math.PI * 2
+        );
+        ctx.fill();
+
+        // Desenha a imagem no centro
         ctx.drawImage(
-            logo,
-            (novoCanvas.width - tamanhoLogo) / 2,
-            (novoCanvas.height - tamanhoLogo) / 2,
-            tamanhoLogo,
-            tamanhoLogo
+            imagem,
+            (canvasFinal.width - tamanhoImagem) / 2,
+            (canvasFinal.height - tamanhoImagem) / 2,
+            tamanhoImagem,
+            tamanhoImagem
         );
 
+        // Download
         const a = document.createElement('a');
-        a.href = novoCanvas.toDataURL('image/png');
+        a.href = canvasFinal.toDataURL('image/png');
         a.download = 'whatsapp-qrcode.png';
         a.click();
     };
 
-    logo.src = 'img/logo.png';
-}    
+    imagem.onerror = function () {
+        alert('Não foi possível carregar a imagem');
+    };
 
-function baixarQRCode() {
-
-    const wrapper = document.querySelector('.qr-wrapper');
-
-    if (!document.getElementById('qrcode').innerHTML.trim()) {
-        alert('Gere um QR Code primeiro.');
-        return;
-    }
-
-    html2canvas(wrapper, {
-        useCORS: true,
-        backgroundColor: "#ffffff"
-    }).then(function(canvas) {
-
-        const link = document.createElement('a');
-        link.download = 'whatsapp-qrcode.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-
-    });
-
-}    
+    imagem.src = 'img/logo.png'; 
+}
+    
 /* =========================
    INICIALIZAÇÃO
 ========================= */
