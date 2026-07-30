@@ -88,11 +88,14 @@
         text-align: center;
     }
 
-    .banner-section img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 12px;
-    }
+.banner-section img {
+    width: 100%;             /* Força a imagem a ocupar 100% do espaço do container */
+    max-width: 100%;         /* Impede que ela passe da largura da tela */
+    height: auto;            /* Mantém a proporção correta da altura sem distorcer */
+    display: block;          /* Remove pequenos espaços em branco abaixo da imagem */
+    border-radius: 12px;     /* Bordas arredondadas elegantes */
+    margin: 0 auto;          /* Centraliza a imagem */
+}
 
     .btn-cta {
         display: inline-block;
@@ -117,8 +120,8 @@
     }
 
     /* ==========================================================================
-       3. INTRODUÇÃO DO ESTATUTO
-       ========================================================================== */
+       3. INTRODUÇÃO DO ESTATUTO [depreciado]
+
     .intro-text {
         max-width: 750px;
         margin: 0 auto 35px auto;
@@ -156,6 +159,35 @@
         color: #888;
         font-style: italic;
     }
+*/
+    /* ==========================================================================
+       3. INTRODUÇÃO DO ESTATUTO [new]
+       ========================================================================== */    
+    /* Bloco do Estatuto Enxuto */
+.intro-text blockquote {
+    margin: 15px auto;
+    padding: 12px 18px;
+    border-left: 4px solid var(--laranja-urgencia);
+    background: rgba(255, 140, 0, 0.05); /* Um fundo suave apenas atrás do texto */
+    border-radius: 0 8px 8px 0;
+    display: inline-block; /* O fundo ocupa APENAS a largura do texto */
+    text-align: left;
+}
+
+.intro-text blockquote p {
+    margin: 0;
+    display: inline;
+    font-style: italic;
+}
+
+.intro-text blockquote cite {
+    display: inline-block;
+    margin-left: 8px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: var(--azul-anunciadores);
+}    
 
     /* ==========================================================================
        4. CARROSSEL DE CARDS (OBRAS DE EVANGELIZAÇÃO)
@@ -585,7 +617,7 @@
         <div class="intro-text">
             <blockquote cite="Estatuto Aliança de Misericórdia, nº 10">
                 <p>“Somos chamados a <strong>EVANGELIZAR PARA TRANSFORMAR</strong>, transformando todo evangelizado em evangelizador e testemunha da Misericórdia. Evangelizando, queremos “colocar” todo homem no colo de Deus, nestas “entranhas de Misericórdia”, onde todo filho é gerado à “vida nova” e faz experiência viva e pessoal do amor de Deus, do qual torna-se testemunha (cf. Jo 20,17-18)”.</p>
-                <footer>— Estatuto Aliança de Misericórdia, nº 10</footer>
+                <cite>— Estatuto Aliança de Misericórdia, nº 10</cite>
             </blockquote>
 
             <p class="highlight-quote">
@@ -594,7 +626,7 @@
 
             <blockquote cite="Estatuto Aliança de Misericórdia, nº 18">
                 <p>Da mesma forma que a luz se decompõe nas diversificadas “cores” do arco-íris, sinal da Nova Aliança da Misericórdia de Deus, entre o céu e a terra (cf. Gn 9,8-17), assim seu amor reluz nas diferentes obras de Misericórdia, materiais e espirituais, que somos chamados a realizar, pela diversidade dos carismas com que o Espírito Santo nos capacitará.</p>
-                <footer>— Estatuto Aliança de Misericórdia, nº 18</footer>
+                <cite>— Estatuto Aliança de Misericórdia, nº 18</cite>
             </blockquote>
         </div>
 
