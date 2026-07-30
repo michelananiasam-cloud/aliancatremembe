@@ -305,10 +305,10 @@
     .prev-btn { left: 0; }
     .next-btn { right: 0; }
 
-    /* ENTROU: Regra exclusiva para garantir que o card preencha a tela do celular */
+/* Ajustes específicos para Celular (Mantendo as setas visíveis) */
     @media (max-width: 768px) {
         .carousel-container {
-            padding: 0;
+            padding: 0 10px; /* Pequeno recuo para as setas não colarem na borda da tela */
         }
 
         .carousel-track {
@@ -316,15 +316,22 @@
         }
 
         .card {
-            flex: 0 0 100%; /* Faz o card ter 100% da largura da tela */
+            flex: 0 0 100%; /* Card ocupa toda a largura útil */
             max-width: 100%;
         }
 
+        /* Mantém as setas visíveis e menores no mobile */
         .carousel-btn {
-            display: none; /* Esconde as setas no mobile para usar o toque */
+            display: flex; /* Garante que continuem aparecendo */
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+            background: rgba(0, 119, 194, 0.9); /* Fundo um pouco transparente */
         }
-    }
 
+        .prev-btn { left: 5px; }
+        .next-btn { right: 5px; }
+    }
     /* ==========================================================================
        5. OUTRAS SEÇÕES (JAM, TABELA, IMPACTO, DOAÇÃO, FORMULÁRIO, FOOTER)
        ========================================================================== */
