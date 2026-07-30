@@ -13,12 +13,63 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f7fa;padding:20px} .car
 <div class="card">
 <h1>📱 Gerador de QR Code WhatsApp</h1>
 <div class="grid">
-<div><label>País</label><input id="pais" value="55"></div>
+<div>
+    <label>🌎 País</label>
+
+    <select id="pais">
+
+        <option value="55" selected>
+            🇧🇷 Brasil (+55)
+        </option>
+
+        <option value="1">
+            🇺🇸 Estados Unidos (+1)
+        </option>
+
+        <option value="351">
+            🇵🇹 Portugal (+351)
+        </option>
+
+        <option value="54">
+            🇦🇷 Argentina (+54)
+        </option>
+
+        <option value="34">
+            🇪🇸 Espanha (+34)
+        </option>
+
+        <option value="33">
+            🇫🇷 França (+33)
+        </option>
+
+        <option value="39">
+            🇮🇹 Itália (+39)
+        </option>
+
+        <option value="49">
+            🇩🇪 Alemanha (+49)
+        </option>
+
+        <option value="44">
+            🇬🇧 Reino Unido (+44)
+        </option>
+
+        <option value="52">
+            🇲🇽 México (+52)
+        </option>
+
+    </select>
+
+</div>
 <div><label>DDD</label><input id="ddd" value="11"></div>
 <div><label>Número</label><input id="numero" value="989269296"></div>
 </div>
 <p><label>Mensagem</label></p>
-<textarea id="mensagem" rows="5">Olá! Gostaria de mais informações sobre o Retiro Thalita Kum em Tremembé.</textarea>
+<textarea
+    id="mensagem"
+    rows="5"
+    placeholder="Digite aqui uma mensagem opcional. Se deixar em branco, o QR Code abrirá apenas a conversa do WhatsApp.">
+</textarea>
 <div>
 <button class="p" onclick="gerarQRCode()">Gerar QR Code</button>
 <button class="i" onclick="copiarLink()">Copiar Link</button>
@@ -37,7 +88,17 @@ const pais=document.getElementById('pais').value.replace(/\D/g,'');
 const ddd=document.getElementById('ddd').value.replace(/\D/g,'');
 const numero=document.getElementById('numero').value.replace(/\D/g,'');
 const mensagem=document.getElementById('mensagem').value.trim();
-linkAtual=`https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`;
+if (mensagem) {
+
+    linkAtual =
+        `https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`;
+
+} else {
+
+    linkAtual =
+        `https://wa.me/${pais}${ddd}${numero}`;
+
+}
 document.getElementById('linkResultado').innerHTML=`<a href="${linkAtual}" target="_blank">${linkAtual}</a>`;
 document.getElementById('previewMensagem').textContent=mensagem;
 const qr=document.getElementById('qrcode'); qr.innerHTML='';
