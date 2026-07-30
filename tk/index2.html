@@ -314,6 +314,71 @@
 .carousel button:hover{
     background:rgba(0,0,0,.8);
 }        
+
+/* Layout do Carrossel */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+    scroll-behavior: smooth;
+}
+
+/* Estilo do Card */
+.card {
+    min-width: 300px;
+    max-width: 350px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+/* Controle do Texto Oculto */
+.more-content {
+    display: none; /* Esconde o texto inicialmente */
+    margin-top: 10px;
+}
+
+.more-content.show {
+    display: block; /* Mostra o texto ao clicar */
+}
+
+/* Botão Ler Mais */
+.read-more-btn {
+    background: transparent;
+    border: none;
+    color: #0066cc;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 10px;
+}
+
+/* Botões do Carrossel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+        
     </style>
 </head>
 
@@ -413,51 +478,50 @@
 </section>
 
 
-<section class="evangelizacao">
+<section>
     <div class="container">
 
-<div class="banner-section"> 
-    <img src="assets/evangelizacao.png" alt="Banner Evangelização">
-</div>
-
-        <h2>A Evangelização na Aliança de Misericórdia</h2>
-
-        <div class="grid">
-
-<div class="card">
-    <h4>Thalita Kum</h4>
-    <p class="slogan">Nasceu para "despertar" e gerar profunda conversão!</p>
-    
-    <p>Uma experiência de encontro com Deus focada na mensagem Kerigmática e nas pregações apostólicas (At 2-4).</p>
-    
-    <ul>
-        <li><strong>Para quem precisa:</strong> Afastados da Igreja ou envolvidos em maus caminhos.</li>
-        <li><strong>Para quem já caminha:</strong> Fortalecimento da fé e aprendizado sobre evangelização.</li>
-    </ul>
-</div>
-            <div class="card">
-                <h4>Noite de Espiritualidade</h4>
-                <p>Experiência carismática de oração.</p>
-            </div>
-
-            <div class="card">
-                <h4>Células</h4>
-                <p>Pequenos grupos de evangelização.</p>
-            </div>
-
-            <div class="card">
-                <h4>Ação de Rua</h4>
-                <p>Onde a misericórdia encontra os últimos.</p>
-            </div>
-
-            <div class="card">
-                <h4>Ônibus da Misericórdia</h4>
-                <p>Evangelização social e promoção humana.</p>
-            </div>
-
+        <div class="banner-section">
+            <img src="evangelizacao.jpg" alt="Banner Evangelização">
         </div>
+
+        <h2>Nossas Evangelizações - Movimento Tremembé em Ação</h2>
+
+        <!-- Envolvente do Carrossel -->
+        <div class="carousel-container">
+            <button class="carousel-btn prev-btn" onclick="moveCarousel(-1)">&#10094;</button>
+
+            <div class="carousel-track">
+
+                <!-- Card: Thalita Kum -->
+                <div class="card">
+                    <h4>Thalita Kum</h4>
+                    <p class="slogan">Nasceu para "despertar" e gerar profunda conversão!</p>
+                    
+                    <p>Uma experiência de encontro com Deus focada na mensagem Kerigmática e nas pregações apostólicas (At 2-4).</p>
+                    
+                    <!-- Trecho Oculto -->
+                    <div class="more-content">
+                        <ul>
+                            <li><strong>Para quem precisa:</strong> Afastados da Igreja ou envolvidos em maus caminhos.</li>
+                            <li><strong>Para quem já caminha:</strong> Fortalecimento da fé e aprendizado sobre evangelização.</li>
+                        </ul>
+                    </div>
+
+                    <button class="read-more-btn" onclick="toggleReadMore(this)">Ler mais</button>
+                </div>
+
+                <!-- Adicione os outros cards com a mesma estrutura aqui -->
+
+            </div>
+
+            <button class="carousel-btn next-btn" onclick="moveCarousel(1)">&#10095;</button>
+        </div>
+
     </div>
 </section>
+
+    
     <section class="impacto">
 
         <div class="container">
@@ -737,7 +801,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setInterval(() => showSlide(index + 1), 5000);
 
-});        
+});      
+
+// Função para expandir e recolher o "Ler mais"
+function toggleReadMore(button) {
+    const card = button.closest('.card');
+    const moreContent = card.querySelector('.more-content');
+    
+    moreContent.classList.toggle('show');
+    
+    if (moreContent.classList.contains('show')) {
+        button.textContent = 'Ler menos';
+    } else {
+        button.textContent = 'Ler mais';
+    }
+}
+
+// Lógica simples de navegação do carrossel
+function moveCarousel(direction) {
+    const track = document.querySelector('.carousel-track');
+    const cardWidth = document.querySelector('.card').offsetWidth + 20; // Largura do card + gap
+    track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+}        
+        
     </script>
 
 </body>
