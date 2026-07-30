@@ -3,386 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Gerador de QR Code WhatsApp</title>
-
-js/1.0.0/qrcode.min.js"></script>
-
+<title>Gerador QR Code WhatsApp</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Segoe UI,Arial,sans-serif;
-    background:#f4f7fa;
-    color:#333;
-    padding:20px;
-}
-
-.container{
-    max-width:1000px;
-    margin:auto;
-}
-
-.card{
-    background:white;
-    border-radius:16px;
-    padding:25px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-h1{
-    color:#128C7E;
-    margin-bottom:20px;
-}
-
-label{
-    display:block;
-    margin-top:15px;
-    margin-bottom:5px;
-    font-weight:600;
-}
-
-input, textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    font-size:15px;
-}
-
-textarea{
-    resize:vertical;
-}
-
-.grid{
-    display:grid;
-    gap:15px;
-    grid-template-columns:1fr 1fr 2fr;
-}
-
-button{
-    background:#128C7E;
-    color:white;
-    border:none;
-    padding:14px 20px;
-    border-radius:10px;
-    cursor:pointer;
-    margin-top:20px;
-    font-size:16px;
-}
-
-button:hover{
-    background:#0f7468;
-}
-
-.link-box{
-    margin-top:20px;
-    background:#eef8f6;
-    padding:15px;
-    border-radius:10px;
-    word-break:break-all;
-}
-
-.preview-box{
-    margin-top:15px;
-    background:#f8f8f8;
-    border-left:4px solid #25D366;
-    padding:15px;
-    border-radius:8px;
-}
-
-.qr-container{
-    margin-top:30px;
-    text-align:center;
-}
-
-#qrcode{
-    position:relative;
-    display:inline-block;
-    margin-top:10px;
-}
-
-.logo-whats{
-    position:absolute;
-    width:60px;
-    height:60px;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    background:white;
-    border-radius:50%;
-    padding:6px;
-}
-
-.download-btn{
-    background:#25D366;
-}
-
-.download-btn:hover{
-    background:#1eb858;
-}
-
-.history{
-    margin-top:30px;
-}
-
-.history-item{
-    background:#fafafa;
-    border:1px solid #e5e5e5;
-    padding:12px;
-    border-radius:10px;
-    margin-top:10px;
-}
-
-.history-item a{
-    color:#128C7E;
-}
-
-small{
-    color:#666;
-}
-
-@media(max-width:768px){
-
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
+body{font-family:Segoe UI,Arial,sans-serif;background:#f4f7fa;padding:20px} .card{max-width:1000px;margin:auto;background:#fff;padding:25px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)} .grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:15px} input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px} button{padding:12px 20px;border:none;border-radius:8px;color:#fff;cursor:pointer;margin:5px}.p{background:#128C7E}.s{background:#25D366}.i{background:#2196F3}.box{background:#f8f8f8;padding:15px;border-radius:10px;margin-top:15px}.qr{text-align:center} @media(max-width:768px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<div class="container">
-
 <div class="card">
-
 <h1>📱 Gerador de QR Code WhatsApp</h1>
-
 <div class="grid">
-
+<div><label>País</label><input id="pais" value="55"></div>
+<div><label>DDD</label><input id="ddd" value="11"></div>
+<div><label>Número</label><input id="numero" value="989269296"></div>
+</div>
+<p><label>Mensagem</label></p>
+<textarea id="mensagem" rows="5">Olá! Gostaria de mais informações sobre o Retiro Thalita Kum em Tremembé.</textarea>
 <div>
-<label>País</label>
-<input id="pais" value="55">
+<button class="p" onclick="gerarQRCode()">Gerar QR Code</button>
+<button class="i" onclick="copiarLink()">Copiar Link</button>
+<button class="s" onclick="abrirWhatsapp()">Abrir WhatsApp</button>
+<button class="s" onclick="baixarQRCode()">Baixar PNG</button>
 </div>
-
-<div>
-<label>DDD</label>
-<input id="ddd" value="11">
+<div class="box"><strong>Link:</strong><div id="linkResultado"></div></div>
+<div class="box"><strong>Mensagem:</strong><div id="previewMensagem"></div></div>
+<div class="qr"><div id="qrcode"></div></div>
+<div class="box"><h3>Histórico</h3><div id="historico"></div></div>
 </div>
-
-<div>
-<label>Número</label>
-<input id="numero" value="989269296">
-</div>
-
-</div>
-
-<label>Mensagem</label>
-
-<textarea id="mensagem" rows="5">
-Olá! Gostaria de mais informações sobre o Retiro Thalita Kum em Tremembé.
-</textarea>
-
-<button onclick="gerarQRCode()">
-Gerar QR Code
-</button>
-
-<div class="link-box">
-
-<strong>Link WhatsApp:</strong>
-
-<div id="linkResultado">
-Aguardando geração...
-</div>
-
-</div>
-
-<div class="preview-box">
-
-<strong>Mensagem:</strong>
-
-<div id="previewMensagem">
-Aguardando geração...
-</div>
-
-</div>
-
-<div class="qr-container">
-
-<h2>QR Code</h2>
-
-<div id="qrcode"></div>
-
-<br>
-
-<button
-class="download-btn"
-onclick="baixarQRCode()">
-⬇️ Baixar PNG
-</button>
-
-</div>
-
-<div class="history">
-
-<h2>📜 Histórico</h2>
-
-<div id="historico"></div>
-
-</div>
-
-</div>
-
-</div>
-
 <script>
-
-let qrAtual = null;
-
-function gerarQRCode() {
-
-    const pais =
-        document.getElementById("pais")
-        .value
-        .replace(/\D/g,'');
-
-    const ddd =
-        document.getElementById("ddd")
-        .value
-        .replace(/\D/g,'');
-
-    const numero =
-        document.getElementById("numero")
-        .value
-        .replace(/\D/g,'');
-
-    const mensagem =
-        document.getElementById("mensagem").value.trim();
-
-    const url =
-      `https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`;
-
-    document.getElementById("linkResultado").innerHTML =
-      `${url}${url}</a>`;
-
-    document.getElementById("previewMensagem").textContent =
-      mensagem;
-
-    const qrDiv =
-      document.getElementById("qrcode");
-
-    qrDiv.innerHTML = "";
-
-    qrAtual = new QRCode(qrDiv,{
-        text:url,
-        width:300,
-        height:300
-    });
-
-    setTimeout(() => {
-
-        const logo =
-            document.createElement("img");
-
-        logo.src =
-            "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg";
-
-        logo.className =
-            "logo-whats";
-
-        qrDiv.appendChild(logo);
-
-    },300);
-
-    salvarHistorico(url,mensagem);
+let linkAtual='';
+function gerarQRCode(){
+const pais=document.getElementById('pais').value.replace(/\D/g,'');
+const ddd=document.getElementById('ddd').value.replace(/\D/g,'');
+const numero=document.getElementById('numero').value.replace(/\D/g,'');
+const mensagem=document.getElementById('mensagem').value.trim();
+linkAtual=`https://wa.me/${pais}${ddd}${numero}?text=${encodeURIComponent(mensagem)}`;
+document.getElementById('linkResultado').innerHTML=`<a href="${linkAtual}" target="_blank">${linkAtual}</a>`;
+document.getElementById('previewMensagem').textContent=mensagem;
+const qr=document.getElementById('qrcode'); qr.innerHTML='';
+new QRCode(qr,{text:linkAtual,width:300,height:300});
+salvarHistorico(linkAtual,mensagem);
 }
-
-function baixarQRCode(){
-
-    const canvas =
-        document.querySelector("#qrcode canvas");
-
-    if(!canvas){
-        alert("Gere um QR Code primeiro.");
-        return;
-    }
-
-    const link =
-        document.createElement("a");
-
-    link.download =
-        "whatsapp-qrcode.png";
-
-    link.href =
-        canvas.toDataURL("image/png");
-
-    link.click();
-}
-
-function salvarHistorico(url,mensagem){
-
-    let lista =
-        JSON.parse(
-            localStorage.getItem("qrHistorico")
-        ) || [];
-
-    lista.unshift({
-        data:new Date().toLocaleString(),
-        url,
-        mensagem
-    });
-
-    lista =
-        lista.slice(0,10);
-
-    localStorage.setItem(
-        "qrHistorico",
-        JSON.stringify(lista)
-    );
-
-    carregarHistorico();
-}
-
-function carregarHistorico(){
-
-    const lista =
-        JSON.parse(
-            localStorage.getItem("qrHistorico")
-        ) || [];
-
-    const div =
-        document.getElementById("historico");
-
-    div.innerHTML = "";
-
-    lista.forEach(item=>{
-
-        div.innerHTML += `
-        <div class="history-item">
-            <strong>${item.data}</strong>
-            <br><br>
-
-            <small>${item.mensagem}</small>
-
-            <br><br>
-
-            ${item.url}
-                Abrir WhatsApp
-            </a>
-        </div>`;
-    });
-}
-
-carregarHistorico();
-
+function copiarLink(){if(linkAtual){navigator.clipboard.writeText(linkAtual);alert('Link copiado!');}}
+function abrirWhatsapp(){if(linkAtual) window.open(linkAtual,'_blank');}
+function baixarQRCode(){const c=document.querySelector('#qrcode canvas'); if(!c)return alert('Gere um QR Code primeiro.'); const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='whatsapp-qrcode.png'; a.click();}
+function salvarHistorico(url,mensagem){let l=JSON.parse(localStorage.getItem('historicoQR'))||[]; l.unshift({data:new Date().toLocaleString(),url,mensagem}); l=l.slice(0,10); localStorage.setItem('historicoQR',JSON.stringify(l)); carregarHistorico();}
+function carregarHistorico(){let l=JSON.parse(localStorage.getItem('historicoQR'))||[]; const d=document.getElementById('historico'); d.innerHTML=''; l.forEach(i=>{d.innerHTML+=`<div style="margin:8px 0;padding:8px;border:1px solid #ddd"><b>${i.data}</b><br>${i.mensagem}<br><a href="${i.url}" target="_blank">Abrir WhatsApp</a></div>`})}
+window.onload=()=>{carregarHistorico(); gerarQRCode();}
 </script>
-
-</body>
-</html>
+</body></html>
