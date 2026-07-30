@@ -280,10 +280,8 @@
 }
 
 .slides img{
+    flex: 0 0 100%;
     width:100%;
-    flex-shrink:0;
-    height:350px;
-    object-fit:cover;
 }
 
 .carousel button{
@@ -328,9 +326,9 @@
             Um encontro de ressurreição espiritual e restauração integral em Tremembé/SP.
         </p>
 
-        " class="btn-cta">
-            QUERO ME INSCREVER AGORA
-        </a>
+<a href="#inscricao" class="btn-cta">
+    QUERO ME INSCREVER AGORA
+</a>
     </header>
 
     <section>
@@ -572,11 +570,11 @@
         <p>© 2026 - Aliança de Misericórdia | Tremembé/SP</p>
     </footer>
 
-    131209191"
-       class="whatsapp-float"
-       target="_blank">
-        💬
-    </a>
+<a href="https://wa.me/5511989269296"
+   class="whatsapp-float"
+   target="_blank">
+    💬
+</a>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -633,7 +631,6 @@
 
         });
 
-const slides = document.querySelector(".slides");
 const images = document.querySelectorAll(".slides img");
 
 let index = 0;
@@ -658,7 +655,28 @@ document.querySelector(".prev").addEventListener("click", () => {
 setInterval(() => {
     showSlide(index + 1);
 }, 5000);        
-        
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const slides = document.querySelector(".slides");
+    const images = document.querySelectorAll(".slides img");
+
+    let index = 0;
+
+    function showSlide(i){
+        if(i >= images.length) index = 0;
+        else if(i < 0) index = images.length - 1;
+        else index = i;
+
+        slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    document.querySelector(".next").onclick = () => showSlide(index + 1);
+    document.querySelector(".prev").onclick = () => showSlide(index - 1);
+
+    setInterval(() => showSlide(index + 1), 5000);
+
+});        
     </script>
 
 </body>
