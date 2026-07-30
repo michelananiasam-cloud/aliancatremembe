@@ -122,23 +122,24 @@
             padding: 4px;
         }
 
-.history-item button {
-    background: #128C7E;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    margin-right: 5px;
-    margin-top: 5px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
+.btn-reutilizar {
+    background: #1976D2;
+    color: white;
 }
 
-.history-item button:hover {
-    background: #0f6d61;
+.btn-reutilizar:hover {
+    background: #125ea7;
 }
 
+.btn-excluir {
+    background: #D32F2F;
+    color: white;
+}
+
+.btn-excluir:hover {
+    background: #a92525;
+}
+        
         #linkResultado {
             word-break: break-all;
         }
@@ -323,13 +324,18 @@ function carregarHistorico() {
     lista.forEach(item => {
 
         div.innerHTML += `
-            <div class="history-item">
+            <div>
                 <strong>${item.data}</strong><br>
                 📱 +${item.pais} ${item.ddd} ${item.numero}<br>
                 💬 ${item.mensagem || 'Sem mensagem'}<br><br>
                 <a href="${item.url}" target="_blank">Abrir WhatsApp</a><br><br>
-                <button onclick="reutilizarQR('${item.id}')">♻ Reutilizar</button>
-                <button onclick="excluirHistorico('${item.id}')">🗑 Excluir</button>
+                <button class="btn-reutilizar" onclick="reutilizarQR('${item.id}')">
+                    ♻ Reutilizar
+                </button>
+
+                <button class="btn-excluir" onclick="excluirHistorico('${item.id}')">
+                    🗑 Excluir
+                </button>
             </div>
         `;
     });
