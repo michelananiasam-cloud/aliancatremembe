@@ -169,24 +169,25 @@
         text-align: justify;
     }
 
-    /* --- [CORREÇÃO REFORÇADA] Zoom no Banner/Slides no Mobile --- */
-    
-    /* 1. Força o container pai/geral do carrossel a ter altura no mobile */
-    .carousel, 
-    .slider, 
-    .banner-container, 
+    /* --- [CORREÇÃO DEFINITIVA PARA <img src="...">] --- */
+
+    /* 1. Definimos uma altura fixa para o trilho/container de slides no celular */
     .slides {
-        height: 450px !important; /* Define uma altura fixa bem visível no celular */
-        max-height: 70vh !important;
+        height: 400px !important; /* Altura desejada do banner no celular */
+        display: flex !important;
     }
 
-    /* 2. Força o item individual do slide e a imagem a preencherem os 450px */
-    .slides .slide,
+    /* 2. Forçamos a tag <img> a ocupar 100% da altura dos 400px e aplicar o ZOOM */
     .slides img {
         width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important; /* Aplica o zoom cortando as sobras */
-        object-position: center center !important; /* Mantém o centro focado */
+        min-width: 100% !important;
+        height: 400px !important; /* Mesma altura do container */
+        max-height: 400px !important;
+        
+        object-fit: cover !important; /* APLICA O ZOOM: Preenche os 400px cortando as sobras */
+        object-position: center center !important; /* Mantém o centro da arte visível */
+        
+        display: block !important;
     }
 }
     
