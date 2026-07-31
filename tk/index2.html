@@ -154,6 +154,9 @@
 /* ==========================================================================
    AJUSTE DE ZOOM E DESTAQUE DO BANNER NO MOBILE
    ========================================================================== */
+/* ==========================================================================
+   AJUSTE DE ZOOM E DESTAQUE DO BANNER NO MOBILE
+   ========================================================================== */
 @media (max-width: 768px) {
     /* --- Regras da Seção de História --- */
     .historia-section {
@@ -169,28 +172,24 @@
         text-align: justify;
     }
 
-    /* --- [CORREÇÃO DEFINITIVA PARA <img src="...">] --- */
+    /* --- CORREÇÃO DO BANNER PRINCIPAL --- */
 
-    /* 1. Definimos uma altura fixa para o trilho/container de slides no celular */
-    .slides {
-        height: 400px !important; /* Altura desejada do banner no celular */
-        display: flex !important;
+    /* 1. O container do banner ganha altura fixa e esconde o que passa das bordas */
+    .banner-section {
+        height: 280px !important; /* Ajuste essa altura (ex: 250px a 350px) como preferir */
+        overflow: hidden !important;
+        border-radius: 12px;
     }
 
-    /* 2. Forçamos a tag <img> a ocupar 100% da altura dos 400px e aplicar o ZOOM */
-    .slides img {
+    /* 2. A imagem preenche 100% dos 280px mantendo proporção e aplicando o corte/zoom */
+    .banner-section img {
         width: 100% !important;
-        min-width: 100% !important;
-        height: 400px !important; /* Mesma altura do container */
-        max-height: 400px !important;
-        
-        object-fit: cover !important; /* APLICA O ZOOM: Preenche os 400px cortando as sobras */
-        object-position: center center !important; /* Mantém o centro da arte visível */
-        
-        display: block !important;
+        height: 100% !important;
+        object-fit: cover !important; /* Aplica o ZOOM recortando as sobras nas laterais */
+        object-position: center center !important; /* Centraliza o foco da imagem */
+        border-radius: 12px;
     }
-}
-    
+}    
     /* ==========================================================================
        3. INTRODUÇÃO DO ESTATUTO [depreciado]
 
@@ -975,21 +974,22 @@ document.addEventListener('DOMContentLoaded', () => {
         counters.forEach(counter => observer.observe(counter));
     }
 
-/* ==========================================================================
-   CÁLCULO DINÂMICO DOS ANOS DE FUNDAÇÃO (1999/2000 -> ANO ATUAL)
-   ========================================================================== */
-const anoFundacao = 2000; // Ano em que se completou o primeiro ano na virada de 1999 para 2000
-const anoAtual = new Date().getFullYear();
-const anosDecorridos = anoAtual - anoFundacao;
+    /* ==========================================================================
+       CÁLCULO DINÂMICO DOS ANOS DE FUNDAÇÃO (1999/2000 -> ANO ATUAL)
+       ========================================================================== */
+    const anoFundacao = 2000; 
+    const anoAtual = new Date().getFullYear();
+    const anosDecorridos = anoAtual - anoFundacao;
 
-// Elementos da tela
-const elemAnosTitulo = document.getElementById('anos-fundacao-titulo');
-const elemAnosTexto = document.getElementById('anos-fundacao-texto');
-const elemAnoCorrente = document.getElementById('ano-corrente');
+    // Elementos da tela
+    const elemAnosTitulo = document.getElementById('anos-fundacao-titulo');
+    const elemAnosTexto = document.getElementById('anos-fundacao-texto');
+    const elemAnoCorrente = document.getElementById('ano-corrente');
 
-if (elemAnosTitulo) elemAnosTitulo.textContent = anosDecorridos;
-if (elemAnosTexto) elemAnosTexto.textContent = anosDecorridos;
-if (elemAnoCorrente) elemAnoCorrente.textContent = anoAtual;
+    if (elemAnosTitulo) elemAnosTitulo.textContent = anosDecorridos;
+    if (elemAnosTexto) elemAnosTexto.textContent = anosDecorridos;
+    if (elemAnoCorrente) elemAnoCorrente.textContent = anoAtual;
+
     /* ==========================================================================
        2. CARROSSEL DE SLIDES/IMAGENS (BANNER)
        ========================================================================== */
@@ -1015,7 +1015,6 @@ if (elemAnoCorrente) elemAnoCorrente.textContent = anoAtual;
         // Autoplay do banner de imagens a cada 5s
         setInterval(() => showSlide(slideIndex + 1), 5000);
     }
-
 
     /* ==========================================================================
        3. CARROSSEL DE CARDS (OBRAS DE EVANGELIZAÇÃO) + SETAS INTELIGENTES + AUTOPLAY
@@ -1051,29 +1050,28 @@ if (elemAnoCorrente) elemAnoCorrente.textContent = anoAtual;
             }
         }
 
-        // Função de avanço automático
-// Função de avanço automático ajustada com reset do "Ler mais"
-function nextSlide() {
-    const card = track.querySelector('.card');
-    if (!card) return;
+        // Função de avanço automático ajustada com reset do "Ler mais"
+        function nextSlide() {
+            const card = track.querySelector('.card');
+            if (!card) return;
 
-    // FECHA QUALQUER CARD EXPANDIDO ANTES DE ROLAR (Melhoria de UX no Mobile)
-    document.querySelectorAll('.more-content.show').forEach(content => {
-        content.classList.remove('show');
-        const btn = content.closest('.card').querySelector('.read-more-btn');
-        if (btn) btn.textContent = 'Ler mais';
-    });
+            // FECHA QUALQUER CARD EXPANDIDO ANTES DE ROLAR (Melhoria de UX no Mobile)
+            document.querySelectorAll('.more-content.show').forEach(content => {
+                content.classList.remove('show');
+                const btn = content.closest('.card').querySelector('.read-more-btn');
+                if (btn) btn.textContent = 'Ler mais';
+            });
 
-    const gap = parseInt(window.getComputedStyle(track).gap) || 15;
-    const scrollAmount = card.offsetWidth + gap;
-    const maxScroll = track.scrollWidth - track.clientWidth;
+            const gap = parseInt(window.getComputedStyle(track).gap) || 15;
+            const scrollAmount = card.offsetWidth + gap;
+            const maxScroll = track.scrollWidth - track.clientWidth;
 
-    if (track.scrollLeft >= maxScroll - 5) {
-        track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-}
+            if (track.scrollLeft >= maxScroll - 5) {
+                track.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
 
         function startAutoPlay() {
             stopAutoPlay();
@@ -1084,11 +1082,26 @@ function nextSlide() {
             if (autoPlayInterval) clearInterval(autoPlayInterval);
         }
 
+        // Eventos de clique direto nas setas do carrossel
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                moveCarousel(-1);
+                startAutoPlay(); // Reinicia o timer ao clicar
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                moveCarousel(1);
+                startAutoPlay(); // Reinicia o timer ao clicar
+            });
+        }
+
         // Ouvintes de eventos para rolagem e botões
         track.addEventListener('scroll', updateCarouselButtons);
         window.addEventListener('resize', updateCarouselButtons);
 
-        // Pausa autoplay em caso de interatividade
+        // Pausa autoplay em caso de interatividade do usuário
         track.addEventListener('mouseenter', stopAutoPlay);
         track.addEventListener('touchstart', stopAutoPlay, { passive: true });
         track.addEventListener('mouseleave', startAutoPlay);
