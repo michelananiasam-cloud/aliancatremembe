@@ -155,7 +155,7 @@
    AJUSTE DE ZOOM E DESTAQUE DO BANNER NO MOBILE
    ========================================================================== */
 @media (max-width: 768px) {
-    /* --- [MANTÉM] Regras da Seção de História --- */
+    /* --- Regras da Seção de História --- */
     .historia-section {
         padding: 40px 15px;
     }
@@ -166,20 +166,27 @@
 
     .historia-text {
         font-size: 1rem;
-        text-align: justify; /* Melhora a leitura no mobile */
+        text-align: justify;
     }
 
-    /* --- [ENTRA] Regras do Zoom no Banner no Mobile --- */
+    /* --- [CORREÇÃO REFORÇADA] Zoom no Banner/Slides no Mobile --- */
+    
+    /* 1. Força o container pai/geral do carrossel a ter altura no mobile */
+    .carousel, 
+    .slider, 
+    .banner-container, 
     .slides {
-        height: 60vh; /* Ocupa 60% da altura da tela do celular */
-        min-height: 380px; /* Garante altura mínima para não achatar */
+        height: 450px !important; /* Define uma altura fixa bem visível no celular */
+        max-height: 70vh !important;
     }
 
+    /* 2. Força o item individual do slide e a imagem a preencherem os 450px */
+    .slides .slide,
     .slides img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Aplica o zoom proporcional sem distorcer */
-        object-position: center center; /* Enquadra o centro da imagem */
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; /* Aplica o zoom cortando as sobras */
+        object-position: center center !important; /* Mantém o centro focado */
     }
 }
     
