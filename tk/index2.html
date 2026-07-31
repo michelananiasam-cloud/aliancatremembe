@@ -118,7 +118,54 @@
         text-transform: uppercase;
         margin-bottom: 30px;
     }
+/* ==========================================================================
+   ESTILOS DA SEÇÃO HISTÓRIA E FUNDAÇÃO
+   ========================================================================== */
+.historia-section {
+    padding: 60px 20px;
+    background-color: #f9fbfd; /* Fundo suave */
+    text-align: center;
+}
 
+.historia-section .container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.historia-title {
+    color: var(--azul-anunciadores, #0077c2);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    line-height: 1.3;
+}
+
+.historia-text {
+    color: var(--texto-escuro, #333333);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    margin: 0 auto;
+}
+
+.historia-text strong {
+    color: var(--azul-anunciadores, #0077c2);
+}
+
+@media (max-width: 768px) {
+    .historia-section {
+        padding: 40px 15px;
+    }
+
+    .historia-title {
+        font-size: 1.6rem;
+    }
+
+    .historia-text {
+        font-size: 1rem;
+        text-align: justify; /* Melhora a leitura no mobile */
+    }
+}
+    
     /* ==========================================================================
        3. INTRODUÇÃO DO ESTATUTO [depreciado]
 
@@ -559,6 +606,23 @@
 </a>
     </header>
 
+<!-- ==========================================================================
+   SEÇÃO HISTÓRIA E FUNDAÇÃO (DINÂMICA)
+   ========================================================================== -->
+<section class="historia-section">
+    <div class="container">
+        <h2 class="historia-title">
+            <span id="anos-fundacao-titulo">--</span> anos da concretização do “Sonho de Deus”
+        </h2>
+        
+        <p class="historia-text">
+            Na virada do ano para <strong id="ano-corrente">----</strong>, a família Aliança de Misericórdia comemorou 
+            <strong id="anos-fundacao-texto">--</strong> anos de fundação. Um Movimento que nasceu do Coração Imaculado de Maria, 
+            brotando no coração do Pe. Antonello Cadeddu, do Pe. João Henrique e da Ir. Maria Paula do Cordeiro Imolado. 
+            Uma data memorável para esse Carisma que tem por missão ser expressão viva do amor Misericordioso de Deus.
+        </p>
+    </div>
+</section>    
     <section>
         <div class="container text-center">
 
@@ -963,7 +1027,21 @@ document.addEventListener('DOMContentLoaded', () => {
         counters.forEach(counter => observer.observe(counter));
     }
 
+/* ==========================================================================
+   CÁLCULO DINÂMICO DOS ANOS DE FUNDAÇÃO (1999/2000 -> ANO ATUAL)
+   ========================================================================== */
+const anoFundacao = 2000; // Ano em que se completou o primeiro ano na virada de 1999 para 2000
+const anoAtual = new Date().getFullYear();
+const anosDecorridos = anoAtual - anoFundacao;
 
+// Elementos da tela
+const elemAnosTitulo = document.getElementById('anos-fundacao-titulo');
+const elemAnosTexto = document.getElementById('anos-fundacao-texto');
+const elemAnoCorrente = document.getElementById('ano-corrente');
+
+if (elemAnosTitulo) elemAnosTitulo.textContent = anosDecorridos;
+if (elemAnosTexto) elemAnosTexto.textContent = anosDecorridos;
+if (elemAnoCorrente) elemAnoCorrente.textContent = anoAtual;
     /* ==========================================================================
        2. CARROSSEL DE SLIDES/IMAGENS (BANNER)
        ========================================================================== */
