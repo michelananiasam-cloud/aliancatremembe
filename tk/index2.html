@@ -199,34 +199,38 @@
         margin-top: 20px;
     }
 
-    .carousel-track {
-        display: flex;
-        gap: 20px;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        scroll-snap-type: x mandatory; /* ENTROU: trava o card na tela ao rolar */
-        padding: 10px 0;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start; /* ENTROU: impede que os cards vizinhos estiquem em altura */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 10px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
     .carousel-track::-webkit-scrollbar {
         display: none;
     }
 
-    .card {
-        flex: 0 0 320px; /* ENTROU: substituiu min/max-width por largura base flexível */
-        max-width: 320px;
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        border-top: 5px solid var(--azul-anunciadores);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        scroll-snap-align: start; /* ENTROU: alinha o card perfeitamente ao arrastar */
-    }
+.card {
+    /* Faz caber exatamente 4 cards na tela no Desktop */
+    flex: 0 0 calc((100% - (3 * 20px)) / 4); 
+    max-width: calc((100% - (3 * 20px)) / 4);
+    
+    background: white;
+    padding: 20px; /* Reduzimos levemente o padding interno de 25px para 20px */
+    border-radius: 15px;
+    border-top: 5px solid var(--azul-anunciadores);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    scroll-snap-align: start;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
+}
 
     .card h4 {
         margin-top: 0;
@@ -1022,20 +1026,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Função de avanço automático
-        function nextSlide() {
-            const card = track.querySelector('.card');
-            if (!card) return;
+// Função de avanço automático ajustada com reset do "Ler mais"
+function nextSlide() {
+    const card = track.querySelector('.card');
+    if (!card) return;
 
-            const gap = parseInt(window.getComputedStyle(track).gap) || 15;
-            const scrollAmount = card.offsetWidth + gap;
-            const maxScroll = track.scrollWidth - track.clientWidth;
+    // FECHA QUALQUER CARD EXPANDIDO ANTES DE ROLAR (Melhoria de UX no Mobile)
+    document.querySelectorAll('.more-content.show').forEach(content => {
+        content.classList.remove('show');
+        const btn = content.closest('.card').querySelector('.read-more-btn');
+        if (btn) btn.textContent = 'Ler mais';
+    });
 
-            if (track.scrollLeft >= maxScroll - 5) {
-                track.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            }
-        }
+    const gap = parseInt(window.getComputedStyle(track).gap) || 15;
+    const scrollAmount = card.offsetWidth + gap;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+
+    if (track.scrollLeft >= maxScroll - 5) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+}
 
         function startAutoPlay() {
             stopAutoPlay();
