@@ -151,7 +151,11 @@
     color: var(--azul-anunciadores, #0077c2);
 }
 
+/* ==========================================================================
+   AJUSTE DE ZOOM E DESTAQUE DO BANNER NO MOBILE
+   ========================================================================== */
 @media (max-width: 768px) {
+    /* --- [MANTÉM] Regras da Seção de História --- */
     .historia-section {
         padding: 40px 15px;
     }
@@ -163,6 +167,19 @@
     .historia-text {
         font-size: 1rem;
         text-align: justify; /* Melhora a leitura no mobile */
+    }
+
+    /* --- [ENTRA] Regras do Zoom no Banner no Mobile --- */
+    .slides {
+        height: 60vh; /* Ocupa 60% da altura da tela do celular */
+        min-height: 380px; /* Garante altura mínima para não achatar */
+    }
+
+    .slides img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Aplica o zoom proporcional sem distorcer */
+        object-position: center center; /* Enquadra o centro da imagem */
     }
 }
     
