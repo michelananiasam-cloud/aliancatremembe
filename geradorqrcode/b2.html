@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Importador Bíblia JSON</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f6f9;padding:20px}
+.container{max-width:1200px;margin:auto;background:#fff;padding:20px;border-radius:10px}
+h1{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+label{display:block;font-weight:bold;margin-bottom:5px}
+input,select{width:100%;padding:8px}
+button{padding:10px 15px;margin:5px;cursor:pointer;border:none;border-radius:6px;background:#2563eb;color:#fff}
+button:hover{background:#1d4ed8}
+textarea{width:100%;height:400px;margin-top:10px;font-family:monospace}
+.progress{height:24px;background:#ddd;border-radius:20px;overflow:hidden;margin:10px 0}
+.bar{height:100%;width:0;background:#22c55e;color:#fff;text-align:center;line-height:24px}
+.status{font-size:14px;color:#555}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Importador Bíblia JSON</h1>
+<div class="grid">
+<div><label>Livro (slug API)</label><input id="book" value="genesis"></div>
+<div><label>Capítulo</label><input id="chapter" type="number" value="1"></div>
+</div>
+<p>
+<label><input type="checkbox" id="am" checked> Ave Maria</label>
+<label><input type="checkbox" id="ms" checked> Matos Soares</label>
+</p>
+<button onclick="gerarCapitulo()">Gerar Capítulo</button>
+<button onclick="gerarLivro()">Gerar Livro (usa base_consulta_api)</button>
+<button onclick="downloadJson()">Baixar JSON</button>
+<div class="progress"><div class="bar" id="bar">0%</div></div>
+<div class="status" id="status">Pronto</div>
+<textarea id="result"></textarea>
+</div>
+<script>
+let resultadoFinal=null;
+const BASE='https://www.liriocatolico.com.br';
+function setProgress(cur,total,msg){const p=Math.round((cur/total)*100)||0;const b=document.getElementById('bar');b.style.width=p+'%';b.innerText=p+'%';document.getElementById('status').innerText=msg;}
+async function verse(book,chapter,v){const r=await fetch(`${BASE}/biblia_online/api/${book}/${chapter}/${v}.json`);if(!r.ok)return null;return await r.json();}
+function mapText(d){const obj={};if(document.getElementById('am').checked)obj.ave_maria=d.texto_ave_maria||'';if(document.getElementById('ms').checked)obj.matos_soares=d.texto_matos_soares||'';return obj;}
+async function gerarCapitulo(){const book=document.getElementById('book').value;const chapter=Number(document.getElementById('chapter').value);let result={livro:'',capitulos:{}};result.capitulos[chapter]={versiculos:{}};let v=1;while(true){const data=await verse(book,chapter,v);if(!data)break;if(!result.livro)result.livro=data.livro;result.capitulos[chapter].versiculos[v]=mapText(data);setProgress(v,v+1,`Versículo ${v}`);v++;if(v>300)break;}
+resultadoFinal=result;document.getElementById('result').value=JSON.stringify(result,null,2);setProgress(100,100,'Concluído');}
+async function gerarLivro(){const slug=document.getElementById('book').value;const estrutura=await (await fetch(`${BASE}/biblia_online/base_consulta_api.json`)).json();const linhas=estrutura.filter(x=>x.livro.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').toLowerCase()===slug);
+if(!linhas.length){alert('Livro não encontrado');return;}const result={livro:linhas[0].livro,capitulos:{}};let total=linhas.reduce((a,b)=>a+b.qtd_versiculo_capitulo,0);let atual=0;
+for(const cap of linhas){result.capitulos[cap.capitulo]={versiculos:{}};for(let v=1;v<=cap.qtd_versiculo_capitulo;v++){const data=await verse(slug,cap.capitulo,v);if(data){result.capitulos[cap.capitulo].versiculos[v]=mapText(data);}atual++;setProgress(atual,total,`${cap.livro} ${cap.capitulo}:${v}`);}}
+resultadoFinal=result;document.getElementById('result').value=JSON.stringify(result,null,2);setProgress(total,total,'Livro concluído');}
+function downloadJson(){if(!resultadoFinal)return;const blob=new Blob([JSON.stringify(resultadoFinal,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=((resultadoFinal.livro||'biblia')+'.json');a.click();}
+</script>
+</body>
+</html>
