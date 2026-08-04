@@ -1,0 +1,64 @@
+<button onclick="importarBiblia()">
+  Importar Bíblia
+</button>
+
+<pre id="log"></pre>
+
+<script>
+async function importarBiblia() {
+
+  const log =
+    document.getElementById("log");
+
+  while (true) {
+
+    const nextResponse =
+      await fetch(
+        "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/next-chapter",
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZteXh5cHlrb2t4ZmVvam1kc3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4OTgyMjEsImV4cCI6MjA5NjQ3NDIyMX0.zPk_8i1-OmAie9HPdhLZc18cTa1dyy_kuWJibsiwmAQ"
+          }
+        }
+      );
+
+    const next =
+      await nextResponse.json();
+
+    if (next.finished) {
+
+      log.textContent +=
+        "\n✅ Importação concluída";
+
+      break;
+    }
+
+    const book =
+      next.next.cd_slug_book;
+
+    const chapter =
+      next.next.nr_chapter;
+
+    log.textContent +=
+      `\n📖 ${book} ${chapter}`;
+
+    const importResponse =
+      await fetch(
+        `https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/import-chapter?book=${book}&chapter=${chapter}`,
+        {
+          headers: {
+            Authorization:
+              "Bearer SUA_ANON_KEY"
+          }
+        }
+      );
+
+    const result =
+      await importResponse.json();
+
+    log.textContent +=
+      ` -> ${result.recordsInserted} registros`;
+  }
+}
+</script>
