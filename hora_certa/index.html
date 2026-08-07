@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hora Oficial</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Segoe UI, Arial, sans-serif;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    width:100vw;
+    height:100vh;
+}
+
+.container{
+    text-align:center;
+}
+
+.titulo{
+    font-size:24px;
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+
+.relogio{
+    font-size:120px;
+    font-weight:700;
+    letter-spacing:4px;
+}
+
+.milisegundos{
+    font-size:50px;
+    color:#38bdf8;
+}
+
+.data{
+    margin-top:20px;
+    font-size:30px;
+    color:#cbd5e1;
+}
+
+.status{
+    margin-top:20px;
+    color:#22c55e;
+    font-size:18px;
+}
+
+@media(max-width:768px){
+
+    .relogio{
+        font-size:60px;
+    }
+
+    .milisegundos{
+        font-size:30px;
+    }
+
+    .data{
+        font-size:20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="titulo">
+        Hora Oficial
+    </div>
+
+    <div>
+        <span id="hora" class="relogio">00:00:00</span>
+        <span id="ms" class="milisegundos">000</span>
+    </div>
+
+    <div id="data" class="data"></div>
+
+    <div id="status" class="status">
+        Sincronizando...
+    </div>
+
+</div>
+
+<script>
+
+// URL DA SUA EDGE FUNCTION
+const SERVER_TIME_URL =
+"https://SEU-PROJETO.supabase.co/functions/v1/time";
+
+let offset = 0;
+
+// Busca hora oficial
+async function sincronizarHora() {
+
+    try {
+
+        const inicio = Date.now();
+
+        const response = await fetch(SERVER_TIME_URL);
+
+        const fim = Date.now();
+
+        const data = await response.json();
+
+        const latency = (fim - inicio) / 2;
+
+        offset = data.timestamp - Date.now() + latency;
+
+        document.getElementById("status").innerHTML =
+            "✅ Sincronizado";
+
+    } catch(err){
+
+        document.getElementById("status").innerHTML =
+            "⚠ Erro de sincronização";
+
+        console.error(err);
+    }
+}
+
+function atualizarRelogio(){
+
+    const agora = new Date(Date.now() + offset);
+
+    const hh = String(agora.getHours()).padStart(2,"0");
+    const mm = String(agora.getMinutes()).padStart(2,"0");
+    const ss = String(agora.getSeconds()).padStart(2,"0");
+    const ms = String(agora.getMilliseconds()).padStart(3,"0");
+
+    document.getElementById("hora").innerHTML =
+        `${hh}:${mm}:${ss}`;
+
+    document.getElementById("ms").innerHTML =
+        ms;
+
+    document.getElementById("data").innerHTML =
+        agora.toLocaleDateString(
+            "pt-BR",
+            {
+                weekday:"long",
+                day:"2-digit",
+                month:"long",
+                year:"numeric"
+            }
+        );
+}
+
+sincronizarHora();
+
+setInterval(
+    sincronizarHora,
+    60000
+);
+
+setInterval(
+    atualizarRelogio,
+    50
+);
+
+</script>
+
+</body>
+</html>
