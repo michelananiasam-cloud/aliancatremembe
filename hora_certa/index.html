@@ -105,9 +105,9 @@ body{
 const SERVER_TIME_URL =
 "https://SEU-PROJETO.supabase.co/functions/v1/time";
 
+// Busca hora oficial
 let offset = 0;
 
-// Busca hora oficial
 async function sincronizarHora() {
 
     try {
@@ -116,24 +116,21 @@ async function sincronizarHora() {
             "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/hora-certa"
         );
 
-        document.getElementById("status").innerHTML =
-            "Status HTTP: " + response.status;
+        const data = await response.json();
 
-        const texto = await response.text();
-
-        console.log(texto);
+        offset = data.timestamp - Date.now();
 
         document.getElementById("status").innerHTML =
-            "Resposta: " + texto;
+            "✅ Sincronizado";
 
     } catch(err){
 
         document.getElementById("status").innerHTML =
-            "ERRO: " + err.message;
-
-        console.error(err);
+            "❌ " + err.message;
     }
+
 }
+    
 function atualizarRelogio(){
 
     const agora = new Date(Date.now() + offset);
