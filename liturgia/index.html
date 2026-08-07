@@ -581,13 +581,13 @@ aplicarCorLiturgica(
 
         html += `
             <div class="card">
-                <h2>Orações</h2>
+                <h2>Orações Eucológicas</h2>
         `;
 
         if (celebracao.oracoes.coleta) {
             html += `
                 <div class="oracao">
-                    <h3>Coleta</h3>
+                    <h3>Oração da Coleta</h3>
                     <p>${celebracao.oracoes.coleta}</p>
                 </div>
             `;
@@ -596,7 +596,7 @@ aplicarCorLiturgica(
         if (celebracao.oracoes.oferendas) {
             html += `
                 <div class="oracao">
-                    <h3>Oferendas</h3>
+                    <h3>Oração sobre as Ofertas</h3>
                     <p>${celebracao.oracoes.oferendas}</p>
                 </div>
             `;
@@ -605,7 +605,7 @@ aplicarCorLiturgica(
         if (celebracao.oracoes.comunhao) {
             html += `
                 <div class="oracao">
-                    <h3>Comunhão</h3>
+                    <h3>Oração depois da Comunhão</h3>
                     <p>${celebracao.oracoes.comunhao}</p>
                 </div>
             `;
