@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Temperamentos</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #2980b9;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --border: #e2e8f0;
+      --error: #e74c3c;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .instructions {
+      background-color: #ebf8ff;
+      border-left: 4px solid var(--accent);
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+
+    .question-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .question-card.invalid {
+      border-color: var(--error);
+      background-color: #fff5f5;
+    }
+
+    .question-title {
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+
+    .option-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .option-row:last-child {
+      border-bottom: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-right: 15px;
+      min-width: 90px;
+    }
+
+    .controls label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    button.btn-submit {
+      display: block;
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 30px;
+    }
+
+    button.btn-submit:hover {
+      background-color: var(--accent);
+    }
+
+    #error-msg {
+      color: var(--error);
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+      display: none;
+    }
+
+    /* Estilos do Resultado */
+    #result-section {
+      display: none;
+      margin-top: 30px;
+      border-top: 2px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .result-box {
+      background: #f0f4f8;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .bar-container {
+      margin-bottom: 12px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .bar-bg {
+      background: #e2e8f0;
+      height: 18px;
+      border-radius: 9px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 9px;
+      transition: width 0.5s ease-out;
+    }
+
+    .colerico-bg { background-color: #e74c3c; }
+    .sanguineo-bg { background-color: #f1c40f; }
+    .melancolico-bg { background-color: #3498db; }
+    .fleumatico-bg { background-color: #2ecc71; }
+
+    .summary-card {
+      border-left: 5px solid var(--primary);
+      background: #fff;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Teste dos Quatro Temperamentos</h1>
+  
+  <div class="instructions">
+    <strong>Instruções:</strong> Para cada uma das 20 questões, leia atentamente as 4 opções e assinale exatamente:<br>
+    • <strong>[ M ] (MAIS):</strong> A opção que <u>MAIS</u> descreve seu comportamento natural.<br>
+    • <strong>[ L ] (LEUS):</strong> A opção que <u>LEUS</u> descreve seu comportamento natural.<br>
+    <em>Deixe as outras duas opções do bloco sem marcação.</em>
+  </div>
+
+  <form id="quiz-form"></form>
+
+  <button type="button" class="btn-submit" onclick="calcularResultado()">Calcular Meu Temperamento</button>
+  <div id="error-msg">Por favor, selecione exatamente 1 "MAIS" e 1 "LEUS" em todas as questões antes de prosseguir.</div>
+
+  <div id="result-section">
+    <h2>Seu Perfil de Temperamento</h2>
+    <div class="result-box">
+      <div id="bars-output"></div>
+    </div>
+    <div id="details-output"></div>
+  </div>
+</div>
+
+<script>
+// Mapeamento: C = Colérico, S = Sanguíneo, M = Melancólico, F = Fleumático
+const questoes = [
+  { id: 1, ops: [{ t: "Tomo o controle da situação quando surge um problema.", tpm: "C" }, { t: "Busco animar o ambiente e conversar com todos.", tpm: "S" }, { t: "Analiso detalhadamente as consequências antes de agir.", tpm: "M" }, { t: "Mantenho a calma e tento evitar que haja discussão.", tpm: "F" }] },
+  { id: 2, ops: [{ t: "Sou entusiasmado, expressivo e otimista.", tpm: "S" }, { t: "Sou reservado, atento aos detalhes e perfeccionista.", tpm: "M" }, { t: "Sou paciente, constante e um bom ouvinte.", tpm: "F" }, { t: "Sou direto, focado em resultados e decidido.", tpm: "C" }] },
+  { id: 3, ops: [{ t: "Sob pressão, fico exigente, crítico e reflexivo.", tpm: "M" }, { t: "Sob pressão, fico travado, calado e me omito.", tpm: "F" }, { t: "Sob pressão, fico impaciente e imponho minha vontade.", tpm: "C" }, { t: "Sob pressão, fico agitado, disperso e busco desabafar.", tpm: "S" }] },
+  { id: 4, ops: [{ t: "Prefiro trabalhar com rotinas claras e ritmo constante.", tpm: "F" }, { t: "Prefiro desafios difíceis onde eu possa liderar.", tpm: "C" }, { t: "Prefiro ambientes dinâmicos, festivos e com pessoas.", tpm: "S" }, { t: "Prefiro tarefas que exijam profundidade e precisão.", tpm: "M" }] },
+  { id: 5, ops: [{ t: "O que mais me incomoda é a ineficiência e a lentidão.", tpm: "C" }, { t: "O que mais me incomoda é a rejeição ou falta de atenção.", tpm: "S" }, { t: "O que mais me incomoda é o erro, a desordem e o fútil.", tpm: "M" }, { t: "O que mais me incomoda é o conflito direto e a agressividade.", tpm: "F" }] },
+  { id: 6, ops: [{ t: "Em equipe, sou quem traz harmonia e moderação.", tpm: "F" }, { t: "Em equipe, sou quem garante a qualidade e os dados.", tpm: "M" }, { t: "Em equipe, sou quem decide rápido e faz acontecer.", tpm: "C" }, { t: "Em equipe, sou quem motiva, integra e contagia.", tpm: "S" }] },
+  { id: 7, ops: [{ t: "Espontâneo, convincente e sociável.", tpm: "S" }, { t: "Cauteloso, disciplinado e profundo.", tpm: "M" }, { t: "Acolhedor, diplomático e estável.", tpm: "F" }, { t: "Valente, firme e corajoso.", tpm: "C" }] },
+  { id: 8, ops: [{ t: "Minha meta é alcançar resultados concretos.", tpm: "C" }, { t: "Minha meta é ter boas conexões e relacionamentos.", tpm: "S" }, { t: "Minha meta é fazer as coisas com excelência e ordem.", tpm: "M" }, { t: "Minha meta é manter a paz, estabilidade e tranquilidade.", tpm: "F" }] },
+  { id: 9, ops: [{ t: "Fico muito desanimado com críticas ao meu trabalho.", tpm: "M" }, { t: "Reajo com indiferença ou passividade diante de críticas.", tpm: "F" }, { t: "Combato duramente qualquer crítica recebida.", tpm: "C" }, { t: "Tento desviar o assunto com humor ou mudar de foco.", tpm: "S" }] },
+  { id: 10, ops: [{ t: "Aprecio a solitude e momentos de reflexão interior.", tpm: "M" }, { t: "Aprecio a ordem, tranquilidade e conforto simples.", tpm: "F" }, { t: "Aprecio a vitória, a superação e o comando.", tpm: "C" }, { t: "Aprecio a novidade, a celebração e a variedade.", tpm: "S" }] },
+  { id: 11, ops: [{ t: "Tenho facilidade para perdoar e esquecer ofensas rapidamente.", tpm: "S" }, { t: "Tenho facilidade para guardar mágoas e remoer o passado.", tpm: "M" }, { t: "Não dou tanta importância às ofensas, prefiro ignorar.", tpm: "F" }, { t: "Sinto raiva imediata ao ser ofendido, mas foco na reação.", tpm: "C" }] },
+  { id: 12, ops: [{ t: "Ativo, enérgico e independente.", tpm: "C" }, { t: "Alegre, comunicativo e simpático.", tpm: "S" }, { t: "Cuidadoso, fiel e idealista.", tpm: "M" }, { t: "Pacífico, moderado e cumpridor do dever.", tpm: "F" }] },
+  { id: 13, ops: [{ t: "Tenho tendência a me dispersar e esquecer compromissos.", tpm: "S" }, { t: "Tenho tendência a procrastinar por excesso de reflexão.", tpm: "M" }, { t: "Tenho tendência a adiar tarefas por preguiça ou comodismo.", tpm: "F" }, { t: "Tenho tendência a atropelar os outros pela pressa.", tpm: "C" }] },
+  { id: 14, ops: [{ t: "Diante de um novo projeto, planejo cada detalhe no papel.", tpm: "M" }, { t: "Diante de um novo projeto, analiso se vai exigir muito esforço.", tpm: "F" }, { t: "Diante de um novo projeto, executo imediatamente sem vacilar.", tpm: "C" }, { t: "Diante de um novo projeto, me empolgo e convido os amigos.", tpm: "S" }] },
+  { id: 15, ops: [{ t: "Evito me expor em público se não for estritamente necessário.", tpm: "F" }, { t: "Assumo a palavra com firmeza quando preciso liderar.", tpm: "C" }, { t: "Adoro falar em público e ser o centro das atenções.", tpm: "S" }, { t: "Falo apenas se tiver conhecimento profundo sobre o assunto.", tpm: "M" }] },
+  { id: 16, ops: [{ t: "Inconstante e impulsivo.", tpm: "S" }, { t: "Sério e propenso ao pessimismo.", tpm: "M" }, { t: "Lento e avesso a mudanças.", tpm: "F" }, { t: "Autoritário e dominador.", tpm: "C" }] },
+  { id: 17, ops: [{ t: "Tomo decisões baseando-me em fatos, lógica e padrões.", tpm: "M" }, { t: "Tomo decisões buscando o bem-estar e menor atrito social.", tpm: "F" }, { t: "Tomo decisões rapidamente buscando eficiência.", tpm: "C" }, { t: "Tomo decisões baseando-me na intuição e no momento.", tpm: "S" }] },
+  { id: 18, ops: [{ t: "Luto para alcançar posições de autonomia e comando.", tpm: "C" }, { t: "Luto para ser aceito, querido e popular.", tpm: "S" }, { t: "Luto para alcançar a perfeição e o ideal elevado.", tpm: "M" }, { t: "Luto para manter minha paz de espírito e estabilidade.", tpm: "F" }] },
+  { id: 19, ops: [{ t: "Gosto de ouvir e apoiar pessoas com paciência.", tpm: "F" }, { t: "Gosto de orientar pessoas para que resolvam seus problemas.", tpm: "C" }, { t: "Gosto de animar pessoas que estão tristes.", tpm: "S" }, { t: "Gosto de compreender as dores profundas das pessoas.", tpm: "M" }] },
+  { id: 20, ops: [{ t: "Comunico-me de forma calorosa, gesticulando muito.", tpm: "S" }, { t: "Comunico-me de forma precisa, formal e metódica.", tpm: "M" }, { t: "Comunico-me de forma mansa, pausada e discreta.", tpm: "F" }, { t: "Comunico-me de forma assertiva, incisiva e direta.", tpm: "C" }] ]
+;
+
+const infoTemperamentos = {
+  C: {
+    nome: "Colérico",
+    cor: "colerico-bg",
+    descricao: "Extrovertido, focado na ação, determinado e prático. Possui liderança natural e busca superar obstáculos.",
+    vicios: "Orgulho, impaciência, ira, autoritarismo e tendência a dominar os outros.",
+    virtudes: "Humildade, mansidão, doçura e compaixão."
+  },
+  S: {
+    nome: "Sanguíneo",
+    cor: "sanguineo-bg",
+    descricao: "Extrovertido, focado nas pessoas, comunicativo e entusiasta. Vive no presente e contagia os ambientes.",
+    vicios: "Vaidade, inconstância, superficialidade, busca excessiva por prazeres sensíveis.",
+    virtudes: "Temperança, perseverança, mortificação dos sentidos e fidelidade aos compromissos."
+  },
+  M: {
+    nome: "Melancólico",
+    cor: "melancolico-bg",
+    descricao: "Introvertido, analítico, reflexivo e focado na perfeição. Capaz de grande profundidade, lealdade e idealismo.",
+    vicios: "Tristeza, murmuração, ciúmes, escrupulosidade e paralisia por excesso de análise.",
+    virtudes: "Esperança, confiança na Providência, alegria cristã e desapego do perfeccionismo."
+  },
+  F: {
+    nome: "Fleumático",
+    cor: "fleumatico-bg",
+    descricao: "Introvertido, focado na paz e estabilidade. Calmo, equilibrado, excelente ouvinte e constante nas rotinas.",
+    vicios: "Preguiça espiritual (acídia), passividade, omissão e indiferença diante das necessidades alheias.",
+    virtudes: "Fortaleza, diligência, fervor espiritual e iniciativa para a ação."
+  }
+};
+
+// Renderizar Formulário
+function renderQuiz() {
+  const container = document.getElementById('quiz-form');
+  let html = '';
+
+  questoes.forEach((q) => {
+    html += `
+      <div class="question-card" id="card-q${q.id}">
+        <div class="question-title">Questão ${q.id} de 20</div>
+    `;
+
+    q.ops.forEach((op, idx) => {
+      html += `
+        <div class="option-row">
+          <div class="controls">
+            <label><input type="radio" name="q${q.id}_M" value="${op.tpm}" onchange="validarSelecao(${q.id}, 'M', ${idx})"> M</label>
+            <label><input type="radio" name="q${q.id}_L" value="${op.tpm}" onchange="validarSelecao(${q.id}, 'L', ${idx})"> L</label>
+          </div>
+          <div class="option-text">${op.t}</div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// Impede que a mesma opção seja marcada como M e L ao mesmo tempo
+function validarSelecao(qId, tipo, idx) {
+  const radioM = document.querySelectorAll(`input[name="q${qId}_M"]`);
+  const radioL = document.querySelectorAll(`input[name="q${qId}_L"]`);
+
+  if (tipo === 'M' && radioL[idx].checked) {
+    radioL[idx].checked = false;
+  } else if (tipo === 'L' && radioM[idx].checked) {
+    radioM[idx].checked = false;
+  }
+  
+  document.getElementById(`card-q${qId}`).classList.remove('invalid');
+}
+
+function calcularResultado() {
+  const pontuacao = { C: 0, S: 0, M: 0, F: 0 };
+  let camposValidos = true;
+
+  // Validação e cálculo
+  questoes.forEach((q) => {
+    const selM = document.querySelector(`input[name="q${q.id}_M"]:checked`);
+    const selL = document.querySelector(`input[name="q${q.id}_L"]:checked`);
+
+    if (!selM || !selL) {
+      camposValidos = false;
+      document.getElementById(`card-q${q.id}`).classList.add('invalid');
+    } else {
+      pontuacao[selM.value] += 1; // +1 para M (MAIS)
+      pontuacao[selL.value] -= 1; // -1 para L (LEUS)
+    }
+  });
+
+  const errorMsg = document.getElementById('error-msg');
+  if (!camposValidos) {
+    errorMsg.style.display = 'block';
+    window.scrollTo({ top: errorMsg.offsetTop - 100, behavior: 'smooth' });
+    return;
+  }
+  errorMsg.style.display = 'none';
+
+  // Converter para pontuação positiva (0 a 40 para visualização gráfica)
+  // Como cada tipo varia de -20 a +20, somamos 20 para normalizar
+  const ordenado = Object.keys(pontuacao).map(key => ({
+    key: key,
+    raw: pontuacao[key],
+    scoreNorm: pontuacao[key] + 20
+  })).sort((a, b) => b.raw - a.raw);
+
+  exibirResultados(ordenado);
+}
+
+function exibirResultados(ordenado) {
+  const barsContainer = document.getElementById('bars-output');
+  const detailsContainer = document.getElementById('details-output');
+  
+  let barsHtml = '';
+  ordenado.forEach(item => {
+    const info = infoTemperamentos[item.key];
+    const porcentagem = Math.round((item.scoreNorm / 40) * 100);
+    
+    barsHtml += `
+      <div class="bar-container">
+        <div class="bar-label">
+          <span>${info.nome} (Saldo: ${item.raw > 0 ? '+' : ''}${item.raw})</span>
+          <span>${porcentagem}%</span>
+        </div>
+        <div class="bar-bg">
+          <div class="bar-fill ${info.cor}" style="width: ${porcentagem}%"></div>
+        </div>
+      </div>
+    `;
+  });
+  barsContainer.innerHTML = barsHtml;
+
+  const primario = infoTemperamentos[ordenado[0].key];
+  const secundario = infoTemperamentos[ordenado[1].key];
+
+  detailsContainer.innerHTML = `
+    <div class="summary-card">
+      <h3>1º Temperamento Predominante: ${primario.nome}</h3>
+      <p><strong>Descrição:</strong> ${primario.descricao}</p>
+      <p><strong>Vícios / Fraquezas a Vigiar:</strong> ${primario.vicios}</p>
+      <p><strong>Virtudes a Cultivar:</strong> ${primario.virtudes}</p>
+    </div>
+
+    <div class="summary-card" style="border-left-color: #7f8c8d;">
+      <h3>2º Temperamento Secundário: ${secundario.nome}</h3>
+      <p><strong>Descrição:</strong> ${secundario.descricao}</p>
+      <p><strong>Vícios / Fraquezas a Vigiar:</strong> ${secundario.vicios}</p>
+      <p><strong>Virtudes a Cultivar:</strong> ${secundario.virtudes}</p>
+    </div>
+  `;
+
+  const resultSection = document.getElementById('result-section');
+  resultSection.style.display = 'block';
+  resultSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Inicializar na carga
+document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+
+</body>
+</html>
