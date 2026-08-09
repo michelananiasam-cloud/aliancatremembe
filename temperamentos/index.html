@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teste de Temperamentos</title>
+  <title>Teste dos Temperamentos</title>
   <style>
     :root {
       --primary: #2c3e50;
@@ -54,7 +54,6 @@
       border-radius: 8px;
       padding: 20px;
       margin-bottom: 20px;
-      transition: border-color 0.2s;
     }
 
     .question-card.invalid {
@@ -87,11 +86,11 @@
     }
 
     .controls label {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
       cursor: pointer;
     }
 
@@ -111,7 +110,6 @@
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.2s;
       margin-top: 30px;
     }
 
@@ -127,7 +125,6 @@
       display: none;
     }
 
-    /* Estilos do Resultado */
     #result-section {
       display: none;
       margin-top: 30px;
@@ -164,7 +161,6 @@
     .bar-fill {
       height: 100%;
       border-radius: 9px;
-      transition: width 0.5s ease-out;
     }
 
     .colerico-bg { background-color: #e74c3c; }
@@ -188,16 +184,17 @@
   <h1>Teste dos Quatro Temperamentos</h1>
   
   <div class="instructions">
-    <strong>Instruções:</strong> Para cada uma das 20 questões, leia atentamente as 4 opções e assinale exatamente:<br>
-    • <strong>[ M ] (MAIS):</strong> A opção que <u>MAIS</u> descreve seu comportamento natural.<br>
-    • <strong>[ L ] (LEUS):</strong> A opção que <u>LEUS</u> descreve seu comportamento natural.<br>
-    <em>Deixe as outras duas opções do bloco sem marcação.</em>
+    <strong>Instruções:</strong> Em cada questão, assinale exatamente:<br>
+    • <strong>[ M ] (MAIS):</strong> O comportamento que mais descreve você.<br>
+    • <strong>[ L ] (Menos):</strong> O comportamento que menos descreve você.<br>
+    <em>Deixe as outras duas alternativas em branco.</em>
   </div>
 
-  <form id="quiz-form"></form>
+  <!-- O formulário será inserido diretamente aqui -->
+  <div id="quiz-form"></div>
 
   <button type="button" class="btn-submit" onclick="calcularResultado()">Calcular Meu Temperamento</button>
-  <div id="error-msg">Por favor, selecione exatamente 1 "MAIS" e 1 "LEUS" em todas as questões antes de prosseguir.</div>
+  <div id="error-msg">Por favor, selecione 1 "MAIS" e 1 "LEUS" em todas as questões.</div>
 
   <div id="result-section">
     <h2>Seu Perfil de Temperamento</h2>
@@ -209,7 +206,6 @@
 </div>
 
 <script>
-// Mapeamento: C = Colérico, S = Sanguíneo, M = Melancólico, F = Fleumático
 const questoes = [
   { id: 1, ops: [{ t: "Tomo o controle da situação quando surge um problema.", tpm: "C" }, { t: "Busco animar o ambiente e conversar com todos.", tpm: "S" }, { t: "Analiso detalhadamente as consequências antes de agir.", tpm: "M" }, { t: "Mantenho a calma e tento evitar que haja discussão.", tpm: "F" }] },
   { id: 2, ops: [{ t: "Sou entusiasmado, expressivo e otimista.", tpm: "S" }, { t: "Sou reservado, atento aos detalhes e perfeccionista.", tpm: "M" }, { t: "Sou paciente, constante e um bom ouvinte.", tpm: "F" }, { t: "Sou direto, focado em resultados e decidido.", tpm: "C" }] },
@@ -230,42 +226,18 @@ const questoes = [
   { id: 17, ops: [{ t: "Tomo decisões baseando-me em fatos, lógica e padrões.", tpm: "M" }, { t: "Tomo decisões buscando o bem-estar e menor atrito social.", tpm: "F" }, { t: "Tomo decisões rapidamente buscando eficiência.", tpm: "C" }, { t: "Tomo decisões baseando-me na intuição e no momento.", tpm: "S" }] },
   { id: 18, ops: [{ t: "Luto para alcançar posições de autonomia e comando.", tpm: "C" }, { t: "Luto para ser aceito, querido e popular.", tpm: "S" }, { t: "Luto para alcançar a perfeição e o ideal elevado.", tpm: "M" }, { t: "Luto para manter minha paz de espírito e estabilidade.", tpm: "F" }] },
   { id: 19, ops: [{ t: "Gosto de ouvir e apoiar pessoas com paciência.", tpm: "F" }, { t: "Gosto de orientar pessoas para que resolvam seus problemas.", tpm: "C" }, { t: "Gosto de animar pessoas que estão tristes.", tpm: "S" }, { t: "Gosto de compreender as dores profundas das pessoas.", tpm: "M" }] },
-  { id: 20, ops: [{ t: "Comunico-me de forma calorosa, gesticulando muito.", tpm: "S" }, { t: "Comunico-me de forma precisa, formal e metódica.", tpm: "M" }, { t: "Comunico-me de forma mansa, pausada e discreta.", tpm: "F" }, { t: "Comunico-me de forma assertiva, incisiva e direta.", tpm: "C" }] ]
-;
+  { id: 20, ops: [{ t: "Comunico-me de forma calorosa, gesticulando muito.", tpm: "S" }, { t: "Comunico-me de forma precisa, formal e metódica.", tpm: "M" }, { t: "Comunico-me de forma mansa, pausada e discreta.", tpm: "F" }, { t: "Comunico-me de forma assertiva, incisiva e direta.", tpm: "C" }] }
+];
 
 const infoTemperamentos = {
-  C: {
-    nome: "Colérico",
-    cor: "colerico-bg",
-    descricao: "Extrovertido, focado na ação, determinado e prático. Possui liderança natural e busca superar obstáculos.",
-    vicios: "Orgulho, impaciência, ira, autoritarismo e tendência a dominar os outros.",
-    virtudes: "Humildade, mansidão, doçura e compaixão."
-  },
-  S: {
-    nome: "Sanguíneo",
-    cor: "sanguineo-bg",
-    descricao: "Extrovertido, focado nas pessoas, comunicativo e entusiasta. Vive no presente e contagia os ambientes.",
-    vicios: "Vaidade, inconstância, superficialidade, busca excessiva por prazeres sensíveis.",
-    virtudes: "Temperança, perseverança, mortificação dos sentidos e fidelidade aos compromissos."
-  },
-  M: {
-    nome: "Melancólico",
-    cor: "melancolico-bg",
-    descricao: "Introvertido, analítico, reflexivo e focado na perfeição. Capaz de grande profundidade, lealdade e idealismo.",
-    vicios: "Tristeza, murmuração, ciúmes, escrupulosidade e paralisia por excesso de análise.",
-    virtudes: "Esperança, confiança na Providência, alegria cristã e desapego do perfeccionismo."
-  },
-  F: {
-    nome: "Fleumático",
-    cor: "fleumatico-bg",
-    descricao: "Introvertido, focado na paz e estabilidade. Calmo, equilibrado, excelente ouvinte e constante nas rotinas.",
-    vicios: "Preguiça espiritual (acídia), passividade, omissão e indiferença diante das necessidades alheias.",
-    virtudes: "Fortaleza, diligência, fervor espiritual e iniciativa para a ação."
-  }
+  C: { nome: "Colérico", cor: "colerico-bg", descricao: "Extrovertido, enérgico, focado na ação e na liderança.", vicios: "Orgulho, ira, impaciência e autoritarismo.", virtudes: "Humildade, mansidão, compaixão e paciência." },
+  S: { nome: "Sanguíneo", cor: "sanguineo-bg", descricao: "Extrovertido, comunicativo, alegre e entusiasta.", vicios: "Vaidade, inconstância e busca por prazeres fáceis.", virtudes: "Temperança, perseverança e fidelidade aos compromissos." },
+  M: { nome: "Melancólico", cor: "melancolico-bg", descricao: "Introvertido, analítico, reflexivo e idealista.", vicios: "Tristeza, pessimismo, murmuração e isolamento.", virtudes: "Esperança, confiança na Providência e alegria simples." },
+  F: { nome: "Fleumático", cor: "fleumatico-bg", descricao: "Introvertido, pacífico, constante e bom ouvinte.", vicios: "Preguiça espiritual (acídia), passividade e omissão.", virtudes: "Fortaleza, diligência, fervor e iniciativa de ação." }
 };
 
-// Renderizar Formulário
-function renderQuiz() {
+// Função para construir o formulário diretamente na tela
+function renderizarFormulario() {
   const container = document.getElementById('quiz-form');
   let html = '';
 
@@ -279,8 +251,8 @@ function renderQuiz() {
       html += `
         <div class="option-row">
           <div class="controls">
-            <label><input type="radio" name="q${q.id}_M" value="${op.tpm}" onchange="validarSelecao(${q.id}, 'M', ${idx})"> M</label>
-            <label><input type="radio" name="q${q.id}_L" value="${op.tpm}" onchange="validarSelecao(${q.id}, 'L', ${idx})"> L</label>
+            <label><input type="radio" name="q${q.id}_M" value="${op.tpm}" onclick="validarSelecao(${q.id}, 'M', ${idx})"> M</label>
+            <label><input type="radio" name="q${q.id}_L" value="${op.tpm}" onclick="validarSelecao(${q.id}, 'L', ${idx})"> L</label>
           </div>
           <div class="option-text">${op.t}</div>
         </div>
@@ -293,7 +265,6 @@ function renderQuiz() {
   container.innerHTML = html;
 }
 
-// Impede que a mesma opção seja marcada como M e L ao mesmo tempo
 function validarSelecao(qId, tipo, idx) {
   const radioM = document.querySelectorAll(`input[name="q${qId}_M"]`);
   const radioL = document.querySelectorAll(`input[name="q${qId}_L"]`);
@@ -309,42 +280,35 @@ function validarSelecao(qId, tipo, idx) {
 
 function calcularResultado() {
   const pontuacao = { C: 0, S: 0, M: 0, F: 0 };
-  let camposValidos = true;
+  let tudoRespondido = true;
 
-  // Validação e cálculo
   questoes.forEach((q) => {
     const selM = document.querySelector(`input[name="q${q.id}_M"]:checked`);
     const selL = document.querySelector(`input[name="q${q.id}_L"]:checked`);
 
     if (!selM || !selL) {
-      camposValidos = false;
+      tudoRespondido = false;
       document.getElementById(`card-q${q.id}`).classList.add('invalid');
     } else {
-      pontuacao[selM.value] += 1; // +1 para M (MAIS)
-      pontuacao[selL.value] -= 1; // -1 para L (LEUS)
+      pontuacao[selM.value] += 1;
+      pontuacao[selL.value] -= 1;
     }
   });
 
   const errorMsg = document.getElementById('error-msg');
-  if (!camposValidos) {
+  if (!tudoRespondido) {
     errorMsg.style.display = 'block';
-    window.scrollTo({ top: errorMsg.offsetTop - 100, behavior: 'smooth' });
     return;
   }
   errorMsg.style.display = 'none';
 
-  // Converter para pontuação positiva (0 a 40 para visualização gráfica)
-  // Como cada tipo varia de -20 a +20, somamos 20 para normalizar
   const ordenado = Object.keys(pontuacao).map(key => ({
     key: key,
     raw: pontuacao[key],
     scoreNorm: pontuacao[key] + 20
   })).sort((a, b) => b.raw - a.raw);
 
-  exibirResultados(ordenado);
-}
-
-function exibirResultados(ordenado) {
+  // Exibir Resultados
   const barsContainer = document.getElementById('bars-output');
   const detailsContainer = document.getElementById('details-output');
   
@@ -352,7 +316,6 @@ function exibirResultados(ordenado) {
   ordenado.forEach(item => {
     const info = infoTemperamentos[item.key];
     const porcentagem = Math.round((item.scoreNorm / 40) * 100);
-    
     barsHtml += `
       <div class="bar-container">
         <div class="bar-label">
@@ -374,25 +337,23 @@ function exibirResultados(ordenado) {
     <div class="summary-card">
       <h3>1º Temperamento Predominante: ${primario.nome}</h3>
       <p><strong>Descrição:</strong> ${primario.descricao}</p>
-      <p><strong>Vícios / Fraquezas a Vigiar:</strong> ${primario.vicios}</p>
+      <p><strong>Vícios a Vigiar:</strong> ${primario.vicios}</p>
       <p><strong>Virtudes a Cultivar:</strong> ${primario.virtudes}</p>
     </div>
 
     <div class="summary-card" style="border-left-color: #7f8c8d;">
       <h3>2º Temperamento Secundário: ${secundario.nome}</h3>
       <p><strong>Descrição:</strong> ${secundario.descricao}</p>
-      <p><strong>Vícios / Fraquezas a Vigiar:</strong> ${secundario.vicios}</p>
+      <p><strong>Vícios a Vigiar:</strong> ${secundario.vicios}</p>
       <p><strong>Virtudes a Cultivar:</strong> ${secundario.virtudes}</p>
     </div>
   `;
 
-  const resultSection = document.getElementById('result-section');
-  resultSection.style.display = 'block';
-  resultSection.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('result-section').style.display = 'block';
 }
 
-// Inicializar na carga
-document.addEventListener('DOMContentLoaded', renderQuiz);
+// Execução imediata para garantir a renderização do formulário
+renderizarFormulario();
 </script>
 
 </body>
