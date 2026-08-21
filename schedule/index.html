@@ -516,108 +516,109 @@ button.edit{
 }
 
 /* ===============================
-    PRINT (IMPRIMIR) - CORRIGIDO
+    PRINT (IMPRIMIR) - COMPLETO
 ================================*/
 .print-only { display: none; }
 .logo { display: none; }
 
 @media print {
+  /* Define margens para a folha de papel */
+  @page {
+    margin-top: 130px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
 
-  /* 1. Oculta botões e elementos extras de interface */
+  /* 1. OCULTA BOTOES E ELEMENTOS DA TELA */
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
   button,
-  .add,
-  .open,
-  .edit,
-  .delete,
-  .clone,
-  .btn-voltar,
+  .add, .open, .edit, .delete, .clone, .btn-voltar,
   .progress-container,
   .watermark,
   .icon-obs,
   #scroll-spacer,
   #btn-pdf-mobile,
-  #btn-atualizar-mobile {
+  #btn-atualizar-mobile,
+  #web-header h1 {
     display: none !important;
   }
 
-  /* 2. Mantém o cabeçalho visível no topo de cada página */
+  /* 2. FIXA O CABEÇALHO/LOGO EM TODAS AS PÁGINAS */
   #web-header {
     display: flex !important;
-    position: relative !important;
+    position: fixed !important;
+    top: -110px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 90px !important;
     justify-content: center !important;
     align-items: center !important;
-    flex-direction: column !important;
-    margin-bottom: 20px !important;
     border: none !important;
+    background: transparent !important;
   }
 
-  #web-header h1 {
-    display: none !important; /* Esconde o H1 padrão da web para não duplicar */
-  }
-
-  /* 3. FORÇA A EXIBIÇÃO DA LOGO E DA IMAGEM */
+  /* 3. FORMATACÃO DA IMAGEM DA LOGO */
   .logo-link,
   #web-header .logo-link,
-  .logo-link img,
   #web-header img,
   img {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    width: 130px !important;
+    width: 110px !important;
     height: auto !important;
-    margin: 0 auto 10px auto !important;
+    margin: 0 auto !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 4. Base e Estrutura de Páginas */
+  /* 4. ESTRUTURA BASE E QUEBRA DE PÁGINAS */
   html, body {
     background: #fff !important;
     color: #000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
   }
 
   .pagina-detalhe {
     display: block !important;
-    page-break-before: always;
-    page-break-inside: avoid;
-    padding-top: 10px !important;
+    page-break-before: always !important;
+    page-break-inside: avoid !important;
   }
 
   .pagina-detalhe:first-of-type {
     page-break-before: auto !important;
   }
 
-  /* 5. Títulos e Subtítulos organizados */
+  /* 5. TITULOS E TEXTOS */
   .pagina-detalhe h2 {
     text-align: center !important;
-    font-size: 18px !important;
+    font-size: 17px !important;
     font-weight: 700 !important;
     margin: 0 0 5px 0 !important;
   }
 
   .pagina-detalhe h3 {
     text-align: center !important;
-    margin: 0 0 20px 0 !important;
-    font-size: 15px !important;
+    margin: 0 0 15px 0 !important;
+    font-size: 14px !important;
   }
 
-  /* 6. Remoção de destaques e bordas da lista */
+  /* 6. LISTAS E ITENS */
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
     background: transparent !important;
+    box-shadow: none !important;
   }
 
   .lista-atividades li {
     display: block !important;
-    padding: 4px 0 !important;
-    margin-bottom: 4px !important;
+    padding: 3px 0 !important;
+    margin-bottom: 3px !important;
   }
 
   .item-info {
@@ -625,7 +626,6 @@ button.edit{
     white-space: normal !important;
   }
 }
-
 	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
