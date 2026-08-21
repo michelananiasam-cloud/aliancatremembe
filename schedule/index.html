@@ -967,6 +967,7 @@ body{
 	  <label for="tipo">Tipo</label>
 	  <select id="tipo" title="Escolha o tipo da atividade">
 		<option value="" disabled selected>Selecione o Tipo..</option>
+		<option value="Chegada">Chegada</option>
 		<option value="Introdução">Introdução</option>
 		<option value="Institucional">Institucional</option>  
 		<option value="Pregação">Pregação</option>
@@ -989,6 +990,7 @@ body{
 		<option value="Jantar">Jantar</option>
 		<option value="Palestra">Palestra</option>
 		<option value="Partilha">Partilha</option>
+		<option value="Encerramento">Encerramento</option> 
 	  </select>
 	</div>
    
@@ -1093,7 +1095,7 @@ body{
 <script>
 let atividadeAtual = null;	
 let isPrinting = false; // 👈 ADICIONE AQUI
-const tiposAtividade = ["Introdução","Institucional", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
+const tiposAtividade = ["Chegada","Introdução","Institucional","Encerramento", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
 const HIST_KEY  = "historicos";
