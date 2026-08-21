@@ -516,130 +516,25 @@ button.edit{
 }
 
 /* ===============================
-   PRINT (IMPRIMIR) - AJUSTADO PARA A LOGO
+   PRINT (IMPRIMIR)
 ================================*/
-.print-only { display: none; }
+.print-only{ display:none; }
+.logo { display: none; }
 
 @media print {
-
-  /* ===============================
-     1. REMOVE ELEMENTOS DESNECESSÁRIOS
-  ============================== */
-  #menu-adicao,
-  #menu-rodape,
-  .item-botoes,
-  button,
-  .add, .open, .edit, .delete, .clone, .btn-voltar,
-  .progress-container,
-  .watermark,
-  .icon-obs,
-  #btn-pdf-mobile,
-  #btn-atualizar-mobile,
-  #scroll-spacer {
-    display: none !important;
-  }
-
-  /* ===============================
-     2. BASE DA IMPRESSÃO
-  ============================== */
-  html, body {
-    background: #fff !important;
-    color: #000 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 14px !important;
-  }
-
-  * {
-    background: transparent !important;
-    box-shadow: none !important;
-    animation: none !important;
-  }
-
-  /* ===============================
-     3. REEXIBE E POSICIONA A LOGO DO CABEÇALHO
-  ============================== */
-  #web-header {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    border-bottom: none !important;
-    padding: 0 0 10px 0 !important;
-    margin-bottom: 20px !important;
-  }
-
-  #web-header .logo-link img {
-    display: block !important;
-    width: 120px !important;
-    height: auto !important;
-    visibility: visible !important;
-  }
-
-  #web-header h1 {
-    display: block !important;
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    color: #000 !important;
-  }
-
-  /* ===============================
-     4. ESTRUTURA DAS PÁGINAS E LISTA
-  ============================== */
-  .pagina-detalhe {
-    display: block !important;
-    page-break-before: always;
-    page-break-inside: avoid;
-    position: relative;
-    padding-top: 10px !important;
-  }
-
-  /* Primeira página não força quebra extra */
-  .pagina-detalhe:first-of-type {
-    page-break-before: auto !important;
-  }
-
-  .pagina-detalhe h2 {
-    display: none !important; /* Esconde para usar o título principal do #web-header */
-  }
-
-  .pagina-detalhe h3 {
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
-    color: #000 !important;
-    border-bottom: 1px solid #ccc !important;
-    padding-bottom: 4px !important;
-  }
-
-  .lista-atividades {
-    border: none !important;
-    background: #fff !important;
-  }
-
-  .lista-atividades li {
-    display: block !important;
-    border-bottom: 1px dashed #ccc !important;
-    padding: 6px 0 !important;
-    margin-bottom: 4px !important;
-    position: static !important;
-  }
-
-  .item {
-    border-left: none !important;
-  }
-
-  .item.destaque {
-    border-left: none !important;
-    background: transparent !important;
-  }
-
-  .item-info {
-    display: block !important;
-    white-space: normal !important;
-    color: #000 !important;
-  }
+/* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
+.item.destaque {
+  border-left: none !important;
+  background: transparent !important;
 }
+	
+.item {
+  border-left: none !important;
+}
+
+  .print-only {
+    display: block !important;
+  }
 
   /* ===============================
      REMOVE ELEMENTOS DA INTERFACE
