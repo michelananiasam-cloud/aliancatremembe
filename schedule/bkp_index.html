@@ -13,11 +13,12 @@
 ================================*/
 /* ❌ ENCERRADO (hoje + anteriores) */
 .item.encerrado {
-  border-left: 5px solid #28a745;
-  background: rgba(40,167,69,0.10);
-  opacity: 0.7;
+  border-left: 5px solid rgba(40,167,69,0.7); /* old: border-left: 5px solid #28a745;*/
+  background: rgba(40,167,69,0.06); /* ✅ mais suave  antigo: background: rgba(40,167,69,0.10);*/
+  opacity: 1; /* ✅ NÃO use opacity geral antigo: opacity: 0.7;*/
 }
 
+	
 /* 🟡 FUTURO (hoje e dias futuros igual, sem diferença) */
 .item.futuro {
   border-left: 5px solid transparent;
@@ -31,23 +32,38 @@
   background: rgba(45,108,223,0.06);
 }
 
+.item.em-andamento.ativo {
+  border-left: 5px solid rgba(45,108,223,0.7);
+  background: rgba(45,108,223,0.05);
+}
+
+.item.em-andamento.warning {
+  border-left: 5px solid rgba(255,193,7,0.8);
+  background: rgba(255,193,7,0.06);
+}
+
+.item.em-andamento.danger {
+  border-left: 5px solid rgba(220,53,69,0.8);
+  background: rgba(220,53,69,0.06);
+}
+
+
 /* 🌟 PRÓXIMA ATIVIDADE */
 .item.proxima {
-  background: rgba(0, 0, 0, 0.05);
-  border-left: 5px solid rgba(60, 60, 60, 0.35);
+  border-left: 5px solid rgba(60,60,60,0.4);
+  background: rgba(0,0,0,0.04);
   box-shadow: 0 0 12px rgba(255,193,7,0.35);
   transform: scale(1.01);
-}	
+}
+	
 
 /* ⚠️ alertas continuam opcionais */
 .item.warning {
-  border-left: 5px solid #ffc107;
-  animation: piscar-warning 5s infinite;
+  border-left: 5px solid #ffc107;  
 }
 
 .item.danger {
   border-left: 5px solid #dc3545;
-  animation: piscar-danger 2s infinite;
 }
 	
 @keyframes piscar-warning {
@@ -78,7 +94,6 @@
   flex-shrink: 0; /* 🔥 IMPORTANTE: evita sumir em flex */
 }
 
-/* BASE DA BARRA */
 /* BASE DA BARRA */
 .progress-bar {
   height: 100%;
@@ -878,6 +893,31 @@ body{
 
 @media (max-width:520px){
 
+  /*esconde lista vazia */
+  .lista-atividades:empty {
+    display: none;
+  }
+	
+  /* ✅ esconde apenas botões das atividades */
+  .item-botoes {
+    display: none !important;
+  }
+
+  /* ✅ esconde o container inteiro quando não houver itens */
+  .pagina-detalhe:has(.lista-atividades:empty) {
+    display: none;
+  }
+
+  /* ❌ esconder encerradas */
+  .item.encerrado {
+    display: none !important;
+  }
+
+  /* ✅ esconder futuras que NÃO são próxima */
+  .item.futuro:not(.proxima) {
+    display: none !important;
+  }
+
   /* ✅ esconde rodapé */
   #menu-rodape{
     display: none !important;
@@ -893,10 +933,6 @@ body{
     display: none !important;
   }
 
-}
-
-body{
-  padding-bottom: 200px !important;
 }
 
 	
@@ -931,7 +967,9 @@ body{
 	  <label for="tipo">Tipo</label>
 	  <select id="tipo" title="Escolha o tipo da atividade">
 		<option value="" disabled selected>Selecione o Tipo..</option>
+		<option value="Chegada">Chegada</option>
 		<option value="Introdução">Introdução</option>
+		<option value="Institucional">Institucional</option>  
 		<option value="Pregação">Pregação</option>
 		<option value="Oração">Oração</option>
 		<option value="Acolhida">Acolhida</option>
@@ -952,6 +990,7 @@ body{
 		<option value="Jantar">Jantar</option>
 		<option value="Palestra">Palestra</option>
 		<option value="Partilha">Partilha</option>
+		<option value="Encerramento">Encerramento</option> 
 	  </select>
 	</div>
    
@@ -1004,7 +1043,7 @@ body{
 	  </button>
 
 	  <button id="btn-zerar-tudo" type="button" class="sec-btn danger">
-		Limpar
+		Excluir
 	  </button>
 	  
 	  <button type="button" class="btn_rodape" onclick="exportarBackup()">
@@ -1056,7 +1095,7 @@ body{
 <script>
 let atividadeAtual = null;	
 let isPrinting = false; // 👈 ADICIONE AQUI
-const tiposAtividade = ["Introdução", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
+const tiposAtividade = ["Chegada","Introdução","Institucional","Encerramento", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
 const HIST_KEY  = "historicos";
@@ -1108,20 +1147,14 @@ function getTempoRestante(data, inicio, fim) {
 
   if (!data || !inicio || !fim) return "";
 
-  const hoje = new Date().toISOString().split("T")[0];
-
-  // ❌ só calcula se for hoje
-  if (data !== hoje) return "";
-
   const agora = Date.now();
 
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
-  // 🔴 segurança: dados inválidos
   if (!inicioDate || !fimDate) return "";
 
-  // 🟡 FUTURO (ainda não começou)
+  // ✅ não depende de comparar string de data
   if (agora < inicioDate) {
 
     const diff = inicioDate - agora;
@@ -1130,12 +1163,11 @@ function getTempoRestante(data, inicio, fim) {
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
 
-    if (h > 0) return `⏱️ Inicia em ${h}h ${m}min ${s}seg`;
-    if (m > 0) return `⏱️ Inicia em ${m}min ${s}seg`;
-    return `⏱️ Inicia em ${s}seg`;
+    if (h > 0) return `⏳ Inicia em ${h}h ${m}min ${s}seg`;
+    if (m > 0) return `⏳ Inicia em ${m}min ${s}seg`;
+    return `⏳ Inicia em ${s}seg`;
   }
 
-  // 🔵 EM ANDAMENTO
   if (agora >= inicioDate && agora <= fimDate) {
 
     const diff = fimDate - agora;
@@ -1149,7 +1181,6 @@ function getTempoRestante(data, inicio, fim) {
     return `🔥 ${s}seg restantes`;
   }
 
-  // ✅ ENCERRADO
   return `✅ Encerrado`;
 }
 
@@ -1161,31 +1192,26 @@ function parseDateTime(data, hora) {
   if (!data || !hora) return null;
   return new Date(`${data}T${hora}:00`);
 }
-	
-function getStatusAtividade(data, inicio, fim) {
+	function getStatusAtividade(data, inicio, fim) {
 
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
-  // 🔴 segurança: dados inválidos
   if (!inicioDate || !fimDate) {
-    return "futuro";
+    return "futuro"; // ✅ fallback seguro
   }
 
   const agora = Date.now();
 
-  // 🔵 EM ANDAMENTO
   if (agora >= inicioDate && agora <= fimDate) {
     return "em-andamento";
   }
 
-  // ❌ ENCERRADO
   if (agora > fimDate) {
     return "encerrado";
   }
 
-  // 🟡 FUTURO
-  return "futuro";
+  return "futuro"; // ✅ sempre retorna algo
 }
 
 function marcarProximaAtividade(lista) {
@@ -1234,19 +1260,29 @@ function salvarLista(lista){
 }
 
 function carregarLista(){
-  try{
+  try {
 
     const lista = localStorage.getItem(LIST_KEY);
     const dados = lista ? JSON.parse(lista) : [];
 
-    // ✅ garante obs em todos os itens
     dados.forEach(item => {
-      if (item.obs === undefined) item.obs = "";
+
+      // ✅ garante observação
+      if (item.obs === undefined) {
+        item.obs = "";
+      }
+
+      // ✅ garante ID (ESSENCIAL)
+      if (!item.id) {
+        item.id = `id_${Date.now()}_${Math.random()}`;
+      }
+
     });
 
     return dados;
 
-  }catch(e){
+  } catch(e){
+    console.error(e);
     return [];
   }
 }
@@ -1325,25 +1361,31 @@ function buildInfo(p) {
     texto += ` (${p.servo.trim()})`;
   }
 
-  /* ===============================
-     TIMER (NÃO APARECE NO PRINT)
-  ============================== */
-  if (!isPrinting) {
-
-    const timer = getTempoRestante(
-      p.data,
-      p.inicio,
-      p.fim
-    );
-
-    if (timer) {
-      texto += ` • ${timer}`;
-    }
-  }
-
   return texto;
 }
 
+function scrollParaAtividade() {
+
+  const atual = document.querySelector("#atividade-atual");
+
+  if (atual) {
+    atual.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+    return;
+  }
+
+  const proxima = document.querySelector("#proxima-atividade");
+
+  if (proxima) {
+    proxima.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
+	
 function getProgresso(data, inicio, fim){
 
   const hoje = new Date().toISOString().split("T")[0];
@@ -1364,14 +1406,13 @@ function getProgresso(data, inicio, fim){
 
   return Math.floor(((agora - i) / (f - i)) * 100);
 }
-
+/*
 function renderizarLista() {
 
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
 
   const lista = ordenarLista(carregarLista());
-  const agoraGlobal = Date.now();
   const proximaIndex = marcarProximaAtividade(lista);
 
   const grupos = {};
@@ -1418,52 +1459,262 @@ function renderizarLista() {
         `
       });
 
-      // ✅ ICONE 💬 CORRETO
+// ✅ MARCA PARA SCROLL
+if (status === "em-andamento") {
+  li.setAttribute("id", "atividade-atual");
+}
+else if (isProxima) {
+  li.setAttribute("id", "proxima-atividade");
+}
+
+      // 💬 Observação
       const temObs = (p.obs || "").trim().length > 0;
 
       if (temObs) {
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
 
-        const iconObs = el(
-          "span",
-          { className: "icon-obs" },
-          "💬"
-        );
-
-        iconObs.addEventListener(
-          "click",
-          () => editarObservacao(idxReal)
-        );
-
+        iconObs.addEventListener("click", () => editarObservacao(idxReal));
         iconObs.setAttribute("title", p.obs);
 
         li.appendChild(iconObs);
       }
 
+      // ✅ TEXTO BASE
+      let texto = buildInfo(p);
+
+      // ✅ TIMER CONTROLADO
+      const timer = getTempoRestante(
+        p.data,
+        p.inicio,
+        p.fim
+      );
+
+      if (!isPrinting && timer) {
+
+        // 🔵 EM ANDAMENTO
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
+
+        // ✅ ENCERRADO
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
+
+        // 🌟 PRÓXIMA
+        else if (isProxima && timer.startsWith("⏳")) {
+          texto += ` • ${timer}`;
+        }
+      }
+
       const divInfo = el(
         "div",
         { className: "item-info" },
-        buildInfo(p)
+        texto
       );
 
-      const bEdit = el("button", { className: "edit" }, "Editar");
-      bEdit.addEventListener("click", () => editarAtividade(idxReal));
+const bEdit = el("button", { className: "edit" }, "Editar");
+bEdit.addEventListener("click", () => editarAtividade(p.id));
 
-      const bDelete = el("button", { className: "delete" }, "Excluir");
-      bDelete.addEventListener("click", () => excluirAtividade(idxReal));
+const bDelete = el("button", { className: "delete" }, "Excluir");
+bDelete.addEventListener("click", () => excluirAtividade(p.id));
 
-      const bClone = el("button", { className: "clone" }, "Clonar");
-      bClone.addEventListener("click", () => clonarAtividade(idxReal));
+const bClone = el("button", { className: "clone" }, "Clonar");
+bClone.addEventListener("click", () => clonarAtividade(p.id));
 
-      const bObs = el("button", { className: "obs" }, "💬");
-      bObs.addEventListener("click", () => editarObservacao(idxReal));
+const divBtns = el(
+  "div",
+  { className: "item-botoes" },
+  [bEdit, bDelete, bClone]
+);
 
-      const divBtns = el(
-        "div",
-        { className: "item-botoes" },
-        [bEdit, bDelete, bClone]
-      );
+li.appendChild(divInfo);
+
+// ✅ PROGRESSO
+const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+if (status === "em-andamento") {
+
+  const barraContainer = el("div", {
+    className: "progress-container"
+  });
+
+
+let classeBarra = "progress-bar ativo";
+let classeItemExtra = "";
+
+
+  const fimDate = parseDateTime(p.data, p.fim);
+  const agora = Date.now();
+  const diff = fimDate - agora;
+
+  const minutosRestantes = diff / (1000 * 60);
+
+  if (minutosRestantes <= 5) {
+    classeBarra = "progress-bar danger";
+  }
+  else if (minutosRestantes <= 10) {
+    classeBarra = "progress-bar warning";
+  }
+
+  const barra = el("div", {
+    className: classeBarra,
+    style: `width: ${progresso}%`
+  });
+
+  barraContainer.appendChild(barra);
+  li.appendChild(barraContainer);
+}
+
+// ✅ botões continuam depois
+li.appendChild(divBtns);
+
+      ul.appendChild(li);
+
+    });
+
+    containerDia.appendChild(ul);
+    listaDiv.appendChild(containerDia);
+
+  });
+
+}
+*/
+
+function renderizarLista() {
+
+  const listaDiv = document.getElementById("lista");
+  listaDiv.innerHTML = "";
+
+  const lista = ordenarLista(carregarLista());
+  const proximaIndex = marcarProximaAtividade(lista);
+
+  const grupos = {};
+
+  lista.forEach(p => {
+    if (!grupos[p.data]) grupos[p.data] = [];
+    grupos[p.data].push(p);
+  });
+
+  const datasOrdenadas = Object.keys(grupos).sort();
+
+  datasOrdenadas.forEach(data => {
+
+    const atividadesDoDia = grupos[data];
+
+    const containerDia = el("section", {
+      className: "pagina-detalhe"
+    });
+
+    const dataBr = data.split("-").reverse().join("/");
+    const diaSemana = diaDaSemanaPorData(data);
+
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
+    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
+
+    containerDia.appendChild(h2Titulo);
+    containerDia.appendChild(hDia);
+
+    const ul = el("ul", { className: "lista-atividades" });
+
+    atividadesDoDia.forEach(p => {
+
+      const idxReal = lista.findIndex(item => item.id === p.id);
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+      const isProxima = (idxReal === proximaIndex);
+
+      const li = el("li", {
+        className: `
+          item 
+          ${status} 
+          ${isProxima ? "proxima" : ""}
+          ${p.destaque ? "destaque" : ""}
+        `
+      });
+
+      // 💬 OBS
+      if ((p.obs || "").trim()) {
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
+        iconObs.setAttribute("title", p.obs);
+        iconObs.addEventListener("click", () => editarObservacao(p.id));
+        li.appendChild(iconObs);
+      }
+
+      // ✅ TEXTO BASE
+      let texto = buildInfo(p);
+
+      const timer = getTempoRestante(p.data, p.inicio, p.fim);
+
+      if (!isPrinting && timer) {
+
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
+        else if (isProxima && timer.startsWith("⏳")) {
+          texto += ` • ${timer}`;
+        }
+      }
+
+      const divInfo = el("div", {
+        className: "item-info"
+      }, texto);
 
       li.appendChild(divInfo);
+
+      // ✅ ===== PROGRESSO + COR DINÂMICA =====
+      if (status === "em-andamento") {
+
+        const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+        let classeBarra = "progress-bar ativo";
+        let classeItemExtra = "ativo";
+
+        const fimDate = parseDateTime(p.data, p.fim);
+        const agora = Date.now();
+        const minutosRestantes = (fimDate - agora) / (1000 * 60);
+
+        if (minutosRestantes <= 5) {
+          classeBarra = "progress-bar danger";
+          classeItemExtra = "danger";
+        }
+        else if (minutosRestantes <= 10) {
+          classeBarra = "progress-bar warning";
+          classeItemExtra = "warning";
+        }
+
+        const barraContainer = el("div", {
+          className: "progress-container"
+        });
+
+        const barra = el("div", {
+          className: classeBarra,
+          style: `width: ${progresso}%`
+        });
+
+        barraContainer.appendChild(barra);
+        li.appendChild(barraContainer);
+
+        // ✅ sincroniza borda lateral
+        li.classList.add(classeItemExtra);
+      }
+
+      // ✅ BOTÕES (PADRÃO CORRETO COM ID)
+      const bEdit = el("button", { className: "edit" }, "Editar");
+      bEdit.addEventListener("click", () => editarAtividade(p.id));
+
+      const bDelete = el("button", { className: "delete" }, "Excluir");
+      bDelete.addEventListener("click", () => excluirAtividade(p.id));
+
+      const bClone = el("button", { className: "clone" }, "Clonar");
+      bClone.addEventListener("click", () => clonarAtividade(p.id));
+
+      const divBtns = el("div", {
+        className: "item-botoes"
+      }, [bEdit, bDelete, bClone]);
+
       li.appendChild(divBtns);
 
       ul.appendChild(li);
@@ -1474,7 +1725,8 @@ function renderizarLista() {
     listaDiv.appendChild(containerDia);
 
   });
-}
+
+}	
 
 
 function adicionarAtividade(){
@@ -1495,6 +1747,7 @@ function adicionarAtividade(){
   const lista = carregarLista();
 
   lista.push({
+    id: `id_${Date.now()}_${Math.random()}`, // ✅ ID único
     dia,
     data,
     tipo,
@@ -1502,21 +1755,12 @@ function adicionarAtividade(){
     servo,
     inicio,
     fim,
-
-    destaque: false,  // ✅ para marcar com ⚠️
-    obs: ""           // ✅ armazenar comentário 💬
+    destaque: false,
+    obs: ""
   });
 
   salvarLista(lista);
   renderizarLista();
-
-  // ✅ limpa campos
-  document.getElementById("data").value = "";
-  document.getElementById("tipo").selectedIndex = 0;
-  document.getElementById("nome").value = "";
-  document.getElementById("servo").value = "";
-  document.getElementById("inicio").value = "";
-  document.getElementById("fim").value = "";
 }
 
 function editarObservacao(index){
@@ -1552,49 +1796,7 @@ let intervalTimers = null;
 let intervalProgresso = null;
 let intervalGlobal = null;
 
-function buildInfo(p) {
 
-  const duracao = getDuracao(p.inicio, p.fim);
-
-  let texto = `[${p.inicio} – ${p.fim}`;
-
-  if (duracao) {
-    texto += ` (Total: ${duracao})`;
-  }
-
-  texto += `]`;
-
-  if (p.tipo) {
-    texto += ` ${p.tipo}`;
-  }
-
-  if (p.nome?.trim()) {
-    texto += `: ${p.nome.trim()}`;
-  }
-
-  if (p.servo?.trim()) {
-    texto += ` (${p.servo.trim()})`;
-  }
-
-  /* ===============================
-     TIMER (NÃO APARECE NO PRINT)
-  ============================== */
-  if (!isPrinting) {
-
-    const timer = getTempoRestante(
-      p.data,
-      p.inicio,
-      p.fim
-    );
-
-    if (timer) {
-      texto += ` • ${timer}`;
-    }
-  }
-
-  return texto;
-}
-	
 function pararLoops() {
 
   if (!intervalGlobal) {
@@ -1605,9 +1807,17 @@ function pararLoops() {
   intervalGlobal = null;
 
 }
-	function editarAtividade(index){
+
+function editarAtividade(id){
 
   const lista = carregarLista();
+
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) {
+    alert("Erro: atividade não encontrada");
+    return;
+  }
+
   const p = lista[index];
 
   const dataBrAtual = isoParaBr(p.data);
@@ -1636,13 +1846,11 @@ function pararLoops() {
   const novoFim = prompt("Hora fim:", p.fim);
   if (novoFim === null) return;
 
-  // ✅ OBSERVAÇÃO INCLUÍDA (CORRETAMENTE)
   const novaObs = prompt("Observação:", p.obs || "");
   if (novaObs === null) return;
 
   const textoObs = novaObs.trim();
 
-  // ✅ ATUALIZA SEM PERDER DADOS
   lista[index] = {
     ...p,
     dia: diaDaSemanaPorData(novaDataIso),
@@ -1661,17 +1869,37 @@ function pararLoops() {
 }
 
 
-function excluirAtividade(index){
+function excluirAtividade(id){
+
   if(!confirm("Deseja realmente excluir esta atividade?")) return;
+
   const lista = carregarLista();
-  lista.splice(index,1);
-  salvarLista(lista);
+
+  const novaLista = lista.filter(item => item.id !== id);
+
+  salvarLista(novaLista);
   renderizarLista();
 }
 
-function clonarAtividade(index){
+function clonarAtividade(id){
+
   const lista = carregarLista();
-  lista.push({...lista[index], data: lista[index].data});
+
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) {
+    alert("Erro ao clonar");
+    return;
+  }
+
+  const original = lista[index];
+
+  const novoItem = {
+    ...original,
+    id: `id_${Date.now()}_${Math.random()}` // ✅ novo ID
+  };
+
+  lista.push(novoItem);
+
   salvarLista(lista);
   renderizarLista();
 }
@@ -1766,7 +1994,7 @@ function handleImportFile(file){
 }
 
 function zerarTudo(){
-  if (!confirm("Tem certeza que deseja ZERAR a LISTA atual? Esta ação não pode ser desfeita.")) {
+  if (!confirm("Tem certeza que deseja EXCLUIR essa PROGRAMAÇÃO? Esta ação não poderá ser revertida!")) {
     return;
   }
   try {
@@ -1777,7 +2005,7 @@ function zerarTudo(){
     alert("Pronto! Lista foi zerada.");
   } catch (e) {
     console.error(e);
-    alert("Não foi possível zerar. Tente novamente.");
+    alert("Não foi possível excluir essa programação. Tente novamente.");
   }
 }
 
@@ -1867,6 +2095,10 @@ document.addEventListener("DOMContentLoaded", () => {
   atualizarTitulos();
   renderizarLista();
 
+  setTimeout(() => {
+    scrollParaAtividade();
+  }, 200);
+
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
 
@@ -1928,7 +2160,7 @@ window.addEventListener("afterprint", () => {
 	
 </script>
 
-  <div class="watermark">TK JOVEM</div>
+  <div class="watermark">TK Agosto</div>
 </body>
   
 </html>
