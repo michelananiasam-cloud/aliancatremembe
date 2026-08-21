@@ -516,20 +516,15 @@ button.edit{
 }
 
 /* ===============================
-    PRINT (IMPRIMIR) - REPETIÇÃO TOTAL
+    PRINT (IMPRIMIR)
 ================================*/
-.print-only { display: none; }
-.logo { display: none; }
+/* Esconde elementos exclusivos de impressão na tela web */
+.tabela-impressao thead { display: none; }
 
 @media print {
-
-  /* 1. CRIA O ESPAÇO NO TOPO DE TODAS AS FOLHAS PARA O CABEÇALHO FIXO */
   @page {
     size: A4 portrait;
-    margin-top: 35mm;
-    margin-bottom: 15mm;
-    margin-left: 15mm;
-    margin-right: 15mm;
+    margin: 10mm 15mm;
   }
 
   html, body {
@@ -540,7 +535,8 @@ button.edit{
     font-size: 13px !important;
   }
 
-  /* 2. OCULTA ELEMENTOS DE INTERFACE */
+  /* 1. OCULTA A INTERFACE WEB E O HEADER GLOBAL ANTIGO */
+  #web-header,
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
@@ -555,48 +551,7 @@ button.edit{
     display: none !important;
   }
 
-  /* 3. CABEÇALHO FIXO (REPETIDO LADO A LADO EM TODAS AS PÁGINAS) */
-  #web-header {
-    display: flex !important;
-    position: fixed !important;
-    top: -28mm !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 25mm !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 15px !important;
-    border: none !important;
-    background: #fff !important;
-  }
-
-  /* FORMATACÃO DA LOGO */
-  .logo-link,
-  #web-header .logo-link,
-  #web-header img,
-  img {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 80px !important;
-    height: auto !important;
-    margin: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* FORMATACÃO DO TÍTULO */
-  #web-header h1 {
-    display: block !important;
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    color: #000 !important;
-    margin: 0 !important;
-    text-align: left !important;
-  }
-
-  /* 4. QUEBRA E ESPAÇAMENTO DAS PÁGINAS */
+  /* 2. QUEBRA DE PÁGINAS LIMPA */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always !important;
@@ -607,12 +562,43 @@ button.edit{
     page-break-before: auto !important;
   }
 
-  /* ESCONDE TÍTULOS SECUNDÁRIOS DUPLICADOS */
-  .pagina-detalhe h2 {
-    display: none !important;
+  /* 3. ATIVA A TABELA E REPETIÇÃO NATIVA DO CABEÇALHO */
+  .tabela-impressao {
+    width: 100% !important;
+    border-collapse: collapse !important;
   }
 
-  /* DATA / DIA DA SEMANA */
+  .tabela-impressao thead {
+    display: table-header-group !important; /* Mágica que repete o topo */
+  }
+
+  /* 4. CABEÇALHO LADO A LADO DA IMPRESSÃO */
+  .cabecalho-impressao {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 15px !important;
+    padding-bottom: 15px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .logo-print {
+    display: block !important;
+    width: 90px !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .cabecalho-impressao h1 {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin: 0 !important;
+  }
+
+  /* 5. TÍTULOS E LISTAS */
   .pagina-detalhe h3 {
     text-align: left !important;
     font-size: 15px !important;
@@ -620,7 +606,6 @@ button.edit{
     margin: 5px 0 10px 0 !important;
   }
 
-  /* 5. LISTAS E ITENS */
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
     background: transparent !important;
@@ -637,8 +622,7 @@ button.edit{
     display: block !important;
     white-space: normal !important;
   }
-}
-	
+}	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
 ================================*/
