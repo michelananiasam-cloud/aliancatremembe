@@ -518,94 +518,131 @@ button.edit{
 /* ===============================
    PRINT (IMPRIMIR)
 ================================*/
+.print-only{ display:none; }
+.logo { display: none; }
+
 @media print {
-  /* Remove navegação e botões */
+/* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
+.item.destaque {
+  border-left: none !important;
+  background: transparent !important;
+}
+	
+.item {
+  border-left: none !important;
+}
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* ===============================
+     REMOVE ELEMENTOS DA INTERFACE
+  ============================== */
   #menu-adicao,
   #web-header,
   #menu-rodape,
   .item-botoes,
   button,
+  .add,
+  .open,
+  .edit,
+  .delete,
+  .clone,
   .btn-voltar,
   .progress-container,
-  .watermark,
-  .icon-obs {
+  .watermark {
     display: none !important;
   }
 
-  html, body {
+  /* ===============================
+     BASE DA IMPRESSÃO
+  ============================== */
+  html,
+  body {
     background: #fff !important;
     color: #000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
   }
 
-  /* Garante que cada bloco de dia comece em uma nova página PDF */
+  /* ===============================
+     PÁGINAS
+  ============================== */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always;
     page-break-inside: avoid;
-    padding-top: 100px !important; /* Espaço reservations para o topo impresso */
-    position: relative !important;
+    position: relative;
+    padding-top: 120px !important;
   }
 
-  .pagina-detalhe:first-child {
-    page-break-before: auto;
-  }
-
-  /* Logo visível no topo de CADA página */
-  .pagina-detalhe .logo-impressao {
+  /* ===============================
+     LOGO
+  ============================== */
+  .pagina-detalhe .logo {
     display: block !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    width: 90px !important;
+    width: 100px !important;
     height: auto !important;
   }
 
-  /* Título da página centralizado no topo */
-  .pagina-detalhe .titulo-impressao {
-    display: block !important;
+  /* ===============================
+     TÍTULO
+  ============================== */
+  .pagina-detalhe h2 {
     position: absolute !important;
-    top: 15px !important;
-    left: 100px !important;
+    top: 30px !important;
+    left: 0 !important;
     right: 0 !important;
     text-align: center !important;
     font-size: 18px !important;
-    font-weight: bold !important;
+    font-weight: 700 !important;
     margin: 0 !important;
   }
 
-  /* Dia da semana e data logo abaixo do cabeçalho */
+  /* ===============================
+     DATA / DIA DA SEMANA
+  ============================== */
   .pagina-detalhe h3 {
-    margin-top: 10px !important;
-    margin-bottom: 15px !important;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
     font-size: 15px !important;
-    font-weight: bold !important;
-    border-bottom: 1px solid #ccc !important;
-    padding-bottom: 5px !important;
   }
 
-  /* Formatação limpa da lista */
+  /* ===============================
+     LISTA
+  ============================== */
   .lista-atividades {
     border: none !important;
-    background: transparent !important;
+    background: #fff !important;
   }
 
   .lista-atividades li {
     display: block !important;
     border: none !important;
-    border-bottom: 1px dashed #ccc !important;
-    padding: 6px 0 !important;
+    padding: 4px 0 !important;
+    margin-bottom: 4px !important;
   }
 
+  .item-info {
+    display: block !important;
+    white-space: normal !important;
+  }
+
+  /* ===============================
+     LIMPEZA VISUAL
+  ============================== */
   * {
     background: transparent !important;
     box-shadow: none !important;
     animation: none !important;
   }
+
 }
-	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
 ================================*/
@@ -1542,16 +1579,18 @@ li.appendChild(divBtns);
   });
 
 }
+*/
 
 function renderizarLista() {
+
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
 
   const lista = ordenarLista(carregarLista());
   const proximaIndex = marcarProximaAtividade(lista);
 
-  // Agrupamento por data
   const grupos = {};
+
   lista.forEach(p => {
     if (!grupos[p.data]) grupos[p.data] = [];
     grupos[p.data].push(p);
@@ -1560,6 +1599,7 @@ function renderizarLista() {
   const datasOrdenadas = Object.keys(grupos).sort();
 
   datasOrdenadas.forEach(data => {
+
     const atividadesDoDia = grupos[data];
 
     const containerDia = el("section", {
@@ -1569,38 +1609,30 @@ function renderizarLista() {
     const dataBr = data.split("-").reverse().join("/");
     const diaSemana = diaDaSemanaPorData(data);
 
-    // 1. Logo (impresso no topo de cada folha)
-    const imgLogo = el("img", {
-      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-      className: "logo-impressao print-only",
-      alt: "Logo"
-    });
-
-    // 2. Título da Programação (impresso no topo)
-    const h2Titulo = el("h2", { 
-      className: "titulo-impressao print-only" 
-    }, getTituloProgramacao());
-
-    // 3. Dia da Semana + Data (ficará logo abaixo do topo)
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
     const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
 
-    // Adiciona elementos de topo na ordem
-    containerDia.appendChild(imgLogo);
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
     const ul = el("ul", { className: "lista-atividades" });
 
     atividadesDoDia.forEach(p => {
+
       const idxReal = lista.findIndex(item => item.id === p.id);
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
       const isProxima = (idxReal === proximaIndex);
 
       const li = el("li", {
-        className: `item ${status} ${isProxima ? "proxima" : ""} ${p.destaque ? "destaque" : ""}`.trim()
+        className: `
+          item 
+          ${status} 
+          ${isProxima ? "proxima" : ""}
+          ${p.destaque ? "destaque" : ""}
+        `
       });
 
-      // 💬 Observação
+      // 💬 OBS
       if ((p.obs || "").trim()) {
         const iconObs = el("span", { className: "icon-obs" }, "💬");
         iconObs.setAttribute("title", p.obs);
@@ -1608,22 +1640,35 @@ function renderizarLista() {
         li.appendChild(iconObs);
       }
 
-      // ✅ Texto Base e Timer
+      // ✅ TEXTO BASE
       let texto = buildInfo(p);
+
       const timer = getTempoRestante(p.data, p.inicio, p.fim);
 
       if (!isPrinting && timer) {
-        if (timer.startsWith("🔥") || timer.startsWith("✅") || (isProxima && timer.startsWith("⏳"))) {
+
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
+        else if (isProxima && timer.startsWith("⏳")) {
           texto += ` • ${timer}`;
         }
       }
 
-      const divInfo = el("div", { className: "item-info" }, texto);
+      const divInfo = el("div", {
+        className: "item-info"
+      }, texto);
+
       li.appendChild(divInfo);
 
-      // ✅ Progresso + Cor Dinâmica
+      // ✅ ===== PROGRESSO + COR DINÂMICA =====
       if (status === "em-andamento") {
+
         const progresso = getProgresso(p.data, p.inicio, p.fim);
+
         let classeBarra = "progress-bar ativo";
         let classeItemExtra = "ativo";
 
@@ -1634,12 +1679,16 @@ function renderizarLista() {
         if (minutosRestantes <= 5) {
           classeBarra = "progress-bar danger";
           classeItemExtra = "danger";
-        } else if (minutosRestantes <= 10) {
+        }
+        else if (minutosRestantes <= 10) {
           classeBarra = "progress-bar warning";
           classeItemExtra = "warning";
         }
 
-        const barraContainer = el("div", { className: "progress-container" });
+        const barraContainer = el("div", {
+          className: "progress-container"
+        });
+
         const barra = el("div", {
           className: classeBarra,
           style: `width: ${progresso}%`
@@ -1647,10 +1696,12 @@ function renderizarLista() {
 
         barraContainer.appendChild(barra);
         li.appendChild(barraContainer);
+
+        // ✅ sincroniza borda lateral
         li.classList.add(classeItemExtra);
       }
 
-      // ✅ Botões
+      // ✅ BOTÕES (PADRÃO CORRETO COM ID)
       const bEdit = el("button", { className: "edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(p.id));
 
@@ -1660,16 +1711,22 @@ function renderizarLista() {
       const bClone = el("button", { className: "clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(p.id));
 
-      const divBtns = el("div", { className: "item-botoes" }, [bEdit, bDelete, bClone]);
+      const divBtns = el("div", {
+        className: "item-botoes"
+      }, [bEdit, bDelete, bClone]);
 
       li.appendChild(divBtns);
+
       ul.appendChild(li);
+
     });
 
     containerDia.appendChild(ul);
     listaDiv.appendChild(containerDia);
+
   });
-}
+
+}	
 
 
 function adicionarAtividade(){
