@@ -516,7 +516,7 @@ button.edit{
 }
 
 /* ===============================
-    PRINT (IMPRIMIR) - AJUSTADO
+    PRINT (IMPRIMIR) - CORRIGIDO
 ================================*/
 .print-only { display: none; }
 
@@ -525,7 +525,7 @@ button.edit{
   /* 1. CONFIGURAÇÃO DA PÁGINA */
   @page {
     size: A4 portrait;
-    margin: 12mm 15mm;
+    margin: 10mm 15mm;
   }
 
   html, body {
@@ -536,7 +536,7 @@ button.edit{
     font-size: 13px !important;
   }
 
-  /* 2. OCULTA APENAS OS BOTÕES E INTERFACES DA TELA WEB */
+  /* 2. OCULTA APENAS A INTERFACE WEB */
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
@@ -552,29 +552,25 @@ button.edit{
     display: none !important;
   }
 
-  /* 3. ESTRUTURA DE PÁGINA (QUEBRA LIMPA POR DIA) */
+  /* 3. QUEBRA DE PÁGINA LIMPA */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always !important;
     page-break-inside: avoid !important;
+    padding-top: 10px !important;
   }
 
   .pagina-detalhe:first-of-type {
     page-break-before: auto !important;
   }
 
-  /* 4. BLOCO DO CABEÇALHO (LOGO + TÍTULO LADO A LADO) */
-  /* Cria uma barra superior em cada .pagina-detalhe */
-  .pagina-detalhe::before {
-    content: "";
-    display: block;
-  }
-
-  /* Exibe a logo do topo de cada página */
+  /* 4. GARANTE QUE A IMAGEM E O TÍTULO DENTRO DE CADA PÁGINA APAREÇAM LADO A LADO */
   .pagina-detalhe img,
-  .pagina-detalhe .logo {
+  .pagina-detalhe .logo,
+  img {
     display: inline-block !important;
     visibility: visible !important;
+    opacity: 1 !important;
     vertical-align: middle !important;
     width: 80px !important;
     height: auto !important;
@@ -585,16 +581,15 @@ button.edit{
     print-color-adjust: exact !important;
   }
 
-  /* Exibe o Título "Programação Thalita Kum..." no topo da página */
   .pagina-detalhe h2 {
     display: inline-block !important;
     visibility: visible !important;
     vertical-align: middle !important;
     text-align: left !important;
-    font-size: 17px !important;
+    font-size: 16px !important;
     font-weight: bold !important;
     color: #000 !important;
-    margin: 0 0 15px 0 !important;
+    margin: 0 !important;
   }
 
   /* 5. DATA / DIA DA SEMANA */
@@ -603,11 +598,11 @@ button.edit{
     text-align: left !important;
     font-size: 14px !important;
     font-weight: bold !important;
-    margin: 10px 0 15px 0 !important;
+    margin: 15px 0 10px 0 !important;
     clear: both !important;
   }
 
-  /* 6. FORMATACÃO DA LISTA DE ATIVIDADES */
+  /* 6. FORMATACÃO DA LISTA */
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
     background: transparent !important;
@@ -625,7 +620,6 @@ button.edit{
     white-space: normal !important;
   }
 }
-
 	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
