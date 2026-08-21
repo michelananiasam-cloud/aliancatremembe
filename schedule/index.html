@@ -516,17 +516,17 @@ button.edit{
 }
 
 /* ===============================
-    PRINT (IMPRIMIR) - DEFINITIVO
+    PRINT (IMPRIMIR) - FINAL
 ================================*/
 .print-only { display: none; }
 .logo { display: none; }
 
 @media print {
 
-  /* 1. CONFIGURAÇÃO DA PÁGINA */
+  /* 1. CONFIGURAÇÃO DA FOLHA */
   @page {
     size: A4 portrait;
-    margin: 15mm;
+    margin: 10mm 15mm;
   }
 
   html, body {
@@ -537,7 +537,7 @@ button.edit{
     font-size: 13px !important;
   }
 
-  /* 2. OCULTA ELEMENTOS DA INTERFACE WEB */
+  /* 2. OCULTA APENAS OS BOTÕES DE INTERFACE */
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
@@ -548,61 +548,72 @@ button.edit{
   .icon-obs,
   #scroll-spacer,
   #btn-pdf-mobile,
-  #btn-atualizar-mobile,
-  #web-header h1 {
+  #btn-atualizar-mobile {
     display: none !important;
   }
 
-  /* 3. RESETA O HEADER GLOBAL PARA NÃO ATROPELAR */
+  /* 3. CABEÇALHO LADO A LADO (LOGO + TÍTULO) */
   #web-header {
-    display: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 20px !important;
+    margin-bottom: 20px !important;
+    border: none !important;
+    background: transparent !important;
   }
 
-  /* 4. ESTRUTURA DE PÁGINA COM ESPAÇAMENTO REAL */
-  .pagina-detalhe {
-    display: block !important;
-    page-break-before: always !important;
-    page-break-inside: avoid !important;
-    position: relative !important;
-    padding-top: 140px !important; /* Espaço exato reservado para a logo */
-  }
-
-  .pagina-detalhe:first-of-type {
-    page-break-before: auto !important;
-  }
-
-  /* 5. LOGO ABSOLUTA DENTRO DE CADA PÁGINA (SEM REPETIR POR CIMA) */
-  .logo,
-  .pagina-detalhe .logo,
-  .pagina-detalhe img {
+  /* EXIBE A LOGO */
+  .logo-link,
+  #web-header .logo-link,
+  #web-header img,
+  img {
     display: block !important;
     visibility: visible !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 110px !important;
+    opacity: 1 !important;
+    width: 100px !important;
     height: auto !important;
     margin: 0 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 6. TÍTULOS ALINHADOS E COM ESPAÇAMENTO CORRETO */
+  /* EXIBE O TÍTULO "Programação Thalita Kum..." DO CABEÇALHO */
+  #web-header h1 {
+    display: block !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #000 !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  /* 4. ESTRUTURA DE PÁGINAS DA LISTA */
+  .pagina-detalhe {
+    display: block !important;
+    page-break-before: always !important;
+    page-break-inside: avoid !important;
+  }
+
+  .pagina-detalhe:first-of-type {
+    page-break-before: auto !important;
+  }
+
+  /* Esconde h2 duplicados de dentro da página se houver */
   .pagina-detalhe h2 {
-    text-align: center !important;
-    font-size: 17px !important;
-    font-weight: bold !important;
-    margin: 0 0 5px 0 !important;
+    display: none !important;
   }
 
+  /* DATA / DIA DA SEMANA (Sexta, Sábado, Domingo) */
   .pagina-detalhe h3 {
-    text-align: center !important;
-    font-size: 14px !important;
-    margin: 0 0 15px 0 !important;
+    text-align: left !important;
+    font-size: 15px !important;
+    font-weight: bold !important;
+    margin: 10px 0 10px 0 !important;
   }
 
-  /* 7. FORMATACÃO DA LISTA DE ATIVIDADES */
+  /* 5. FORMATACÃO DAS LISTAS */
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
     background: transparent !important;
@@ -620,6 +631,7 @@ button.edit{
     white-space: normal !important;
   }
 }
+
 	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
