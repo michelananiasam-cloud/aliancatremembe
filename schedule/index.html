@@ -518,24 +518,28 @@ button.edit{
 /* ===============================
     PRINT (IMPRIMIR)
 ================================*/
-/* Esconde elementos exclusivos de impressão na tela web */
-.tabela-impressao thead { display: none; }
+/* Esconde o cabeçalho de impressão na tela web */
+.header-impressao {
+  display: none;
+}
 
 @media print {
+
+  /* 1. CONFIGURAÇÃO DA FOLHA */
   @page {
     size: A4 portrait;
-    margin: 10mm 15mm;
+    margin: 12mm 15mm;
   }
 
   html, body {
-    background: #fff !important;
-    color: #000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
     font-size: 13px !important;
   }
 
-  /* 1. OCULTA A INTERFACE WEB E O HEADER GLOBAL ANTIGO */
+  /* 2. OCULTA ELEMENTOS DE INTERFACE WEB E O CABEÇALHO GLOBAL ANTIGO */
   #web-header,
   #menu-adicao,
   #menu-rodape,
@@ -551,36 +555,28 @@ button.edit{
     display: none !important;
   }
 
-  /* 2. QUEBRA DE PÁGINAS LIMPA */
+  /* 3. QUEBRA DE PÁGINA LIMPA */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always !important;
     page-break-inside: avoid !important;
+    padding-top: 0 !important;
   }
 
   .pagina-detalhe:first-of-type {
     page-break-before: auto !important;
   }
 
-  /* 3. ATIVA A TABELA E REPETIÇÃO NATIVA DO CABEÇALHO */
-  .tabela-impressao {
-    width: 100% !important;
-    border-collapse: collapse !important;
-  }
-
-  .tabela-impressao thead {
-    display: table-header-group !important; /* Mágica que repete o topo */
-  }
-
-  /* 4. CABEÇALHO LADO A LADO DA IMPRESSÃO */
-  .cabecalho-impressao {
+  /* 4. CABEÇALHO LADO A LADO EM CADA PÁGINA */
+  .header-impressao {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 15px !important;
-    padding-bottom: 15px !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 15px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #ddd !important;
   }
 
   .logo-print {
@@ -591,10 +587,10 @@ button.edit{
     print-color-adjust: exact !important;
   }
 
-  .cabecalho-impressao h1 {
+  .header-impressao h1 {
     font-size: 18px !important;
-    font-weight: bold !important;
-    color: #000 !important;
+    font-weight: 800 !important;
+    color: #000000 !important;
     margin: 0 !important;
   }
 
@@ -603,7 +599,7 @@ button.edit{
     text-align: left !important;
     font-size: 15px !important;
     font-weight: bold !important;
-    margin: 5px 0 10px 0 !important;
+    margin: 10px 0 10px 0 !important;
   }
 
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
@@ -622,7 +618,8 @@ button.edit{
     display: block !important;
     white-space: normal !important;
   }
-}	
+}
+	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
 ================================*/
