@@ -516,28 +516,14 @@ button.edit{
 }
 
 /* ===============================
-    PRINT (IMPRIMIR)
+    PRINT (IMPRIMIR) - CORRIGIDO
 ================================*/
 .print-only { display: none; }
 .logo { display: none; }
 
 @media print {
 
-  /* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
-  .item.destaque,
-  .item {
-    border-left: none !important;
-    background: transparent !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  /* ===============================
-     1. ESCONDE ELEMENTOS DA INTERFACE
-  ============================== */
-  #web-header,
+  /* 1. Oculta botões e elementos extras de interface */
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
@@ -557,11 +543,39 @@ button.edit{
     display: none !important;
   }
 
-  /* ===============================
-     2. BASE DA IMPRESSÃO
-  ============================== */
-  html,
-  body {
+  /* 2. Mantém o cabeçalho visível no topo de cada página */
+  #web-header {
+    display: flex !important;
+    position: relative !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column !important;
+    margin-bottom: 20px !important;
+    border: none !important;
+  }
+
+  #web-header h1 {
+    display: none !important; /* Esconde o H1 padrão da web para não duplicar */
+  }
+
+  /* 3. FORÇA A EXIBIÇÃO DA LOGO E DA IMAGEM */
+  .logo-link,
+  #web-header .logo-link,
+  .logo-link img,
+  #web-header img,
+  img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 130px !important;
+    height: auto !important;
+    margin: 0 auto 10px auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 4. Base e Estrutura de Páginas */
+  html, body {
     background: #fff !important;
     color: #000 !important;
     margin: 0 !important;
@@ -569,39 +583,19 @@ button.edit{
     font-size: 14px !important;
   }
 
-  /* ===============================
-     3. PÁGINAS (Quebra de página perfeita)
-  ============================== */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always;
     page-break-inside: avoid;
-    position: relative !important;
-    padding-top: 20px !important;
+    padding-top: 10px !important;
   }
 
   .pagina-detalhe:first-of-type {
     page-break-before: auto !important;
   }
 
-  /* ===============================
-     4. LOGO (Centralizada em cada página)
-  ============================== */
-  .logo,
-  .pagina-detalhe .logo {
-    display: block !important;
-    visibility: visible !important;
-    position: static !important;
-    width: 120px !important;
-    height: auto !important;
-    margin: 0 auto 15px auto !important;
-  }
-
-  /* ===============================
-     5. TÍTULO E SUBTÍTULO (Alinhados com a logo)
-  ============================== */
+  /* 5. Títulos e Subtítulos organizados */
   .pagina-detalhe h2 {
-    position: static !important;
     text-align: center !important;
     font-size: 18px !important;
     font-weight: 700 !important;
@@ -609,23 +603,19 @@ button.edit{
   }
 
   .pagina-detalhe h3 {
-    position: static !important;
     text-align: center !important;
-    margin: 0 0 25px 0 !important;
+    margin: 0 0 20px 0 !important;
     font-size: 15px !important;
   }
 
-  /* ===============================
-     6. LISTA
-  ============================== */
-  .lista-atividades {
+  /* 6. Remoção de destaques e bordas da lista */
+  .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
-    background: #fff !important;
+    background: transparent !important;
   }
 
   .lista-atividades li {
     display: block !important;
-    border: none !important;
     padding: 4px 0 !important;
     margin-bottom: 4px !important;
   }
@@ -634,17 +624,9 @@ button.edit{
     display: block !important;
     white-space: normal !important;
   }
-
-  /* ===============================
-     7. LIMPEZA VISUAL
-  ============================== */
-  * {
-    background: transparent !important;
-    box-shadow: none !important;
-    animation: none !important;
-  }
-
 }
+
+	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
 ================================*/
