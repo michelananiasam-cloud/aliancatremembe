@@ -516,31 +516,28 @@ button.edit{
 }
 
 /* ===============================
-   PRINT (IMPRIMIR)
+   PRINT (IMPRIMIR) - AJUSTADO
 ================================*/
-.print-only{ display:none; }
+.print-only { display: none; }
 .logo { display: none; }
 
 @media print {
-/* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
-.item.destaque {
-  border-left: none !important;
-  background: transparent !important;
-}
-	
-.item {
-  border-left: none !important;
-}
+
+  /* ✅ REMOVE DESTAQUE E BORDAS DA IMPRESSÃO */
+  .item.destaque,
+  .item {
+    border-left: none !important;
+    background: transparent !important;
+  }
 
   .print-only {
     display: block !important;
   }
 
   /* ===============================
-     REMOVE ELEMENTOS DA INTERFACE
+     1. REMOVE ELEMENTOS DA INTERFACE (MANTÉM O CABEÇALHO)
   ============================== */
   #menu-adicao,
-  /*#web-header,*/
   #menu-rodape,
   .item-botoes,
   button,
@@ -551,18 +548,44 @@ button.edit{
   .clone,
   .btn-voltar,
   .progress-container,
-  .watermark {
+  .watermark,
+  .icon-obs,
+  #scroll-spacer,
+  #btn-pdf-mobile,
+  #btn-atualizar-mobile {
     display: none !important;
   }
-	
-/* Se a logo estiver dentro do #web-header, mantemos apenas o elemento visible */
-  #web-header {
-    display: block !important;
-    background: transparent !important;
-    border: none !important;
-  }
+
   /* ===============================
-     BASE DA IMPRESSÃO
+     2. EXIBE O CABEÇALHO E A LOGO
+  ============================== */
+  #web-header {
+    display: flex !important;
+    position: relative !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Oculta apenas o h1 do cabeçalho web para usar o h2 de impressão */
+  #web-header h1 {
+    display: none !important;
+  }
+
+  .logo-link,
+  .logo-link img,
+  #web-header img {
+    display: block !important;
+    visibility: visible !important;
+    width: 120px !important;
+    height: auto !important;
+  }
+
+  /* ===============================
+     3. BASE DA IMPRESSÃO
   ============================== */
   html,
   body {
@@ -574,55 +597,34 @@ button.edit{
   }
 
   /* ===============================
-     PÁGINAS
+     4. ESTRUTURA DAS PÁGINAS
   ============================== */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always;
     page-break-inside: avoid;
-    position: relative;
-    padding-top: 120px !important;
+    position: relative !important;
+    padding-top: 10px !important;
   }
 
-/* ===============================
-     LOGO (AJUSTADO PARA GARANTIR VISIBILIDADE)
-  ============================== */
-  .logo,
-  .pagina-detalhe .logo {
-    display: block !important;
-    visibility: visible !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100px !important;
-    height: auto !important;
+  .pagina-detalhe:first-of-type {
+    page-break-before: auto !important;
   }
 
-  /* ===============================
-     TÍTULO
-  ============================== */
   .pagina-detalhe h2 {
-    position: absolute !important;
-    top: 30px !important;
-    left: 0 !important;
-    right: 0 !important;
-    text-align: center !important;
     font-size: 18px !important;
     font-weight: 700 !important;
-    margin: 0 !important;
+    margin: 0 0 10px 0 !important;
   }
 
-  /* ===============================
-     DATA / DIA DA SEMANA
-  ============================== */
   .pagina-detalhe h3 {
-    margin-top: 20px !important;
+    margin-top: 10px !important;
     margin-bottom: 10px !important;
     font-size: 15px !important;
   }
 
   /* ===============================
-     LISTA
+     5. LISTA DE ATIVIDADES
   ============================== */
   .lista-atividades {
     border: none !important;
@@ -642,14 +644,13 @@ button.edit{
   }
 
   /* ===============================
-     LIMPEZA VISUAL
+     6. LIMPEZA VISUAL
   ============================== */
   * {
     background: transparent !important;
     box-shadow: none !important;
     animation: none !important;
   }
-
 }
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
