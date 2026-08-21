@@ -518,14 +518,13 @@ button.edit{
 /* ===============================
     PRINT (IMPRIMIR)
 ================================*/
-/* Esconde o cabeçalho de impressão na tela web */
-.header-impressao {
-  display: none;
+/* Esconde o cabeçalho duplicado na tela web normal */
+body:not(.printing) .header-impressao {
+  display: none !important;
 }
 
 @media print {
-
-  /* 1. CONFIGURAÇÃO DA FOLHA */
+  /* 1. CONFIGURAÇÃO DA PÁGINA IMPRESSA */
   @page {
     size: A4 portrait;
     margin: 12mm 15mm;
@@ -539,7 +538,7 @@ button.edit{
     font-size: 13px !important;
   }
 
-  /* 2. OCULTA ELEMENTOS DE INTERFACE WEB E O CABEÇALHO GLOBAL ANTIGO */
+  /* 2. OCULTA O HEADER WEB ANTIGO E BOTÕES DA TELA */
   #web-header,
   #menu-adicao,
   #menu-rodape,
@@ -555,19 +554,7 @@ button.edit{
     display: none !important;
   }
 
-  /* 3. QUEBRA DE PÁGINA LIMPA */
-  .pagina-detalhe {
-    display: block !important;
-    page-break-before: always !important;
-    page-break-inside: avoid !important;
-    padding-top: 0 !important;
-  }
-
-  .pagina-detalhe:first-of-type {
-    page-break-before: auto !important;
-  }
-
-  /* 4. CABEÇALHO LADO A LADO EM CADA PÁGINA */
+  /* 3. FORÇA A EXIBIÇÃO DO CABEÇALHO EM CADA PÁGINA */
   .header-impressao {
     display: flex !important;
     flex-direction: row !important;
@@ -576,25 +563,41 @@ button.edit{
     gap: 15px !important;
     margin-bottom: 15px !important;
     padding-bottom: 10px !important;
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid #ccc !important;
+    width: 100% !important;
   }
 
+  .header-impressao img,
   .logo-print {
     display: block !important;
+    visibility: visible !important;
     width: 90px !important;
     height: auto !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .header-impressao h1 {
+  .header-impressao h1,
+  .header-impressao h2 {
+    display: block !important;
+    visibility: visible !important;
     font-size: 18px !important;
     font-weight: 800 !important;
     color: #000000 !important;
     margin: 0 !important;
   }
 
-  /* 5. TÍTULOS E LISTAS */
+  /* 4. ESTRUTURA DE PÁGINAS */
+  .pagina-detalhe {
+    display: block !important;
+    page-break-before: always !important;
+    page-break-inside: avoid !important;
+  }
+
+  .pagina-detalhe:first-of-type {
+    page-break-before: auto !important;
+  }
+
   .pagina-detalhe h3 {
     text-align: left !important;
     font-size: 15px !important;
@@ -602,6 +605,7 @@ button.edit{
     margin: 10px 0 10px 0 !important;
   }
 
+  /* 5. FORMATACÃO DAS LISTAS */
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
     background: transparent !important;
@@ -612,11 +616,6 @@ button.edit{
     display: block !important;
     padding: 3px 0 !important;
     margin-bottom: 3px !important;
-  }
-
-  .item-info {
-    display: block !important;
-    white-space: normal !important;
   }
 }
 	
