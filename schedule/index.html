@@ -519,47 +519,36 @@ button.edit{
    PRINT (IMPRIMIR)
 ================================*/
 .print-only{ display:none; }
-.logo { display: none; }
+/*.logo { display: none; }*/
+
+/* ===============================
+   PRINT (IMPRIMIR) - AJUSTADO PARA A LOGO
+================================*/
+.print-only { display: none; }
 
 @media print {
-/* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
-.item.destaque {
-  border-left: none !important;
-  background: transparent !important;
-}
-	
-.item {
-  border-left: none !important;
-}
-
-  .print-only {
-    display: block !important;
-  }
 
   /* ===============================
-     REMOVE ELEMENTOS DA INTERFACE
+     1. REMOVE ELEMENTOS DESNECESSÁRIOS
   ============================== */
   #menu-adicao,
-  #web-header,
   #menu-rodape,
   .item-botoes,
   button,
-  .add,
-  .open,
-  .edit,
-  .delete,
-  .clone,
-  .btn-voltar,
+  .add, .open, .edit, .delete, .clone, .btn-voltar,
   .progress-container,
-  .watermark {
+  .watermark,
+  .icon-obs,
+  #btn-pdf-mobile,
+  #btn-atualizar-mobile,
+  #scroll-spacer {
     display: none !important;
   }
 
   /* ===============================
-     BASE DA IMPRESSÃO
+     2. BASE DA IMPRESSÃO
   ============================== */
-  html,
-  body {
+  html, body {
     background: #fff !important;
     color: #000 !important;
     margin: 0 !important;
@@ -567,55 +556,68 @@ button.edit{
     font-size: 14px !important;
   }
 
+  * {
+    background: transparent !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+
   /* ===============================
-     PÁGINAS
+     3. REEXIBE E POSICIONA A LOGO DO CABEÇALHO
+  ============================== */
+  #web-header {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-bottom: none !important;
+    padding: 0 0 10px 0 !important;
+    margin-bottom: 20px !important;
+  }
+
+  #web-header .logo-link img {
+    display: block !important;
+    width: 120px !important;
+    height: auto !important;
+    visibility: visible !important;
+  }
+
+  #web-header h1 {
+    display: block !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+  }
+
+  /* ===============================
+     4. ESTRUTURA DAS PÁGINAS E LISTA
   ============================== */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always;
     page-break-inside: avoid;
     position: relative;
-    padding-top: 120px !important;
+    padding-top: 10px !important;
   }
 
-  /* ===============================
-     LOGO
-  ============================== */
-  .pagina-detalhe .logo {
-    display: block !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100px !important;
-    height: auto !important;
+  /* Primeira página não força quebra extra */
+  .pagina-detalhe:first-of-type {
+    page-break-before: auto !important;
   }
 
-  /* ===============================
-     TÍTULO
-  ============================== */
   .pagina-detalhe h2 {
-    position: absolute !important;
-    top: 30px !important;
-    left: 0 !important;
-    right: 0 !important;
-    text-align: center !important;
-    font-size: 18px !important;
-    font-weight: 700 !important;
-    margin: 0 !important;
+    display: none !important; /* Esconde para usar o título principal do #web-header */
   }
 
-  /* ===============================
-     DATA / DIA DA SEMANA
-  ============================== */
   .pagina-detalhe h3 {
-    margin-top: 20px !important;
+    margin-top: 10px !important;
     margin-bottom: 10px !important;
-    font-size: 15px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    border-bottom: 1px solid #ccc !important;
+    padding-bottom: 4px !important;
   }
 
-  /* ===============================
-     LISTA
-  ============================== */
   .lista-atividades {
     border: none !important;
     background: #fff !important;
@@ -623,16 +625,27 @@ button.edit{
 
   .lista-atividades li {
     display: block !important;
-    border: none !important;
-    padding: 4px 0 !important;
+    border-bottom: 1px dashed #ccc !important;
+    padding: 6px 0 !important;
     margin-bottom: 4px !important;
+    position: static !important;
+  }
+
+  .item {
+    border-left: none !important;
+  }
+
+  .item.destaque {
+    border-left: none !important;
+    background: transparent !important;
   }
 
   .item-info {
     display: block !important;
     white-space: normal !important;
+    color: #000 !important;
   }
-
+}
   /* ===============================
      LIMPEZA VISUAL
   ============================== */
