@@ -516,30 +516,27 @@ button.edit{
 }
 
 /* ===============================
-    PRINT (IMPRIMIR)
+    PRINT (IMPRIMIR) - AJUSTADO
 ================================*/
-/* Esconde o cabeçalho duplicado na tela web normal */
-body:not(.printing) .header-impressao {
-  display: none !important;
-}
+.print-only { display: none; }
 
 @media print {
-  /* 1. CONFIGURAÇÃO DA PÁGINA IMPRESSA */
+
+  /* 1. CONFIGURAÇÃO DA PÁGINA */
   @page {
     size: A4 portrait;
     margin: 12mm 15mm;
   }
 
   html, body {
-    background: #ffffff !important;
-    color: #000000 !important;
+    background: #fff !important;
+    color: #000 !important;
     margin: 0 !important;
     padding: 0 !important;
     font-size: 13px !important;
   }
 
-  /* 2. OCULTA O HEADER WEB ANTIGO E BOTÕES DA TELA */
-  #web-header,
+  /* 2. OCULTA APENAS OS BOTÕES E INTERFACES DA TELA WEB */
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
@@ -550,44 +547,12 @@ body:not(.printing) .header-impressao {
   .icon-obs,
   #scroll-spacer,
   #btn-pdf-mobile,
-  #btn-atualizar-mobile {
+  #btn-atualizar-mobile,
+  #web-header {
     display: none !important;
   }
 
-  /* 3. FORÇA A EXIBIÇÃO DO CABEÇALHO EM CADA PÁGINA */
-  .header-impressao {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 15px !important;
-    margin-bottom: 15px !important;
-    padding-bottom: 10px !important;
-    border-bottom: 1px solid #ccc !important;
-    width: 100% !important;
-  }
-
-  .header-impressao img,
-  .logo-print {
-    display: block !important;
-    visibility: visible !important;
-    width: 90px !important;
-    height: auto !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .header-impressao h1,
-  .header-impressao h2 {
-    display: block !important;
-    visibility: visible !important;
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    color: #000000 !important;
-    margin: 0 !important;
-  }
-
-  /* 4. ESTRUTURA DE PÁGINAS */
+  /* 3. ESTRUTURA DE PÁGINA (QUEBRA LIMPA POR DIA) */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always !important;
@@ -598,14 +563,51 @@ body:not(.printing) .header-impressao {
     page-break-before: auto !important;
   }
 
-  .pagina-detalhe h3 {
-    text-align: left !important;
-    font-size: 15px !important;
-    font-weight: bold !important;
-    margin: 10px 0 10px 0 !important;
+  /* 4. BLOCO DO CABEÇALHO (LOGO + TÍTULO LADO A LADO) */
+  /* Cria uma barra superior em cada .pagina-detalhe */
+  .pagina-detalhe::before {
+    content: "";
+    display: block;
   }
 
-  /* 5. FORMATACÃO DAS LISTAS */
+  /* Exibe a logo do topo de cada página */
+  .pagina-detalhe img,
+  .pagina-detalhe .logo {
+    display: inline-block !important;
+    visibility: visible !important;
+    vertical-align: middle !important;
+    width: 80px !important;
+    height: auto !important;
+    margin-right: 15px !important;
+    position: static !important;
+    transform: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Exibe o Título "Programação Thalita Kum..." no topo da página */
+  .pagina-detalhe h2 {
+    display: inline-block !important;
+    visibility: visible !important;
+    vertical-align: middle !important;
+    text-align: left !important;
+    font-size: 17px !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin: 0 0 15px 0 !important;
+  }
+
+  /* 5. DATA / DIA DA SEMANA */
+  .pagina-detalhe h3 {
+    display: block !important;
+    text-align: left !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    margin: 10px 0 15px 0 !important;
+    clear: both !important;
+  }
+
+  /* 6. FORMATACÃO DA LISTA DE ATIVIDADES */
   .item.destaque, .item, .lista-atividades, .lista-atividades li {
     border: none !important;
     background: transparent !important;
@@ -617,7 +619,13 @@ body:not(.printing) .header-impressao {
     padding: 3px 0 !important;
     margin-bottom: 3px !important;
   }
+
+  .item-info {
+    display: block !important;
+    white-space: normal !important;
+  }
 }
+
 	
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
