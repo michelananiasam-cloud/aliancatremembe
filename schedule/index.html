@@ -516,14 +516,14 @@ button.edit{
 }
 
 /* ===============================
-   PRINT (IMPRIMIR) - AJUSTADO
+    PRINT (IMPRIMIR)
 ================================*/
 .print-only { display: none; }
 .logo { display: none; }
 
 @media print {
 
-  /* ✅ REMOVE DESTAQUE E BORDAS DA IMPRESSÃO */
+  /* ✅ REMOVE DESTAQUE NA IMPRESSÃO */
   .item.destaque,
   .item {
     border-left: none !important;
@@ -535,8 +535,9 @@ button.edit{
   }
 
   /* ===============================
-     1. REMOVE ELEMENTOS DA INTERFACE (MANTÉM O CABEÇALHO)
+     1. ESCONDE ELEMENTOS DA INTERFACE
   ============================== */
+  #web-header,
   #menu-adicao,
   #menu-rodape,
   .item-botoes,
@@ -557,35 +558,7 @@ button.edit{
   }
 
   /* ===============================
-     2. EXIBE O CABEÇALHO E A LOGO
-  ============================== */
-  #web-header {
-    display: flex !important;
-    position: relative !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    border: none !important;
-    background: transparent !important;
-    padding: 0 !important;
-    margin-bottom: 20px !important;
-  }
-
-  /* Oculta apenas o h1 do cabeçalho web para usar o h2 de impressão */
-  #web-header h1 {
-    display: none !important;
-  }
-
-  .logo-link,
-  .logo-link img,
-  #web-header img {
-    display: block !important;
-    visibility: visible !important;
-    width: 120px !important;
-    height: auto !important;
-  }
-
-  /* ===============================
-     3. BASE DA IMPRESSÃO
+     2. BASE DA IMPRESSÃO
   ============================== */
   html,
   body {
@@ -597,34 +570,53 @@ button.edit{
   }
 
   /* ===============================
-     4. ESTRUTURA DAS PÁGINAS
+     3. PÁGINAS (Quebra de página perfeita)
   ============================== */
   .pagina-detalhe {
     display: block !important;
     page-break-before: always;
     page-break-inside: avoid;
     position: relative !important;
-    padding-top: 10px !important;
+    padding-top: 20px !important;
   }
 
   .pagina-detalhe:first-of-type {
     page-break-before: auto !important;
   }
 
+  /* ===============================
+     4. LOGO (Centralizada em cada página)
+  ============================== */
+  .logo,
+  .pagina-detalhe .logo {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 120px !important;
+    height: auto !important;
+    margin: 0 auto 15px auto !important;
+  }
+
+  /* ===============================
+     5. TÍTULO E SUBTÍTULO (Alinhados com a logo)
+  ============================== */
   .pagina-detalhe h2 {
+    position: static !important;
+    text-align: center !important;
     font-size: 18px !important;
     font-weight: 700 !important;
-    margin: 0 0 10px 0 !important;
+    margin: 0 0 5px 0 !important;
   }
 
   .pagina-detalhe h3 {
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
+    position: static !important;
+    text-align: center !important;
+    margin: 0 0 25px 0 !important;
     font-size: 15px !important;
   }
 
   /* ===============================
-     5. LISTA DE ATIVIDADES
+     6. LISTA
   ============================== */
   .lista-atividades {
     border: none !important;
@@ -644,13 +636,14 @@ button.edit{
   }
 
   /* ===============================
-     6. LIMPEZA VISUAL
+     7. LIMPEZA VISUAL
   ============================== */
   * {
     background: transparent !important;
     box-shadow: none !important;
     animation: none !important;
   }
+
 }
 /* ===============================
    MENU DE RODAPÉ – SOMENTE WEB (ALINHADO EM UMA LINHA)
