@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-08-20T02:06:25.040Z",
+  "exportedAt": "2026-08-21T11:57:47.106Z",
   "current": {
     "evangelizacao": "Thalita Kum Agosto/2026",
     "lista": [
@@ -135,7 +135,7 @@
         "data": "2026-08-29",
         "tipo": "Pregação",
         "nome": "Amor Roubado",
-        "servo": "Tati e Wilson",
+        "servo": "Michelle e Wilson",
         "inicio": "11:15",
         "fim": "12:00",
         "obs": "",
@@ -169,7 +169,7 @@
         "data": "2026-08-29",
         "tipo": "Pregação",
         "nome": "Pecado e Salvação",
-        "servo": "Michel e Carol Borges",
+        "servo": "Michel e Tati",
         "inicio": "13:20",
         "fim": "14:00",
         "obs": "",
@@ -325,23 +325,11 @@
       {
         "dia": "Sábado",
         "data": "2026-08-29",
-        "tipo": "Teatro",
-        "nome": "\"Família do Zé\"",
-        "servo": "Não teremos",
-        "inicio": "20:30",
-        "fim": "20:50",
-        "obs": "Alinar com o Wilson",
-        "id": "id_1782426914241_0.9526525403857921",
-        "destaque": true
-      },
-      {
-        "dia": "Sábado",
-        "data": "2026-08-29",
         "tipo": "Pregação",
         "nome": "Vida Nova em Família",
         "servo": "Wilson e Paula",
-        "inicio": "20:50",
-        "fim": "21:30",
+        "inicio": "20:30",
+        "fim": "21:10",
         "obs": "",
         "id": "id_1782426914241_0.19962152923628018",
         "destaque": false
@@ -352,32 +340,35 @@
         "tipo": "Dinâmica",
         "nome": "Abraçar os Pais + Carta aos Pais/Familiares",
         "servo": "",
-        "inicio": "21:30",
-        "fim": "22:00",
+        "inicio": "21:10",
+        "fim": "21:40",
         "obs": "",
-        "id": "id_1782426914241_0.5727299817061959"
+        "id": "id_1782426914241_0.5727299817061959",
+        "destaque": false
       },
       {
         "dia": "Sábado",
         "data": "2026-08-29",
-        "tipo": "Momento",
-        "nome": "Avisos e Encerramento",
+        "tipo": "Encerramento",
+        "nome": "Avisos + Oração da Noite",
         "servo": "",
-        "inicio": "22:00",
-        "fim": "22:30",
+        "inicio": "21:40",
+        "fim": "22:00",
         "obs": "",
-        "id": "id_1782426914241_0.9826728971533483"
+        "id": "id_1782426914241_0.9826728971533483",
+        "destaque": false
       },
       {
         "dia": "Domingo",
         "data": "2026-08-30",
-        "tipo": "",
-        "nome": "Chegada dos Servos",
+        "tipo": "Chegada",
+        "nome": "dos Servos",
         "servo": "",
         "inicio": "07:30",
         "fim": "08:00",
         "obs": "",
-        "id": "id_1782426914241_0.27275427123413"
+        "id": "id_1782426914241_0.27275427123413",
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -420,11 +411,11 @@
         "data": "2026-08-30",
         "tipo": "Pregação",
         "nome": "Promessa do Pai",
-        "servo": "Wagner e ?",
+        "servo": "Wagner e Carol Borges",
         "inicio": "09:00",
         "fim": "09:40",
-        "obs": "Veriicar com quem*",
-        "destaque": true,
+        "obs": "",
+        "destaque": false,
         "id": "id_1782426914241_0.9591139069231157"
       },
       {
@@ -468,11 +459,11 @@
         "data": "2026-08-30",
         "tipo": "Pregação",
         "nome": "Se Lançar",
-        "servo": "Edgard e Missionario(a)",
+        "servo": "Edgard e Luna",
         "inicio": "11:00",
         "fim": "11:40",
-        "obs": "Qual Missionária?",
-        "destaque": true,
+        "obs": "",
+        "destaque": false,
         "id": "id_1782426914241_0.3362622060555923"
       },
       {
@@ -482,7 +473,7 @@
         "nome": "Se Lançar",
         "servo": "",
         "inicio": "11:40",
-        "fim": "12:40",
+        "fim": "13:00",
         "obs": "",
         "id": "id_1782426914241_0.8577163274746209",
         "destaque": false
@@ -490,26 +481,14 @@
       {
         "dia": "Domingo",
         "data": "2026-08-30",
-        "tipo": "Almoço",
-        "nome": "",
-        "servo": "",
-        "inicio": "12:40",
-        "fim": "13:20",
-        "obs": "",
-        "id": "id_1782426914241_0.8740547144620254",
-        "destaque": false
-      },
-      {
-        "dia": "Domingo",
-        "data": "2026-08-30",
         "tipo": "Pregação",
         "nome": "Vida Nova",
-        "servo": "Luna e ?",
-        "inicio": "13:20",
-        "fim": "14:00",
-        "obs": "Quem fará com a Luna?",
+        "servo": "Caio e Marília",
+        "inicio": "14:00",
+        "fim": "14:40",
+        "obs": "",
         "id": "id_1782426914241_0.03837109303595798",
-        "destaque": true
+        "destaque": false
       },
       {
         "dia": "Domingo",
@@ -517,8 +496,8 @@
         "tipo": "Momento",
         "nome": "Retrospectiva + Cartas",
         "servo": "Animadores",
-        "inicio": "14:00",
-        "fim": "14:30",
+        "inicio": "15:00",
+        "fim": "15:30",
         "obs": "",
         "id": "id_1782426914241_0.5775718029909195",
         "destaque": false
@@ -529,8 +508,8 @@
         "tipo": "Momento",
         "nome": "Pais e Família",
         "servo": "",
-        "inicio": "14:30",
-        "fim": "14:50",
+        "inicio": "15:30",
+        "fim": "16:00",
         "obs": "",
         "id": "id_1782426914241_0.27487292719028966",
         "destaque": false
@@ -538,11 +517,11 @@
       {
         "dia": "Domingo",
         "data": "2026-08-30",
-        "tipo": "Santa Missa",
-        "nome": "",
+        "tipo": "",
+        "nome": "Preparação Santa Missa",
         "servo": "",
-        "inicio": "15:00",
-        "fim": "16:00",
+        "inicio": "16:00",
+        "fim": "16:30",
         "obs": "",
         "id": "id_1782426914241_0.7959680863676338",
         "destaque": false
@@ -550,11 +529,11 @@
       {
         "dia": "Domingo",
         "data": "2026-08-30",
-        "tipo": "",
-        "nome": "Foto Oficial + Encerramento + Organização do Local",
+        "tipo": "Encerramento",
+        "nome": "Foto Oficial + Organização do Local",
         "servo": "Todos os Servos",
-        "inicio": "16:00",
-        "fim": "17:00",
+        "inicio": "17:30",
+        "fim": "18:00",
         "obs": "",
         "id": "id_1782426914241_0.6656642731304973",
         "destaque": false
@@ -562,26 +541,50 @@
       {
         "dia": "Sábado",
         "data": "2026-08-29",
-        "tipo": "Acolhida",
-        "nome": "Chegada dos Servos",
-        "servo": "",
-        "inicio": "07:00",
-        "fim": "07:30",
-        "destaque": false,
-        "obs": "",
-        "id": "id_1782426938688_0.1824272194921882"
-      },
-      {
-        "dia": "Sábado",
-        "data": "2026-08-29",
-        "tipo": "Acolhida",
-        "nome": "",
+        "tipo": "Chegada",
+        "nome": "dos Servos",
         "servo": "",
         "inicio": "07:00",
         "fim": "07:30",
         "destaque": false,
         "obs": "",
         "id": "id_1783702404635_0.49740666176171244"
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-08-30",
+        "tipo": "Santa Missa",
+        "nome": "",
+        "servo": "",
+        "inicio": "16:30",
+        "fim": "17:30",
+        "obs": "",
+        "id": "id_1787277174617_0.8281830061866995",
+        "destaque": false
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-08-30",
+        "tipo": "Institucional",
+        "nome": "Aliança Movimento Tremembé",
+        "servo": "Caio e Marília",
+        "inicio": "14:40",
+        "fim": "15:00",
+        "obs": "",
+        "id": "id_1787277333367_0.2986206887275623",
+        "destaque": false
+      },
+      {
+        "dia": "Domingo",
+        "data": "2026-08-30",
+        "tipo": "Almoço",
+        "nome": "",
+        "servo": "",
+        "inicio": "13:00",
+        "fim": "14:00",
+        "obs": "",
+        "id": "id_1787277504093_0.05989203126291487",
+        "destaque": false
       }
     ]
   }
