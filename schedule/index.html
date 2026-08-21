@@ -54,7 +54,6 @@
   transform: scale(1.01);
 }
 
-/* ⚠️ alertas continuam opcionais */
 .item.warning {
   border-left: 5px solid #ffc107;  
 }
@@ -62,7 +61,7 @@
 .item.danger {
   border-left: 5px solid #dc3545;
 }
-	
+
 @keyframes piscar-warning {
   0%   { background: rgba(255,193,7,0.25); }
   50%  { background: rgba(255,193,7,0.05); }
@@ -74,11 +73,10 @@
   50%  { background: rgba(220,53,69,0.1); }
   100% { background: rgba(220,53,69,0.35); }
 }
-	
+
 /* ===============================
    BARRA DE PROGRESSO
 ================================*/
-
 .progress-container{
   width: 100%;
   height: 6px;
@@ -173,11 +171,11 @@
 
 @media (prefers-color-scheme: dark){
   :root{
-	--bg:#0b0b0c;
-	--text:#f1f1f1;
-	--muted:#aaa;
-	--card:#141416;
-	--brand:#5a8dff;
+    --bg:#0b0b0c;
+    --text:#f1f1f1;
+    --muted:#aaa;
+    --card:#141416;
+    --brand:#5a8dff;
   }
 }
 
@@ -194,6 +192,7 @@ body {
   background:var(--bg);
   margin:0;
   padding: var(--space-6) var(--space-4) var(--space-8);
+  padding-bottom: 200px !important;
 }
 
 h1,h2,h3{
@@ -237,7 +236,7 @@ h3{ font-size:1.1rem; color:var(--muted); font-weight:600; }
 }
 
 /* ===============================
-   FORMULÁRIO SUPERIOR – CAMPOS BASE
+   FORMULÁRIO SUPERIOR
 ================================*/
 .field{
   display:flex;
@@ -264,7 +263,6 @@ input[type="time"]{
   font-variant-numeric: tabular-nums;
 }
 
-/* Botão principal */
 button.add{
   padding: 0.95rem 1.1rem;
   background: var(--brand);
@@ -280,11 +278,7 @@ button.add{
   button.add{ width:auto; }
 }
 
-/* Demais botões */
-button.open,
-button.clone,
-button.delete,
-button.edit{
+button.open, button.clone, button.delete, button.edit{
   padding: 0.55rem 0.8rem;
   font-size:0.9rem;
   border:none;
@@ -292,22 +286,10 @@ button.edit{
   cursor:pointer;
 }
 
-button.open, button.clone{
-  background: var(--brand);
-  color:#fff;
-}
-button.delete{
-  background: var(--danger);
-  color:#fff;
-}
-button.edit{
-  background: var(--warn);
-  color:#000;
-}
+button.open, button.clone{ background: var(--brand); color:#fff; }
+button.delete{ background: var(--danger); color:#fff; }
+button.edit{ background: var(--warn); color:#000; }
 
-/* ===============================
-   PATCH: SUPORTE às classes col-*
-================================*/
 #menu-adicao{
   display:grid;
   grid-template-columns: repeat(12, 1fr);
@@ -325,12 +307,8 @@ button.edit{
   border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
 }
 
-#menu-adicao .col-2,
-#menu-adicao .col-3,
-#menu-adicao .col-4,
-#menu-adicao .col-6,
-#menu-adicao .col-8,
-#menu-adicao .col-12 {
+#menu-adicao .col-2, #menu-adicao .col-3, #menu-adicao .col-4,
+#menu-adicao .col-6, #menu-adicao .col-8, #menu-adicao .col-12 {
   grid-column: span 12;
 }
 
@@ -380,6 +358,7 @@ button.edit{
 }
 
 .lista-atividades li{
+  position: relative;
   flex-direction: column;
   display:flex;
   flex-wrap:wrap;
@@ -388,7 +367,6 @@ button.edit{
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
   border-bottom:1px solid color-mix(in srgb, var(--text) 8%, transparent);
-  position: relative;
 }
 
 .lista-atividades li:last-child{
@@ -424,9 +402,7 @@ button.edit{
   transform: scale(1.2);
 }
 
-.icon-obs.tem-obs {
-  opacity: 1;
-}
+.icon-obs.tem-obs { opacity: 1; }
 
 @media(max-width:520px){
   .item-info{ order:1; }
@@ -449,103 +425,146 @@ button.edit{
 }
 
 /* ===============================
-   PRINT (IMPRIMIR)
+   CONTROLE EXPANDIR/RECOLHER
 ================================*/
-.print-only{ display:none; }
-.logo { display: none; }
+#toggle-menu-adicao {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 30;
+}
+
+#menu-adicao.collapsed {
+  height: 22px !important;
+  max-height: 48px !important;
+  overflow: hidden !important;
+  padding-top: 12px !important;
+}
+
+#menu-adicao.collapsed > *:not(#toggle-menu-adicao) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+#menu-adicao.collapsed #toggle-menu-adicao {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* ===============================
+   MARCA D'ÁGUA E DESTAQUE
+================================*/
+.watermark {
+  display: var(--watermark-display);
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 999999;
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.06);
+  transform: rotate(-30deg);
+}
+
+.item.destaque {
+  background: rgba(255,193,7,0.08);
+  border-left: 5px solid #ffc107;
+  position: relative;
+}
+
+/* ===============================
+   SUPORTE DE LOGO NA IMPRESSÃO
+================================*/
+.print-only { display: none !important; }
+.logo-print { display: none !important; }
 
 @media print {
-  .item.destaque {
-    border-left: none !important;
-    background: transparent !important;
-  }
-	
-  .item {
-    border-left: none !important;
-    position: static !important;
+  @page {
+    margin: 1cm;
   }
 
   .print-only {
     display: block !important;
   }
 
-  /* REMOVE ELEMENTOS DA INTERFACE */
+  .watermark,
   #menu-adicao,
   #web-header,
   #menu-rodape,
   .item-botoes,
   button,
-  .add,
-  .open,
-  .edit,
-  .delete,
-  .clone,
   .btn-voltar,
   .progress-container,
-  .watermark,
-  .icon-obs,
-  #btn-pdf-mobile,
-  #btn-atualizar-mobile {
+  .icon-obs {
     display: none !important;
   }
 
-  /* BASE DA IMPRESSÃO */
   html, body {
     background: #fff !important;
     color: #000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
   }
 
-  /* PÁGINAS */
+  .item.destaque, .item {
+    border-left: none !important;
+    background: transparent !important;
+    position: static !important;
+  }
+
   .pagina-detalhe {
     display: block !important;
     page-break-before: always;
     page-break-inside: avoid;
     position: relative !important;
-    padding-top: 100px !important;
+    padding-top: 70px !important;
+    margin-bottom: 20px !important;
   }
-  
-  .pagina-detalhe:first-child {
+
+  .pagina-detalhe:first-of-type {
     page-break-before: auto;
   }
 
-  /* LOGO NA IMPRESSÃO */
-  .logo {
-    display: block !important;
-  }
-
-  .pagina-detalhe .logo {
+  /* ✅ CORREÇÃO DA LOGO NO PDF/IMPRESSÃO */
+  .pagina-detalhe .logo-print {
     display: block !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100px !important;
+    width: 90px !important;
     height: auto !important;
-    z-index: 10 !important;
+    z-index: 999 !important;
   }
 
-  /* TÍTULO */
   .pagina-detalhe h2 {
     position: absolute !important;
-    top: 20px !important;
-    left: 0 !important;
+    top: 10px !important;
+    left: 100px !important;
     right: 0 !important;
-    text-align: center !important;
-    font-size: 18px !important;
+    text-align: left !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
     margin: 0 !important;
   }
 
-  /* DATA / DIA DA SEMANA */
   .pagina-detalhe h3 {
     margin-top: 10px !important;
     margin-bottom: 10px !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
+    border-bottom: 1px solid #ccc !important;
+    padding-bottom: 4px !important;
   }
 
-  /* LISTA */
   .lista-atividades {
     border: none !important;
     background: #fff !important;
@@ -554,8 +573,8 @@ button.edit{
   .lista-atividades li {
     display: block !important;
     border: none !important;
-    padding: 4px 0 !important;
-    margin-bottom: 4px !important;
+    padding: 3px 0 !important;
+    margin-bottom: 2px !important;
   }
 
   .item-info {
@@ -571,7 +590,7 @@ button.edit{
 }
 
 /* ===============================
-   MENU DE RODAPÉ
+   MENU RODAPÉ WEB
 ================================*/
 #menu-rodape{
   position: fixed;
@@ -631,8 +650,7 @@ button.edit{
   flex-wrap: nowrap;
 }
 
-.btn_rodape,
-.sec-btn{
+.btn_rodape, .sec-btn{
   padding: 8px 12px;
   font-size: 0.9rem;
   border-radius: 8px;
@@ -643,33 +661,14 @@ button.edit{
   color: var(--text);
 }
 
-.sec-btn{
-  background: var(--danger);
-  color:#fff;
-}
-
-.btn_rodape{
-  background: var(--brand);
-  color:#fff;
-}
+.sec-btn{ background: var(--danger); color:#fff; }
+.btn_rodape{ background: var(--brand); color:#fff; }
 
 @media (max-width: 720px){
-  .menu-rodape-content{
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .field-inline{
-    flex: 1 1 100%;
-  }
-  .rodape-actions{
-    flex: 1 1 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  #menu-rodape input{
-    max-width: 100%;
-  }
+  .menu-rodape-content{ flex-wrap: wrap; gap: 8px; }
+  .field-inline{ flex: 1 1 100%; }
+  .rodape-actions{ flex: 1 1 100%; justify-content: flex-start; flex-wrap: wrap; gap: 6px; }
+  #menu-rodape input{ max-width: 100%; }
 }
 
 button.obs {
@@ -691,189 +690,176 @@ button.obs.tem-obs {
   opacity: 1;
 }
 
-body{
-  padding-bottom: 200px !important;
-}
-
-#menu-adicao {
-  position: relative;
-}
-
-#toggle-menu-adicao {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 30;
-}
-
-#menu-adicao.collapsed {
-  height: 22px !important;
-  max-height: 48px !important;
-  overflow: hidden !important;
-  padding-top: 12px !important;
-}
-
-#menu-adicao.collapsed > *:not(#toggle-menu-adicao) {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  pointer-events: none !important;
-}
-
-#menu-adicao.collapsed #toggle-menu-adicao {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-.watermark {
-  display: var(--watermark-display);
-  position: fixed;
-  inset: 0;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  user-select: none;
-  z-index: 999999;
-  font-size: 60px;
-  font-weight: bold;
-  color: rgba(0,0,0,0.06);
-  transform: rotate(-30deg);
-}
-
-@media print { .watermark { display:none!important; } }
-
-.item.destaque {
-  background: rgba(255,193,7,0.08); 
-  border-left: 5px solid #ffc107;
-  position: relative;
-}
-
 @media (max-width:520px){
   .lista-atividades:empty { display: none; }
   .item-botoes { display: none !important; }
   .pagina-detalhe:has(.lista-atividades:empty) { display: none; }
   .item.encerrado { display: none !important; }
   .item.futuro:not(.proxima) { display: none !important; }
-  #menu-rodape{ display: none !important; }
-  #menu-adicao{ display: none !important; }
-  #toggle-menu-adicao{ display: none !important; }
+  #menu-rodape, #menu-adicao, #toggle-menu-adicao { display: none !important; }
 }
-
 </style>
 </head>
 <body>
 <div class="container">
 
-  <div id="web-header" role="banner" aria-label="Topo">
-    <a href="../" class="logo-link">
-      <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png" alt="Logo da Aliança">
-    </a>
-    <h1 id="titulo-web">Programação Movimento Tremembé</h1>
-  </div>
+	<div id="web-header" role="banner" aria-label="Topo">
+  	<a href="../" class="logo-link">
+    	<img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
+         	alt="Logo da Aliança">
+  	</a>
+  
+  	<h1 id="titulo-web">Programação Movimento Tremembé</h1>
+	</div>
+	
 
   <div id="menu-adicao" aria-labelledby="titulo-form">
-    <button id="toggle-menu-adicao" class="toggle-form-btn">-</button>
-    <h2 id="titulo-form" class="sr-only" style="position:absolute;left:-9999px;">Adicionar atividade</h2>
+	<button id="toggle-menu-adicao" class="toggle-form-btn">-</button>
+	<h2 id="titulo-form" class="sr-only" style="position:absolute;left:-9999px;">
+	  Adicionar atividade
+	</h2>
 
-    <div class="field col-2">
-      <label for="data">Data</label>
-      <input type="date" id="data" title="Selecione a data da atividade">
-    </div>
+	<div class="field col-2">
+	  <label for="data">Data</label>
+	  <input type="date" id="data" title="Selecione a data da atividade">
+	</div>
 	
-    <div class="field col-4">
-      <label for="tipo">Tipo</label>
-      <select id="tipo" title="Escolha o tipo da atividade">
-        <option value="" disabled selected>Selecione o Tipo..</option>
-        <option value="Chegada">Chegada</option>
-        <option value="Introdução">Introdução</option>
-        <option value="Institucional">Institucional</option>  
-        <option value="Pregação">Pregação</option>
-        <option value="Oração">Oração</option>
-        <option value="Acolhida">Acolhida</option>
-        <option value="Animação">Animação</option>
-        <option value="Adoração">Adoração</option>
-        <option value="Dinâmica">Dinâmica</option>
-        <option value="Testemunho">Testemunho</option>
-        <option value="Santa Missa">Santa Missa</option>
-        <option value="Momento">Momento</option>
-        <option value="Historinha">Historinha</option>
-        <option value="Monólogo">Monólogo</option>
-        <option value="Efusão">Efusão</option>
-        <option value="Teatro">Teatro</option>
-        <option value="Pausa">Pausa</option>
-        <option value="Intervalo">Intervalo</option>
-        <option value="Almoço">Almoço</option>
-        <option value="Café">Café</option>
-        <option value="Jantar">Jantar</option>
-        <option value="Palestra">Palestra</option>
-        <option value="Partilha">Partilha</option>
-        <option value="Encerramento">Encerramento</option> 
-      </select>
-    </div>
+	<div class="field col-4">
+	  <label for="tipo">Tipo</label>
+	  <select id="tipo" title="Escolha o tipo da atividade">
+		<option value="" disabled selected>Selecione o Tipo..</option>
+		<option value="Chegada">Chegada</option>
+		<option value="Introdução">Introdução</option>
+		<option value="Institucional">Institucional</option>  
+		<option value="Pregação">Pregação</option>
+		<option value="Oração">Oração</option>
+		<option value="Acolhida">Acolhida</option>
+		<option value="Animação">Animação</option>
+		<option value="Adoração">Adoração</option>
+		<option value="Dinâmica">Dinâmica</option>
+		<option value="Testemunho">Testemunho</option>
+		<option value="Santa Missa">Santa Missa</option>
+		<option value="Momento">Momento</option>
+		<option value="Historinha">Historinha</option>
+		<option value="Monólogo">Monólogo</option>
+		<option value="Efusão">Efusão</option>
+		<option value="Teatro">Teatro</option>
+		<option value="Pausa">Pausa</option>
+		<option value="Intervalo">Intervalo</option>
+		<option value="Almoço">Almoço</option>
+		<option value="Café">Café</option>
+		<option value="Jantar">Jantar</option>
+		<option value="Palestra">Palestra</option>
+		<option value="Partilha">Partilha</option>
+		<option value="Encerramento">Encerramento</option> 
+	  </select>
+	</div>
    
-    <div class="field col-4">
-      <label for="nome">Nome da Atividade</label>
-      <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
-    </div>
+	<div class="field col-4">
+	  <label for="nome">Nome da Atividade</label>
+	  <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
+	</div>
    
-    <div class="field col-6">
-      <label for="servo">Servo</label>
-      <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
-    </div>
+	<div class="field col-6">
+	  <label for="servo">Servo</label>
+	  <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
+	</div>
    
-    <div class="field col-2">
-      <label for="inicio">Hora Início</label>
-      <input type="time" id="inicio" title="Selecione a hora de início da atividade">
-    </div>
+	<div class="field col-2">
+	  <label for="inicio">Hora Início</label>
+	  <input type="time" id="inicio" title="Selecione a hora de início da atividade">
+	</div>
    
-    <div class="field col-2">
-      <label for="fim">Hora Fim</label>
-      <input type="time" id="fim" title="Selecione a hora de término da atividade">
-    </div>
+	<div class="field col-2">
+	  <label for="fim">Hora Fim</label>
+	  <input type="time" id="fim" title="Selecione a hora de término da atividade">
+	</div>
    
-    <div class="field col-12" style="align-items:flex-start;">
-      <button class="add" onclick="adicionarAtividade()" aria-label="Adicionar Atividade">
-        Adicionar Atividade
-      </button>
-    </div>
+	<div class="field col-12" style="align-items:flex-start;">
+	  <button class="add" onclick="adicionarAtividade()" aria-label="Adicionar Atividade">
+		Adicionar Atividade
+	  </button>
+	</div>
+
   </div>
 
   <div id="lista" aria-live="polite"></div>
 
-  <div id="menu-rodape" role="region" aria-label="Alterar evangelização (rodapé)">
-    <form class="menu-rodape-content" onsubmit="alterarEvangelizacao(event)">
-      <div class="field-inline">
-        <label for="evangelizacao">Evangelização</label>
-        <input type="text" id="evangelizacao" placeholder="Nome da Evangelização" title="Digite o nome da Evangelização">
-      </div>
-
-      <div class="rodape-actions">
-        <button type="submit" class="btn_rodape brand">Alterar Evangelização</button>
-        <button id="btn-zerar-tudo" type="button" class="sec-btn danger" onclick="zerarTudo()">Excluir</button>
-        <button type="button" class="btn_rodape" onclick="exportarBackup()">Export</button>
-        <button type="button" class="btn_rodape" onclick="document.getElementById('importar-arquivo').click()">ImportLocal</button>
-        <button type="button" class="btn_rodape" onclick="window.print()">PDF</button>
-        <button type="button" class="btn_rodape" onclick="renderizarLista()">Atualizar</button>
-          
-        <input type="file" id="importar-arquivo" accept=".json,application/json,*/*" style="display:none" onchange="handleImportFile(this.files[0])" />
-      </div>
-    </form>
-  </div>
-
-  <button id="btn-pdf-mobile" type="button" onclick="window.print()">📄 PDF</button>
-  <button id="btn-atualizar-mobile" type="button" onclick="renderizarLista()">🔄 Atualizar</button>
+<div id="menu-rodape" role="region" aria-label="Alterar evangelização (rodapé)">
+  <form class="menu-rodape-content" onsubmit="alterarEvangelizacao(event)">
 	
-  <div id="scroll-spacer"></div>
+	<div class="field-inline">
+	  <label for="evangelizacao">Evangelização</label>
+	  <input 
+		type="text" 
+		id="evangelizacao" 
+		placeholder="Nome da Evangelização" 
+		title="Digite o nome da Evangelização"
+	  >
+	</div>
+
+	<div class="rodape-actions">
+	  <button type="submit" class="btn_rodape brand">
+		Alterar Evangelização
+	  </button>
+
+	  <button id="btn-zerar-tudo" type="button" class="sec-btn danger">
+		Excluir
+	  </button>
+	  
+	  <button type="button" class="btn_rodape" onclick="exportarBackup()">
+	    Export
+	  </button>
+	  
+	  <button type="button" class="btn_rodape" onclick="document.getElementById('importar-arquivo').click()">
+	    ImportLocal
+	  </button>
+
+	  <button class="btn_rodape" onclick="baixarPDF()">
+  	    PDF
+	  </button>
+
+	  <button class="btn_rodape" onclick="escolherAtualizacaoJSON()">
+  	    Atualizar
+	  </button>
+		
+	  <input 
+	  type="file" 
+	  id="importar-arquivo" 
+	  accept=".json,application/json,*/*"
+	  style="display:none" 
+	  onchange="handleImportFile(this.files[0])"
+	  />
+	</div>
+
+  </form>
+</div>
+
+
+<button id="btn-pdf-mobile"
+        type="button"
+        onclick="baixarPDF()">
+  📄 PDF
+</button>
+	
+<!-- ✅ BOTÃO MOBILE -->
+<button id="btn-atualizar-mobile"
+        type="button"
+        onclick="escolherAtualizacaoJSON()">
+  🔄 Atualizar
+</button>
+	
+  <!-- ✅ BOTÃO MOBILE -->
+<div id="scroll-spacer"></div>
 </div>
 
 <script>
 let atividadeAtual = null;	
-let isPrinting = false;
+let isPrinting = false; // 👈 ADICIONE AQUI
+const tiposAtividade = ["Chegada","Introdução","Institucional","Encerramento", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
+const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
+const HIST_KEY  = "historicos";
 const EVANG_KEY = "evangelizacao";
 const EVANG_DEFAULT = "Movimento Tremembé";
 
@@ -891,7 +877,6 @@ function getEvangelizacao() {
     return EVANG_DEFAULT;
   }
 }
-
 function setEvangelizacao(valor) {
   try {
     localStorage.setItem(EVANG_KEY, (valor || "").trim());
@@ -899,11 +884,9 @@ function setEvangelizacao(valor) {
     console.error("Erro salvando evangelização", e);
   }
 }
-
 function getTituloProgramacao() {
   return `Programação ${getEvangelizacao()}`;
 }
-
 function atualizarTitulos() {
   const h1 = document.getElementById("titulo-web");
   if (h1) h1.textContent = getTituloProgramacao();
@@ -921,31 +904,89 @@ function alterarEvangelizacao(e) {
 
 function dois(n){ return n.toString().padStart(2,'0'); }
 
+function getTempoRestante(data, inicio, fim) {
+
+  if (!data || !inicio || !fim) return "";
+
+  const agora = Date.now();
+
+  const inicioDate = parseDateTime(data, inicio);
+  const fimDate = parseDateTime(data, fim);
+
+  if (!inicioDate || !fimDate) return "";
+
+  // ✅ não depende de comparar string de data
+  if (agora < inicioDate) {
+
+    const diff = inicioDate - agora;
+
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    if (h > 0) return `⏳ Inicia em ${h}h ${m}min ${s}seg`;
+    if (m > 0) return `⏳ Inicia em ${m}min ${s}seg`;
+    return `⏳ Inicia em ${s}seg`;
+  }
+
+  if (agora >= inicioDate && agora <= fimDate) {
+
+    const diff = fimDate - agora;
+
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    if (h > 0) return `🔥 ${h}h ${m}min ${s}seg restantes`;
+    if (m > 0) return `🔥 ${m}min ${s}seg restantes`;
+    return `🔥 ${s}seg restantes`;
+  }
+
+  return `✅ Encerrado`;
+}
+
+function isDataValida(data, hora) {
+  return !isNaN(new Date(`${data}T${hora}:00`).getTime());
+}
+
 function parseDateTime(data, hora) {
   if (!data || !hora) return null;
   return new Date(`${data}T${hora}:00`);
 }
+	function getStatusAtividade(data, inicio, fim) {
 
-function getStatusAtividade(data, inicio, fim) {
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
-  if (!inicioDate || !fimDate) return "futuro";
+  if (!inicioDate || !fimDate) {
+    return "futuro"; // ✅ fallback seguro
+  }
 
   const agora = Date.now();
-  if (agora >= inicioDate && agora <= fimDate) return "em-andamento";
-  if (agora > fimDate) return "encerrado";
 
-  return "futuro";
+  if (agora >= inicioDate && agora <= fimDate) {
+    return "em-andamento";
+  }
+
+  if (agora > fimDate) {
+    return "encerrado";
+  }
+
+  return "futuro"; // ✅ sempre retorna algo
 }
 
 function marcarProximaAtividade(lista) {
+
   const agora = Date.now();
+
   let proximaIndex = -1;
   let menorDiff = Infinity;
 
   lista.forEach((p, i) => {
+
     const inicio = parseDateTime(p.data, p.inicio);
+
+    // 🔴 ignora dados inválidos
     if (!inicio) return;
 
     if (inicio > agora && (inicio - agora) < menorDiff) {
@@ -955,6 +996,20 @@ function marcarProximaAtividade(lista) {
   });
 
   return proximaIndex;
+}
+	
+function dataHoje(){
+  const d = new Date();
+  return `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
+}
+
+function abrir(fim, inicio, titulo){
+  const link =
+    "https://relogioonline.com.br/temporizador/#date=" +
+    dataHoje() + "T" + fim + ":00" +
+    "&title=" + encodeURIComponent(titulo) +
+    "&loop=0";
+  window.open(link, "_blank");
 }
 
 function salvarLista(lista){
@@ -967,15 +1022,26 @@ function salvarLista(lista){
 
 function carregarLista(){
   try {
+
     const lista = localStorage.getItem(LIST_KEY);
     const dados = lista ? JSON.parse(lista) : [];
 
     dados.forEach(item => {
-      if (item.obs === undefined) item.obs = "";
-      if (!item.id) item.id = `id_${Date.now()}_${Math.random()}`;
+
+      // ✅ garante observação
+      if (item.obs === undefined) {
+        item.obs = "";
+      }
+
+      // ✅ garante ID (ESSENCIAL)
+      if (!item.id) {
+        item.id = `id_${Date.now()}_${Math.random()}`;
+      }
+
     });
 
     return dados;
+
   } catch(e){
     console.error(e);
     return [];
@@ -983,78 +1049,127 @@ function carregarLista(){
 }
 
 function ordenarLista(lista) {
-  return lista.sort((a, b) => {
+
+  lista.sort((a, b) => {
+
     const dateA = new Date(`${a.data}T${a.inicio}:00`);
     const dateB = new Date(`${b.data}T${b.inicio}:00`);
+
     return dateA - dateB;
   });
-}
 
+  return lista;
+}
+	
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
 
   Object.entries(attrs).forEach(([k,v])=>{
-    if (k === "className") e.className = v;
-    else if (k.startsWith("on") && typeof v === "function") e.addEventListener(k.slice(2), v);
-    else e.setAttribute(k, v);
+	if (k === "className") e.className = v;
+	else if (k.startsWith("on") && typeof v === "function")
+	  e.addEventListener(k.slice(2), v);
+	else
+	  e.setAttribute(k, v);
   });
 
   (Array.isArray(children) ? children : [children]).forEach(c=>{
-    if (typeof c === "string") e.appendChild(document.createTextNode(c));
-    else if (c) e.appendChild(c);
+	if (typeof c === "string") e.appendChild(document.createTextNode(c));
+	else if (c) e.appendChild(c);
   });
 
   return e;
 }
 
+function getDuracao(inicio, fim) {
+
+  if (!inicio || !fim) return "";
+
+  const i = new Date(`1970-01-01T${inicio}:00`);
+  const f = new Date(`1970-01-01T${fim}:00`);
+  const diff = f - i;
+
+  if (diff <= 0) return "";
+
+  const h = Math.floor(diff / (1000 * 60 * 60));
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+
+  if (h > 0 && m > 0) return `${h}h ${m}m`;
+  if (h > 0) return `${h}h`;
+  return `${m}mim`;
+}
+
 function buildInfo(p) {
-  let texto = `[${p.inicio} – ${p.fim}]`;
-  if (p.tipo) texto += ` ${p.tipo}`;
-  if (p.nome?.trim()) texto += `: ${p.nome.trim()}`;
-  if (p.servo?.trim()) texto += ` (${p.servo.trim()})`;
+
+  const duracao = getDuracao(p.inicio, p.fim);
+
+  let texto = `[${p.inicio} – ${p.fim}`;
+
+  if (duracao) {
+    texto += ` (Total: ${duracao})`;
+  }
+
+  texto += `]`;
+
+  if (p.tipo) {
+    texto += ` ${p.tipo}`;
+  }
+
+  if (p.nome?.trim()) {
+    texto += `: ${p.nome.trim()}`;
+  }
+
+  if (p.servo?.trim()) {
+    texto += ` (${p.servo.trim()})`;
+  }
+
   return texto;
 }
 
-function adicionarAtividade() {
-  const data = document.getElementById("data").value;
-  const tipo = document.getElementById("tipo").value;
-  const nome = document.getElementById("nome").value;
-  const servo = document.getElementById("servo").value;
-  const inicio = document.getElementById("inicio").value;
-  const fim = document.getElementById("fim").value;
+function scrollParaAtividade() {
 
-  if (!data || !inicio || !fim) {
-    alert("Preencha ao menos Data, Hora Início e Hora Fim!");
+  const atual = document.querySelector("#atividade-atual");
+
+  if (atual) {
+    atual.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
     return;
   }
 
-  const nova = { id: `id_${Date.now()}`, data, tipo, nome, servo, inicio, fim, obs: "" };
-  const lista = carregarLista();
-  lista.push(nova);
-  salvarLista(lista);
-  renderizarLista();
-  
-  // Limpar formulário
-  document.getElementById("nome").value = "";
-  document.getElementById("servo").value = "";
-}
+  const proxima = document.querySelector("#proxima-atividade");
 
-function deletarAtividade(id) {
-  let lista = carregarLista();
-  lista = lista.filter(item => item.id !== id);
-  salvarLista(lista);
-  renderizarLista();
-}
-
-function zerarTudo() {
-  if (confirm("Deseja realmente apagar todas as atividades?")) {
-    localStorage.removeItem(LIST_KEY);
-    renderizarLista();
+  if (proxima) {
+    proxima.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
   }
 }
+	
+function getProgresso(data, inicio, fim){
 
+  const hoje = new Date().toISOString().split("T")[0];
+
+  // ❌ não é hoje → sem progresso
+  if (data !== hoje) return 0;
+
+  const agora = Date.now();
+
+  const i = parseDateTime(data, inicio);
+  const f = parseDateTime(data, fim);
+
+  // 🔴 segurança: dados inválidos
+  if (!i || !f) return 0;
+
+  if (agora < i) return 0;
+  if (agora > f) return 100;
+
+  return Math.floor(((agora - i) / (f - i)) * 100);
+}
+/*
 function renderizarLista() {
-  atualizarTitulos();
+
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
 
@@ -1062,6 +1177,7 @@ function renderizarLista() {
   const proximaIndex = marcarProximaAtividade(lista);
 
   const grupos = {};
+
   lista.forEach(p => {
     if (!grupos[p.data]) grupos[p.data] = [];
     grupos[p.data].push(p);
@@ -1070,15 +1186,11 @@ function renderizarLista() {
   const datasOrdenadas = Object.keys(grupos).sort();
 
   datasOrdenadas.forEach(data => {
+
     const atividadesDoDia = grupos[data];
 
-    const containerDia = el("section", { className: "pagina-detalhe" });
-
-    // ✅ LOGO Adicionada para Impressão
-    const imgLogo = el("img", {
-      className: "logo print-only",
-      src: "https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png",
-      alt: "Logo Aliança"
+    const containerDia = el("section", {
+      className: "pagina-detalhe"
     });
 
     const dataBr = data.split("-").reverse().join("/");
@@ -1087,52 +1199,729 @@ function renderizarLista() {
     const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
     const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
 
-    containerDia.appendChild(imgLogo);
     containerDia.appendChild(h2Titulo);
     containerDia.appendChild(hDia);
 
     const ul = el("ul", { className: "lista-atividades" });
 
     atividadesDoDia.forEach(p => {
+
       const idxReal = lista.indexOf(p);
+
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
       const isProxima = (idxReal === proximaIndex);
 
       const li = el("li", {
-        className: `item ${status} ${isProxima ? 'proxima' : ''}`
+        className: `
+          item 
+          ${status} 
+          ${isProxima ? "proxima" : ""}
+          ${p.destaque ? "destaque" : ""}
+        `
       });
 
-      const spanInfo = el("span", { className: "item-info" }, buildInfo(p));
-      
-      const divBotoes = el("div", { className: "item-botoes" }, [
-        el("button", { className: "delete", onclick: () => deletarAtividade(p.id) }, "Excluir")
-      ]);
+// ✅ MARCA PARA SCROLL
+if (status === "em-andamento") {
+  li.setAttribute("id", "atividade-atual");
+}
+else if (isProxima) {
+  li.setAttribute("id", "proxima-atividade");
+}
 
-      li.appendChild(spanInfo);
-      li.appendChild(divBotoes);
+      // 💬 Observação
+      const temObs = (p.obs || "").trim().length > 0;
+
+      if (temObs) {
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
+
+        iconObs.addEventListener("click", () => editarObservacao(idxReal));
+        iconObs.setAttribute("title", p.obs);
+
+        li.appendChild(iconObs);
+      }
+
+      // ✅ TEXTO BASE
+      let texto = buildInfo(p);
+
+      // ✅ TIMER CONTROLADO
+      const timer = getTempoRestante(
+        p.data,
+        p.inicio,
+        p.fim
+      );
+
+      if (!isPrinting && timer) {
+
+        // 🔵 EM ANDAMENTO
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
+
+        // ✅ ENCERRADO
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
+
+        // 🌟 PRÓXIMA
+        else if (isProxima && timer.startsWith("⏳")) {
+          texto += ` • ${timer}`;
+        }
+      }
+
+      const divInfo = el(
+        "div",
+        { className: "item-info" },
+        texto
+      );
+
+const bEdit = el("button", { className: "edit" }, "Editar");
+bEdit.addEventListener("click", () => editarAtividade(p.id));
+
+const bDelete = el("button", { className: "delete" }, "Excluir");
+bDelete.addEventListener("click", () => excluirAtividade(p.id));
+
+const bClone = el("button", { className: "clone" }, "Clonar");
+bClone.addEventListener("click", () => clonarAtividade(p.id));
+
+const divBtns = el(
+  "div",
+  { className: "item-botoes" },
+  [bEdit, bDelete, bClone]
+);
+
+li.appendChild(divInfo);
+
+// ✅ PROGRESSO
+const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+if (status === "em-andamento") {
+
+  const barraContainer = el("div", {
+    className: "progress-container"
+  });
+
+
+let classeBarra = "progress-bar ativo";
+let classeItemExtra = "";
+
+
+  const fimDate = parseDateTime(p.data, p.fim);
+  const agora = Date.now();
+  const diff = fimDate - agora;
+
+  const minutosRestantes = diff / (1000 * 60);
+
+  if (minutosRestantes <= 5) {
+    classeBarra = "progress-bar danger";
+  }
+  else if (minutosRestantes <= 10) {
+    classeBarra = "progress-bar warning";
+  }
+
+  const barra = el("div", {
+    className: classeBarra,
+    style: `width: ${progresso}%`
+  });
+
+  barraContainer.appendChild(barra);
+  li.appendChild(barraContainer);
+}
+
+// ✅ botões continuam depois
+li.appendChild(divBtns);
+
       ul.appendChild(li);
+
     });
 
     containerDia.appendChild(ul);
     listaDiv.appendChild(containerDia);
+
   });
+
+}
+*/
+
+function renderizarLista() {
+
+  const listaDiv = document.getElementById("lista");
+  listaDiv.innerHTML = "";
+
+  const lista = ordenarLista(carregarLista());
+  const proximaIndex = marcarProximaAtividade(lista);
+
+  const grupos = {};
+
+  lista.forEach(p => {
+    if (!grupos[p.data]) grupos[p.data] = [];
+    grupos[p.data].push(p);
+  });
+
+  const datasOrdenadas = Object.keys(grupos).sort();
+
+  datasOrdenadas.forEach(data => {
+
+    const atividadesDoDia = grupos[data];
+
+    const containerDia = el("section", {
+      className: "pagina-detalhe"
+    });
+
+    const dataBr = data.split("-").reverse().join("/");
+    const diaSemana = diaDaSemanaPorData(data);
+
+    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
+    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
+
+    containerDia.appendChild(h2Titulo);
+    containerDia.appendChild(hDia);
+
+    const ul = el("ul", { className: "lista-atividades" });
+
+    atividadesDoDia.forEach(p => {
+
+      const idxReal = lista.findIndex(item => item.id === p.id);
+      const status = getStatusAtividade(p.data, p.inicio, p.fim);
+      const isProxima = (idxReal === proximaIndex);
+
+      const li = el("li", {
+        className: `
+          item 
+          ${status} 
+          ${isProxima ? "proxima" : ""}
+          ${p.destaque ? "destaque" : ""}
+        `
+      });
+
+      // 💬 OBS
+      if ((p.obs || "").trim()) {
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
+        iconObs.setAttribute("title", p.obs);
+        iconObs.addEventListener("click", () => editarObservacao(p.id));
+        li.appendChild(iconObs);
+      }
+
+      // ✅ TEXTO BASE
+      let texto = buildInfo(p);
+
+      const timer = getTempoRestante(p.data, p.inicio, p.fim);
+
+      if (!isPrinting && timer) {
+
+        if (timer.startsWith("🔥")) {
+          texto += ` • ${timer}`;
+        }
+        else if (timer.startsWith("✅")) {
+          texto += ` • ${timer}`;
+        }
+        else if (isProxima && timer.startsWith("⏳")) {
+          texto += ` • ${timer}`;
+        }
+      }
+
+      const divInfo = el("div", {
+        className: "item-info"
+      }, texto);
+
+      li.appendChild(divInfo);
+
+      // ✅ ===== PROGRESSO + COR DINÂMICA =====
+      if (status === "em-andamento") {
+
+        const progresso = getProgresso(p.data, p.inicio, p.fim);
+
+        let classeBarra = "progress-bar ativo";
+        let classeItemExtra = "ativo";
+
+        const fimDate = parseDateTime(p.data, p.fim);
+        const agora = Date.now();
+        const minutosRestantes = (fimDate - agora) / (1000 * 60);
+
+        if (minutosRestantes <= 5) {
+          classeBarra = "progress-bar danger";
+          classeItemExtra = "danger";
+        }
+        else if (minutosRestantes <= 10) {
+          classeBarra = "progress-bar warning";
+          classeItemExtra = "warning";
+        }
+
+        const barraContainer = el("div", {
+          className: "progress-container"
+        });
+
+        const barra = el("div", {
+          className: classeBarra,
+          style: `width: ${progresso}%`
+        });
+
+        barraContainer.appendChild(barra);
+        li.appendChild(barraContainer);
+
+        // ✅ sincroniza borda lateral
+        li.classList.add(classeItemExtra);
+      }
+
+      // ✅ BOTÕES (PADRÃO CORRETO COM ID)
+      const bEdit = el("button", { className: "edit" }, "Editar");
+      bEdit.addEventListener("click", () => editarAtividade(p.id));
+
+      const bDelete = el("button", { className: "delete" }, "Excluir");
+      bDelete.addEventListener("click", () => excluirAtividade(p.id));
+
+      const bClone = el("button", { className: "clone" }, "Clonar");
+      bClone.addEventListener("click", () => clonarAtividade(p.id));
+
+      const divBtns = el("div", {
+        className: "item-botoes"
+      }, [bEdit, bDelete, bClone]);
+
+      li.appendChild(divBtns);
+
+      ul.appendChild(li);
+
+    });
+
+    containerDia.appendChild(ul);
+    listaDiv.appendChild(containerDia);
+
+  });
+
+}	
+
+
+function adicionarAtividade(){
+
+  const data  = document.getElementById("data").value;
+  const dia   = diaDaSemanaPorData(data);
+  const tipo  = document.getElementById("tipo").value;
+  const nome  = document.getElementById("nome").value.trim();
+  const servo = document.getElementById("servo").value.trim();
+  const inicio = document.getElementById("inicio").value;
+  const fim    = document.getElementById("fim").value;
+
+  if(!data || !inicio || !fim){
+    alert("Preencha a data e horários!");
+    return;
+  }
+
+  const lista = carregarLista();
+
+  lista.push({
+    id: `id_${Date.now()}_${Math.random()}`, // ✅ ID único
+    dia,
+    data,
+    tipo,
+    nome,
+    servo,
+    inicio,
+    fim,
+    destaque: false,
+    obs: ""
+  });
+
+  salvarLista(lista);
+  renderizarLista();
 }
 
-// Inicializar página
+function editarObservacao(index){
+
+  const lista = carregarLista();
+
+  const atual = lista[index].obs || "";
+
+  const nova = prompt("Observação:", atual);
+
+  if (nova === null) return;
+
+  const texto = nova.trim();
+
+  lista[index].obs = texto;
+
+  lista[index].destaque = texto.length > 0;
+
+  salvarLista(lista);
+  renderizarLista();
+}
+	
+function toggleDestaque(index){
+  const lista = carregarLista();
+
+  lista[index].destaque = !lista[index].destaque;
+
+  salvarLista(lista);
+  renderizarLista();
+}
+	
+let intervalTimers = null;
+let intervalProgresso = null;
+let intervalGlobal = null;
+
+
+function pararLoops() {
+
+  if (!intervalGlobal) {
+    return;
+  }
+
+  clearInterval(intervalGlobal);
+  intervalGlobal = null;
+
+}
+
+function editarAtividade(id){
+
+  const lista = carregarLista();
+
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) {
+    alert("Erro: atividade não encontrada");
+    return;
+  }
+
+  const p = lista[index];
+
+  const dataBrAtual = isoParaBr(p.data);
+
+  const entradaDataBr = prompt("Editar data (DD/MM/AAAA):", dataBrAtual);
+  if (entradaDataBr === null) return;
+
+  const novaDataIso = brParaIso(entradaDataBr);
+  if (!novaDataIso) {
+    alert("Data inválida.");
+    return;
+  }
+
+  const novoTipo = prompt("Tipo da atividade:", p.tipo || "");
+  if (novoTipo === null) return;
+
+  const novoNome = prompt("Nome da Atividade:", p.nome || "");
+  if (novoNome === null) return;
+
+  const novoServo = prompt("Servo:", p.servo || "");
+  if (novoServo === null) return;
+
+  const novoInicio = prompt("Hora início:", p.inicio);
+  if (novoInicio === null) return;
+
+  const novoFim = prompt("Hora fim:", p.fim);
+  if (novoFim === null) return;
+
+  const novaObs = prompt("Observação:", p.obs || "");
+  if (novaObs === null) return;
+
+  const textoObs = novaObs.trim();
+
+  lista[index] = {
+    ...p,
+    dia: diaDaSemanaPorData(novaDataIso),
+    data: novaDataIso,
+    tipo: novoTipo,
+    nome: novoNome.trim(),
+    servo: novoServo.trim(),
+    inicio: novoInicio,
+    fim: novoFim,
+    obs: textoObs,
+    destaque: textoObs.length > 0
+  };
+
+  salvarLista(lista);
+  renderizarLista();
+}
+
+
+function excluirAtividade(id){
+
+  if(!confirm("Deseja realmente excluir esta atividade?")) return;
+
+  const lista = carregarLista();
+
+  const novaLista = lista.filter(item => item.id !== id);
+
+  salvarLista(novaLista);
+  renderizarLista();
+}
+
+function clonarAtividade(id){
+
+  const lista = carregarLista();
+
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) {
+    alert("Erro ao clonar");
+    return;
+  }
+
+  const original = lista[index];
+
+  const novoItem = {
+    ...original,
+    id: `id_${Date.now()}_${Math.random()}` // ✅ novo ID
+  };
+
+  lista.push(novoItem);
+
+  salvarLista(lista);
+  renderizarLista();
+}
+
+function isoParaBr(iso) {
+  if (!iso) return "";
+  const [yyyy, mm, dd] = iso.split("-");
+  if (!yyyy || !mm || !dd) return iso;
+  return `${dd}/${mm}/${yyyy}`;
+}
+
+function brParaIso(br) {
+  const m = String(br || "").trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!m) return null;
+  const dd = m[1], mm = m[2], yyyy = m[3];
+  const dt = new Date(`${yyyy}-${mm}-${dd}T00:00:00`);
+  if (
+    isNaN(dt.getTime()) ||
+    dt.getUTCFullYear() !== Number(yyyy) ||
+    (dt.getUTCMonth() + 1) !== Number(mm) ||
+    dt.getUTCDate() !== Number(dd)
+  ) {
+    return null;
+  }
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function gerarNomeArquivo() {
+  const nome = getEvangelizacao()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+
+  return `Programacao_${nome || "backup"}.json`;
+}
+
+function exportarBackup(){
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    current: {
+      evangelizacao: getEvangelizacao(),
+      lista: carregarLista()
+    }
+  };
+
+  const blob = new Blob(
+    [JSON.stringify(data, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = gerarNomeArquivo(); // ✅ nome melhorado
+
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+}
+
+function handleImportFile(file){
+  if(!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{
+      const obj = JSON.parse(fr.result);
+      if(!obj || !Array.isArray(obj.current?.lista)) {
+        alert("Arquivo JSON inválido.");
+        return;
+      }
+      if(confirm("Deseja SUBSTITUIR a lista atual?")){
+        salvarLista(obj.current.lista || []);
+        setEvangelizacao(obj.current.evangelizacao || EVANG_DEFAULT);
+        const inputEv = document.getElementById("evangelizacao");
+        if (inputEv) inputEv.value = obj.current.evangelizacao || "";
+      }
+      atualizarTitulos();
+      renderizarLista();
+      alert("Backup importado com sucesso.");
+    }catch(e){
+      console.error(e);
+      alert("Erro ao importar o arquivo.");
+    }
+  };
+  fr.readAsText(file);
+}
+
+function zerarTudo(){
+  if (!confirm("Tem certeza que deseja EXCLUIR essa PROGRAMAÇÃO? Esta ação não poderá ser revertida!")) {
+    return;
+  }
+  try {
+    localStorage.removeItem(LIST_KEY);
+    localStorage.removeItem(HIST_KEY);
+    atualizarTitulos();
+    renderizarLista();
+    alert("Pronto! Lista foi zerada.");
+  } catch (e) {
+    console.error(e);
+    alert("Não foi possível excluir essa programação. Tente novamente.");
+  }
+}
+
+function iniciarLoops() {
+
+  if (intervalGlobal) return;
+
+  intervalGlobal = setInterval(() => {
+    renderizarLista();
+  }, 1000);
+
+}
+	
+function setPrintMode(state) {
+  isPrinting = state;
+  document.body.classList.toggle("printing", state);
+}
+
+function importarJSONDireto(json) {
+  try {
+
+    if (!json.current?.lista) {
+      throw new Error("Formato inválido");
+    }
+
+    // ✅ atualiza dados
+    salvarLista(json.current.lista);
+
+    // ✅ atualiza evangelização
+    if (json.current.evangelizacao) {
+      setEvangelizacao(json.current.evangelizacao);
+    }
+
+    atualizarTitulos();
+    renderizarLista();
+
+    alert("✅ Programação atualizada com sucesso!");
+
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao importar JSON do servidor!");
+  }
+}
+	
+function escolherAtualizacaoJSON() {
+  fetch('import/option.json?v=' + Date.now())
+    .then(res => res.json())
+    .then(opcoes => {
+
+      const escolha = prompt(
+        "Escolha o arquivo:\n\n" +
+        opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
+      );
+
+      const idx = parseInt(escolha) - 1;
+      if (!opcoes[idx]) return;
+
+      const caminho = "import/" + opcoes[idx].arquivo;
+
+      fetch(caminho)
+        .then(r => r.json())
+        .then(importarJSONDireto)
+        .catch(() => alert("Erro ao carregar arquivo"));
+
+    })
+    .catch(() => alert("Erro ao carregar opções"));
+}
+
+window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
+
+function baixarPDF() {
+  setTimeout(() => {
+    window.print();
+  }, 100);
+}
+window.baixarPDF = baixarPDF;
+	
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ===============================
+  // 🔹 INICIALIZA
+  // ===============================
+  const ev = getEvangelizacao();
+  const input = document.getElementById("evangelizacao");
+  if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
+
+  atualizarTitulos();
   renderizarLista();
 
-  // Comportamento do botão colapsar formulário
-  const toggleBtn = document.getElementById("toggle-menu-adicao");
-  const menuAdicao = document.getElementById("menu-adicao");
+  setTimeout(() => {
+    scrollParaAtividade();
+  }, 200);
 
-  if(toggleBtn && menuAdicao) {
-    toggleBtn.addEventListener("click", () => {
-      menuAdicao.classList.toggle("collapsed");
-      toggleBtn.textContent = menuAdicao.classList.contains("collapsed") ? "+" : "-";
+  const btnZerar = document.getElementById('btn-zerar-tudo');
+  if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
+
+  // ===============================
+  // 🔹 MENU TOGGLE
+  // ===============================
+  const btn = document.getElementById("toggle-menu-adicao");
+  const menu = document.getElementById("menu-adicao");
+
+  if (btn && menu) {
+    menu.classList.add("collapsed");
+    btn.textContent = "+";
+
+    btn.addEventListener("click", () => {
+      const aberto = menu.classList.contains("expanded");
+
+      if (aberto) {
+        menu.classList.remove("expanded");
+        menu.classList.add("collapsed");
+        btn.textContent = "+";
+      } else {
+        menu.classList.remove("collapsed");
+        menu.classList.add("expanded");
+        btn.textContent = "-";
+      }
     });
   }
+
+  // ===============================
+  // 🔥 LOOPS (CORRIGIDO)
+  // ===============================
+  iniciarLoops();
+
+  // ===============================
+  // 🖨 PRINT CONTROL
+  // ===============================
+
+window.addEventListener("beforeprint", () => {
+
+  isPrinting = true;
+
+  pararLoops();
+
+  renderizarLista();
+
 });
+
+window.addEventListener("afterprint", () => {
+
+  isPrinting = false;
+
+  renderizarLista();
+
+  iniciarLoops();
+
+});
+
+});
+	
 </script>
+
+  <div class="watermark">TK Agosto</div>
 </body>
+  
 </html>
