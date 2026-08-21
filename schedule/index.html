@@ -1588,6 +1588,42 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar opções"));
 }
 
+// Função que calcula a porcentagem exata do tempo decorrido da atividade
+function calcularProgresso(data, inicio, fim) {
+  const inicioDate = parseDateTime(data, inicio);
+  const fimDate = parseDateTime(data, fim);
+
+  if (!inicioDate || !fimDate) return 0;
+
+  const agora = Date.now();
+  const total = fimDate - inicioDate;
+  const decorrido = agora - inicioDate;
+
+  if (agora < inicioDate) return 0;      // Não começou
+  if (agora > fimDate) return 100;       // Encerrado
+
+  const pct = (decorrido / total) * 100;
+  return Math.min(Math.max(pct, 0), 100); // Mantém entre 0% e 100%
+}
+
+// Atualiza a largura (width) de todas as barras de progresso na tela
+function atualizarBarrasProgresso() {
+  const barras = document.querySelectorAll('.progress-bar');
+  barras.forEach(bar => {
+    const data = bar.dataset.data;
+    const inicio = bar.dataset.inicio;
+    const fim = bar.dataset.fim;
+
+    if (data && inicio && fim) {
+      const pct = calcularProgresso(data, inicio, fim);
+      bar.style.width = `${pct}%`;
+    }
+  });
+}
+
+// Atualiza o progresso das barras automaticamente a cada 10 segundos
+setInterval(atualizarBarrasProgresso, 10000);
+	
 window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 
 function baixarPDF() {
@@ -1671,7 +1707,7 @@ window.addEventListener("afterprint", () => {
 });
 
 });
-	
+
 </script>
 
   <div class="watermark">TK Agosto</div>
