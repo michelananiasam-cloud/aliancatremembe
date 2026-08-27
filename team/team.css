@@ -579,13 +579,29 @@ button.primary{
 .print-only{ display:none !important; }
 
 /* ============================================
-   IMPRESSÃO — VERSÃO FINAL (100% CORRIGIDA)
+   IMPRESSÃO — VERSÃO FINAL (CORRIGIDA)
 =========================================== */
 @media print {
 
-.escala-box{
-  display:block !important;
-}
+  /* ----------- OCULTAR BOTÕES E INTERFACE DE EDIÇÃO ----------- */
+  #form-bloco,
+  #form-bloco *,
+  #toggle-form,
+  #web-header,
+  #menu-rodape,
+  #org,
+  #mobile-bar,
+  .team-actions,
+  .chip-actions,
+  .ref-actions,
+  .toggle-form-btn,
+  button {
+      display: none !important;
+  }
+
+  .escala-box{
+      display: block !important;
+  }
 
   /* ----------- Pagina ----------- */
   @page {
@@ -593,134 +609,107 @@ button.primary{
       margin: 5mm 8mm 8mm 8mm !important;
   }
 
-  /* ----------- OCULTAR INTERFACE WEB ----------- */
-  #form-bloco,
-  #form-bloco *,
-  #toggle-form,
-  #web-header,
-  #menu-rodape,
-  #org {
-      display:none !important;
-  }
-
   .print-only {
-      display:block !important;
+      display: block !important;
   }
 
   /* ----------- CABEÇALHO FIXO ----------- */
   #print-header {
-      position:fixed !important;
-      top:0; left:0; right:0;
-
-      height:22mm !important;
-      padding:4mm 0 !important;
-
-      display:flex !important;
-      justify-content:center;
-      align-items:center;
-
-      background:#fff !important;
-      z-index:9999 !important;
-
-      border:none !important; /* impede linha invasiva */
+      position: fixed !important;
+      top: 0; left: 0; right: 0;
+      height: 22mm !important;
+      padding: 4mm 0 !important;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      background: #fff !important;
+      z-index: 9999 !important;
+      border: none !important;
   }
 
   #print-header img {
-      position:absolute !important;
-      top:1mm;
-      left:0mm;
-      max-height:22mm !important;
+      position: absolute !important;
+      top: 1mm;
+      left: 0mm;
+      max-height: 22mm !important;
   }
 
   /* ----------- ZERAR BODY ----------- */
   body {
-      margin:0 !important;
-      padding:0 !important;
-      background:#fff !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
   }
 
   /* ----------- CONTAINER DAS PÁGINAS ----------- */
   #print-lists {
-      margin:0 !important;
-      padding:0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
   }
 
   /* ----------- QUEBRA DE PÁGINA REAL ----------- */
   .print-break {
-      page-break-before:always !important;
-      break-before:page !important;
+      page-break-before: always !important;
+      break-before: page !important;
   }
-
-  /* ------ NOTA IMPORTANTE ------
-     Não usamos ::before nem padding-top aqui,
-     pois o espaçamento correto é feito SOMENTE
-     pelo JS usando divs reais (firstSpacer/spacer2/spacer3).
-  -------------------------------- */
 
   /* ----------- TÍTULOS DE SEÇÃO ----------- */
   .print-section-title {
-      display:block !important;
-      font-size:16px !important;
-      font-weight:700 !important;
-
-      background:#eef3ff !important;
-      border-left:4px solid #2a5bd7 !important;
-
-      padding:2mm 1mm !important;
-      margin:6mm 0 4mm 0 !important;
-
-      page-break-inside:avoid !important;
+      display: block !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      background: #eef3ff !important;
+      border-left: 4px solid #2a5bd7 !important;
+      padding: 2mm 1mm !important;
+      margin: 6mm 0 4mm 0 !important;
+      page-break-inside: avoid !important;
   }
 
   /* ----------- LISTAS ----------- */
   .print-list-block {
-      margin:1mm 0 2mm 0 !important;
+      margin: 1mm 0 2mm 0 !important;
   }
 
   .print-line {
-      font-size:14px !important;
-      margin:1mm 0 !important;
+      font-size: 14px !important;
+      margin: 1mm 0 !important;
   }
 
-  /* ----------- EQUIPES (inline, sem quebra) ----------- */
+  /* ----------- EQUIPES ----------- */
   .print-team-outer {
-      display:block !important;
-      page-break-inside:avoid !important;
-      break-inside:avoid !important;
-      orphans:999 !important;
-      widows:999 !important;
-
-      margin:3mm 0 !important;
-      padding-bottom:1mm !important;
-
-      border-top:none !important;
-      border-bottom:1px dashed #999 !important;
+      display: block !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      orphans: 999 !important;
+      widows: 999 !important;
+      margin: 3mm 0 !important;
+      padding-bottom: 1mm !important;
+      border-top: none !important;
+      border-bottom: 1px dashed #999 !important;
   }
 
   .print-team-outer:last-of-type {
-      border-bottom:none !important;
+      border-bottom: none !important;
   }
 
   .team-title {
-      font-size:14px !important;
-      font-weight:700 !important;
-
-      border-bottom:1px solid #ddd !important;
-      padding-bottom:1mm !important;
-      margin-bottom:1mm !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      border-bottom: 1px solid #ddd !important;
+      padding-bottom: 1mm !important;
+      margin-bottom: 1mm !important;
   }
 
   .team-members-inline {
-      font-size:12.5px !important;
-      line-height:1.3 !important;
-      word-break:break-word !important;
-      white-space:normal !important;
+      font-size: 12.5px !important;
+      line-height: 1.3 !important;
+      word-break: break-word !important;
+      white-space: normal !important;
   }
 
   /* ----------- CHIPS ----------- */
-  .chip-ok  { border:2px solid #28a745 !important; }
-  .chip-pend{ border:2px solid #dc3545 !important; }
-
+  .chip-ok  { border: 2px solid #28a745 !important; }
+  .chip-pend{ border: 2px solid #dc3545 !important; }
 }
 
 
