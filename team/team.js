@@ -2609,6 +2609,55 @@ function imprimirEscalaSabDom() {
   }, 100);
 }
 
+function gerarListaPresencaDinamica() {
+  const tbody = document.getElementById('tabela-presenca-body');
+  if (!tbody) return;
+
+  // 1. Captura todos os elementos de servos (chips) na página
+  const chips = document.querySelectorAll('.chip');
+  const servosSet = new Set();
+
+  chips.forEach(chip => {
+    // Clona o nó para não alterar a tela visual
+    const clone = chip.cloneNode(true);
+
+    // Remove botões de ação ou ícones de dias/estrelas internos do chip se existirem
+    const elementosParaRemover = clone.querySelectorAll('.chip-actions, .chip-days, .chip-star, button');
+    elementosParaRemover.forEach(el => el.remove());
+
+    // Pega apenas o texto do nome e limpa espaços extras
+    let nome = clone.textContent.trim();
+
+    // Se houver texto limpo válido, adiciona ao Set (o Set ignora duplicados)
+    if (nome) {
+      servosSet.add(nome);
+    }
+  });
+
+  // 2. Transforma em Array e ordena alfabeticamente (A-Z)
+  const listaOrdenada = Array.from(servosSet).sort((a, b) => 
+    a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })
+  );
+
+  // 3. Limpa o conteúdo anterior da tabela
+  tbody.innerHTML = '';
+
+  // 4. Preenche a tabela dinamicamente
+  listaOrdenada.forEach(nome => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${nome}</td>
+      <td class="col-check"><div class="box-check"></div></td>
+      <td class="col-check"><div class="box-check"></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Executa automaticamente SEMPRE antes de abrir a janela de impressão (Ctrl + P ou botão)
+window.addEventListener('beforeprint', gerarListaPresencaDinamica);
+
+
 /* ============================================
    EXPOR FUNÇÕES PARA HTML (OBRIGATÓRIO)
 ============================================ */
