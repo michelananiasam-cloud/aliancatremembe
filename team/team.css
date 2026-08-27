@@ -1,6 +1,5 @@
 <style>
 
-
 /* ===============================
    FIXAR HEADER WEB NO TOPO
 ================================*/
@@ -10,7 +9,7 @@
     top:0;
     backdrop-filter:blur(6px);
     background:rgba(255,255,255,0.75);
-	z-index: 9999 !important;
+    z-index: 9999 !important;
 }
 
 
@@ -19,7 +18,6 @@
 ================================*/
 :root{
   /* ✅ FLAG watermark-display (Marca D'Água) */
-  /* --> block = mostra "Em Desenvolvimento" ou none = esconde "Em Desenvolvimento" */
   --watermark-display: flex;	
   --bg:#ffffff;
   --text:#111;
@@ -86,7 +84,7 @@ h1{ font-size:1.6rem; font-weight:700; }
 #web-header img{ width:120px; height:auto; }
 
 /* ===============================
-   FORMULÁRIOS (com seta no canto)
+   FORMULÁRIOS
 ================================*/
 .field{ display:flex; flex-direction:column; gap:6px; }
 .field label{ font-weight:600; font-size:0.92rem; }
@@ -101,7 +99,6 @@ input, select{
   font-size:1rem;
 }
 
-
 #form-bloco{
   display:block;
   position:relative;
@@ -112,13 +109,12 @@ input, select{
   margin-bottom:16px;
 }
 
-
 #form-bloco-inner {
    display:grid;
    gap:16px;
 }
 
-/* 🔥 SETA MINIMALISTA — APENAS - / + */
+/* SETA MINIMALISTA (- / +) */
 .toggle-form-btn{
   position:absolute;
   top:8px;
@@ -139,7 +135,7 @@ input, select{
   opacity:0.6;
 }
 
-/* animação de abrir/fechar o menu de adição */
+/* Animação do menu de adição */
 #form-bloco.expanded{
   max-height:5000px;
   opacity:1;
@@ -148,23 +144,19 @@ input, select{
 
 #form-bloco.collapsed{
   display:block !important;
-  height:20px !important; /* altura da barra visível */
+  height:20px !important;
   max-height:48px !important;
   overflow:hidden !important;
-
   padding: var(--space-6) var(--space-4) !important;
-  padding-top:10px !important; /* espaço para a seta */
-
+  padding-top:10px !important;
   background: var(--card);
   border-radius: var(--radius);
   border:1px solid color-mix(in srgb, var(--text) 10%, transparent);
-
   position:relative;
   opacity:1 !important;
   transition:all .35s ease;
 }
 
-/* ESCONDE TODO CONTEÚDO INTERNO */
 #form-bloco.collapsed > *:not(.toggle-form-btn){
   opacity:0 !important;
   visibility:hidden !important;
@@ -176,7 +168,6 @@ input, select{
   pointer-events:none !important;
 }
 
-/* MANTÉM A SETA VISÍVEL */
 #form-bloco.collapsed .toggle-form-btn{
   opacity:1 !important;
   visibility:visible !important;
@@ -233,46 +224,35 @@ button.primary{
 @media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
 
 /* ===============================
-   MOBILE READ-ONLY FINAL (CORRETO)
+   MOBILE READ-ONLY BAR
 ================================*/
-/* escondido no desktop */
 #mobile-bar{
   display:none;
 }
 
-/* MOBILE */
 @media (max-width: 760px){
-
   #mobile-bar{
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-
     display: flex;
     justify-content: space-around;
-
     padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
-
     background: var(--card);
     border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-
     z-index: 999999;
   }
 
   #mobile-bar button{
     flex: 1;
     margin: 0 4px;
-
     background: var(--brand);
     color:#fff;
-
     padding: 10px 6px;
     border-radius: 8px;
-
     font-size: 0.85rem;
     font-weight:600;
-
     border:none;
   }
 
@@ -328,15 +308,12 @@ button.primary{
 }
 .chip{
   display:flex;
-  align-items:center;    /* ✅ volta pro padrão */
+  align-items:center;
   gap:6px;
-
   padding:6px 10px;
-  border-radius:999px;   /* ✅ volta cápsula */
+  border-radius:999px;
   background:var(--card);
-
   border:2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
-
   font-size:0.92rem;
   transition: border-color 0.25s linear;
 }
@@ -360,25 +337,22 @@ button.primary{
   color:var(--text);
 }
 .chip-star{ color:var(--warn); font-size:1rem; }
+
 /* ===============================
    DIAS DA SEMANA
 ================================*/
-
 .chip-days{
   display:flex;
   gap:4px;
-  margin-left:4px;   /* ✅ espaço depois do nome */
+  margin-left:4px;
 }
 
 .chip-day{
-  font-size:8px;     /* ✅ menor que o nome */
+  font-size:8px;
   padding:2px 5px;
-
   border-radius:6px;
-
   background:rgba(0,0,0,.08);
   border:1px solid rgba(0,0,0,.12);
-
   line-height:1;
   white-space:nowrap;
   opacity:.8;
@@ -392,7 +366,7 @@ button.primary{
 .chip-day.dom { background:#ede7f6; }
 
 /* ===============================
-   MENU DE RODAPÉ – VERSÃO FINAL
+   MENU DE RODAPÉ
 ================================*/
 #menu-rodape{
   position: fixed;
@@ -402,34 +376,28 @@ button.primary{
   padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
   box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
   z-index: 1000;
-
   -webkit-overflow-scrolling: touch;
   contain: layout paint;
 }
 
-/* Linha principal do rodapé */
 .menu-rodape-content{
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-
   max-width: 1100px;
   margin: 0 auto;
   min-width: 0;
 }
 
-/* Campo inline (label + input) */
 .field-inline{
   display: flex;
   align-items: center;
   gap: 8px;
-
   min-width: 0;
   flex: 0 1 auto;
 }
 
-/* input no rodapé */
 #menu-rodape label{
   font-size: 0.9rem;
   font-weight: 600;
@@ -448,20 +416,16 @@ button.primary{
   width: 100%;
 }
 
-/* A área de botões */
 .rodape-actions{
   display: flex;
   align-items: center;
   gap: 8px;
-
   flex: 1 1 auto;
   justify-content: flex-end;
-
   min-width: 0;
   flex-wrap: nowrap;
 }
 
-/* Botões */
 .btn_rodape,
 .sec-btn{
   padding: 8px 12px;
@@ -474,15 +438,8 @@ button.primary{
   color: var(--text);
 }
 
-.btn_rodape{
-  background: var(--brand);
-  color:#fff;
-}
-
-.sec-btn{
-  background: var(--danger);
-  color:#fff;
-}
+.btn_rodape{ background: var(--brand); color:#fff; }
+.sec-btn{ background: var(--danger); color:#fff; }
 
 .btn_rodape.brand{
   border-color: color-mix(in srgb, var(--brand) 60%, transparent);
@@ -494,36 +451,10 @@ button.primary{
   color:#fff;
 }
 
-/* Mobile: empilha
-@media (max-width: 720px){
-  .menu-rodape-content{
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-*/
-
-/* Mobile: esconde o menu de rodapé na tela */
-@media (max-width: 720px){
+/* ESCONDE O RODAPÉ NO MOBILE */
+@media (max-width: 760px){
   #menu-rodape {
     display: none !important;
-  }
-}
-	
-	
-
-  .field-inline{
-    flex: 1 1 100%;
-  }
-
-  .rodape-actions{
-    flex: 1 1 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  #menu-rodape input{
-    max-width: 100%;
   }
 }
 
@@ -551,11 +482,9 @@ button.primary{
 /* ===============================
    ESCALA DE SERVOS (IMPRESSÃO 2)
 ================================*/
-
 .escala-box{
   font-family: monospace;
   font-size: 13px;
-
   column-count: 2;
   column-gap: 40px;
 }
@@ -568,23 +497,13 @@ button.primary{
   break-inside: avoid;
 }
 
-.col-nome{
-  width: 55%;
-}
-
-.col-dia{
-  width: 20%;
-  text-align: center;
-}
-
-.escala-sep{
-  margin: 6px 0;
-}
+.col-nome{ width: 55%; }
+.col-dia{ width: 20%; text-align: center; }
+.escala-sep{ margin: 6px 0; }
 
 /* ===============================
-   IMPRESSÃO – BLOCO FINAL CONSOLIDADO
+   CONTROLES PADRÃO DE TELA
 ================================*/
-
 #print-header{ display:none !important; }
 .print-only{ display:none !important; }
 
@@ -593,7 +512,7 @@ button.primary{
 =========================================== */
 @media print {
 
-  /* ----------- OCULTAR BOTÕES E INTERFACE DE EDIÇÃO ----------- */
+  /* ----------- OCULTAR INTERFACE E BOTÕES ----------- */
   #form-bloco,
   #form-bloco *,
   #toggle-form,
@@ -613,7 +532,7 @@ button.primary{
       display: block !important;
   }
 
-  /* ----------- Pagina ----------- */
+  /* ----------- PÁGINA ----------- */
   @page {
       size: auto;
       margin: 5mm 8mm 8mm 8mm !important;
@@ -720,10 +639,14 @@ button.primary{
   /* ----------- CHIPS ----------- */
   .chip-ok  { border: 2px solid #28a745 !important; }
   .chip-pend{ border: 2px solid #dc3545 !important; }
+
+  /* MARCA D'ÁGUA OFF NA IMPRESSÃO */
+  .watermark { display: none !important; }
 }
 
-
-
+/* ===============================
+   MARCA D'ÁGUA (TELA)
+================================*/
 .watermark {
   display: var(--watermark-display);
   position: fixed;
@@ -738,8 +661,10 @@ button.primary{
   color: rgba(0,0,0,0.06);
   transform: rotate(-30deg);
 }
-@media print { .watermark { display:none!important; } }
 
+/* ===============================
+   MODAL CUSTOMIZADO
+================================*/
 #custom-modal{
   position:fixed;
   inset:0;
@@ -757,7 +682,6 @@ button.primary{
   width:90%;
   max-width:320px;
   text-align:center;
-
   box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
@@ -779,6 +703,5 @@ button.primary{
   border:none;
   cursor:pointer;
 }
-
 
 </style>
