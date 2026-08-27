@@ -994,29 +994,30 @@ function renderPrintEscala2(){
   const container = document.createElement("div");
   container.className = "escala-box";
 
-  // cabeçalho
+  // Cabeçalho
   const header = document.createElement("div");
   header.className = "escala-header";
   header.innerHTML = `
-    <span class="col-nome">Servo</span>
-    <span class="col-dia">Sábado</span>
-    <span class="col-dia">Domingo</span>
+    <span class="col-nome"><strong>Servo</strong></span>
+    <span class="col-dia"><strong>Sábado</strong></span>
+    <span class="col-dia"><strong>Domingo</strong></span>
   `;
   container.appendChild(header);
 
   const sep = document.createElement("div");
   sep.className = "escala-sep";
-  sep.textContent = "----------------------------------";
+  sep.textContent = "--------------------------------------------------";
   container.appendChild(sep);
 
+  // Linhas com checkbox textual
   servos.forEach(s => {
     const row = document.createElement("div");
     row.className = "escala-row";
 
     row.innerHTML = `
       <span class="col-nome">${s.nome}</span>
-      <span class="col-dia">${s.sab ? "[✔]" : "[❌]"}</span>
-      <span class="col-dia">${s.dom ? "[✔]" : "[❌]"}</span>
+      <span class="col-dia">${s.sab ? "[ ✔ ]" : "[   ]"}</span>
+      <span class="col-dia">${s.dom ? "[ ✔ ]" : "[   ]"}</span>
     `;
 
     container.appendChild(row);
@@ -2581,6 +2582,33 @@ function baixarPDFEscala() {
   }, 100);
 }
 
+/* ============================================================
+   FUNÇÕES DE IMPRESSÃO DEDICADAS (MOBILE / DESKTOP)
+============================================================ */
+
+// 1. Imprime a versão completa (igual ao Web / Desktop)
+function imprimirRelatorioGeral() {
+  const org = ORG.load();
+  // Força a renderização do layout tradicional de impressão
+  renderPrintVersion(org);
+  
+  // Pequeno timeout para o navegador processar a troca de DOM no mobile
+  setTimeout(function() {
+    window.print();
+  }, 100);
+}
+
+// 2. Imprime a lista com check de Sábado e Domingo
+function imprimirEscalaSabDom() {
+  // Força a renderização do layout de tabela com check
+  renderPrintEscala2();
+  
+  // Pequeno timeout para o navegador processar a troca de DOM no mobile
+  setTimeout(function() {
+    window.print();
+  }, 100);
+}
+
 /* ============================================
    EXPOR FUNÇÕES PARA HTML (OBRIGATÓRIO)
 ============================================ */
@@ -2591,6 +2619,8 @@ function baixarPDFEscala() {
 ============================================================ */
 
 /* funções chamadas no HTML */
+
+window.imprimirEscalaSabDom = imprimirEscalaSabDom;
 window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 window.baixarJSONEquipes = baixarJSONEquipes;
 window.baixarMermaidA4 = baixarMermaidA4;
