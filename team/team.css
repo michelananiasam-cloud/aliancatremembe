@@ -494,12 +494,22 @@ button.primary{
   color:#fff;
 }
 
-/* Mobile: empilha */
+/* Mobile: empilha
 @media (max-width: 720px){
   .menu-rodape-content{
     flex-wrap: wrap;
     gap: 8px;
   }
+*/
+
+/* Mobile: esconde o menu de rodapé na tela */
+@media (max-width: 720px){
+  #menu-rodape {
+    display: none !important;
+  }
+}
+	
+	
 
   .field-inline{
     flex: 1 1 100%;
