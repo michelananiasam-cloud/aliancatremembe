@@ -235,116 +235,52 @@ button.primary{
 /* ===============================
    MOBILE READ-ONLY FINAL (CORRETO)
 ================================*/
-@media (max-width: 760px) {
+/* escondido no desktop */
+#mobile-bar{
+  display:none;
+}
 
-  /* ✅ Espaçamento */
-  body {
-    padding: 8px 12px 80px !important;
-    overflow-x: hidden;
+/* MOBILE */
+@media (max-width: 760px){
+
+  #mobile-bar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: space-around;
+
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+
+    background: var(--card);
+    border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+
+    z-index: 999999;
   }
 
-  /* ✅ Header */
-  #web-header {
-    border-bottom: none !important;
-    backdrop-filter: none !important;
-  }
+  #mobile-bar button{
+    flex: 1;
+    margin: 0 4px;
 
-  /* ❌ Remove formulário */
-  #form-bloco,
-  #form-bloco.collapsed {
-    display: none !important;
-  }
+    background: var(--brand);
+    color:#fff;
 
-  /* ❌ Remove botão +/- */
-  .toggle-form-btn {
-    display: none !important;
-  }
-
-  /* ✅ Limpa rodapé */
-  #menu-rodape {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  /* ❌ Esconde rodapé */
-  .menu-rodape-content {
-    display: none !important;
-  }
-
-  /* ❌ Remove ações */
-  .team-actions,
-  .chip-actions,
-  .ref-actions {
-    display: none !important;
-  }
-
-  /* ❌ BLOQUEIA INTERAÇÃO GLOBAL (FORMA SEGURA) */
-  input,
-  select,
-  button,
-  .chip {
-    pointer-events: none !important;
-  }
-
-  /* ✅ LIBERA APENAS OS BOTÕES MOBILE */
-  #btn-atualizar-mobile,
-  #btn-pdf-mobile {
-    pointer-events: auto !important;
-  }
-
-  /* ✅ BOTÕES MOBILE */
-  #btn-atualizar-mobile,
-  #btn-pdf-mobile {
-    display: block !important;
-    position: fixed !important;
-
-    bottom: 16px !important;
-
-    z-index: 9999999 !important;
-
-    background: var(--brand) !important;
-    color: #fff !important;
-
-    padding: 8px 12px;
+    padding: 10px 6px;
     border-radius: 8px;
 
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight:600;
 
-    border: 1px solid color-mix(in srgb, var(--brand) 60%, transparent);
-
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-
-    opacity: 0.95;
-    transition: 0.2s;
+    border:none;
   }
 
-  /* ✅ POSIÇÃO (SEM SOBREPOR) */
-  #btn-atualizar-mobile {
-    right: 16px !important;
-  }
-
-  #btn-pdf-mobile {
-    right: 120px !important;
-  }
-
-  /* ✅ Clique */
-  #btn-atualizar-mobile:active, 
-  #btn-pdf-mobile:active {
+  #mobile-bar button:active{
     transform: scale(0.96);
   }
 }
 
-/* ===============================
-   BASE (DESKTOP)
-================================*/
-#btn-atualizar-mobile,
-#btn-pdf-mobile {
-  display: none;
-}	
-
-	
 /* ===============================
    EQUIPES
 ================================*/
@@ -392,15 +328,19 @@ button.primary{
 }
 .chip{
   display:flex;
-  align-items:center;
+  align-items:center;    /* ✅ volta pro padrão */
   gap:6px;
+
   padding:6px 10px;
-  border-radius:999px;
+  border-radius:999px;   /* ✅ volta cápsula */
   background:var(--card);
+
   border:2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
+
   font-size:0.92rem;
   transition: border-color 0.25s linear;
 }
+
 .chip-ok{ border-color:#28a745 !important; }
 .chip-pend{ border-color:#dc3545 !important; }
 .chip:hover .chip-actions{ opacity:1; pointer-events:auto; }
@@ -420,6 +360,36 @@ button.primary{
   color:var(--text);
 }
 .chip-star{ color:var(--warn); font-size:1rem; }
+/* ===============================
+   DIAS DA SEMANA
+================================*/
+
+.chip-days{
+  display:flex;
+  gap:4px;
+  margin-left:4px;   /* ✅ espaço depois do nome */
+}
+
+.chip-day{
+  font-size:8px;     /* ✅ menor que o nome */
+  padding:2px 5px;
+
+  border-radius:6px;
+
+  background:rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.12);
+
+  line-height:1;
+  white-space:nowrap;
+  opacity:.8;
+}
+.chip-day.seg { background:#e3f2fd; }
+.chip-day.ter { background:#e8f5e9; }
+.chip-day.qua { background:#fff3e0; }
+.chip-day.qui { background:#f3e5f5; }
+.chip-day.sex { background:#fce4ec; }
+.chip-day.sab { background:#e0f7fa; }
+.chip-day.dom { background:#ede7f6; }
 
 /* ===============================
    MENU DE RODAPÉ – VERSÃO FINAL
@@ -569,6 +539,39 @@ button.primary{
 .ref-btn:hover{ opacity:1; }
 
 /* ===============================
+   ESCALA DE SERVOS (IMPRESSÃO 2)
+================================*/
+
+.escala-box{
+  font-family: monospace;
+  font-size: 13px;
+
+  column-count: 2;
+  column-gap: 40px;
+}
+
+.escala-header,
+.escala-row{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  break-inside: avoid;
+}
+
+.col-nome{
+  width: 55%;
+}
+
+.col-dia{
+  width: 20%;
+  text-align: center;
+}
+
+.escala-sep{
+  margin: 6px 0;
+}
+
+/* ===============================
    IMPRESSÃO – BLOCO FINAL CONSOLIDADO
 ================================*/
 
@@ -579,6 +582,10 @@ button.primary{
    IMPRESSÃO — VERSÃO FINAL (100% CORRIGIDA)
 =========================================== */
 @media print {
+
+.escala-box{
+  display:block !important;
+}
 
   /* ----------- Pagina ----------- */
   @page {
