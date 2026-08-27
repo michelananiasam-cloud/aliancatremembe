@@ -642,6 +642,21 @@ button.primary{
 
   /* MARCA D'ÁGUA OFF NA IMPRESSÃO */
   .watermark { display: none !important; }
+
+  /* Garante exibição do bloco de escala apenas ao imprimir */
+  .escala-box {
+    display: block !important;
+    width: 100% !important;
+    font-family: monospace !important;
+    font-size: 12pt !important;
+  }
+  
+  .escala-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 4px 0 !important;
+    border-bottom: 1px dotted #ccc !important;
+  }
 }
 
 /* ===============================
