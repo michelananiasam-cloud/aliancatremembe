@@ -337,7 +337,10 @@
       "parentId": "32",
       "confirmado": true,
       "isReferencia": false,
-      "dias": []
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
     },
     {
       "id": "36",
@@ -400,6 +403,7 @@
       "confirmado": true,
       "isReferencia": false,
       "dias": [
+        "Sáb",
         "Dom"
       ]
     },
@@ -614,7 +618,10 @@
       "parentId": "59",
       "confirmado": true,
       "isReferencia": false,
-      "dias": []
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
     },
     {
       "id": "64",
