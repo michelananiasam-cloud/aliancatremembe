@@ -1403,10 +1403,6 @@ function gerarImpressaoServos(listaServosCompleta) {
   const container = document.getElementById('print-lists');
   container.innerHTML = ''; 
 
-  // Esconde os blocos das equipes se você quiser imprimir APENAS a lista
-  const blocoEquipes = document.getElementById('org');
-  if (blocoEquipes) blocoEquipes.style.display = 'none';
-
   for (let i = 0; i < listaServosCompleta.length; i += LIMITE_POR_PAGINA) {
     const bloco = listaServosCompleta.slice(i, i + LIMITE_POR_PAGINA);
     const numeroPagina = Math.floor(i / LIMITE_POR_PAGINA) + 1;
@@ -1414,25 +1410,29 @@ function gerarImpressaoServos(listaServosCompleta) {
     const paginaDiv = document.createElement('div');
     paginaDiv.className = 'print-page';
 
-    // Monta uma tabela nativa com bordas e checkbox de presença
     paginaDiv.innerHTML = `
       <div class="print-section-title">
-        Lista de Presença — Página ${numeroPagina}
+        Controle de Presença dos Servos — Página ${numeroPagina}
       </div>
       <table class="tabela-presenca">
         <thead>
           <tr>
-            <th>Nome do Servo</th>
-            <th class="col-check">Presença</th>
+            <th>NOME DO SERVO</th>
+            <th class="col-check">SÁBADO</th>
+            <th class="col-check">DOMINGO</th>
           </tr>
         </thead>
         <tbody>
-          ${bloco.map(servo => `
-            <tr>
-              <td>${typeof servo === 'object' ? servo.nome : servo}</td>
-              <td class="col-check">[ &nbsp; ]</td>
-            </tr>
-          `).join('')}
+          ${bloco.map(servo => {
+            const nome = typeof servo === 'object' ? servo.nome : servo;
+            return `
+              <tr>
+                <td>${nome}</td>
+                <td class="col-check"></td>
+                <td class="col-check"></td>
+              </tr>
+            `;
+          }).join('')}
         </tbody>
       </table>
     `;
