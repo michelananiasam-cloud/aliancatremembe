@@ -1,5 +1,4 @@
-
-const MOBILE_EDITABLE = false;  /* true para liberar edição no mobile */
+const MOBILE_EDITABLE = false; /* true para liberar edição no mobile */
 
 function isMobileEditAllowed() {
   return MOBILE_EDITABLE;
@@ -8,11 +7,9 @@ function isMobileEditAllowed() {
 function canEdit() {
   return !(window.innerWidth <= 760 && !isMobileEditAllowed());
 }
-	
+
 /* ============================================================
    PARTE 3 — Modelo de dados, storage e utilitários
-   - Tema e rodapé já vieram nas Partes 1 e 2
-   - Aqui focamos em: dados, ordenações, edição inline e ações
 ============================================================ */
 
 /* ---------- CHAVES ---------- */
@@ -21,7 +18,7 @@ var TITLE_DEFAULT = "Equipe Movimento Tremembé";
 var ORG_KEY = "Equipes_dados_v2"; // v2 p/ evitar conflito com versões antigas
 
 /* ---------- MODELO PADRÃO ---------- */
-function defaultModel(){
+function defaultModel() {
   return {
     coordenacao: [],
     interna: { responsaveis: [], equipes: [] },
@@ -31,72 +28,77 @@ function defaultModel(){
 }
 
 /* ---------- TITLE: GET/SET + UI ---------- */
-function getTitulo(){
+function getTitulo() {
   try {
     var v = (localStorage.getItem(TITLE_KEY) || "").trim();
     return v || TITLE_DEFAULT;
-  } catch { return TITLE_DEFAULT; }
-}
-function setTitulo(v){
-  try { localStorage.setItem(TITLE_KEY, (v||"").trim()); } catch {}
+  } catch (err) {
+    return TITLE_DEFAULT;
+  }
 }
 
+function setTitulo(v) {
+  try {
+    localStorage.setItem(TITLE_KEY, (v || "").trim());
+  } catch (err) {}
+}
 
-function atualizarTitulos(){
+function getTituloFormatado() {
+  var base = getTitulo();
+  base = (base || "").trim();
+  var nome = base && base !== TITLE_DEFAULT ? base : TITLE_DEFAULT.replace(/^Equipes\s*/i, "");
+  return "Equipe " + nome;
+}
+
+function atualizarTitulos() {
   var h1 = document.getElementById("titulo-web");
   var tituloFmt = getTituloFormatado();
   if (h1) h1.textContent = tituloFmt;
   document.title = tituloFmt;
 }
 
-
-function initTituloInput(){
+function initTituloInput() {
   var inp = document.getElementById("evangelizacao");
   if (!inp) return;
-  var t = getTitulo(); // mantém o nome puro no input
+  var t = getTitulo();
   inp.value = (t === TITLE_DEFAULT ? "Movimento Tremembé" : t);
 }
 
-function alterarTitulo(e){
+function alterarTitulo(e) {
   if (e) e.preventDefault();
   var inp = document.getElementById("evangelizacao");
   var novo = (inp && inp.value || "").trim();
-  setTitulo(novo);        // salva só o nome
-  atualizarTitulos();     // mostra "Equipe <nome>"
+  setTitulo(novo);
+  atualizarTitulos();
 }
 
-
 /* ---------- STORAGE: LOAD/SAVE/NORMALIZE ---------- */
-function normalizeModel(m){
+function normalizeModel(m) {
   if (!m || typeof m !== "object") return defaultModel();
   if (!Array.isArray(m.coordenacao)) m.coordenacao = [];
 
-  ["interna","externa","apoio"].forEach(function(key){
+  ["interna", "externa", "apoio"].forEach(function(key) {
     if (!m[key] || typeof m[key] !== "object") m[key] = { responsaveis: [], equipes: [] };
     if (!Array.isArray(m[key].responsaveis)) m[key].responsaveis = [];
     if (!Array.isArray(m[key].equipes)) m[key].equipes = [];
 
-    m[key].equipes.forEach(function(eq){
+    m[key].equipes.forEach(function(eq) {
       if (!eq || typeof eq !== "object") return;
 
       if (typeof eq.nome !== "string") eq.nome = "";
       if (typeof eq.referencia === "undefined") eq.referencia = null;
 
-      eq.pessoas = (eq.pessoas || []).map(function(p){
+      eq.pessoas = (eq.pessoas || []).map(function(p) {
         if (typeof p === "string") {
-          return { nome: p, confirmado: null };
+          return { nome: p, confirmado: null, dias: [] };
         } else if (typeof p === "object") {
           return {
             nome: p.nome || "",
-            confirmado: (p.confirmado === true
-                          ? true
-                          : p.confirmado === false
-                            ? false
-                            : null),
-			dias: Array.isArray(p.dias) ? p.dias : []
+            confirmado: (p.confirmado === true ? true : p.confirmado === false ? false : null),
+            dias: Array.isArray(p.dias) ? p.dias : []
           };
         }
-        return { nome: "", confirmado: null };
+        return { nome: "", confirmado: null, dias: [] };
       });
     });
   });
@@ -104,62 +106,65 @@ function normalizeModel(m){
   return m;
 }
 
-function loadOrg(){
-  try{
+function loadOrg() {
+  try {
     var raw = localStorage.getItem(ORG_KEY);
     if (!raw) return defaultModel();
     var m = JSON.parse(raw);
     return normalizeModel(m);
-  }catch{
+  } catch (err) {
     return defaultModel();
   }
 }
-function saveOrg(m){
-  try{
+
+function saveOrg(m) {
+  try {
     localStorage.setItem(ORG_KEY, JSON.stringify(normalizeModel(m)));
-  }catch{
+  } catch (err) {
     alert("Não foi possível salvar localmente.");
   }
 }
 
 /* ---------- ORDENADORES ---------- */
-function sortByNamePT(a,b){
-  return String(a||"").localeCompare(String(b||""), "pt-BR", {sensitivity:"base"});
+function sortByNamePT(a, b) {
+  return String(a || "").localeCompare(String(b || ""), "pt-BR", { sensitivity: "base" });
 }
-function uniquePush(list, name){
+
+function uniquePush(list, name) {
   if (!name) return;
   if (list.indexOf(name) === -1) list.push(name);
 }
 
-/* Pessoas para exibição: referência sempre no topo; demais em ordem A–Z */
-function orderPeopleForDisplay(eq){
+const ORDEM_DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
+
+function ordenarDias(dias) {
+  return dias.slice().sort((a, b) => ORDEM_DIAS.indexOf(a) - ORDEM_DIAS.indexOf(b));
+}
+
+function orderPeopleForDisplay(eq) {
   const pessoas = eq.pessoas || [];
   const ref = eq.referencia || null;
 
-  // separar referência
   const refObj = ref ? pessoas.find(p => p.nome === ref) : null;
-
   const restantes = pessoas
     .filter(p => p.nome !== ref)
-    .sort((a,b)=> sortByNamePT(a.nome, b.nome));
+    .sort((a, b) => sortByNamePT(a.nome, b.nome));
 
   return refObj ? [refObj, ...restantes] : restantes;
 }
 
 /* ---------- BUSCAS ---------- */
-function findEquipe(arr, nome){
-  var n = (nome||"").toLowerCase();
-  for (var i=0;i<(arr||[]).length;i++){
+function findEquipe(arr, nome) {
+  var n = (nome || "").toLowerCase();
+  for (var i = 0; i < (arr || []).length; i++) {
     var it = arr[i];
-    if (it && String(it.nome||"").toLowerCase() === n) return it;
+    if (it && String(it.nome || "").toLowerCase() === n) return it;
   }
   return null;
 }
 
-/* ============================================================
-   função para alterar dias
-============================================================ */
-function toggleDiaPessoa(refKey, nomeEquipe, pessoaNome, dia){
+/* ---------- ALTERAR DIAS ---------- */
+function toggleDiaPessoa(refKey, nomeEquipe, pessoaNome, dia) {
   const org = loadOrg();
   const eq = findEquipe(org[refKey].equipes, nomeEquipe);
   if (!eq) return;
@@ -178,13 +183,11 @@ function toggleDiaPessoa(refKey, nomeEquipe, pessoaNome, dia){
   saveOrg(org);
 }
 
-/* ============================================================
-   AÇÕES DE PESSOAS‑CHAVE (Coordenação / Responsáveis)
-============================================================ */
-function addPessoaChave(area, nome){
+/* ---------- AÇÕES DE PESSOAS-CHAVE ---------- */
+function addPessoaChave(area, nome) {
   if (!nome) return;
   var org = loadOrg();
-  if (area === "coordenacao"){
+  if (area === "coordenacao") {
     uniquePush(org.coordenacao, nome);
     org.coordenacao.sort(sortByNamePT);
   } else {
@@ -193,24 +196,26 @@ function addPessoaChave(area, nome){
   }
   saveOrg(org);
 }
-function removePessoaChave(area, nome){
+
+function removePessoaChave(area, nome) {
   var org = loadOrg();
-  if (area === "coordenacao"){
-    org.coordenacao = (org.coordenacao||[]).filter(function(p){ return p !== nome; });
+  if (area === "coordenacao") {
+    org.coordenacao = (org.coordenacao || []).filter(p => p !== nome);
   } else {
-    org[area].responsaveis = (org[area].responsaveis||[]).filter(function(p){ return p !== nome; });
+    org[area].responsaveis = (org[area].responsaveis || []).filter(p => p !== nome);
   }
   saveOrg(org);
 }
-function renamePessoaChave(area, oldName, newName){
-  newName = (newName||"").trim();
+
+function renamePessoaChave(area, oldName, newName) {
+  newName = (newName || "").trim();
   if (!newName) return;
   var org = loadOrg();
   var list = (area === "coordenacao") ? org.coordenacao : org[area].responsaveis;
 
   var idx = list.indexOf(oldName);
-  if (idx >= 0){
-    if (!list.includes(newName)){
+  if (idx >= 0) {
+    if (!list.includes(newName)) {
       list[idx] = newName;
       list.sort(sortByNamePT);
       saveOrg(org);
@@ -218,61 +223,58 @@ function renamePessoaChave(area, oldName, newName){
   }
 }
 
-/* ============================================================
-   AÇÕES DE EQUIPES E PESSOAS DA EQUIPE
-============================================================ */
-function upsertEquipe(refKey, nomeEquipe, pessoaOpcional, marcarRef){
+/* ---------- AÇÕES DE EQUIPES E PESSOAS ---------- */
+function upsertEquipe(refKey, nomeEquipe, pessoaOpcional, marcarRef) {
   var org = loadOrg();
   var list = org[refKey].equipes;
   var eq = findEquipe(list, nomeEquipe);
-  if (!eq){
+
+  if (!eq) {
     eq = { nome: nomeEquipe, pessoas: [], referencia: null };
     list.push(eq);
-    list.sort((a,b)=> sortByNamePT(a.nome, b.nome));
+    list.sort((a, b) => sortByNamePT(a.nome, b.nome));
   }
 
-  if (pessoaOpcional){
+  if (pessoaOpcional) {
     if (!eq.pessoas.some(p => p.nome === pessoaOpcional)) {
-      
-eq.pessoas.push({ 
-  nome: pessoaOpcional, 
-  confirmado: null,
-  dias: [] // ✅
-});
-
+      eq.pessoas.push({
+        nome: pessoaOpcional,
+        confirmado: null,
+        dias: []
+      });
     }
   }
 
-  if (marcarRef && pessoaOpcional){
+  if (marcarRef && pessoaOpcional) {
     eq.referencia = pessoaOpcional;
   }
 
   saveOrg(org);
 }
 
-function deleteEquipe(refKey, nomeEquipe){
+function deleteEquipe(refKey, nomeEquipe) {
   var org = loadOrg();
-  org[refKey].equipes = (org[refKey].equipes||[]).filter(function(e){ return e.nome !== nomeEquipe; });
+  org[refKey].equipes = (org[refKey].equipes || []).filter(e => e.nome !== nomeEquipe);
   saveOrg(org);
 }
-function renameEquipe(refKey, oldName, newName){
-  newName = (newName||"").trim();
+
+function renameEquipe(refKey, oldName, newName) {
+  newName = (newName || "").trim();
   if (!newName) return;
   var org = loadOrg();
   var list = org[refKey].equipes;
   var eq = findEquipe(list, oldName);
   if (!eq) return;
 
-  // impedir duplicação de nomes
   if (findEquipe(list, newName)) return;
 
   eq.nome = newName;
-  // reordena por nome
-  list.sort(function(a,b){ return sortByNamePT(a.nome, b.nome); });
+  list.sort((a, b) => sortByNamePT(a.nome, b.nome));
   saveOrg(org);
 }
-function addPessoaToEquipe(refKey, nomeEquipe, pessoa, marcarRef){
-  pessoa = (pessoa||"").trim();
+
+function addPessoaToEquipe(refKey, nomeEquipe, pessoa, marcarRef) {
+  pessoa = (pessoa || "").trim();
   if (!pessoa) return;
 
   var org = loadOrg();
@@ -280,31 +282,29 @@ function addPessoaToEquipe(refKey, nomeEquipe, pessoa, marcarRef){
   if (!eq) return;
 
   if (!eq.pessoas.some(p => p.nome === pessoa)) {
-    
-eq.pessoas.push({ 
-  nome: pessoa, 
-  confirmado: null,
-  dias: [] // ✅ IMPORTANTE
-});
-
+    eq.pessoas.push({
+      nome: pessoa,
+      confirmado: null,
+      dias: []
+    });
   }
 
   if (marcarRef) eq.referencia = pessoa;
-
   saveOrg(org);
 }
-function removePessoaFromEquipe(refKey, nomeEquipe, pessoa){
+
+function removePessoaFromEquipe(refKey, nomeEquipe, pessoa) {
   var org = loadOrg();
   var eq = findEquipe(org[refKey].equipes, nomeEquipe);
   if (!eq) return;
 
   eq.pessoas = eq.pessoas.filter(p => p.nome !== pessoa);
-
   if (eq.referencia === pessoa) eq.referencia = null;
 
   saveOrg(org);
 }
-function renamePessoaInEquipe(refKey, nomeEquipe, oldName, newName){
+
+function renamePessoaInEquipe(refKey, nomeEquipe, oldName, newName) {
   newName = (newName || "").trim();
   if (!newName) return;
 
@@ -315,7 +315,7 @@ function renamePessoaInEquipe(refKey, nomeEquipe, oldName, newName){
   var idx = eq.pessoas.findIndex(p => p.nome === oldName);
   if (idx < 0) return;
 
-  if (!eq.pessoas.some(p => p.nome === newName)){
+  if (!eq.pessoas.some(p => p.nome === newName)) {
     eq.pessoas[idx].nome = newName;
     if (eq.referencia === oldName) eq.referencia = newName;
   }
@@ -323,7 +323,7 @@ function renamePessoaInEquipe(refKey, nomeEquipe, oldName, newName){
   saveOrg(org);
 }
 
-function toggleReferencia(refKey, nomeEquipe, pessoa){
+function toggleReferencia(refKey, nomeEquipe, pessoa) {
   var org = loadOrg();
   var eq = findEquipe(org[refKey].equipes, nomeEquipe);
   if (!eq) return;
@@ -331,11 +331,8 @@ function toggleReferencia(refKey, nomeEquipe, pessoa){
   saveOrg(org);
 }
 
-/* ============================================================
-   EDIÇÃO INLINE (duplo clique ou via ícones) — genérico
-============================================================ */
-function startInlineEdit(targetEl, initialText, onSave, opts){
-  // opts: {placeholder, selectAll}
+/* ---------- EDIÇÃO INLINE ---------- */
+function startInlineEdit(targetEl, initialText, onSave, opts) {
   opts = opts || {};
   var parent = targetEl.parentNode;
   if (!parent) return;
@@ -352,106 +349,64 @@ function startInlineEdit(targetEl, initialText, onSave, opts){
   input.style.background = "var(--bg)";
   input.style.color = "var(--text)";
 
-  // troca o nó
   parent.replaceChild(input, targetEl);
-  if (opts.selectAll !== false){
-    setTimeout(function(){
-      input.focus();
-      input.select();
-    }, 0);
-  } else {
-    setTimeout(function(){ input.focus(); }, 0);
+
+  setTimeout(function() {
+    input.focus();
+    if (opts.selectAll !== false) input.select();
+  }, 0);
+
+  function commit() {
+    var v = (input.value || "").trim();
+    try { onSave(v); } finally {}
   }
 
-  function commit(){
-    var v = (input.value||"").trim();
-    try { onSave(v); } finally {
-      // restaura nó original (será atualizado no render)
-    }
-  }
-  function cancel(){
-    // apenas re-render lá fora
-  }
-
-  input.addEventListener("keydown", function(e){
-    if (e.key === "Enter"){ e.preventDefault(); commit(); }
-    if (e.key === "Escape"){ e.preventDefault(); cancel(); /* re-render */ render(); }
+  input.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") { e.preventDefault(); commit(); }
+    if (e.key === "Escape") { e.preventDefault(); render(); }
   });
-  input.addEventListener("blur", function(){ commit(); });
+  input.addEventListener("blur", function() { commit(); });
 
-  return input; // caso queira manipular
+  return input;
 }
 
-
-/* ============================================================
-   EXPOSE (para a Parte 4 usar)
-============================================================ */
+/* ---------- EXPOSE OBJETO ORG ---------- */
 window.ORG = {
-  // storage/title
-  getTitulo: getTitulo,
-  setTitulo: setTitulo,
-  atualizarTitulos: atualizarTitulos,
-  initTituloInput: initTituloInput,
-  alterarTitulo: alterarTitulo,
-
-  // model
-  load: loadOrg,
-  save: saveOrg,
-  orderPeopleForDisplay: orderPeopleForDisplay,
-  sortByNamePT: sortByNamePT,
-
-  // pessoas‑chave
-  addPessoaChave: addPessoaChave,
-  removePessoaChave: removePessoaChave,
-  renamePessoaChave: renamePessoaChave,
-
-  // equipes
-  upsertEquipe: upsertEquipe,
-  deleteEquipe: deleteEquipe,
-  renameEquipe: renameEquipe,
-  addPessoaToEquipe: addPessoaToEquipe,
-  removePessoaFromEquipe: removePessoaFromEquipe,
-  renamePessoaInEquipe: renamePessoaInEquipe,
-  toggleReferencia: toggleReferencia,
-
-  // busca
-  findEquipe: findEquipe,
-
-  // inline edit
-  startInlineEdit: startInlineEdit
+  getTitulo, setTitulo, atualizarTitulos, initTituloInput, alterarTitulo,
+  load: loadOrg, save: saveOrg, orderPeopleForDisplay, sortByNamePT,
+  addPessoaChave, removePessoaChave, renamePessoaChave,
+  upsertEquipe, deleteEquipe, renameEquipe, addPessoaToEquipe, removePessoaFromEquipe, renamePessoaInEquipe, toggleReferencia,
+  findEquipe, startInlineEdit
 };
 
 /* ============================================================
-   PARTE 4.1 — Funções utilitárias de renderização visual
-   (Criar elementos e estruturas HTML dos cartões)
+   PARTE 4 — Componentes DOM, Renderização e Ações
 ============================================================ */
-
-/* Criador rápido de elementos */
-function el(tag, attrs, children){
-  if(!attrs) attrs = {};
-  if(!children) children = [];
+function el(tag, attrs, children) {
+  attrs = attrs || {};
+  children = children || [];
   const E = document.createElement(tag);
 
-  for(const k in attrs){
+  for (const k in attrs) {
     const v = attrs[k];
-    if(k === "className") E.className = v;
-    else if(k.startsWith("on") && typeof v === "function"){
+    if (k === "className") E.className = v;
+    else if (k.startsWith("on") && typeof v === "function") {
       E.addEventListener(k.slice(2), v);
     } else {
       E.setAttribute(k, v);
     }
   }
 
-  if(!Array.isArray(children)) children = [children];
-  children.forEach(c=>{
-    if(typeof c === "string") E.appendChild(document.createTextNode(c));
-    else if(c) E.appendChild(c);
+  if (!Array.isArray(children)) children = [children];
+  children.forEach(c => {
+    if (typeof c === "string") E.appendChild(document.createTextNode(c));
+    else if (c) E.appendChild(c);
   });
 
   return E;
 }
 
-function abrirSeletorDias(refKey, equipeName, pessoaObj){
+function abrirSeletorDias(refKey, equipeName, pessoaObj) {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.inset = "0";
@@ -466,7 +421,7 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
   box.style.padding = "16px";
   box.style.borderRadius = "12px";
 
-  const diasSemana = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+  const diasSemana = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
   const atual = new Set(pessoaObj.dias || []);
 
   diasSemana.forEach(d => {
@@ -477,13 +432,13 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
     btn.style.borderRadius = "6px";
     btn.style.border = "1px solid #ccc";
 
-    if (atual.has(d)){
+    if (atual.has(d)) {
       btn.style.background = "#4caf50";
       btn.style.color = "#fff";
     }
 
     btn.onclick = () => {
-      if (atual.has(d)){
+      if (atual.has(d)) {
         atual.delete(d);
         btn.style.background = "";
         btn.style.color = "";
@@ -497,33 +452,26 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
     box.appendChild(btn);
   });
 
-  // botão salvar
   const salvar = document.createElement("button");
   salvar.textContent = "Salvar";
   salvar.style.display = "block";
   salvar.style.marginTop = "12px";
 
   salvar.onclick = () => {
-
     const org = ORG.load();
     const eq = ORG.findEquipe(org[refKey].equipes, equipeName);
     const p = eq.pessoas.find(p => p.nome === pessoaObj.nome);
 
     p.dias = ordenarDias(Array.from(atual));
-
     saveOrg(org);
     document.body.removeChild(overlay);
     render();
   };
 
-  // botão cancelar
   const cancelar = document.createElement("button");
   cancelar.textContent = "Cancelar";
   cancelar.style.marginTop = "8px";
-
-  cancelar.onclick = () => {
-    document.body.removeChild(overlay);
-  };
+  cancelar.onclick = () => document.body.removeChild(overlay);
 
   box.appendChild(salvar);
   box.appendChild(cancelar);
@@ -532,71 +480,41 @@ function abrirSeletorDias(refKey, equipeName, pessoaObj){
   document.body.appendChild(overlay);
 }
 
-function normalizarDia(d){
-  return d
-    .toLowerCase()
-    .replace("á","a")
-    .replace("ã","a")
-    .replace("â","a")
-    .replace("é","e")
-    .replace("í","i")
-    .replace("ó","o")
-    .replace("ú","u");
+function normalizarDia(d) {
+  return d.toLowerCase()
+    .replace("á", "a").replace("ã", "a").replace("â", "a")
+    .replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
 }
 
-/* ------------------------------------------------------------
-   CRIA CHIP DE PESSOA (com suporte a dias + ações)
------------------------------------------------------------- */
-
-function makePessoaChip(refKey, equipeName, pessoaObj, isRef){
+function makePessoaChip(refKey, equipeName, pessoaObj, isRef) {
   const nome = pessoaObj.nome;
-
   const classes = ["chip"];
   if (pessoaObj.confirmado === true) classes.push("chip-ok");
   else if (pessoaObj.confirmado === false) classes.push("chip-pend");
 
   const chip = el("div", { className: classes.join(" ") });
+  const nameSpan = el("span", { className: "chip-name" }, nome);
 
-  const nameSpan = el("span", { className:"chip-name" }, nome);
-
-  // ✅ edição inline
-  nameSpan.ondblclick = function(e){
+  nameSpan.ondblclick = function(e) {
     e.stopPropagation();
-    ORG.startInlineEdit(
-      nameSpan,
-      nome,
-      (newName)=>{
-        ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
-        render();
-      }
-    );
+    ORG.startInlineEdit(nameSpan, nome, (newName) => {
+      ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
+      render();
+    });
   };
 
   chip.appendChild(nameSpan);
 
-// ✅ MOSTRAR DIAS
-if (pessoaObj.dias && pessoaObj.dias.length){
+  if (pessoaObj.dias && pessoaObj.dias.length) {
+    const diasWrap = el("div", { className: "chip-days" });
+    ordenarDias(pessoaObj.dias).forEach(d => {
+      const classeDia = "chip-day " + normalizarDia(d);
+      diasWrap.appendChild(el("span", { className: classeDia }, d + "."));
+    });
+    chip.appendChild(diasWrap);
+  }
 
-  const diasWrap = el("div", { className:"chip-days" });
-
-
-ordenarDias(pessoaObj.dias).forEach(d => {
-  const classeDia = "chip-day " + normalizarDia(d);
-
-  const textoDia = d + "."; // ✅ adiciona ponto
-
-  diasWrap.appendChild(
-    el("span", { className: classeDia }, textoDia)
-  );
-});
-
-
-  chip.appendChild(diasWrap);
-}
-
-  // ✅ CLICK → alterna confirmado
-  chip.addEventListener("click", function(){
-
+  chip.addEventListener("click", function() {
     if (!canEdit()) return;
 
     if (pessoaObj.confirmado === null) pessoaObj.confirmado = true;
@@ -612,254 +530,168 @@ ordenarDias(pessoaObj.dias).forEach(d => {
     render();
   });
 
-  // ✅ estrela referência
-  if (isRef){
-    chip.appendChild(el("span", { className:"chip-star" }, "⭐"));
-  }
+  if (isRef) chip.appendChild(el("span", { className: "chip-star" }, "⭐"));
 
-  const actions = el("div", { className:"chip-actions" });
+  const actions = el("div", { className: "chip-actions" });
 
-  // ✅ EDITAR
-  actions.appendChild(
-    el("button", {
-      title:"Editar",
-      onclick:(e)=>{
-        e.stopPropagation();
-        ORG.startInlineEdit(
-          nameSpan,
-          nome,
-          (newName)=>{
-            ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
-            render();
-          }
-        );
-      }
-    }, "✎")
-  );
+  actions.appendChild(el("button", {
+    title: "Editar",
+    onclick: (e) => {
+      e.stopPropagation();
+      ORG.startInlineEdit(nameSpan, nome, (newName) => {
+        ORG.renamePessoaInEquipe(refKey, equipeName, nome, newName);
+        render();
+      });
+    }
+  }, "✎"));
 
-  // ✅ 📅 AGORA CHAMA A FUNÇÃO EXTERNA
-  actions.appendChild(
-    el("button", {
-      title:"Definir dias disponíveis",
-      onclick:(e)=>{
-        e.stopPropagation();
-        if (!canEdit()) return;
+  actions.appendChild(el("button", {
+    title: "Definir dias disponíveis",
+    onclick: (e) => {
+      e.stopPropagation();
+      if (!canEdit()) return;
+      abrirSeletorDias(refKey, equipeName, pessoaObj);
+    }
+  }, "📅"));
 
-        abrirSeletorDias(refKey, equipeName, pessoaObj);
-      }
-    }, "📅")
-  );
+  actions.appendChild(el("button", {
+    title: "Referência",
+    onclick: (e) => {
+      e.stopPropagation();
+      ORG.toggleReferencia(refKey, equipeName, nome);
+      render();
+    }
+  }, "⭐"));
 
-  // ✅ REFERÊNCIA
-  actions.appendChild(
-    el("button", {
-      title:"Referência",
-      onclick:(e)=>{
-        e.stopPropagation();
-        ORG.toggleReferencia(refKey, equipeName, nome);
+  actions.appendChild(el("button", {
+    title: "Remover",
+    onclick: (e) => {
+      e.stopPropagation();
+      if (confirm("Remover " + nome + "?")) {
+        ORG.removePessoaFromEquipe(refKey, equipeName, nome);
         render();
       }
-    }, "⭐")
-  );
-
-  // ✅ REMOVER
-  actions.appendChild(
-    el("button", {
-      title:"Remover",
-      onclick:(e)=>{
-        e.stopPropagation();
-        if(confirm("Remover " + nome + "?")){
-          ORG.removePessoaFromEquipe(refKey, equipeName, nome);
-          render();
-        }
-      }
-    }, "✕")
-  );
+    }
+  }, "✕"));
 
   chip.appendChild(actions);
-
   return chip;
 }
 
-/* ------------------------------------------------------------
-   LINHA DA EQUIPE (B2 — ícones ao lado do nome no hover)
-   -> Sem estrela no nome da equipe; mostra contagem (N)
------------------------------------------------------------- */
-function makeEquipeHeader(refKey, equipe){
-  const line = el("div", {className:"team-line"});
-
+function makeEquipeHeader(refKey, equipe) {
+  const line = el("div", { className: "team-line" });
   const qtd = countDistinctInEquipe(equipe);
-  const nameSpan = el("span", {className:"team-name"}, `${equipe.nome} (${qtd})`);
+  const nameSpan = el("span", { className: "team-name" }, `${equipe.nome} (${qtd})`);
 
-  // ✅ Duplo clique protegido
-  nameSpan.ondblclick = function(){
-
+  nameSpan.ondblclick = function() {
     if (!canEdit()) return;
-
-    ORG.startInlineEdit(
-      nameSpan,
-      equipe.nome,
-      function(newName){
-        ORG.renameEquipe(refKey, equipe.nome, newName);
-        render();
-      }
-    );
+    ORG.startInlineEdit(nameSpan, equipe.nome, function(newName) {
+      ORG.renameEquipe(refKey, equipe.nome, newName);
+      render();
+    });
   };
 
   line.appendChild(nameSpan);
 
-  const acts = el("div", {className:"team-actions"});
+  const acts = el("div", { className: "team-actions" });
 
-  // ✅ EDITAR
-  const btnEdit = el("button", {
-    title:"Editar nome da equipe",
-    onclick:function(){
-
+  acts.appendChild(el("button", {
+    title: "Editar nome da equipe",
+    onclick: function() {
       if (!canEdit()) return;
-
-      ORG.startInlineEdit(
-        nameSpan,
-        equipe.nome,
-        function(newName){
-          ORG.renameEquipe(refKey, equipe.nome, newName);
-          render();
-        }
-      );
+      ORG.startInlineEdit(nameSpan, equipe.nome, function(newName) {
+        ORG.renameEquipe(refKey, equipe.nome, newName);
+        render();
+      });
     }
-  }, "✎");
+  }, "✎"));
 
-  // ✅ ADD PESSOA
-  const btnAdd = el("button", {
-    title:"Adicionar pessoa à equipe",
-    onclick:function(){
-
+  acts.appendChild(el("button", {
+    title: "Adicionar pessoa à equipe",
+    onclick: function() {
       if (!canEdit()) return;
-
       const p = prompt("Nome da nova pessoa:");
-      if(p){
+      if (p) {
         ORG.addPessoaToEquipe(refKey, equipe.nome, p, false);
         render();
       }
     }
-  }, "＋");
+  }, "＋"));
 
-  // ✅ REFERÊNCIA
-  const btnFav = el("button", {
-    title:"Marcar / desmarcar como referência da equipe",
-    onclick:function(){
-
+  acts.appendChild(el("button", {
+    title: "Marcar / desmarcar como referência da equipe",
+    onclick: function() {
       if (!canEdit()) return;
-
       if (!equipe.pessoas || !equipe.pessoas.length) {
         alert("Adicione pelo menos 1 pessoa antes de marcar referência.");
         return;
       }
-
       if (equipe.referencia) {
         ORG.toggleReferencia(refKey, equipe.nome, equipe.referencia);
       } else {
-        const p = prompt("Digite o nome da pessoa que será a referência:\n" + (equipe.pessoas||[]).join("\n"));
-        if (p && equipe.pessoas.includes(p)) {
+        const p = prompt("Digite o nome da pessoa que será a referência:\n" + (equipe.pessoas || []).map(x => x.nome).join("\n"));
+        if (p && equipe.pessoas.some(x => x.nome === p)) {
           ORG.toggleReferencia(refKey, equipe.nome, p);
         } else if (p) {
           alert("Essa pessoa não pertence à equipe.");
         }
       }
-
       render();
     }
-  }, "⭐");
+  }, "⭐"));
 
-  // ✅ EXCLUIR
-  const btnDel = el("button", {
-    title:"Excluir equipe",
-    onclick:function(){
-
+  acts.appendChild(el("button", {
+    title: "Excluir equipe",
+    onclick: function() {
       if (!canEdit()) return;
-
-      if(confirm(`Excluir a equipe "${equipe.nome}"?`)){
+      if (confirm(`Excluir a equipe "${equipe.nome}"?`)) {
         ORG.deleteEquipe(refKey, equipe.nome);
         render();
       }
     }
-  }, "🗑");
-
-  acts.appendChild(btnEdit);
-  acts.appendChild(btnAdd);
-  acts.appendChild(btnFav);
-  acts.appendChild(btnDel);
+  }, "🗑"));
 
   line.appendChild(acts);
-
   return line;
 }
 
-
-
-/* ============================================================
-   PARTE 4.2 — Gerador dos cartões e de toda a árvore visual
-   (Coordenação, Interna, Externa, Apoio + Equipes + Pessoas)
-============================================================ */
-
-/* ------------------------------------------------------------
-   RENDER CHIPS DE PESSOAS
------------------------------------------------------------- */
-function renderPeople(refKey, equipeName, eq){
+function renderPeople(refKey, equipeName, eq) {
   const ordered = ORG.orderPeopleForDisplay(eq);
-  const wrap = el("div", {className:"people"});
+  const wrap = el("div", { className: "people" });
 
-  ordered.forEach(function(p){
-
-const isRef = (eq.referencia === p.nome);
-const chip = makePessoaChip(refKey, equipeName, p, isRef);
-
+  ordered.forEach(function(p) {
+    const isRef = (eq.referencia === p.nome);
+    const chip = makePessoaChip(refKey, equipeName, p, isRef);
     wrap.appendChild(chip);
   });
 
   return wrap;
 }
 
-/* ------------------------------------------------------------
-   CARD DE UMA REFERÊNCIA (IN/EX/APOIO)
------------------------------------------------------------- */
-function renderRefCard(label, refKey, dataRef){
-  const card = el("section", {className:"card" + (refKey==="apoio"?" ref-apoio":"")});
+function renderRefCard(label, refKey, dataRef) {
+  const card = el("section", { className: "card" + (refKey === "apoio" ? " ref-apoio" : "") });
 
-  /* Título + chips (responsáveis) ao lado */
-  const titleBar = el("div", {className:"card-title"}, [
-
-    // Badge com o nome da referência
-    el("span", {className:"badge"}, label),
-
-    // Área de responsáveis
-    el("div", {className:"right"},
-      makeResponsaveisRow(refKey, dataRef.responsaveis)
-    ),
-
-    // Hover actions (add responsável + add equipe)
-    el("div", {className:"ref-actions"}, [
-
-      // Adicionar responsável
+  const titleBar = el("div", { className: "card-title" }, [
+    el("span", { className: "badge" }, label),
+    el("div", { className: "right" }, makeResponsaveisRow(refKey, dataRef.responsaveis)),
+    el("div", { className: "ref-actions" }, [
       el("button", {
         className: "ref-btn",
         title: "Adicionar responsável",
-        onclick: function(){
+        onclick: function() {
           const nome = prompt("Nome do responsável:");
-          if(nome && nome.trim()){
+          if (nome && nome.trim()) {
             ORG.addPessoaChave(refKey, nome.trim());
             render();
           }
         }
       }, "🙋‍＋"),
-
-      // Adicionar equipe (AGORA INLINE E CORRETO)
       el("button", {
         className: "ref-btn",
         title: "Adicionar nova equipe",
-        onclick: function(){
+        onclick: function() {
           const nomeEq = prompt("Nome da nova equipe:");
           if (!nomeEq || !nomeEq.trim()) return;
-
           ORG.upsertEquipe(refKey, nomeEq.trim(), null, false);
           render();
         }
@@ -869,132 +701,86 @@ function renderRefCard(label, refKey, dataRef){
 
   card.appendChild(titleBar);
 
-  /* Agora renderizar as equipes deste bloco */
-  if (!dataRef.equipes || dataRef.equipes.length === 0){
-    card.appendChild(
-      el("p", {style:"color:var(--muted);margin-top:12px;"},
-      "Nenhuma equipe cadastrada.")
-    );
+  if (!dataRef.equipes || dataRef.equipes.length === 0) {
+    card.appendChild(el("p", { style: "color:var(--muted);margin-top:12px;" }, "Nenhuma equipe cadastrada."));
     return card;
   }
 
-  /* Para cada equipe */
   dataRef.equipes
     .slice()
-    .sort(function(a,b){ return ORG.sortByNamePT(a.nome,b.nome); })
-    .forEach(function(eq){
-      const eqContainer = el("div", {className:"team-container"});
-
-      /* Linha do nome + ícones */
+    .sort((a, b) => ORG.sortByNamePT(a.nome, b.nome))
+    .forEach(function(eq) {
+      const eqContainer = el("div", { className: "team-container" });
       eqContainer.appendChild(makeEquipeHeader(refKey, eq));
-
-      /* Chips das pessoas */
       eqContainer.appendChild(renderPeople(refKey, eq.nome, eq));
-
       card.appendChild(eqContainer);
     });
 
   return card;
 }
 
-/* ------------------------------------------------------------
-   LINHA DE RESPONSÁVEIS DAS REFERÊNCIAS E DA COORDENAÇÃO
-   (nome ao lado da badge)
------------------------------------------------------------- */
-function makeResponsaveisRow(areaKey, arr){
-  const wrap = el("div", {className:"people"});
+function makeResponsaveisRow(areaKey, arr) {
+  const wrap = el("div", { className: "people" });
+  if (!arr || arr.length === 0) return wrap;
 
-  if (!arr || arr.length === 0){
-    return wrap; 
-  }
+  arr.slice().sort((a, b) => ORG.sortByNamePT(a, b)).forEach(function(name) {
+    const chip = el("div", { className: "chip" });
+    const nameSpan = el("span", { className: "chip-name" }, name);
 
-  arr
-    .slice()
-    .sort(function(a,b){ return ORG.sortByNamePT(a,b); })
-    .forEach(function(name){
+    nameSpan.ondblclick = function() {
+      if (!canEdit()) return;
+      ORG.startInlineEdit(nameSpan, name, function(newName) {
+        ORG.renamePessoaChave(areaKey, name, newName);
+        render();
+      });
+    };
 
-      const chip = el("div", {className:"chip"});
-      const nameSpan = el("span", {className:"chip-name"}, name);
+    const actions = el("div", { className: "chip-actions" });
 
-      // ✅ Duplo clique protegido
-      nameSpan.ondblclick = function(){
-
+    actions.appendChild(el("button", {
+      title: "Editar",
+      onclick: function(e) {
+        e.stopPropagation();
         if (!canEdit()) return;
+        ORG.startInlineEdit(nameSpan, name, function(newName) {
+          ORG.renamePessoaChave(areaKey, name, newName);
+          render();
+        });
+      }
+    }, "✎"));
 
-        ORG.startInlineEdit(
-          nameSpan,
-          name,
-          function(newName){
-            ORG.renamePessoaChave(areaKey, name, newName);
-            render();
-          }
-        );
-      };
+    actions.appendChild(el("button", {
+      title: "Excluir",
+      onclick: function(e) {
+        e.stopPropagation();
+        if (!canEdit()) return;
+        if (confirm(`Excluir "${name}" desta função?`)) {
+          ORG.removePessoaChave(areaKey, name);
+          render();
+        }
+      }
+    }, "✕"));
 
-      const actions = el("div", {className:"chip-actions"});
-
-      // ✅ EDITAR
-      actions.appendChild(
-        el("button", {
-          title:"Editar",
-          onclick:function(e){
-
-            e.stopPropagation();
-            if (!canEdit()) return;
-
-            ORG.startInlineEdit(
-              nameSpan,
-              name,
-              function(newName){
-                ORG.renamePessoaChave(areaKey, name, newName);
-                render();
-              }
-            );
-          }
-        }, "✎")
-      );
-
-      // ✅ EXCLUIR
-      actions.appendChild(
-        el("button", {
-          title:"Excluir",
-          onclick:function(e){
-
-            e.stopPropagation();
-            if (!canEdit()) return;
-
-            if(confirm(`Excluir "${name}" desta função?`)){
-              ORG.removePessoaChave(areaKey, name);
-              render();
-            }
-          }
-        }, "✕")
-      );
-
-      chip.appendChild(nameSpan);
-      chip.appendChild(actions);
-
-      wrap.appendChild(chip);
-    });
+    chip.appendChild(nameSpan);
+    chip.appendChild(actions);
+    wrap.appendChild(chip);
+  });
 
   return wrap;
 }
 
-
-function renderPrintEscala2(){
+/* ---------- IMPRESSÃO E RELATÓRIOS ---------- */
+function renderPrintEscala2() {
   const org = ORG.load();
   const wrap = document.getElementById("print-lists");
-
   if (!wrap) return;
 
   wrap.innerHTML = "";
-
   const servos = coletarServosComDias(org);
 
   const container = document.createElement("div");
   container.className = "escala-box";
 
-  // Cabeçalho
   const header = document.createElement("div");
   header.className = "escala-header";
   header.innerHTML = `
@@ -1009,27 +795,24 @@ function renderPrintEscala2(){
   sep.textContent = "--------------------------------------------------";
   container.appendChild(sep);
 
-  // Linhas com checkbox textual
   servos.forEach(s => {
     const row = document.createElement("div");
     row.className = "escala-row";
-
     row.innerHTML = `
       <span class="col-nome">${s.nome}</span>
       <span class="col-dia">${s.sab ? "[ ✔ ]" : "[   ]"}</span>
       <span class="col-dia">${s.dom ? "[ ✔ ]" : "[   ]"}</span>
     `;
-
     container.appendChild(row);
   });
 
   wrap.appendChild(container);
 }
 
-function coletarServosComDias(org){
+function coletarServosComDias(org) {
   const lista = [];
 
-  ["interna","externa","apoio"].forEach(area => {
+  ["interna", "externa", "apoio"].forEach(area => {
     org[area].equipes.forEach(eq => {
       eq.pessoas.forEach(p => {
         lista.push({
@@ -1044,54 +827,32 @@ function coletarServosComDias(org){
   const map = new Map();
   lista.forEach(p => map.set(p.nome, p));
 
-  return Array.from(map.values())
-    .sort((a,b) => sortByNamePT(a.nome,b.nome));
+  return Array.from(map.values()).sort((a, b) => sortByNamePT(a.nome, b.nome));
 }
 
-
-/* ------------------------------------------------------------
-   UTIL: Contagem de pessoas distintas (por nome)
-   - Conta TOTAL (Coordenação + Interna + Externa + Apoio)
-   - Conta por referência: Interna, Externa, Apoio
-   - Case-insensitive (normaliza para comparar)
------------------------------------------------------------- */
-
-// normaliza chave de comparação para evitar contagem duplicada por variações
-function normalizeNameKey(name){
+function normalizeNameKey(name) {
   return String(name || "").trim().toLowerCase();
 }
 
-// coleta nomes distintos de uma referência (responsáveis + todas as equipes/pessoas)
-function collectDistinctFromRef(ref){
+function collectDistinctFromRef(ref) {
   const set = new Set();
-
-  // responsáveis (strings)
-  (ref?.responsaveis || []).forEach(n => {
-    if (n && n.trim()) set.add(n.trim().toLowerCase());
-  });
-
-  // equipes
+  (ref?.responsaveis || []).forEach(n => { if (n && n.trim()) set.add(n.trim().toLowerCase()); });
   (ref?.equipes || []).forEach(eq => {
     (eq?.pessoas || []).forEach(p => {
-      if (p && p.nome){
-        set.add(p.nome.trim().toLowerCase());
-      }
+      if (p && p.nome) set.add(p.nome.trim().toLowerCase());
     });
   });
-
   return set;
 }
 
-// computa contagens: total e por referência
-function getDistinctCounts(org){
+function getDistinctCounts(org) {
   const internaSet = collectDistinctFromRef(org.interna);
   const externaSet = collectDistinctFromRef(org.externa);
-  const apoioSet   = collectDistinctFromRef(org.apoio);
+  const apoioSet = collectDistinctFromRef(org.apoio);
 
-  // Total agrega coordenação + todas as referências
   const totalSet = new Set();
-  (org.coordenacao || []).forEach(n => { if(n && n.trim()) totalSet.add(normalizeNameKey(n)); });
-  [internaSet, externaSet, apoioSet].forEach(s => { s.forEach(k => totalSet.add(k)); });
+  (org.coordenacao || []).forEach(n => { if (n && n.trim()) totalSet.add(normalizeNameKey(n)); });
+  [internaSet, externaSet, apoioSet].forEach(s => s.forEach(k => totalSet.add(k)));
 
   return {
     total: totalSet.size,
@@ -1101,47 +862,26 @@ function getDistinctCounts(org){
   };
 }
 
-/* ------------------------------------------------------------
-   RENDER PRINCIPAL (WEB)
------------------------------------------------------------- */
-function render(){
+function render() {
   const root = document.getElementById("org");
+  if (!root) return;
   root.innerHTML = "";
 
   const org = ORG.load();
+  atualizarTitulos();
 
-  /* (Opcional, mas recomendado) Atualiza título do H1 e da aba */
-  //const tituloAtual = ORG.getTitulo ? ORG.getTitulo() : document.title;
-  //const h1 = document.getElementById("titulo-web");
-  //if (h1 && tituloAtual) h1.textContent = tituloAtual;
-  //if (tituloAtual) document.title = tituloAtual;
-  
-/* Atualiza título do H1 e da aba */
-atualizarTitulos();
-
-
-  /* Card Coordenação */
-  const cardCoord = el("section", {className:"card"});
-
+  const cardCoord = el("section", { className: "card" });
   cardCoord.appendChild(
-    el("div", {className:"card-title"}, [
-      // Badge
-      el("span", {className:"badge"}, "Coordenação"),
-
-      // Chips (coordenadores)
-      el("div", {className:"right"},
-        makeResponsaveisRow("coordenacao", org.coordenacao)
-      ),
-
-      // Ações no hover (igual às referências)
-      el("div", {className:"ref-actions"}, [
-        // Adicionar coordenador(a) — mesma lógica do "Adicionar responsável"
+    el("div", { className: "card-title" }, [
+      el("span", { className: "badge" }, "Coordenação"),
+      el("div", { className: "right" }, makeResponsaveisRow("coordenacao", org.coordenacao)),
+      el("div", { className: "ref-actions" }, [
         el("button", {
           className: "ref-btn",
           title: "Adicionar coordenador(a)",
-          onclick: function(){
+          onclick: function() {
             const nome = prompt("Nome do(a) coordenador(a):");
-            if (nome && nome.trim()){
+            if (nome && nome.trim()) {
               ORG.addPessoaChave("coordenacao", nome.trim());
               render();
             }
@@ -1150,249 +890,175 @@ atualizarTitulos();
       ])
     ])
   );
-
   root.appendChild(cardCoord);
 
-  /* Grid de referências */
-  const grid = el("div", {className:"grid-refs"});
+  const grid = el("div", { className: "grid-refs" });
   grid.appendChild(renderRefCard("Interna", "interna", org.interna));
   grid.appendChild(renderRefCard("Externa", "externa", org.externa));
-  grid.appendChild(renderRefCard("Apoio",   "apoio",   org.apoio));
+  grid.appendChild(renderRefCard("Apoio", "apoio", org.apoio));
   root.appendChild(grid);
 
-  /* Totais (pessoas distintas) no fim da página web */
   const counts = getDistinctCounts(org);
   root.appendChild(renderCountsWeb(counts));
 
-  /* Gera versão textual p/ impressão */
   renderPrintVersion(org);
 }
 
+function renderPrintVersion(org) {
+  const wrap = document.getElementById("print-lists");
+  if (!wrap) return;
 
-function renderPrintVersion(org){
-    const wrap = document.getElementById("print-lists");
-    if (!wrap) return;
+  wrap.innerHTML = "";
 
-    wrap.innerHTML = "";
+  const firstSpacer = document.createElement("div");
+  firstSpacer.style.height = "26mm";
+  firstSpacer.style.display = "block";
+  wrap.appendChild(firstSpacer);
 
-    /* ======================================================
-       ESPAÇADOR REAL SOMENTE PARA A PRIMEIRA PÁGINA
-    ====================================================== */
-    const firstSpacer = document.createElement("div");
-    firstSpacer.style.height = "26mm"; 
-    firstSpacer.style.display = "block";
-    wrap.appendChild(firstSpacer);
+  function secTitle(txt) {
+    const h = document.createElement("div");
+    h.className = "print-section-title";
+    h.textContent = txt;
+    wrap.appendChild(h);
+  }
 
-    /* ======================================================
-       FUNÇÕES DE SUPORTE
-    ====================================================== */
+  function mkList(items) {
+    const box = document.createElement("div");
+    box.className = "print-list-block";
+    items.forEach(t => {
+      const line = document.createElement("div");
+      line.className = "print-line";
+      line.textContent = t;
+      box.appendChild(line);
+    });
+    wrap.appendChild(box);
+  }
 
-    function secTitle(txt){
-        const h = document.createElement("div");
-        h.className = "print-section-title";
-        h.textContent = txt;
-        wrap.appendChild(h);
+  function mkTeam(eq) {
+    const outer = document.createElement("div");
+    outer.className = "print-team-outer";
+
+    const qtd = countDistinctInEquipe(eq);
+    const ref = eq.referencia ? ` — Ref.: ${eq.referencia}` : "";
+
+    const title = document.createElement("div");
+    title.className = "team-title";
+    title.textContent = `${eq.nome} (${qtd} servos)${ref}`;
+    outer.appendChild(title);
+
+    const ordered = ORG.orderPeopleForDisplay(eq).map(p => p.nome);
+    let text = "";
+
+    if (ordered.length === 1) text = ordered[0] + ".";
+    else if (ordered.length === 2) text = ordered[0] + " e " + ordered[1] + ".";
+    else if (ordered.length > 2) {
+      text = `${ordered.slice(0, -1).join(", ")} e ${ordered.at(-1)}.`;
     }
 
-    function mkList(items){
-        const box = document.createElement("div");
-        box.className = "print-list-block";
+    const ppl = document.createElement("div");
+    ppl.className = "team-members-inline";
+    ppl.textContent = text;
+    outer.appendChild(ppl);
 
-        items.forEach(t => {
-            const line = document.createElement("div");
-            line.className = "print-line";
-            line.textContent = t;
-            box.appendChild(line);
-        });
+    wrap.appendChild(outer);
+  }
 
-        wrap.appendChild(box);
-    }
+  function pageBreak() {
+    const d = document.createElement("div");
+    d.className = "print-break";
+    return d;
+  }
 
-   function mkTeam(eq){
-        const outer = document.createElement("div");
-        outer.className = "print-team-outer";
+  // PÁGINA 1
+  secTitle("Coordenação Thalita Kum");
+  mkList(org.coordenacao.length ? org.coordenacao.slice().sort(ORG.sortByNamePT) : ["(vazio)"]);
 
-        const qtd = countDistinctInEquipe(eq);
-        const ref = eq.referencia ? ` — Ref.: ${eq.referencia}` : "";
+  secTitle("Referência [Interna]");
+  mkList(org.interna.responsaveis.length ? org.interna.responsaveis.slice().sort(ORG.sortByNamePT) : ["(vazio)"]);
 
-        const title = document.createElement("div");
-        title.className = "team-title";
-        title.textContent = `${eq.nome} (${qtd} servos)${ref}`;
-        outer.appendChild(title);
+  secTitle("Equipes [Interna]");
+  org.interna.equipes.slice().sort((a, b) => ORG.sortByNamePT(a.nome, b.nome)).forEach(mkTeam);
 
-        const ordered = ORG.orderPeopleForDisplay(eq).map(p => p.nome);
-        let text = "";
+  // PÁGINA 2
+  wrap.appendChild(pageBreak());
+  const spacer2 = document.createElement("div");
+  spacer2.style.height = "26mm";
+  spacer2.style.display = "block";
+  wrap.appendChild(spacer2);
 
-        if (ordered.length === 1){
-            text = ordered[0] + ".";
-        } 
-        else if (ordered.length === 2){
-            text = ordered[0] + " e " + ordered[1] + ".";
-        } 
-        else if (ordered.length > 2){
-            const before = ordered.slice(0,-1).join(", ");
-            const last = ordered.at(-1);
-            text = `${before} e ${last}.`;
-        }
+  secTitle("Coordenação Thalita Kum");
+  mkList(org.coordenacao.length ? org.coordenacao.slice().sort(ORG.sortByNamePT) : ["(vazio)"]);
 
-        const ppl = document.createElement("div");
-        ppl.className = "team-members-inline";
-        ppl.textContent = text;
-        outer.appendChild(ppl);
+  secTitle("Referência [Externa]");
+  mkList(org.externa.responsaveis.length ? org.externa.responsaveis.slice().sort(ORG.sortByNamePT) : ["(vazio)"]);
 
-        wrap.appendChild(outer);
-    }
+  secTitle("Equipes [Externa]");
+  org.externa.equipes.slice().sort((a, b) => ORG.sortByNamePT(a.nome, b.nome)).forEach(mkTeam);
 
-    function pageBreak(){
-        const d = document.createElement("div");
-        d.className = "print-break";
-        return d;
-    }
+  // PÁGINA 3
+  wrap.appendChild(pageBreak());
+  const spacer3 = document.createElement("div");
+  spacer3.style.height = "26mm";
+  spacer3.style.display = "block";
+  wrap.appendChild(spacer3);
 
-    /* ======================================================
-       PÁGINA 1 — COORDENAÇÃO + INTERNA
-    ====================================================== */
+  secTitle("Coordenação — Thalita Kum");
+  mkList(org.coordenacao.length ? org.coordenacao.slice().sort(ORG.sortByNamePT) : ["(vazio)"]);
 
-    secTitle("Coordenação Thalita Kum");
-    mkList(
-        org.coordenacao.length
-        ? org.coordenacao.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
+  secTitle("Equipes [Apoio]");
+  org.apoio.equipes.slice().sort((a, b) => ORG.sortByNamePT(a.nome, b.nome)).forEach(mkTeam);
 
-    secTitle("Referência [Interna]");
-    mkList(
-        org.interna.responsaveis.length
-        ? org.interna.responsaveis.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Equipes [Interna]");
-    org.interna.equipes
-      .slice()
-      .sort((a,b) => ORG.sortByNamePT(a.nome, b.nome))
-      .forEach(mkTeam);
-
-    /* ======================================================
-       PÁGINA 2 — EXTERNA
-    ====================================================== */
-
-    wrap.appendChild(pageBreak());
-    const spacer2 = document.createElement("div");
-    spacer2.style.height = "26mm";
-    spacer2.style.display = "block";
-    wrap.appendChild(spacer2);
-
-    secTitle("Coordenação Thalita Kum");
-    mkList(
-        org.coordenacao.length
-        ? org.coordenacao.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Referência [Externa]");
-    mkList(
-        org.externa.responsaveis.length
-        ? org.externa.responsaveis.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    secTitle("Equipes [Externa]");
-    org.externa.equipes
-      .slice()
-      .sort((a,b) => ORG.sortByNamePT(a.nome,b.nome))
-      .forEach(mkTeam);
-
-    /* ======================================================
-       PÁGINA 3 — GERAL + TOTAIS
-    ====================================================== */
-
-    wrap.appendChild(pageBreak());
-    const spacer3 = document.createElement("div");
-    spacer3.style.height = "26mm";
-    spacer3.style.display = "block";
-    wrap.appendChild(spacer3);
-
-    secTitle("Coordenação — Thalita Kum");
-    mkList(
-        org.coordenacao.length
-        ? org.coordenacao.slice().sort(ORG.sortByNamePT)
-        : ["(vazio)"]
-    );
-
-    /* sem responsáveis no Apoio */
-    secTitle("Equipes [Apoio]");
-    org.apoio.equipes
-      .slice()
-      .sort((a,b) => ORG.sortByNamePT(a.nome,b.nome))
-      .forEach(mkTeam);
-
-    /* ====== TOTAIS ====== */
-    const totals = getDistinctCounts(org);
-
-    secTitle("Número de Servos");
-    mkList([
-        "Total geral: " + totals.total,
-        "Interna: "     + totals.interna,
-        "Externa: "     + totals.externa,
-        "Apoio: "       + totals.apoio
-    ]);
-}	
-
-
-const ORDEM_DIAS = ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
-
-function ordenarDias(dias){
-  return dias.slice().sort((a,b)=>{
-    return ORDEM_DIAS.indexOf(a) - ORDEM_DIAS.indexOf(b);
-  });
+  const totals = getDistinctCounts(org);
+  secTitle("Número de Servos");
+  mkList([
+    "Total geral: " + totals.total,
+    "Interna: " + totals.interna,
+    "Externa: " + totals.externa,
+    "Apoio: " + totals.apoio
+  ]);
 }
-/* ------------------------------------------------------------
-   HANDLERS DE FORMULÁRIOS (Pessoas‑chave e Equipes)
------------------------------------------------------------- */
-function handleAddPessoaChave(e){
+
+/* ---------- HANDLERS & INICIALIZAÇÃO ---------- */
+function handleAddPessoaChave(e) {
   if (e) e.preventDefault();
   var area = document.getElementById("chave-area");
   var nome = document.getElementById("chave-nome");
   var a = area ? area.value : "coordenacao";
   var n = (nome ? nome.value : "").trim();
-  if (!n){ alert("Informe o nome."); return; }
+  if (!n) { alert("Informe o nome."); return; }
   ORG.addPessoaChave(a, n);
   if (nome) nome.value = "";
   render();
 }
 
-function handleUpsertEquipe(e){
+function handleUpsertEquipe(e) {
   if (e) e.preventDefault();
-  var ref   = document.getElementById("eq-ref")?.value || "interna";
-  var nome  = (document.getElementById("eq-nome")?.value || "").trim();
-  var pessoa= (document.getElementById("eq-pessoa")?.value || "").trim();
-  var marcar= !!document.getElementById("eq-marcar-ref")?.checked;
+  var ref = document.getElementById("eq-ref")?.value || "interna";
+  var nome = (document.getElementById("eq-nome")?.value || "").trim();
+  var pessoa = (document.getElementById("eq-pessoa")?.value || "").trim();
+  var marcar = !!document.getElementById("eq-marcar-ref")?.checked;
 
-  if (!nome){ alert("Informe o nome da equipe."); return; }
+  if (!nome) { alert("Informe o nome da equipe."); return; }
 
   ORG.upsertEquipe(ref, nome, pessoa, marcar);
 
-  // limpa só o campo pessoa, mantém nome e referência selecionada
   var pessoaEl = document.getElementById("eq-pessoa");
-  var checkEl  = document.getElementById("eq-marcar-ref");
+  var checkEl = document.getElementById("eq-marcar-ref");
   if (pessoaEl) pessoaEl.value = "";
   if (checkEl) checkEl.checked = false;
 
   render();
 }
 
-/* ------------------------------------------------------------
-   RODAPÉ: título + limpar
------------------------------------------------------------- */
-function handleRodapeSubmit(e){
+function handleRodapeSubmit(e) {
   ORG.alterarTitulo(e);
 }
-function handleClearAll(){
+
+function handleClearAll() {
   if (!confirm("Tem certeza que deseja LIMPAR todas as informações do Equipes?")) return;
-  localStorage.removeItem("Equipes_dados_v2");
+  localStorage.removeItem(ORG_KEY);
   var reset = confirm("Deseja TAMBÉM resetar o título para o padrão?");
-  if (reset){
+  if (reset) {
     ORG.setTitulo("Equipe Movimento Tremembé");
     var inp = document.getElementById("evangelizacao");
     if (inp) inp.value = "";
@@ -1401,1029 +1067,302 @@ function handleClearAll(){
   render();
 }
 
-/* ------------------------------------------------------------
-   BINDs e Inicialização
------------------------------------------------------------- */
+function syncPrintHeaderTitle() {
+  try {
+    const h = document.getElementById("print-title");
+    if (!h) return;
+    h.textContent = getTituloFormatado();
+    void h.offsetHeight;
+  } catch (e) {
+    console.error("Erro ao atualizar título de impressão:", e);
+  }
+}
+
 function bindUI() {
-
-  // Botões principais
-  const btnChave   = document.getElementById("btn-add-chave");
-  const btnEquipe  = document.getElementById("btn-add-equipe");
+  const btnChave = document.getElementById("btn-add-chave");
+  const btnEquipe = document.getElementById("btn-add-equipe");
   const formRodape = document.getElementById("form-rodape");
-  const btnZerar   = document.getElementById("btn-zerar");
+  const btnZerar = document.getElementById("btn-zerar");
 
-  if (btnChave)   btnChave.addEventListener("click", handleAddPessoaChave);
-  if (btnEquipe)  btnEquipe.addEventListener("click", handleUpsertEquipe);
+  if (btnChave) btnChave.addEventListener("click", handleAddPessoaChave);
+  if (btnEquipe) btnEquipe.addEventListener("click", handleUpsertEquipe);
   if (formRodape) formRodape.addEventListener("submit", handleRodapeSubmit);
-  if (btnZerar)   btnZerar.addEventListener("click", handleClearAll);
+  if (btnZerar) btnZerar.addEventListener("click", handleClearAll);
 
-
-  // Enter → adicionar pessoa-chave
   const inpPessoaChave = document.getElementById("chave-nome");
-  if (inpPessoaChave){
+  if (inpPessoaChave) {
     inpPessoaChave.addEventListener("keydown", ev => {
-      if (ev.key === "Enter"){ 
-        ev.preventDefault(); 
-        handleAddPessoaChave(); 
-      }
+      if (ev.key === "Enter") { ev.preventDefault(); handleAddPessoaChave(); }
     });
   }
 
-  // Enter → adicionar pessoa na equipe
   const inpEqPessoa = document.getElementById("eq-pessoa");
-  if (inpEqPessoa){
+  if (inpEqPessoa) {
     inpEqPessoa.addEventListener("keydown", ev => {
-      if (ev.key === "Enter"){ 
-        ev.preventDefault(); 
-        handleUpsertEquipe(); 
-      }
+      if (ev.key === "Enter") { ev.preventDefault(); handleUpsertEquipe(); }
     });
   }
 
-  // Enter → adicionar equipe
   const inpEqNome = document.getElementById("eq-nome");
-  if (inpEqNome){
+  if (inpEqNome) {
     inpEqNome.addEventListener("keydown", ev => {
-      if (ev.key === "Enter"){ 
-        ev.preventDefault(); 
-        handleUpsertEquipe(); 
-      }
+      if (ev.key === "Enter") { ev.preventDefault(); handleUpsertEquipe(); }
     });
   }
 
+  const btnExportMermaid = document.getElementById("btn-export-mermaid");
+  if (btnExportMermaid) btnExportMermaid.addEventListener("click", baixarMermaidA4);
 
-// ===============================
-// 🆕 BOTÕES DE EXPORTAÇÃO
-// ===============================
+  const btnExportJSON = document.getElementById("btn-export-json");
+  if (btnExportJSON) btnExportJSON.addEventListener("click", baixarJSONEquipes);
 
-// Exportar Mermaid A4
-const btnExportMermaid = document.getElementById("btn-export-mermaid");
-if (btnExportMermaid){
-  btnExportMermaid.addEventListener("click", baixarMermaidA4);
-}
+  const btnImport = document.getElementById("btn-import-json");
+  const inputImport = document.getElementById("input-import-json");
 
-// Exportar JSON
-const btnExportJSON = document.getElementById("btn-export-json");
-if (btnExportJSON){
-  btnExportJSON.addEventListener("click", baixarJSONEquipes);
-}
-
-
-// ===============================
-// 🆕 BOTÃO IMPORTAR JSON
-// ===============================
-
-const btnImport = document.getElementById("btn-import-json");
-const inputImport = document.getElementById("input-import-json");
-
-if (btnImport && inputImport) {
-    btnImport.addEventListener("click", () => {
-        inputImport.click();
-    });
-
+  if (btnImport && inputImport) {
+    btnImport.addEventListener("click", () => inputImport.click());
     inputImport.addEventListener("change", (e) => {
-    	const file = e.target.files?.[0];
-
-    	if (!file) {
-        	alert("Nenhum arquivo selecionado.");
-        	return;
-    	}
-
-    	importarJSONEquipes(file);
-
-    	inputImport.value = ""; // permite reimportar
-	});
-}
-  
+      const file = e.target.files?.[0];
+      if (!file) { alert("Nenhum arquivo selecionado."); return; }
+      importarJSONEquipes(file);
+      inputImport.value = "";
+    });
+  }
 }
 
-// Retorna sempre no formato "Equipe <nome>"
-function getTituloFormatado(){
-  var base = getTitulo();
-  base = (base || "").trim();
-  var nome = base && base !== TITLE_DEFAULT ? base : TITLE_DEFAULT.replace(/^Equipes\s*/i, "");
-  return "Equipe " + nome;
-}
-
-
-function initApp(){
+function initApp() {
   ORG.atualizarTitulos();
   ORG.initTituloInput();
   bindUI();
   render();
-  syncPrintHeaderTitle(); // <--- garantir aqui
+  syncPrintHeaderTitle();
 }
 
-function handleSalvarTitulo() {
-    ORG.salvarTitulo();
-    render();
-    syncPrintHeaderTitle();
-}
-
-function syncPrintHeaderTitle() {
-    try {
-        const h = document.getElementById("print-title");
-        if (!h) return;
-
-        const titulo = getTituloFormatado();
-        h.textContent = titulo;
-
-        void h.offsetHeight; // força re-render antes da impressão
-    } catch(e) {
-        console.error("Erro ao atualizar título de impressão:", e);
-    }
-}
-/* ------------------------------------------------------------
-   UTIL: contagem distinta por equipe (case-insensitive)
------------------------------------------------------------- */
-function countDistinctInEquipe(eq){
+function countDistinctInEquipe(eq) {
   const set = new Set();
   (eq?.pessoas || []).forEach(p => {
-    if (p && p.nome){
-      set.add(p.nome.trim().toLowerCase());
-    }
+    if (p && p.nome) set.add(p.nome.trim().toLowerCase());
   });
   return set.size;
 }
 
-// ------------------------------------------------------------
-// RENDER: Cartão com contagens (versão web)
-// ------------------------------------------------------------
-function renderCountsWeb(counts){
-  // Cria um card com 4 chips: Total / Interna / Externa / Apoio
-  const card = el("section", {className:"card counts-card"});
-
-  card.appendChild(
-    el("div", {className:"card-title"}, [
-      el("span", {className:"badge"}, "Número de Servos")
-    ])
-  );
-
-  const row = el("div", {className:"people"}, [
-    el("div", {className:"chip"}, "Total: "   + counts.total),
-    el("div", {className:"chip"}, "Interna: " + counts.interna),
-    el("div", {className:"chip"}, "Externa: " + counts.externa),
-    el("div", {className:"chip"}, "Apoio: "   + counts.apoio),
+function renderCountsWeb(counts) {
+  const card = el("section", { className: "card counts-card" });
+  card.appendChild(el("div", { className: "card-title" }, [el("span", { className: "badge" }, "Número de Servos")]));
+  const row = el("div", { className: "people" }, [
+    el("div", { className: "chip" }, "Total: " + counts.total),
+    el("div", { className: "chip" }, "Interna: " + counts.interna),
+    el("div", { className: "chip" }, "Externa: " + counts.externa),
+    el("div", { className: "chip" }, "Apoio: " + counts.apoio)
   ]);
-
   card.appendChild(row);
   return card;
 }
 
+/* ---------- EXPORTAÇÃO E IMPORTAÇÃO DE JSON / MERMAID ---------- */
 function baixarJSONEquipes() {
-    const json = gerarJSONEquipesComLinks();
-    const conteudo = JSON.stringify(json, null, 2);
+  const json = gerarJSONEquipesComLinks();
+  const conteudo = JSON.stringify(json, null, 2);
 
-    let nomeArquivo = getTitulo();
+  let nomeArquivo = getTitulo()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_|_$/g, "")
+    .toLowerCase();
 
-    nomeArquivo = nomeArquivo
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9]/g, "_")
-        .replace(/_+/g, "_")
-        .replace(/^_|_$/g, "")
-        .toLowerCase(); // ✅ garante minúsculo
+  if (!nomeArquivo) nomeArquivo = "Equipes";
 
-    if (!nomeArquivo) nomeArquivo = "Equipes";
-
-    const blob = new Blob([conteudo], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = nomeArquivo + ".json";
-    a.click();
-
-    URL.revokeObjectURL(url);
+  const blob = new Blob([conteudo], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = nomeArquivo + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function baixarMermaidA4() {
-    let txt = gerarMermaidA4();
-
-    // 🔥 Remove a dupla escapagem que QUEBRA o Mermaid
-    txt = txt
-        .replace(/&amp;lt;/g, "<;")
-        .replace(/&amp;gt;/g, ">;");
-
-    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes_a4_mermaid.txt";
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-// Aproximação: conversão mm -> px (96dpi ~ 3.78 px/mm)
-const MM_TO_PX = 3.78;
-
-// Ajuste aqui se você alterar margens do @page ou a altura do header/padding
-const PAGE_HEIGHT_MM   = 297; // A4
-const MARGIN_TOP_MM    = 18;  // @page margin-top
-const MARGIN_BOTTOM_MM = 15;  // @page margin-bottom
-const HEADER_MM        = 34;  // seu header fixo + padding-top (ajuste se mudou)
-
-// Altura útil aproximada do conteúdo por página (em px)
-function getUsablePagePx(){
-  const usableMM = PAGE_HEIGHT_MM - MARGIN_TOP_MM - MARGIN_BOTTOM_MM - HEADER_MM;
-  return usableMM * MM_TO_PX;
-}
-
-/* ===============================
-document.addEventListener("DOMContentLoaded", () => {
-
-  // 🔥 PRIMEIRO: inicializa tudo
-  initApp();
-
-  // 🔥 DEPOIS: tenta carregar JSON
-  fetch('./data/Equipes_model.json')
-    .then(res => {
-      if (!res.ok) throw new Error("JSON não encontrado");
-      return res.json();
-    })
-    .then(json => {
-      const temDados = localStorage.getItem("Equipes_dados_v2");
-
-      if (!temDados) {
-        importarJSONDireto(json);
-      }
-    })
-    .catch(err => {
-      console.warn("Falha ao carregar JSON:", err);
-    });
-
-  // 🔥 VOLTA O TOGGLE
-  const btn = document.getElementById("toggle-form");
-  const bloco = document.getElementById("form-bloco");
-
-  if (btn && bloco) {
-      bloco.classList.add("collapsed");
-      btn.textContent = "+";
-
-      btn.addEventListener("click", () => {
-          const isOpen = bloco.classList.contains("expanded");
-
-          if (isOpen) {
-              bloco.classList.remove("expanded");
-              bloco.classList.add("collapsed");
-              btn.textContent = "+";
-          } else {
-              bloco.classList.remove("collapsed");
-              bloco.classList.add("expanded");
-              btn.textContent = "-";
-          }
-      });
-  }
-
-});
-================================ */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  initApp();
-
-  // ✅ CARREGA AUTOMÁTICO PRIMEIRA OPÇÃO
-  fetch('import/option.json?v=' + Date.now())
-    .then(res => res.json())
-    .then(opcoes => {
-
-      const primeira = opcoes[0];
-
-      if (!primeira) return;
-
-      const caminho = "import/" + primeira.arquivo;
-
-      const temDados = localStorage.getItem("Equipes_dados_v2");
-
-      if (!temDados) {
-        fetch(caminho)
-          .then(r => r.json())
-          .then(importarJSONDireto)
-          .catch(() => console.warn("Erro ao carregar JSON inicial"));
-      }
-
-    })
-    .catch(() => console.warn("Erro ao carregar option.json"));
-
-  // ✅ TOGGLE
-  const btn = document.getElementById("toggle-form");
-  const bloco = document.getElementById("form-bloco");
-
-  if (btn && bloco) {
-    bloco.classList.add("collapsed");
-    btn.textContent = "+";
-
-    btn.addEventListener("click", () => {
-      const isOpen = bloco.classList.contains("expanded");
-
-      if (isOpen) {
-        bloco.classList.remove("expanded");
-        bloco.classList.add("collapsed");
-        btn.textContent = "+";
-      } else {
-        bloco.classList.remove("collapsed");
-        bloco.classList.add("expanded");
-        btn.textContent = "-";
-      }
-    });
-  }
-
-});	
-	
-function getTeamStats(org){
-    const stats = {
-        interna: { equipes: 0, servos: 0 },
-        externa: { equipes: 0, servos: 0 },
-        apoio:   { equipes: 0, servos: 0 }
-    };
-
-    ["interna","externa","apoio"].forEach(area => {
-        stats[area].equipes = org[area].equipes.length;
-        org[area].equipes.forEach(eq => {
-            stats[area].servos += countDistinctInEquipe(eq);
-        });
-    });
-
-    const totalServos = getDistinctCounts(org).total;
-
-    const totalAreas = {
-        internaPct: Math.round((stats.interna.servos / totalServos) * 100),
-        externaPct: Math.round((stats.externa.servos / totalServos) * 100),
-        apoioPct:   Math.round((stats.apoio.servos   / totalServos) * 100),
-        totalServos,
-    };
-
-    return { stats, totalAreas };
+  let txt = gerarMermaidA4().replace(/&amp;lt;/g, "<;").replace(/&amp;gt;/g, ">;");
+  const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Equipes_a4_mermaid.txt";
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function gerarJSONEquipesComLinks() {
-    const org = ORG.load();
+  const org = ORG.load();
+  let idCounter = 1;
+  const nextId = () => String(idCounter++);
 
-    let idCounter = 1;
-    const nextId = () => String(idCounter++);
+  const nodes = [];
+  const links = [];
 
-    const nodes = [];
-    const links = [];
+  const idCoord = nextId();
+  nodes.push({ id: idCoord, name: "Coordenação", title: "Coordenação" });
 
-    // --- Nó raiz: Coordenação ---
-    const idCoord = nextId();
-    nodes.push({
-        id: idCoord,
-        name: "Coordenação",
-        title: "Coordenação"
+  org.coordenacao.forEach(nome => {
+    nodes.push({ id: nextId(), name: nome, title: "Coordenador", parentId: idCoord });
+  });
+
+  function processArea(areaObj, areaNome, areaTitle) {
+    const idArea = nextId();
+    nodes.push({ id: idArea, name: areaNome, title: areaTitle, parentId: idCoord });
+
+    (areaObj.responsaveis || []).forEach(nome => {
+      nodes.push({ id: nextId(), name: nome, title: "Referência", parentId: idArea });
     });
 
-    // --- Coordenadores ---
-    org.coordenacao.forEach(nome => {
+    (areaObj.equipes || []).forEach(eq => {
+      const idEq = nextId();
+      nodes.push({ id: idEq, name: eq.nome, title: eq.nome, parentId: idArea });
+
+      (eq.pessoas || []).forEach(p => {
         nodes.push({
-            id: nextId(),
-            name: nome,
-            title: "Coordenador",
-            parentId: idCoord
+          id: nextId(),
+          name: p.nome,
+          title: "Servo",
+          parentId: idEq,
+          confirmado: p.confirmado === true ? true : p.confirmado === false ? false : null,
+          isReferencia: eq.referencia === p.nome,
+          dias: Array.isArray(p.dias) ? p.dias : []
         });
+      });
     });
 
+    return idArea;
+  }
 
-    // --- Monta Interna e Externa normalmente ---
-    function processArea(areaObj, areaNome, areaTitle) {
-        const idArea = nextId();
-        nodes.push({
-            id: idArea,
-            name: areaNome,
-            title: areaTitle,
-            parentId: idCoord
-        });
+  const idInterna = processArea(org.interna, "Interna", "Referência Interna");
+  const idExterna = processArea(org.externa, "Externa", "Referência Externa");
 
-        (areaObj.responsaveis || []).forEach(nome => {
-            nodes.push({
-                id: nextId(),
-                name: nome,
-                title: "Referência",
-                parentId: idArea
-            });
-        });
+  const idApoio = nextId();
+  nodes.push({ id: idApoio, name: "Apoio", title: "Apoio", parentId: idCoord });
 
-        (areaObj.equipes || []).forEach(eq => {
-            const idEq = nextId();
-            nodes.push({
-                id: idEq,
-                name: eq.nome,
-                title: eq.nome,
-                parentId: idArea
-            });
+  (org.apoio.equipes || []).forEach(eq => {
+    const idEq = nextId();
+    nodes.push({ id: idEq, name: eq.nome, title: eq.nome, parentId: idApoio });
 
-(eq.pessoas || []).forEach(p => {
-    nodes.push({
+    (eq.pessoas || []).forEach(p => {
+      nodes.push({
         id: nextId(),
         name: p.nome,
         title: "Servo",
         parentId: idEq,
-
-        // ✅ CAMPOS EXISTENTES
-        confirmado: p.confirmado === true ? true :
-                    p.confirmado === false ? false : null,
-
-        isReferencia: eq.referencia === p.nome,
-
-        // ✅ NOVO CAMPO (IMPORTANTE)
-        dias: Array.isArray(p.dias) ? p.dias : []
+        confirmado: p.confirmado === true ? true : p.confirmado === false ? false : null,
+        isReferencia: eq.referencia === p.nome
+      });
     });
-});
+  });
 
-        });
+  links.push({ from: idApoio, to: idInterna, type: "responde_para" });
+  links.push({ from: idApoio, to: idExterna, type: "responde_para" });
 
-        return idArea;
-    }
-
-    const idInterna = processArea(org.interna, "Interna", "Referência Interna");
-    const idExterna = processArea(org.externa, "Externa", "Referência Externa");
-
-
-    // --- Área Apoio (SEM responsáveis) ---
-    const idApoio = nextId();
-    nodes.push({
-        id: idApoio,
-        name: "Apoio",
-        title: "Apoio",
-        parentId: idCoord
-    });
-
-    (org.apoio.equipes || []).forEach(eq => {
-        const idEq = nextId();
-        nodes.push({
-            id: idEq,
-            name: eq.nome,
-            title: eq.nome,
-            parentId: idApoio
-        });
-
-		(eq.pessoas || []).forEach(p => {
-			nodes.push({
-				id: nextId(),
-				name: p.nome,
-				title: "Servo",
-				parentId: idEq,
-		
-				// 🔥 NOVOS CAMPOS
-				confirmado: p.confirmado === true ? true :
-							p.confirmado === false ? false : null,
-		
-				isReferencia: eq.referencia === p.nome
-			});
-		});
-    });
-
-    // --- Ligações cruzadas (Apoio → Interna, Externa) ---
-    links.push({ from: idApoio, to: idInterna, type: "responde_para" });
-    links.push({ from: idApoio, to: idExterna, type: "responde_para" });
-
-    return {
-    titulo: getTitulo(),   // 🔥 AQUI
-    nodes, 
-    links 
-	};
+  return { titulo: getTitulo(), nodes, links };
 }
-
-function gerarLinkMermaid(mermaidCode) {
-    // Mermaid.live exige DEFLATE RAW
-    const compressed = pako.deflateRaw(mermaidCode, { level: 9 });
-
-    let binary = "";
-    compressed.forEach(b => {
-        binary += String.fromCharCode(b);
-    });
-
-    let base64 = btoa(binary)
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
-
-    return "https://mermaid.live/edit#pako:" + base64;
-}
-
-function testarJSON() {
-    const json = gerarJSONEquipesComLinks();
-    console.log(json);
-}
-
-function abrirMermaid() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-    const codigo = gerarMermaidAPartirDoJSON(nodes, links);
-    const url = gerarLinkMermaid(codigo);
-    window.open(url, "_blank");
-}
-
-function gerarMermaidAPartirDoJSON(nodes, links) {
-    let linhas = ["flowchart TB"];
-
-    // Criar nós com prefixo n_
-    nodes.forEach(n => {
-        const id = "n" + n.id;
-        const label = `${n.name}\\n(${n.title})`;
-        linhas.push(`    ${id}["${label}"]`);
-    });
-
-    // Hierarquia
-    nodes.forEach(n => {
-        if (n.parentId) {
-            const pai = "n" + n.parentId;
-            const filho = "n" + n.id;
-            linhas.push(`    ${pai} --> ${filho}`);
-        }
-    });
-
-    // Ligações cruzadas
-    links.forEach(l => {
-        const from = "n" + l.from;
-        const to = "n" + l.to;
-        linhas.push(`    ${from} -.-> ${to}`);
-    });
-
-    return linhas.join("\n");
-}
-
-function baixarMermaidTXT() {
-    // 1. pega seus dados reais
-    const { nodes, links } = gerarJSONEquipesComLinks();
-
-    // 2. converte em texto Mermaid
-    const mermaid = gerarMermaidTexto(nodes, links);
-
-    // 3. cria um arquivo TXT para download
-    const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    
-    // 4. cria o link invisível para baixar
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes.mmd.txt";
-    document.body.appendChild(a);
-    a.click();
-    
-    // 5. limpa
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function gerarMermaidTexto(nodes, links) {
-    let out = "flowchart TB\n";
-
-    // cria nós
-    nodes.forEach(n => {
-        const id = "n" + n.id;
-        const label = `${n.name}\\n(${n.title})`;
-        out += `${id}["${label}"]\n`;
-    });
-
-    // hierarquia (parentId)
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
-}
-
-function normalizarNos(nodes) {
-    const mapa = new Map(); // evita duplicações por nome + title
-  
-    nodes.forEach(n => {
-        const key = (n.name + "|" + n.title).toLowerCase();
-        if (!mapa.has(key)) mapa.set(key, n);
-    });
-
-    return Array.from(mapa.values());
-}
-
-function gerarMermaidEquipes(nodes, links) {
-    // remove duplicações automáticas
-    nodes = normalizarNos(nodes);
-
-    let out = "flowchart TB\n";
-
-    // cria nós
-    nodes.forEach(n => {
-        const id = "n" + n.id;
-        const label = `${n.name}\\n(${n.title})`;
-        out += `${id}["${label}"]\n`;
-    });
-
-    // hierarquia parentId
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
-}
-
-function baixarMermaidRealTXT() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-    const mermaid = gerarMermaidEquipes(nodes, links);
-
-    const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-  
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes_real.mmd.txt";
-    document.body.appendChild(a);
-    a.click();
-  
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function gerarMermaidPorEquipes(nodes, links) {
-    let out = "flowchart TB\n";
-
-    // 1. Gerar caixas
-    nodes.forEach(n => {
-
-        // Se for equipe e tiver servos
-        if (n.title.toLowerCase().includes("equipe") && n.pessoas && n.pessoas.length > 0) {
-
-            const listaServos = n.pessoas
-                .map(p => `• ${p.nome}`)
-                .join("\\n");
-
-            const label = `${n.name}\\n------------------\\n${listaServos}`;
-
-            out += `n${n.id}["${label}"]\n`;
-        }
-        else {
-            // Caixas normais (coordenação, referências, apoio)
-            const label = `${n.name}\\n(${n.title})`;
-            out += `n${n.id}["${label}"]\n`;
-        }
-    });
-
-    // 2. Criar ligações (hierarquia principal)
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // 3. Links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
-}
-
-function baixarMermaidEquipesTXT() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-    const mermaid = gerarMermaidPorEquipes(nodes, links);
-
-    const blob = new Blob([mermaid], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Equipes_equipes.mmd.txt";
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function gerarMermaidEquipesSimplificado() {
-    const { nodes, links } = gerarJSONEquipesComLinks();
-
-    // index para consultar servos associados a cada equipe
-    const mapaServos = {};
-    nodes.forEach(n => {
-        if (n.title === "Servo" && n.parentId) {
-            if (!mapaServos[n.parentId]) mapaServos[n.parentId] = [];
-            mapaServos[n.parentId].push(n.name);
-        }
-    });
-
-    let out = "flowchart TB\n";
-
-    nodes.forEach(n => {
-
-        // Se for equipe, criar caixa única com lista de servos
-        if (n.title.toLowerCase().includes("equipe")) {
-            const servos = mapaServos[n.id] || [];
-            const lista = servos.length 
-                ? "\\n------------------\\n" + servos.map(s => "• " + s).join("\\n") 
-                : "";
-
-            out += `n${n.id}["${n.name}${lista}"]\n`;
-        
-        } else {
-            // Coordenação, Referência, Apoio
-            out += `n${n.id}["${n.name}\\n(${n.title})"]\n`;
-        }
-    });
-
-    // Hierarquia
-    nodes.forEach(n => {
-        if (n.parentId) {
-            out += `n${n.parentId} --> n${n.id}\n`;
-        }
-    });
-
-    // Links cruzados
-    links.forEach(l => {
-        out += `n${l.from} -.->|${l.type}| n${l.to}\n`;
-    });
-
-    return out;
-}
-
 
 function gerarMermaidA4() {
-    const org = ORG.load();
+  const org = ORG.load();
 
-    function idSafe(str) {
-        return String(str || "")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-zA-Z0-9_]/g, "_");
-    }
+  function idSafe(str) {
+    return String(str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_]/g, "_");
+  }
 
-    function esc(str) {
-        return String(str || "").replace(/`/g, "\\`");
-    }
+  function esc(str) {
+    return String(str || "").replace(/`/g, "\\`");
+  }
 
-    const BR = "<br/>";
+  const BR = "<br/>";
 
-    function caixaEquipe(eq) {
-        const lista = (eq.pessoas && eq.pessoas.length)
-            ? eq.pessoas
-                .map(p => {
-                    const estrela = eq.referencia === p.nome ? " ⭐" : "";
-                    return `• ${esc(p.nome)}${estrela}`;
-                })
-                .join(BR)
-            : "(vazio)";
+  function caixaEquipe(eq) {
+    const lista = (eq.pessoas && eq.pessoas.length)
+      ? eq.pessoas.map(p => `• ${esc(p.nome)}${eq.referencia === p.nome ? " ⭐" : ""}`).join(BR)
+      : "(vazio)";
+    return `\`**${esc(eq.nome)}**${BR}${lista}\``;
+  }
 
-        return `\`**${esc(eq.nome)}**${BR}${lista}\``;
-    }
+  function caixaReferencias(titulo, lista) {
+    const nomes = (lista && lista.length) ? lista.map(n => esc(n)).join(BR) : "(vazio)";
+    return `\`${esc(titulo)}${BR}${nomes}\``;
+  }
 
-    function caixaReferencias(titulo, lista) {
-        const nomes = (lista && lista.length)
-            ? lista.map(n => esc(n)).join(BR)
-            : "(vazio)";
-        return `\`${esc(titulo)}${BR}${nomes}\``;
-    }
+  const coord = esc(org.coordenacao[0] || "—");
+  const refInt = org.interna.responsaveis || [];
+  const refExt = org.externa.responsaveis || [];
+  const eqInt = org.interna.equipes || [];
+  const eqExt = org.externa.equipes || [];
+  const eqApo = org.apoio.equipes || [];
 
-    function blocoEquipes(nome, equipes) {
-        let out = `    subgraph ${nome} ["${nome}"]:::area\n`;
-        out += `    direction LR\n`;
-        equipes.forEach(eq => {
-            out += `        n_${nome}_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe\n`;
-        });
-        out += "    end\n";
-        return out;
-    }
-
-    const coord   = esc(org.coordenacao[0] || "—");
-    const refInt  = org.interna.responsaveis || [];
-    const refExt  = org.externa.responsaveis || [];
-    const eqInt   = org.interna.equipes || [];
-    const eqExt   = org.externa.equipes || [];
-    const eqApo   = org.apoio.equipes || [];
-
-    let txt = `flowchart TB
-%% Equipes A4 – AUTO GERADO DINAMICAMENTE
-%% https://mermaid.live/
-
-
+  return `flowchart TB
 linkStyle default curve:linear
 
-classDef coord   fill:#dbe8ff,stroke:#6a9eff,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:14px;
-classDef apoio   fill:#efe6ff,stroke:#b18cff,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:14px;
-classDef interna fill:#e8f8e8,stroke:#6cbf6c,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:13px;
-classDef externa fill:#fff3e2,stroke:#e7b26b,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:13px;
+classDef coord fill:#dbe8ff,stroke:#6a9eff,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:14px;
+classDef apoio fill:#efe6ff,stroke:#b18cff,stroke-width:1.5px,color:#1a1a1a,rx:4,ry:4,font-size:14px;
+classDef equipe fill:#ffffff,stroke:#00000022,stroke-width:1px,color:#222,rx:3,ry:3,font-size:11px;
+classDef invis fill:none,stroke:none,color:#0000;
 
-classDef equipe  fill:#ffffff,stroke:#00000022,stroke-width:1px,color:#222,rx:3,ry:3,font-size:11px;
-classDef invis   fill:none,stroke:none,color:#0000;
-
-
-%% COORDENAÇÃO
 n0["\`Coordenação${BR}${coord}\`"]:::coord
 
-%% INTERNAS + REFERÊNCIAS + EXTERNAS
 subgraph GRUPOS_INTER [ ]
 direction LR
-
     iL:::invis
-
-    %% INTERNAS
     subgraph INTERNA ["INTERNA"]
     direction LR
-${eqInt.map(eq =>
-`        n_INTERNA_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe`
-).join("\n")}
+${eqInt.map(eq => `        n_INTERNA_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe`).join("\n")}
     end
-
-    %% REFERÊNCIAS CENTRALIZADAS
     subgraph CENTRO ["Referências"]
     direction TB
         n_ref_int["${caixaReferencias("Ref. Interna", refInt)}"]:::refInt
         n_ref_ext["${caixaReferencias("Ref. Externa", refExt)}"]:::refExt
     end
-
-    %% EXTERNAS
     subgraph EXTERNA ["EXTERNA"]
     direction LR
-${eqExt.map(eq =>
-`        n_EXTERNA_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe`
-).join("\n")}
+${eqExt.map(eq => `        n_EXTERNA_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::equipe`).join("\n")}
     end
-
     iR:::invis
 end
 
-%% Ligações coord --&gt; referências
-n0 --&gt; n_ref_int
-n0 --&gt; n_ref_ext
+n0 --> n_ref_int
+n0 --> n_ref_ext
+${eqInt.map(eq => `n_ref_int --> n_INTERNA_${idSafe(eq.nome)}`).join("\n")}
+${eqExt.map(eq => `n_ref_ext --> n_EXTERNA_${idSafe(eq.nome)}`).join("\n")}
 
-%% Interna liga às equipes internas
-${eqInt.map(eq => `n_ref_int --&gt; n_INTERNA_${idSafe(eq.nome)}`).join("\n")}
-
-%% Externa liga às equipes externas
-${eqExt.map(eq => `n_ref_ext --&gt; n_EXTERNA_${idSafe(eq.nome)}`).join("\n")}
-
-%% APOIO
 n_apoio["Apoio"]:::header
-n_ref_int --&gt; n_apoio
-n_ref_ext --&gt; n_apoio
+n_ref_int --> n_apoio
+n_ref_ext --> n_apoio
 
-%% EQUIPES APOIO (lado a lado)
 subgraph APOIO_EQ [" "]
 direction LR
-${eqApo.map(eq =>
-`    n_APOIO_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::apoio`
-).join("\n")}
+${eqApo.map(eq => `    n_APOIO_${idSafe(eq.nome)}["${caixaEquipe(eq)}"]:::apoio`).join("\n")}
 end
 
-${eqApo.map(eq => `n_apoio --&gt; n_APOIO_${idSafe(eq.nome)}`).join("\n")}
-`;
-
-    // === CORREÇÃO FINAL: garantir SEMPRE &lt;br/&gt; ===
-    txt = txt
-        .replace(/--&gt;/g, "-->");
-
-    return txt;
+${eqApo.map(eq => `n_apoio --> n_APOIO_${idSafe(eq.nome)}`).join("\n")}`;
 }
-
-window.addEventListener("beforeprint", () => {
-    syncPrintHeaderTitle();
-});
 
 function importarJSONEquipes(file) {
-    if (!file) return;
+  if (!file) return;
+  const reader = new FileReader();
 
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-        try {
-            const json = JSON.parse(e.target.result);
-
-            // valida estrutura mínima do JSON
-            if (!json || !Array.isArray(json.nodes)) {
-                alert("JSON inválido.");
-                return;
-            }
-
-            const novoModel = defaultModel();
-
-            // aplica título (evangelização), se existir
-            if (typeof json.titulo === "string") {
-                setTitulo(json.titulo);
-
-                const inp = document.getElementById("evangelizacao");
-                if (inp) inp.value = json.titulo;
-            }
-
-            // --- COORDENAÇÃO ---
-            json.nodes
-                .filter(n => n.title === "Coordenador")
-                .forEach(n => {
-                    novoModel.coordenacao.push(n.name);
-                });
-
-            // --- MAPEAMENTO DE ÁREAS ---
-            const areasMap = {
-                "Interna": "interna",
-                "Externa": "externa",
-                "Apoio": "apoio"
-            };
-
-            json.nodes.forEach(n => {
-                const areaKey = areasMap[n.name];
-                if (!areaKey) return;
-
-                // --- RESPONSÁVEIS ---
-                json.nodes
-                    .filter(x =>
-                        x.parentId === n.id &&
-                        x.title === "Referência"
-                    )
-                    .forEach(ref => {
-                        novoModel[areaKey].responsaveis.push(ref.name);
-                    });
-
-                // --- EQUIPES ---
-                json.nodes
-                    .filter(x =>
-                        x.parentId === n.id &&
-                        x.title !== "Referência" &&
-                        x.title !== "Servo"
-                    )
-                    .forEach(eqNode => {
-
-                        const eq = {
-                            nome: eqNode.name,
-                            pessoas: [],
-                            referencia: null
-                        };
-
-                        // coleta pessoas da equipe (uma única varredura)
-                        const pessoas = json.nodes.filter(p =>
-                            p.parentId === eqNode.id &&
-                            p.title === "Servo"
-                        );
-
-                        let encontrouRef = false;
-
-                        pessoas.forEach(p => {
-
-const pessoa = {
-    nome: p.name,
-    confirmado:
-        p.confirmado === true ? true :
-        p.confirmado === false ? false : null,
-
-    // ✅ NOVO CAMPO
-    dias: Array.isArray(p.dias) ? p.dias : []
-};
-
-
-                            eq.pessoas.push(pessoa);
-
-                            if (p.isReferencia === true) {
-                                eq.referencia = pessoa.nome;
-                                encontrouRef = true;
-                            }
-                        });
-
-                        // fallback: nenhum marcado como referência
-                        if (!encontrouRef) {
-                            eq.referencia = null;
-                        }
-
-                        novoModel[areaKey].equipes.push(eq);
-                    });
-            });
-
-            // salva dados e atualiza interface
-            saveOrg(novoModel);
-            atualizarTitulos();
-            render();
-
-            alert("Importação concluída!");
-
-        } catch (err) {
-            console.error(err);
-            alert("Erro ao importar JSON.");
-        }
-    };
-
-    reader.readAsText(file);
-}
-
-function carregarJSONDoRepositorio() {
-  fetch('import/thalita_kum_modelo.json')
-    .then(res => res.json())
-    .then(json => {
+  reader.onload = function(e) {
+    try {
+      const json = JSON.parse(e.target.result);
+      if (!json || !Array.isArray(json.nodes)) {
+        alert("JSON inválido.");
+        return;
+      }
       importarJSONDireto(json);
-    })
-    .catch(err => {
+      alert("Importação concluída!");
+    } catch (err) {
       console.error(err);
-      alert("Erro ao carregar JSON do repositório");
-    });
+      alert("Erro ao importar JSON.");
+    }
+  };
+
+  reader.readAsText(file);
 }
 
 function importarJSONDireto(json) {
@@ -2434,215 +1373,102 @@ function importarJSONDireto(json) {
       setTitulo(json.titulo);
     }
 
-    const areasMap = {
-      "Interna": "interna",
-      "Externa": "externa",
-      "Apoio": "apoio"
-    };
+    const areasMap = { "Interna": "interna", "Externa": "externa", "Apoio": "apoio" };
 
-    // coordenação
-    json.nodes
-      .filter(n => n.title === "Coordenador")
-      .forEach(n => {
-        novoModel.coordenacao.push(n.name);
-      });
+    json.nodes.filter(n => n.title === "Coordenador").forEach(n => novoModel.coordenacao.push(n.name));
 
-    // resto
     json.nodes.forEach(n => {
       const areaKey = areasMap[n.name];
       if (!areaKey) return;
 
-      json.nodes
-        .filter(x => x.parentId === n.id && x.title === "Referência")
-        .forEach(ref => {
-          novoModel[areaKey].responsaveis.push(ref.name);
-        });
+      json.nodes.filter(x => x.parentId === n.id && x.title === "Referência").forEach(ref => {
+        novoModel[areaKey].responsaveis.push(ref.name);
+      });
 
-      json.nodes
-        .filter(x =>
-          x.parentId === n.id &&
-          x.title !== "Referência" &&
-          x.title !== "Servo"
-        )
-        .forEach(eqNode => {
-          const eq = {
-            nome: eqNode.name,
-            pessoas: [],
-            referencia: null
-          };
+      json.nodes.filter(x => x.parentId === n.id && x.title !== "Referência" && x.title !== "Servo").forEach(eqNode => {
+        const eq = { nome: eqNode.name, pessoas: [], referencia: null };
+        const pessoas = json.nodes.filter(p => p.parentId === eqNode.id && p.title === "Servo");
 
-          const pessoas = json.nodes.filter(p =>
-            p.parentId === eqNode.id && p.title === "Servo"
-          );
-
-          pessoas.forEach(p => {
-eq.pessoas.push({
-  nome: p.name,
-  confirmado: p.confirmado ?? null,
-
-  // ✅ NOVO CAMPO
-  dias: Array.isArray(p.dias) ? p.dias : []
-});
-
-            if (p.isReferencia) {
-              eq.referencia = p.name;
-            }
+        pessoas.forEach(p => {
+          eq.pessoas.push({
+            nome: p.name,
+            confirmado: p.confirmado ?? null,
+            dias: Array.isArray(p.dias) ? p.dias : []
           });
 
-          novoModel[areaKey].equipes.push(eq);
+          if (p.isReferencia) eq.referencia = p.name;
         });
+
+        novoModel[areaKey].equipes.push(eq);
+      });
     });
 
     saveOrg(novoModel);
     atualizarTitulos();
     render();
-
-    alert("✅ Equipe Atualizada com Sucesso!");
   } catch (e) {
     console.error(e);
-    alert("Erro ao importar JSON do Servidor!");
+    alert("Erro ao importar JSON!");
   }
-}
-
-function carregarJSON() {
-  fetch('./import/thalita_kum_modelo.json')
-    .then(res => res.json())
-    .then(importarJSONDireto)
-    .catch(() => {
-      console.warn("usando localStorage");
-      render(); // usa dados salvos
-    });
-}
-
-function escolherAtualizacaoJSON() {
-
-  fetch('import/option.json?v=' + Date.now()) // 🔥 força atualização
-    .then(res => res.json())
-    .then(opcoes => {
-
-      const escolha = prompt(
-        "Escolha a Equipe:\n\n" +
-        opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
-      );
-
-      const idx = parseInt(escolha) - 1;
-
-      if (!opcoes[idx]) return;
-
-      const caminho = "import/" + opcoes[idx].arquivo;
-
-      fetch(caminho)
-        .then(r => r.json())
-        .then(importarJSONDireto)
-        .catch(() => alert("Erro ao carregar equipes"));
-
-    })
-    .catch(() => alert("Erro ao carregar as opções"));
 }
 
 function escolherAtualizacaoJSON() {
   fetch('import/option.json?v=' + Date.now())
     .then(res => res.json())
     .then(opcoes => {
-
       const escolha = prompt(
         "Escolha a Equipe:\n\n" +
         opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
       );
 
       const idx = parseInt(escolha) - 1;
-
       if (!opcoes[idx]) return;
 
-      const caminho = "import/" + opcoes[idx].arquivo;
-
-      fetch(caminho)
+      fetch("import/" + opcoes[idx].arquivo)
         .then(r => r.json())
         .then(importarJSONDireto)
         .catch(() => alert("Erro ao carregar Equipes"));
-
     })
     .catch(() => alert("Erro ao carregar as opções"));
 }
 
 function baixarPDF() {
-  setTimeout(() => {
-    window.print();
-  }, 100);
+  setTimeout(() => window.print(), 100);
 }
 
 function baixarPDFEscala() {
-
-  // ✅ renderiza o layout de escala
   renderPrintEscala2();
-
-  // ✅ pequena pausa pra renderizar antes de imprimir
-  setTimeout(() => {
-    window.print();
-  }, 100);
+  setTimeout(() => window.print(), 100);
 }
 
-/* ============================================================
-   FUNÇÕES DE IMPRESSÃO DEDICADAS (MOBILE / DESKTOP)
-============================================================ */
-
-// 1. Imprime a versão completa (igual ao Web / Desktop)
 function imprimirRelatorioGeral() {
   const org = ORG.load();
-  // Força a renderização do layout tradicional de impressão
   renderPrintVersion(org);
-  
-  // Pequeno timeout para o navegador processar a troca de DOM no mobile
-  setTimeout(function() {
-    window.print();
-  }, 100);
+  setTimeout(() => window.print(), 100);
 }
 
-// 2. Imprime a lista com check de Sábado e Domingo
 function imprimirEscalaSabDom() {
-  // Força a renderização do layout de tabela com check
   renderPrintEscala2();
-  
-  // Pequeno timeout para o navegador processar a troca de DOM no mobile
-  setTimeout(function() {
-    window.print();
-  }, 100);
+  setTimeout(() => window.print(), 100);
 }
 
 function gerarListaPresencaDinamica() {
   const tbody = document.getElementById('tabela-presenca-body');
   if (!tbody) return;
 
-  // 1. Captura todos os elementos de servos (chips) na página
   const chips = document.querySelectorAll('.chip');
   const servosSet = new Set();
 
   chips.forEach(chip => {
-    // Clona o nó para não alterar a tela visual
     const clone = chip.cloneNode(true);
-
-    // Remove botões de ação ou ícones de dias/estrelas internos do chip se existirem
-    const elementosParaRemover = clone.querySelectorAll('.chip-actions, .chip-days, .chip-star, button');
-    elementosParaRemover.forEach(el => el.remove());
-
-    // Pega apenas o texto do nome e limpa espaços extras
+    clone.querySelectorAll('.chip-actions, .chip-days, .chip-star, button').forEach(el => el.remove());
     let nome = clone.textContent.trim();
-
-    // Se houver texto limpo válido, adiciona ao Set (o Set ignora duplicados)
-    if (nome) {
-      servosSet.add(nome);
-    }
+    if (nome) servosSet.add(nome);
   });
 
-  // 2. Transforma em Array e ordena alfabeticamente (A-Z)
-  const listaOrdenada = Array.from(servosSet).sort((a, b) => 
-    a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })
-  );
+  const listaOrdenada = Array.from(servosSet).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
 
-  // 3. Limpa o conteúdo anterior da tabela
   tbody.innerHTML = '';
-
-  // 4. Preenche a tabela dinamicamente
   listaOrdenada.forEach(nome => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -2654,22 +1480,54 @@ function gerarListaPresencaDinamica() {
   });
 }
 
-// Executa automaticamente SEMPRE antes de abrir a janela de impressão (Ctrl + P ou botão)
-window.addEventListener('beforeprint', gerarListaPresencaDinamica);
+/* ---------- EVENTOS DE INICIALIZAÇÃO ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  initApp();
 
+  fetch('import/option.json?v=' + Date.now())
+    .then(res => res.json())
+    .then(opcoes => {
+      const primeira = opcoes[0];
+      if (!primeira) return;
+      if (!localStorage.getItem(ORG_KEY)) {
+        fetch("import/" + primeira.arquivo)
+          .then(r => r.json())
+          .then(importarJSONDireto)
+          .catch(() => console.warn("Erro ao carregar JSON inicial"));
+      }
+    })
+    .catch(() => console.warn("Erro ao carregar option.json"));
 
-/* ============================================
-   EXPOR FUNÇÕES PARA HTML (OBRIGATÓRIO)
-============================================ */
+  const btn = document.getElementById("toggle-form");
+  const bloco = document.getElementById("form-bloco");
 
+  if (btn && bloco) {
+    bloco.classList.add("collapsed");
+    btn.textContent = "+";
 
-/* ============================================================
-   🔥 FIX GLOBAL — NECESSÁRIO PARA JS EXTERNO
-============================================================ */
+    btn.addEventListener("click", () => {
+      const isOpen = bloco.classList.contains("expanded");
+      if (isOpen) {
+        bloco.classList.remove("expanded");
+        bloco.classList.add("collapsed");
+        btn.textContent = "+";
+      } else {
+        bloco.classList.remove("collapsed");
+        bloco.classList.add("expanded");
+        btn.textContent = "-";
+      }
+    });
+  }
+});
 
-/* funções chamadas no HTML */
+window.addEventListener('beforeprint', () => {
+  syncPrintHeaderTitle();
+  gerarListaPresencaDinamica();
+});
 
+/* ---------- EXPOSIÇÃO GLOBAL DE HANDLERS HTML ---------- */
 window.imprimirEscalaSabDom = imprimirEscalaSabDom;
+window.imprimirRelatorioGeral = imprimirRelatorioGeral;
 window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 window.baixarJSONEquipes = baixarJSONEquipes;
 window.baixarMermaidA4 = baixarMermaidA4;
@@ -2677,30 +1535,16 @@ window.baixarPDF = baixarPDF;
 window.baixarPDFEscala = baixarPDFEscala;
 window.renderPrintEscala2 = renderPrintEscala2;
 window.coletarServosComDias = coletarServosComDias;
-/* render principal */
 window.render = render;
-
-/* storage (usados indiretamente) */
 window.saveOrg = saveOrg;
 window.loadOrg = loadOrg;
-
-/* import */
 window.importarJSONDireto = importarJSONDireto;
 window.importarJSONEquipes = importarJSONEquipes;
-
-/* handlers */
 window.handleAddPessoaChave = handleAddPessoaChave;
 window.handleUpsertEquipe = handleUpsertEquipe;
-
-/* título */
 window.getTitulo = getTitulo;
 window.setTitulo = setTitulo;
 window.getTituloFormatado = getTituloFormatado;
 window.atualizarTitulos = atualizarTitulos;
 
-/* debug opcional */
-window.DEBUG = {
-  render,
-  loadOrg,
-  saveOrg
-};
+window.DEBUG = { render, loadOrg, saveOrg };
