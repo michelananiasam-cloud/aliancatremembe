@@ -1453,7 +1453,9 @@ function gerarImpressaoServos(listaServosCompleta) {
 }
 
 document.addEventListener('click', function(e) {
-  // Permite apenas se o alvo for um botão, um link (<a>) ou a logo do cabeçalho
+  // Executa o bloqueio apenas se a tela tiver 760px ou menos (mobile)
+  if (window.innerWidth > 760) return;
+
   const permitido = e.target.closest('button') || 
                     e.target.closest('a') || 
                     e.target.id === 'logo' || 
