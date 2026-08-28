@@ -462,6 +462,7 @@ button.primary{
   text-align: left;
 }
 
+/* Larguras ajustadas para não estourar lateralmente */
 .col-nome { width: 70%; }
 .col-dia { width: 15%; text-align: center; }
 
@@ -470,6 +471,7 @@ button.primary{
   break-before: page;
 }
 
+/* Caixa de marcação manual (Checkbox visual para papel) */
 .box-manual {
   display: inline-block;
   width: 14px;
@@ -543,11 +545,7 @@ button.primary{
       background: #fff !important;
   }
 
-  /* Ajuste crucial: espaçamento dinâmico idêntico ao exigido pelo header fixo */
-  #print-lists { 
-    margin-top: 25mm !important; 
-    padding: 0 !important; 
-  }
+  #print-lists { margin: 0 !important; padding: 0 !important; }
 
   .print-break {
       page-break-before: always !important;
@@ -563,8 +561,12 @@ button.primary{
       padding: 2mm 1mm !important;
       margin: 6mm 0 4mm 0 !important;
       page-break-inside: avoid !important;
-      break-after: avoid !important;
-      page-break-after: avoid !important;
+  }
+
+  /* EMPURRA APENAS O PRIMEIRO BLOCO DA TABELA DE SERVOS PARA LONGE DO HEADER FIXO */
+  .gerado-por-tabela-servos:first-of-type,
+  #print-lists > .print-list-block:first-of-type {
+      margin-top: 25mm !important; 
   }
 
   .print-list-block { margin: 1mm 0 2mm 0 !important; }
@@ -616,8 +618,7 @@ button.primary{
     padding: 5px 8px !important;
   }
 
-  .escala-page-break,
-  .gerado-por-tabela-servos {
+  .escala-page-break {
     page-break-before: always !important;
     break-before: page !important;
   }
