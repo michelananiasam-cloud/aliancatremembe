@@ -686,10 +686,20 @@ button.primary{
 ================================*/
 @media (max-width: 760px) {
   body * {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    pointer-events: none;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    pointer-events: none !important;
+  }
+   /* Impede zoom duplo acidental em textos ao tocar rapidamente na tela */
+  body {
+    touch-action: pan-x pan-y !important;
+  }
+  
+   input, select, textarea, [contenteditable="true"] {
+    pointer-events: none !important;
+    user-select: none !important;
   }
 
   button, 
@@ -698,7 +708,7 @@ button.primary{
   a *, 
   #web-header img, 
   #mobile-bar button, 
-  #menu-rodape button {
+  #mobile-bar button * {
     pointer-events: auto !important;
   }
 }
