@@ -1401,35 +1401,36 @@ function escolherAtualizacaoJSON() {
 function gerarImpressaoServos(listaServosCompleta) {
   const LIMITE_POR_PAGINA = 30;
   const container = document.getElementById('print-lists');
-  container.innerHTML = ''; 
+  if (!container) return;
+  container.innerHTML = '';  
 
   for (let i = 0; i < listaServosCompleta.length; i += LIMITE_POR_PAGINA) {
     const bloco = listaServosCompleta.slice(i, i + LIMITE_POR_PAGINA);
     const numeroPagina = Math.floor(i / LIMITE_POR_PAGINA) + 1;
 
     const paginaDiv = document.createElement('div');
-    paginaDiv.className = 'print-page';
+    paginaDiv.className = i === 0 ? 'print-list-block' : 'print-list-block escala-page-break';
 
     paginaDiv.innerHTML = `
       <div class="print-section-title">
         Controle de Presença dos Servos — Página ${numeroPagina}
       </div>
-      <table class="tabela-presenca">
+      <table class="escala-box">
         <thead>
           <tr>
-            <th>NOME DO SERVO</th>
-            <th class="col-check">SÁBADO</th>
-            <th class="col-check">DOMINGO</th>
+            <th class="col-nome">NOME DO SERVO</th>
+            <th class="col-dia">SÁBADO</th>
+            <th class="col-dia">DOMINGO</th>
           </tr>
         </thead>
         <tbody>
           ${bloco.map(servo => {
-            const nome = typeof servo === 'object' ? servo.nome : servo;
+            const nome = typeof servo === 'object' && servo !== null ? (servo.nome || '') : servo;
             return `
               <tr>
-                <td>${nome}</td>
-                <td class="col-check"></td>
-                <td class="col-check"></td>
+                <td class="col-nome">${nome}</td>
+                <td class="col-dia"><span class="box-manual"></span></td>
+                <td class="col-dia"><span class="box-manual"></span></td>
               </tr>
             `;
           }).join('')}
