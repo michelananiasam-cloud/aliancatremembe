@@ -1423,10 +1423,11 @@ function gerarImpressaoServos(listaServosCompleta) {
         Lista de Presença dos Servos — Página ${numeroPagina}
       </div>
       <br>
+      <br>
       <table class="escala-box">
         <thead>
           <tr>
-            <th class="col-nome">LISTA DE SERVOS</th>
+            <th class="col-nome">LISTA PRESENÇA - SERVOS</th>
             <th class="col-dia">SÁBADO</th>
             <th class="col-dia">DOMINGO</th>
           </tr>
