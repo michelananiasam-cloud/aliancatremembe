@@ -439,26 +439,37 @@ button.primary{
 .ref-btn:hover{ opacity:1; }
 
 /* ===============================
-   ESCALA DE SERVOS
+   ESCALA DE SERVOS (TABELA MANUAL)
 ================================*/
 .escala-box{
-  font-family: monospace;
-  font-size: 13px;
-  column-count: 2;
-  column-gap: 40px;
-}
-
-.escala-header,
-.escala-row{
-  display: flex;
-  justify-content: space-between;
   width: 100%;
-  break-inside: avoid;
+  max-width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
 }
 
-.col-nome{ width: 55%; }
-.col-dia{ width: 20%; text-align: center; }
-.escala-sep{ margin: 6px 0; }
+.escala-box th,
+.escala-box td {
+  border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+  padding: 6px 10px;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.escala-box th {
+  background: color-mix(in srgb, var(--brand) 10%, var(--card));
+  text-align: left;
+}
+
+/* Larguras ajustadas para não estourar lateralmente */
+.col-nome { width: 70%; }
+.col-dia { width: 15%; text-align: center; }
+
+.escala-page-break {
+  page-break-before: always;
+  break-before: page;
+}
 
 /* ===============================
    IMPRESSÃO (@media print)
@@ -572,17 +583,22 @@ button.primary{
   .chip-pend{ border: 2px solid #dc3545 !important; }
 
   .escala-box {
-    display: block !important;
     width: 100% !important;
-    font-family: monospace !important;
-    font-size: 12pt !important;
+    max-width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 11pt !important;
+    table-layout: fixed !important;
   }
   
-  .escala-row {
-    display: flex !important;
-    justify-content: space-between !important;
-    padding: 4px 0 !important;
-    border-bottom: 1px dotted #ccc !important;
+  .escala-box th,
+  .escala-box td {
+    border: 1px solid #999 !important;
+    padding: 5px 8px !important;
+  }
+
+  .escala-page-break {
+    page-break-before: always !important;
+    break-before: page !important;
   }
 }
 
