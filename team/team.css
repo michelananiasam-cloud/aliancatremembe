@@ -3,15 +3,13 @@
 /* ===============================
    FIXAR HEADER WEB NO TOPO
 ================================*/
-
 #web-header{
-    position:sticky;
-    top:0;
-    backdrop-filter:blur(6px);
-    background:rgba(255,255,255,0.75);
-    z-index: 9999 !important;
+  position:sticky;
+  top:0;
+  backdrop-filter:blur(6px);
+  background:rgba(255,255,255,0.75);
+  z-index: 9999 !important;
 }
-
 
 /* ===============================
    VARIÁVEIS E TEMA
@@ -480,7 +478,7 @@ button.primary{
 .ref-btn:hover{ opacity:1; }
 
 /* ===============================
-   ESCALA DE SERVOS (IMPRESSÃO 2)
+   ESCALA DE SERVOS (TELA TIPO 2)
 ================================*/
 .escala-box{
   font-family: monospace;
@@ -502,17 +500,17 @@ button.primary{
 .escala-sep{ margin: 6px 0; }
 
 /* ===============================
-   CONTROLES PADRÃO DE TELA
+   CONTROLES PADRÃO DE TELA (NÃO IMPRESSO)
 ================================*/
 #print-header{ display:none !important; }
 .print-only{ display:none !important; }
 
 /* ============================================
-   IMPRESSÃO — VERSÃO FINAL (CORRIGIDA)
+   IMPRESSÃO — REGRAS GERAIS & REVISADAS
 =========================================== */
 @media print {
 
-  /* ----------- OCULTAR INTERFACE E BOTÕES ----------- */
+  /* ----------- OCULTAR INTERFACE DE TELA ----------- */
   #form-bloco,
   #form-bloco *,
   #toggle-form,
@@ -524,12 +522,9 @@ button.primary{
   .chip-actions,
   .ref-actions,
   .toggle-form-btn,
-  button {
+  button,
+  .watermark {
       display: none !important;
-  }
-
-  .escala-box{
-      display: block !important;
   }
 
   /* ----------- PÁGINA ----------- */
@@ -538,11 +533,18 @@ button.primary{
       margin: 5mm 8mm 8mm 8mm !important;
   }
 
+  /* ----------- ZERAR BODY E EXIBIR ELEMENTOS DE IMPRESSÃO ----------- */
+  body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+  }
+
   .print-only {
       display: block !important;
   }
 
-  /* ----------- CABEÇALHO FIXO ----------- */
+  /* ----------- CABEÇALHO FIXO DO RELATÓRIO ----------- */
   #print-header {
       position: fixed !important;
       top: 0; left: 0; right: 0;
@@ -563,23 +565,18 @@ button.primary{
       max-height: 22mm !important;
   }
 
-  /* ----------- ZERAR BODY ----------- */
-  body {
-      margin: 0 !important;
-      padding: 0 !important;
-      background: #fff !important;
-  }
-
   /* ----------- CONTAINER DAS PÁGINAS ----------- */
   #print-lists {
       margin: 0 !important;
       padding: 0 !important;
+      display: block !important;
   }
 
-  /* ----------- QUEBRA DE PÁGINA REAL ----------- */
+  /* ----------- QUEBRA DE PÁGINA OBRIGATÓRIA ----------- */
   .print-break {
       page-break-before: always !important;
       break-before: page !important;
+      display: block !important;
   }
 
   /* ----------- TÍTULOS DE SEÇÃO ----------- */
@@ -594,17 +591,10 @@ button.primary{
       page-break-inside: avoid !important;
   }
 
-  /* ----------- LISTAS ----------- */
-  .print-list-block {
-      margin: 1mm 0 2mm 0 !important;
-  }
+  /* ----------- LISTAS & EQUIPES ----------- */
+  .print-list-block { margin: 1mm 0 2mm 0 !important; }
+  .print-line { font-size: 14px !important; margin: 1mm 0 !important; }
 
-  .print-line {
-      font-size: 14px !important;
-      margin: 1mm 0 !important;
-  }
-
-  /* ----------- EQUIPES ----------- */
   .print-team-outer {
       display: block !important;
       page-break-inside: avoid !important;
@@ -617,9 +607,7 @@ button.primary{
       border-bottom: 1px dashed #999 !important;
   }
 
-  .print-team-outer:last-of-type {
-      border-bottom: none !important;
-  }
+  .print-team-outer:last-of-type { border-bottom: none !important; }
 
   .team-title {
       font-size: 14px !important;
@@ -636,14 +624,11 @@ button.primary{
       white-space: normal !important;
   }
 
-  /* ----------- CHIPS ----------- */
+  /* ----------- CHIPS NA IMPRESSÃO ----------- */
   .chip-ok  { border: 2px solid #28a745 !important; }
   .chip-pend{ border: 2px solid #dc3545 !important; }
 
-  /* MARCA D'ÁGUA OFF NA IMPRESSÃO */
-  .watermark { display: none !important; }
-
-  /* Garante exibição do bloco de escala apenas ao imprimir */
+  /* ----------- BLOCO DE ESCALA MONOSPACE ----------- */
   .escala-box {
     display: block !important;
     width: 100% !important;
@@ -658,17 +643,18 @@ button.primary{
     border-bottom: 1px dotted #ccc !important;
   }
 
-  /* ------------ TABELA DE PRESENÇA ------------ */
+  /* ----------- TABELA DE PRESENÇA (FAIXA DE CHECKBOX) ----------- */
   .tabela-presenca {
     width: 100% !important;
     border-collapse: collapse !important;
     margin-top: 4mm !important;
     font-size: 11pt !important;
+    display: table !important;
   }
 
   .tabela-presenca th,
   .tabela-presenca td {
-    border: 1px solid #777 !important;
+    border: 1px solid #666 !important;
     padding: 5px 8px !important;
     text-align: left !important;
   }
@@ -679,16 +665,10 @@ button.primary{
     font-size: 9.5pt !important;
   }
 
-  .col-nome-presenca {
-    width: 70% !important;
-  }
+  .col-nome-presenca { width: 70% !important; }
+  .col-check { width: 15% !important; text-align: center !important; }
 
-  .col-check {
-    width: 15% !important;
-    text-align: center !important;
-  }
-
-  /* Quadradinho para marcar o Checkbox manual */
+  /* Caixa estilizada do Checkbox manual */
   .box-check {
     width: 14px;
     height: 14px;
@@ -697,7 +677,7 @@ button.primary{
     margin: 0 auto;
   }
 
-  /* Evita cortar uma linha no meio entre páginas da tabela de presença */
+  /* Evita quebras de linha no meio de um registro da tabela */
   .tabela-presenca tr {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
