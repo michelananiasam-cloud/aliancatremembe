@@ -535,8 +535,7 @@ button.primary{
   /* ----------- PÁGINA ----------- */
   @page {
       size: auto;
-      /* Define a margem superior da página para 26mm, garantindo o espaço do cabeçalho fixo */
-      margin: 26mm 8mm 8mm 8mm !important;
+      margin: 5mm 8mm 8mm 8mm !important;
   }
 
   .print-only {
@@ -581,7 +580,6 @@ button.primary{
   .print-break {
       page-break-before: always !important;
       break-before: page !important;
-      padding-top: 0 !important; /* Espaço mantido pela margem superior do @page */
   }
 
   /* ----------- TÍTULOS DE SEÇÃO ----------- */
@@ -639,8 +637,8 @@ button.primary{
   }
 
   /* ----------- CHIPS ----------- */
-  .chip-ok   { border: 2px solid #28a745 !important; }
-  .chip-pend { border: 2px solid #dc3545 !important; }
+  .chip-ok  { border: 2px solid #28a745 !important; }
+  .chip-pend{ border: 2px solid #dc3545 !important; }
 
   /* MARCA D'ÁGUA OFF NA IMPRESSÃO */
   .watermark { display: none !important; }
@@ -652,24 +650,26 @@ button.primary{
     font-family: monospace !important;
     font-size: 12pt !important;
   }
-   
+  
   .escala-row {
     display: flex !important;
     justify-content: space-between !important;
     padding: 4px 0 !important;
     border-bottom: 1px dotted #ccc !important;
   }
-    
-  /* ===============================
-     CORREÇÃO DE QUEBRA DA TABELA DE PRESENÇA
-  ================================*/
+   
+   /* ===============================
+      CORREÇÃO DE QUEBRA DA TABELA DE PRESENÇA
+   ================================*/
+  /* 1. Força a tabela a respeitar as propriedades de quebra de página */
   .tabela-presenca {
     width: 100% !important;
     border-collapse: collapse !important;
-    margin-top: 10px !important;
+    margin-top: 20px !important;
     page-break-inside: auto !important;
   }
 
+  /* 2. REPETE O CABEÇALHO DA TABELA EM TODAS AS PÁGINAS QUEBRADAS */
   .tabela-presenca thead {
     display: table-header-group !important;
   }
@@ -701,7 +701,15 @@ button.primary{
     width: 15% !important;
     text-align: center !important;
   }
-}  
+
+  /* Espaçamento superior para não atropelar o topo nas quebras */
+  #print-lists .print-break {
+    page-break-before: always !important;
+    break-before: page !important;
+    padding-top: 24mm !important;
+  }
+} 
+  
 
 /* ===============================
    MARCA D'ÁGUA (TELA)
