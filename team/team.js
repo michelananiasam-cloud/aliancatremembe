@@ -1401,39 +1401,36 @@ function escolherAtualizacaoJSON() {
 function gerarImpressaoServos(listaServosCompleta) {
   const LIMITE_POR_PAGINA = 30;
   const container = document.getElementById('print-lists');
-  container.innerHTML = ''; // Limpa impressão anterior
+  container.innerHTML = ''; 
 
-  // Divisão em blocos de 30
+  // Esconde os blocos das equipes se você quiser imprimir APENAS a lista
+  const blocoEquipes = document.getElementById('org');
+  if (blocoEquipes) blocoEquipes.style.display = 'none';
+
   for (let i = 0; i < listaServosCompleta.length; i += LIMITE_POR_PAGINA) {
     const bloco = listaServosCompleta.slice(i, i + LIMITE_POR_PAGINA);
     const numeroPagina = Math.floor(i / LIMITE_POR_PAGINA) + 1;
 
-    // Cria o container da página
     const paginaDiv = document.createElement('div');
     paginaDiv.className = 'print-page';
-    
-    // Adiciona quebra de página a partir da página 2
-    if (i > 0) {
-      paginaDiv.classList.add('print-break');
-    }
 
-    // Estrutura com TABELA NATIVA para garantir cabeçalho e evitar corte de linhas
+    // Monta uma tabela nativa com bordas e checkbox de presença
     paginaDiv.innerHTML = `
       <div class="print-section-title">
-        Lista de Servos — Pagina ${numeroPagina}
+        Lista de Presença — Página ${numeroPagina}
       </div>
       <table class="tabela-presenca">
         <thead>
           <tr>
-            <th class="col-nome-presenca">Nome do Servo</th>
+            <th>Nome do Servo</th>
             <th class="col-check">Presença</th>
           </tr>
         </thead>
         <tbody>
           ${bloco.map(servo => `
             <tr>
-              <td>${servo.nome}</td>
-              <td class="col-check"> [ &nbsp; ] </td>
+              <td>${typeof servo === 'object' ? servo.nome : servo}</td>
+              <td class="col-check">[ &nbsp; ]</td>
             </tr>
           `).join('')}
         </tbody>
