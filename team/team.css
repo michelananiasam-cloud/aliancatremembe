@@ -319,11 +319,11 @@ button.primary {
 
 
 /* ==========================================================================
-   CONFIGURAÇÃO DE IMPRESSÃO FIXA E ISOLADA
+   CONFIGURAÇÃO DE IMPRESSÃO - CORREÇÃO DEFINITIVA DE TABELA E BORDAS
    ========================================================================== */
 @media print {
 
-  /* 1. OCULTA ESPECIFICAMENTE OS COMPONENTES WEB INTERATIVOS */
+  /* 1. Ocultar interface web interativa */
   #web-header, 
   #form-bloco, 
   #mobile-bar, 
@@ -338,7 +338,7 @@ button.primary {
       display: none !important;
   }
 
-  /* 2. LIBERA A EXIBIÇÃO DOS ELEMENTOS DA IMPRESSÃO */
+  /* 2. Exibir áreas de impressão */
   .print-only, 
   #print-header, 
   #org, 
@@ -346,7 +346,6 @@ button.primary {
       display: block !important;
   }
 
-  /* 3. REGRAS DE IMPRESSÃO DA PÁGINA A4 */
   @page {
       size: A4 portrait;
       margin: 12mm 10mm 12mm 10mm !important;
@@ -360,7 +359,6 @@ button.primary {
       font-size: 11pt;
   }
 
-  /* Cabeçalho superior */
   #print-header {
       display: flex !important;
       justify-content: space-between;
@@ -375,7 +373,6 @@ button.primary {
       width: auto !important;
   }
 
-  /* Bloco de Equipes */
   #org {
       page-break-after: always !important;
       break-after: page !important;
@@ -398,7 +395,6 @@ button.primary {
       line-height: 1.3 !important;
   }
 
-  /* Bloco das Tabelas de Presença */
   #print-lists .print-page {
       page-break-before: always !important;
       break-before: page !important;
@@ -413,13 +409,15 @@ button.primary {
       border-bottom: 2px solid #000 !important;
   }
 
-  /* Tabela de presença formatada */
-  table.tabela-presenca {
+  /* 3. FORÇA AS BORDAS NA TABELA DE PRESENÇA */
+  table, table.tabela-presenca {
       display: table !important;
       width: 100% !important;
       border-collapse: collapse !important;
+      border-spacing: 0 !important;
       table-layout: fixed !important;
       margin-top: 2mm !important;
+      border: 1px solid #000 !important;
   }
 
   table.tabela-presenca thead {
@@ -434,28 +432,32 @@ button.primary {
       display: table-row !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      height: 7.5mm !important;
+      height: 8mm !important;
   }
 
+  /* Força a borda preta explícita em CADA CÉLULA individualmente */
   table.tabela-presenca th,
   table.tabela-presenca td {
       display: table-cell !important;
       vertical-align: middle !important;
+      border-top: 1px solid #000 !important;
+      border-bottom: 1px solid #000 !important;
+      border-left: 1px solid #000 !important;
+      border-right: 1px solid #000 !important;
+      padding: 4px 8px !important;
   }
 
   table.tabela-presenca th {
       background-color: #f0f0f0 !important;
       color: #000 !important;
-      border: 1px solid #000 !important;
-      padding: 4px 8px !important;
       font-size: 9.5pt !important;
       font-weight: bold !important;
       text-align: left !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
   }
 
   table.tabela-presenca td {
-      border: 1px solid #444 !important;
-      padding: 4px 8px !important;
       font-size: 9pt !important;
   }
 
