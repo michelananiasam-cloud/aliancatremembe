@@ -1096,8 +1096,60 @@ body{
 </div>
 
 <script>
-let atividadeAtual = null;	
-let isPrinting = false; // 👈 ADICIONE AQUI
+// ===============================
+// 🕒 SINCRONIZAÇÃO SUPABASE (EDGE FUNCTION)
+// ===============================
+const SUPABASE_TIME_URL = "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/hora-certa";
+let timeOffset = 0;
+let supabaseSyncStatus = "⏳ Sincronizando...";
+
+async function sincronizarHoraSupabase() {
+  try {
+    const response = await fetch(SUPABASE_TIME_URL);
+    const data = await response.json();
+    timeOffset = data.timestamp - Date.now();
+    supabaseSyncStatus = "✅ Sincronizado";
+  } catch (err) {
+    console.warn("Erro ao sincronizar com Supabase, usando relógio local.", err);
+    supabaseSyncStatus = "❌ " + err.message;
+    timeOffset = 0;
+  }
+}
+
+function getSyncedTime() {
+  return Date.now() + timeOffset;
+}
+
+function iniciarRelogioVisual() {
+  const spanHora = document.getElementById("hora");
+  const spanMs = document.getElementById("ms");
+  const spanStatus = document.getElementById("status");
+
+  setInterval(() => {
+    const agoraSincronizado = new Date(getSyncedTime());
+    
+    if (spanHora) {
+      const hh = String(agoraSincronizado.getHours()).padStart(2, "0");
+      const mm = String(agoraSincronizado.getMinutes()).padStart(2, "0");
+      const ss = String(agoraSincronizado.getSeconds()).padStart(2, "0");
+      spanHora.textContent = `${hh}:${mm}:${ss}`;
+    }
+    if (spanMs) {
+      spanMs.textContent = String(agoraSincronizado.getMilliseconds()).padStart(3, '0');
+    }
+    if (spanStatus) {
+      spanStatus.textContent = supabaseSyncStatus;
+    }
+  }, 50);
+}
+
+setInterval(sincronizarHoraSupabase, 60000);
+
+// ===============================
+// 🔹 VARIÁVEIS E CONFIGURAÇÕES ORIGINAIS
+// ===============================
+let atividadeAtual = null;    
+let isPrinting = false; 
 const tiposAtividade = ["Chegada","Introdução","Institucional","Encerramento", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
 const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 const LIST_KEY  = "Programação";
@@ -1105,6 +1157,9 @@ const HIST_KEY  = "historicos";
 const EVANG_KEY = "evangelizacao";
 const EVANG_DEFAULT = "Movimento Tremembé";
 
+// ===============================
+// 🔹 FUNÇÕES DE DATAS E TEMPO (ATUALIZADAS COM SERVIDOR)
+// ===============================
 function diaDaSemanaPorData(dataString) {
   const diasSemana = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
   const dataObj = new Date(dataString + "T00:00:00"); 
@@ -1119,6 +1174,7 @@ function getEvangelizacao() {
     return EVANG_DEFAULT;
   }
 }
+
 function setEvangelizacao(valor) {
   try {
     localStorage.setItem(EVANG_KEY, (valor || "").trim());
@@ -1126,9 +1182,11 @@ function setEvangelizacao(valor) {
     console.error("Erro salvando evangelização", e);
   }
 }
+
 function getTituloProgramacao() {
   return `Programação ${getEvangelizacao()}`;
 }
+
 function atualizarTitulos() {
   const h1 = document.getElementById("titulo-web");
   if (h1) h1.textContent = getTituloProgramacao();
@@ -1147,20 +1205,17 @@ function alterarEvangelizacao(e) {
 function dois(n){ return n.toString().padStart(2,'0'); }
 
 function getTempoRestante(data, inicio, fim) {
-
   if (!data || !inicio || !fim) return "";
 
-  const agora = Date.now();
+  const agora = getSyncedTime();
 
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
   if (!inicioDate || !fimDate) return "";
 
-  // ✅ não depende de comparar string de data
-  if (agora < inicioDate) {
-
-    const diff = inicioDate - agora;
+  if (agora < inicioDate.getTime()) {
+    const diff = inicioDate.getTime() - agora;
 
     const h = Math.floor(diff / (1000 * 60 * 60));
     const m = Math.floor((diff / (1000 * 60)) % 60);
@@ -1171,9 +1226,8 @@ function getTempoRestante(data, inicio, fim) {
     return `⏳ Inicia em ${s}seg`;
   }
 
-  if (agora >= inicioDate && agora <= fimDate) {
-
-    const diff = fimDate - agora;
+  if (agora >= inicioDate.getTime() && agora <= fimDate.getTime()) {
+    const diff = fimDate.getTime() - agora;
 
     const h = Math.floor(diff / (1000 * 60 * 60));
     const m = Math.floor((diff / (1000 * 60)) % 60);
@@ -1195,53 +1249,50 @@ function parseDateTime(data, hora) {
   if (!data || !hora) return null;
   return new Date(`${data}T${hora}:00`);
 }
-	function getStatusAtividade(data, inicio, fim) {
 
+function getStatusAtividade(data, inicio, fim) {
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
   if (!inicioDate || !fimDate) {
-    return "futuro"; // ✅ fallback seguro
+    return "futuro";
   }
 
-  const agora = Date.now();
+  const agora = getSyncedTime();
 
-  if (agora >= inicioDate && agora <= fimDate) {
+  if (agora >= inicioDate.getTime() && agora <= fimDate.getTime()) {
     return "em-andamento";
   }
 
-  if (agora > fimDate) {
+  if (agora > fimDate.getTime()) {
     return "encerrado";
   }
 
-  return "futuro"; // ✅ sempre retorna algo
+  return "futuro";
 }
 
 function marcarProximaAtividade(lista) {
-
-  const agora = Date.now();
+  const agora = getSyncedTime();
 
   let proximaIndex = -1;
   let menorDiff = Infinity;
 
   lista.forEach((p, i) => {
-
     const inicio = parseDateTime(p.data, p.inicio);
 
-    // 🔴 ignora dados inválidos
     if (!inicio) return;
 
-    if (inicio > agora && (inicio - agora) < menorDiff) {
-      menorDiff = inicio - agora;
+    if (inicio.getTime() > agora && (inicio.getTime() - agora) < menorDiff) {
+      menorDiff = inicio.getTime() - agora;
       proximaIndex = i;
     }
   });
 
   return proximaIndex;
 }
-	
+
 function dataHoje(){
-  const d = new Date();
+  const d = new Date(getSyncedTime());
   return `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
 }
 
@@ -1264,26 +1315,19 @@ function salvarLista(lista){
 
 function carregarLista(){
   try {
-
     const lista = localStorage.getItem(LIST_KEY);
     const dados = lista ? JSON.parse(lista) : [];
 
     dados.forEach(item => {
-
-      // ✅ garante observação
       if (item.obs === undefined) {
         item.obs = "";
       }
-
-      // ✅ garante ID (ESSENCIAL)
       if (!item.id) {
         item.id = `id_${Date.now()}_${Math.random()}`;
       }
-
     });
 
     return dados;
-
   } catch(e){
     console.error(e);
     return [];
@@ -1291,39 +1335,34 @@ function carregarLista(){
 }
 
 function ordenarLista(lista) {
-
   lista.sort((a, b) => {
-
     const dateA = new Date(`${a.data}T${a.inicio}:00`);
     const dateB = new Date(`${b.data}T${b.inicio}:00`);
-
     return dateA - dateB;
   });
-
   return lista;
 }
-	
+
 function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
 
   Object.entries(attrs).forEach(([k,v])=>{
-	if (k === "className") e.className = v;
-	else if (k.startsWith("on") && typeof v === "function")
-	  e.addEventListener(k.slice(2), v);
-	else
-	  e.setAttribute(k, v);
+    if (k === "className") e.className = v;
+    else if (k.startsWith("on") && typeof v === "function")
+      e.addEventListener(k.slice(2), v);
+    else
+      e.setAttribute(k, v);
   });
 
   (Array.isArray(children) ? children : [children]).forEach(c=>{
-	if (typeof c === "string") e.appendChild(document.createTextNode(c));
-	else if (c) e.appendChild(c);
+    if (typeof c === "string") e.appendChild(document.createTextNode(c));
+    else if (c) e.appendChild(c);
   });
 
   return e;
 }
 
 function getDuracao(inicio, fim) {
-
   if (!inicio || !fim) return "";
 
   const i = new Date(`1970-01-01T${inicio}:00`);
@@ -1341,9 +1380,7 @@ function getDuracao(inicio, fim) {
 }
 
 function buildInfo(p) {
-
   const duracao = getDuracao(p.inicio, p.fim);
-
   let texto = `[${p.inicio} – ${p.fim}`;
 
   if (duracao) {
@@ -1368,7 +1405,6 @@ function buildInfo(p) {
 }
 
 function scrollParaAtividade() {
-
   const atual = document.querySelector("#atividade-atual");
 
   if (atual) {
@@ -1388,31 +1424,28 @@ function scrollParaAtividade() {
     });
   }
 }
-	
+
 function getProgresso(data, inicio, fim){
+  const d = new Date(getSyncedTime());
+  const hoje = `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
 
-  const hoje = new Date().toISOString().split("T")[0];
-
-  // ❌ não é hoje → sem progresso
   if (data !== hoje) return 0;
 
-  const agora = Date.now();
-
+  const agora = getSyncedTime();
   const i = parseDateTime(data, inicio);
   const f = parseDateTime(data, fim);
 
-  // 🔴 segurança: dados inválidos
   if (!i || !f) return 0;
 
-  if (agora < i) return 0;
-  if (agora > f) return 100;
+  if (agora < i.getTime()) return 0;
+  if (agora > f.getTime()) return 100;
 
-  return Math.floor(((agora - i) / (f - i)) * 100);
+  return Math.floor(((agora - i.getTime()) / (f.getTime() - i.getTime())) * 100);
 }
-/*
-function renderizarLista() {
 
+function renderizarLista() {
   const listaDiv = document.getElementById("lista");
+  if (!listaDiv) return;
   listaDiv.innerHTML = "";
 
   const lista = ordenarLista(carregarLista());
@@ -1428,7 +1461,6 @@ function renderizarLista() {
   const datasOrdenadas = Object.keys(grupos).sort();
 
   datasOrdenadas.forEach(data => {
-
     const atividadesDoDia = grupos[data];
 
     const containerDia = el("section", {
@@ -1447,181 +1479,6 @@ function renderizarLista() {
     const ul = el("ul", { className: "lista-atividades" });
 
     atividadesDoDia.forEach(p => {
-
-      const idxReal = lista.indexOf(p);
-
-      const status = getStatusAtividade(p.data, p.inicio, p.fim);
-      const isProxima = (idxReal === proximaIndex);
-
-      const li = el("li", {
-        className: `
-          item 
-          ${status} 
-          ${isProxima ? "proxima" : ""}
-          ${p.destaque ? "destaque" : ""}
-        `
-      });
-
-// ✅ MARCA PARA SCROLL
-if (status === "em-andamento") {
-  li.setAttribute("id", "atividade-atual");
-}
-else if (isProxima) {
-  li.setAttribute("id", "proxima-atividade");
-}
-
-      // 💬 Observação
-      const temObs = (p.obs || "").trim().length > 0;
-
-      if (temObs) {
-        const iconObs = el("span", { className: "icon-obs" }, "💬");
-
-        iconObs.addEventListener("click", () => editarObservacao(idxReal));
-        iconObs.setAttribute("title", p.obs);
-
-        li.appendChild(iconObs);
-      }
-
-      // ✅ TEXTO BASE
-      let texto = buildInfo(p);
-
-      // ✅ TIMER CONTROLADO
-      const timer = getTempoRestante(
-        p.data,
-        p.inicio,
-        p.fim
-      );
-
-      if (!isPrinting && timer) {
-
-        // 🔵 EM ANDAMENTO
-        if (timer.startsWith("🔥")) {
-          texto += ` • ${timer}`;
-        }
-
-        // ✅ ENCERRADO
-        else if (timer.startsWith("✅")) {
-          texto += ` • ${timer}`;
-        }
-
-        // 🌟 PRÓXIMA
-        else if (isProxima && timer.startsWith("⏳")) {
-          texto += ` • ${timer}`;
-        }
-      }
-
-      const divInfo = el(
-        "div",
-        { className: "item-info" },
-        texto
-      );
-
-const bEdit = el("button", { className: "edit" }, "Editar");
-bEdit.addEventListener("click", () => editarAtividade(p.id));
-
-const bDelete = el("button", { className: "delete" }, "Excluir");
-bDelete.addEventListener("click", () => excluirAtividade(p.id));
-
-const bClone = el("button", { className: "clone" }, "Clonar");
-bClone.addEventListener("click", () => clonarAtividade(p.id));
-
-const divBtns = el(
-  "div",
-  { className: "item-botoes" },
-  [bEdit, bDelete, bClone]
-);
-
-li.appendChild(divInfo);
-
-// ✅ PROGRESSO
-const progresso = getProgresso(p.data, p.inicio, p.fim);
-
-if (status === "em-andamento") {
-
-  const barraContainer = el("div", {
-    className: "progress-container"
-  });
-
-
-let classeBarra = "progress-bar ativo";
-let classeItemExtra = "";
-
-
-  const fimDate = parseDateTime(p.data, p.fim);
-  const agora = Date.now();
-  const diff = fimDate - agora;
-
-  const minutosRestantes = diff / (1000 * 60);
-
-  if (minutosRestantes <= 5) {
-    classeBarra = "progress-bar danger";
-  }
-  else if (minutosRestantes <= 10) {
-    classeBarra = "progress-bar warning";
-  }
-
-  const barra = el("div", {
-    className: classeBarra,
-    style: `width: ${progresso}%`
-  });
-
-  barraContainer.appendChild(barra);
-  li.appendChild(barraContainer);
-}
-
-// ✅ botões continuam depois
-li.appendChild(divBtns);
-
-      ul.appendChild(li);
-
-    });
-
-    containerDia.appendChild(ul);
-    listaDiv.appendChild(containerDia);
-
-  });
-
-}
-*/
-
-function renderizarLista() {
-
-  const listaDiv = document.getElementById("lista");
-  listaDiv.innerHTML = "";
-
-  const lista = ordenarLista(carregarLista());
-  const proximaIndex = marcarProximaAtividade(lista);
-
-  const grupos = {};
-
-  lista.forEach(p => {
-    if (!grupos[p.data]) grupos[p.data] = [];
-    grupos[p.data].push(p);
-  });
-
-  const datasOrdenadas = Object.keys(grupos).sort();
-
-  datasOrdenadas.forEach(data => {
-
-    const atividadesDoDia = grupos[data];
-
-    const containerDia = el("section", {
-      className: "pagina-detalhe"
-    });
-
-    const dataBr = data.split("-").reverse().join("/");
-    const diaSemana = diaDaSemanaPorData(data);
-
-    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
-    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
-
-    containerDia.appendChild(h2Titulo);
-    containerDia.appendChild(hDia);
-
-    const ul = el("ul", { className: "lista-atividades" });
-
-    atividadesDoDia.forEach(p => {
-
       const idxReal = lista.findIndex(item => item.id === p.id);
       const status = getStatusAtividade(p.data, p.inicio, p.fim);
       const isProxima = (idxReal === proximaIndex);
@@ -1635,7 +1492,13 @@ function renderizarLista() {
         `
       });
 
-      // 💬 OBS
+      if (status === "em-andamento") {
+        li.setAttribute("id", "atividade-atual");
+      }
+      else if (isProxima) {
+        li.setAttribute("id", "proxima-atividade");
+      }
+
       if ((p.obs || "").trim()) {
         const iconObs = el("span", { className: "icon-obs" }, "💬");
         iconObs.setAttribute("title", p.obs);
@@ -1643,13 +1506,10 @@ function renderizarLista() {
         li.appendChild(iconObs);
       }
 
-      // ✅ TEXTO BASE
       let texto = buildInfo(p);
-
       const timer = getTempoRestante(p.data, p.inicio, p.fim);
 
       if (!isPrinting && timer) {
-
         if (timer.startsWith("🔥")) {
           texto += ` • ${timer}`;
         }
@@ -1667,17 +1527,15 @@ function renderizarLista() {
 
       li.appendChild(divInfo);
 
-      // ✅ ===== PROGRESSO + COR DINÂMICA =====
       if (status === "em-andamento") {
-
         const progresso = getProgresso(p.data, p.inicio, p.fim);
 
         let classeBarra = "progress-bar ativo";
         let classeItemExtra = "ativo";
 
         const fimDate = parseDateTime(p.data, p.fim);
-        const agora = Date.now();
-        const minutosRestantes = (fimDate - agora) / (1000 * 60);
+        const agora = getSyncedTime();
+        const minutosRestantes = (fimDate.getTime() - agora) / (1000 * 60);
 
         if (minutosRestantes <= 5) {
           classeBarra = "progress-bar danger";
@@ -1699,12 +1557,9 @@ function renderizarLista() {
 
         barraContainer.appendChild(barra);
         li.appendChild(barraContainer);
-
-        // ✅ sincroniza borda lateral
         li.classList.add(classeItemExtra);
       }
 
-      // ✅ BOTÕES (PADRÃO CORRETO COM ID)
       const bEdit = el("button", { className: "edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(p.id));
 
@@ -1719,21 +1574,15 @@ function renderizarLista() {
       }, [bEdit, bDelete, bClone]);
 
       li.appendChild(divBtns);
-
       ul.appendChild(li);
-
     });
 
     containerDia.appendChild(ul);
     listaDiv.appendChild(containerDia);
-
   });
-
-}	
-
+}
 
 function adicionarAtividade(){
-
   const data  = document.getElementById("data").value;
   const dia   = diaDaSemanaPorData(data);
   const tipo  = document.getElementById("tipo").value;
@@ -1750,7 +1599,7 @@ function adicionarAtividade(){
   const lista = carregarLista();
 
   lista.push({
-    id: `id_${Date.now()}_${Math.random()}`, // ✅ ID único
+    id: `id_${Date.now()}_${Math.random()}`,
     dia,
     data,
     tipo,
@@ -1766,55 +1615,46 @@ function adicionarAtividade(){
   renderizarLista();
 }
 
-function editarObservacao(index){
-
+function editarObservacao(id){
   const lista = carregarLista();
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) return;
 
   const atual = lista[index].obs || "";
-
   const nova = prompt("Observação:", atual);
 
   if (nova === null) return;
 
   const texto = nova.trim();
-
   lista[index].obs = texto;
-
   lista[index].destaque = texto.length > 0;
 
   salvarLista(lista);
   renderizarLista();
 }
-	
-function toggleDestaque(index){
+
+function toggleDestaque(id){
   const lista = carregarLista();
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) return;
 
   lista[index].destaque = !lista[index].destaque;
-
   salvarLista(lista);
   renderizarLista();
 }
-	
-let intervalTimers = null;
-let intervalProgresso = null;
+
 let intervalGlobal = null;
 
-
 function pararLoops() {
-
   if (!intervalGlobal) {
     return;
   }
-
   clearInterval(intervalGlobal);
   intervalGlobal = null;
-
 }
 
 function editarAtividade(id){
-
   const lista = carregarLista();
-
   const index = lista.findIndex(item => item.id === id);
   if (index === -1) {
     alert("Erro: atividade não encontrada");
@@ -1822,7 +1662,6 @@ function editarAtividade(id){
   }
 
   const p = lista[index];
-
   const dataBrAtual = isoParaBr(p.data);
 
   const entradaDataBr = prompt("Editar data (DD/MM/AAAA):", dataBrAtual);
@@ -1871,13 +1710,10 @@ function editarAtividade(id){
   renderizarLista();
 }
 
-
 function excluirAtividade(id){
-
   if(!confirm("Deseja realmente excluir esta atividade?")) return;
 
   const lista = carregarLista();
-
   const novaLista = lista.filter(item => item.id !== id);
 
   salvarLista(novaLista);
@@ -1885,9 +1721,7 @@ function excluirAtividade(id){
 }
 
 function clonarAtividade(id){
-
   const lista = carregarLista();
-
   const index = lista.findIndex(item => item.id === id);
   if (index === -1) {
     alert("Erro ao clonar");
@@ -1895,14 +1729,12 @@ function clonarAtividade(id){
   }
 
   const original = lista[index];
-
   const novoItem = {
     ...original,
-    id: `id_${Date.now()}_${Math.random()}` // ✅ novo ID
+    id: `id_${Date.now()}_${Math.random()}`
   };
 
   lista.push(novoItem);
-
   salvarLista(lista);
   renderizarLista();
 }
@@ -1944,7 +1776,7 @@ function gerarNomeArquivo() {
 function exportarBackup(){
   const data = {
     version: 1,
-    exportedAt: new Date().toISOString(),
+    exportedAt: new Date(getSyncedTime()).toISOString(),
     current: {
       evangelizacao: getEvangelizacao(),
       lista: carregarLista()
@@ -1960,7 +1792,7 @@ function exportarBackup(){
   const a = document.createElement("a");
 
   a.href = url;
-  a.download = gerarNomeArquivo(); // ✅ nome melhorado
+  a.download = gerarNomeArquivo();
 
   document.body.appendChild(a);
   a.click();
@@ -2013,15 +1845,13 @@ function zerarTudo(){
 }
 
 function iniciarLoops() {
-
   if (intervalGlobal) return;
 
   intervalGlobal = setInterval(() => {
     renderizarLista();
   }, 1000);
-
 }
-	
+
 function setPrintMode(state) {
   isPrinting = state;
   document.body.classList.toggle("printing", state);
@@ -2029,15 +1859,12 @@ function setPrintMode(state) {
 
 function importarJSONDireto(json) {
   try {
-
     if (!json.current?.lista) {
       throw new Error("Formato inválido");
     }
 
-    // ✅ atualiza dados
     salvarLista(json.current.lista);
 
-    // ✅ atualiza evangelização
     if (json.current.evangelizacao) {
       setEvangelizacao(json.current.evangelizacao);
     }
@@ -2046,18 +1873,16 @@ function importarJSONDireto(json) {
     renderizarLista();
 
     alert("✅ Programação atualizada com sucesso!");
-
   } catch (e) {
     console.error(e);
     alert("Erro ao importar JSON do servidor!");
   }
 }
-	
+
 function escolherAtualizacaoJSON() {
-  fetch('import/option.json?v=' + Date.now())
+  fetch('import/option.json?v=' + getSyncedTime())
     .then(res => res.json())
     .then(opcoes => {
-
       const escolha = prompt(
         "Escolha o arquivo:\n\n" +
         opcoes.map((op, i) => `${i + 1} - ${op.nome}`).join("\n")
@@ -2072,7 +1897,6 @@ function escolherAtualizacaoJSON() {
         .then(r => r.json())
         .then(importarJSONDireto)
         .catch(() => alert("Erro ao carregar arquivo"));
-
     })
     .catch(() => alert("Erro ao carregar opções"));
 }
@@ -2085,17 +1909,15 @@ function baixarPDF() {
   }, 100);
 }
 window.baixarPDF = baixarPDF;
-	
-document.addEventListener("DOMContentLoaded", () => {
 
-  // ===============================
-  // 🔹 INICIALIZA
-  // ===============================
+document.addEventListener("DOMContentLoaded", async () => {
   const ev = getEvangelizacao();
   const input = document.getElementById("evangelizacao");
   if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
 
   atualizarTitulos();
+  iniciarRelogioVisual();
+  await sincronizarHoraSupabase();
   renderizarLista();
 
   setTimeout(() => {
@@ -2105,9 +1927,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnZerar = document.getElementById('btn-zerar-tudo');
   if (btnZerar) btnZerar.addEventListener('click', zerarTudo);
 
-  // ===============================
-  // 🔹 MENU TOGGLE
-  // ===============================
   const btn = document.getElementById("toggle-menu-adicao");
   const menu = document.getElementById("menu-adicao");
 
@@ -2130,37 +1949,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===============================
-  // 🔥 LOOPS (CORRIGIDO)
-  // ===============================
   iniciarLoops();
 
-  // ===============================
-  // 🖨 PRINT CONTROL
-  // ===============================
+  window.addEventListener("beforeprint", () => {
+    isPrinting = true;
+    pararLoops();
+    renderizarLista();
+  });
 
-window.addEventListener("beforeprint", () => {
-
-  isPrinting = true;
-
-  pararLoops();
-
-  renderizarLista();
-
+  window.addEventListener("afterprint", () => {
+    isPrinting = false;
+    renderizarLista();
+    iniciarLoops();
+  });
 });
-
-window.addEventListener("afterprint", () => {
-
-  isPrinting = false;
-
-  renderizarLista();
-
-  iniciarLoops();
-
-});
-
-});
-	
 </script>
 
   <div class="watermark">TK Agosto</div>
