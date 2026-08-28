@@ -1,426 +1,757 @@
 <style>
-:root {
-  --bg: #f5f6f8;
-  --card-bg: #ffffff;
-  --text: #2c3e50;
-  --muted: #7f8c8d;
-  --border: #e2e8f0;
-  --primary: #3498db;
-  --primary-hover: #2980b9;
-  --danger: #e74c3c;
-  --badge: #34495e;
+
+/* ===============================
+   FIXAR HEADER WEB NO TOPO
+================================*/
+
+#web-header{
+    position:sticky;
+    top:0;
+    backdrop-filter:blur(6px);
+    background:rgba(255,255,255,0.75);
+    z-index: 9999 !important;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+
+/* ===============================
+   VARIÁVEIS E TEMA
+================================*/
+:root{
+  /* ✅ FLAG watermark-display (Marca D'Água) */
+  --watermark-display: flex;	
+  --bg:#ffffff;
+  --text:#111;
+  --muted:#666;
+  --card:#f5f5f7;
+  --brand:#2d6cdf;
+  --warn:#ffc107;
+  --danger:#dc3545;
+  --radius:10px;
+  --space-1:0.25rem;
+  --space-2:0.5rem;
+  --space-3:0.75rem;
+  --space-4:1rem;
+  --space-5:1.25rem;
+  --space-6:1.5rem;
+  --space-8:2rem;
+  --font-base:16px;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  padding-bottom: 100px;
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0b0c;
+    --text:#f1f1f1;
+    --muted:#aaa;
+    --card:#141416;
+    --brand:#5a8dff;
+  }
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
+/* ===============================
+   BASE
+================================*/
+*{ box-sizing:border-box; }
+html, body { min-height:100%; height:auto; }
+
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: var(--font-base);
+  line-height:1.45;
+  color:var(--text);
+  background:var(--bg);
+  margin:0;
+  padding: var(--space-6) var(--space-4) var(--space-8);
 }
 
-/* ============================================================
-   CABEÇALHO WEB & IMPRESSÃO (TELA)
-============================================================ */
-#web-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+h1,h2,h3{ margin:0 0 var(--space-4); line-height:1.2; }
+h1{ font-size:1.6rem; font-weight:700; }
+
+.container{ max-width:1100px; margin:0 auto; }
+
+/* ===============================
+   CABEÇALHO WEB
+================================*/
+#web-header{
+  display:flex;
+  gap: var(--space-4);
+  align-items:center;
+  justify-content:center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  backdrop-filter: blur(6px);
+}
+#web-header img{ width:120px; height:auto; }
+
+/* ===============================
+   FORMULÁRIOS
+================================*/
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field label{ font-weight:600; font-size:0.92rem; }
+
+input, select{
+  width:100%;
+  padding:0.7rem 0.8rem;
+  border:1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:8px;
+  font-size:1rem;
 }
 
-#web-header .logo-link img {
-  height: 48px;
-  width: auto;
+#form-bloco{
+  display:block;
+  position:relative;
+  padding: var(--space-6) var(--space-4);
 }
 
-#web-header h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
+#form-bloco .card{
+  margin-bottom:16px;
 }
 
-#print-header,
-.print-only {
-  display: none !important;
+#form-bloco-inner {
+   display:grid;
+   gap:16px;
 }
 
-/* ============================================================
-   PAINEL DE FORMULÁRIO (RETRACTÁVEL)
-============================================================ */
-#form-bloco {
-  position: relative;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 24px;
+/* SETA MINIMALISTA (- / +) */
+.toggle-form-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:none;
+  border:none;
+  color:var(--text);
+  font-size:22px;
+  font-weight:bold;
+  cursor:pointer;
+  padding:0;
+  margin:0;
+  line-height:1;
+  transition:0.2s;
+  z-index:10;
+}
+.toggle-form-btn:hover{
+  opacity:0.6;
 }
 
-.toggle-form-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
+/* Animação do menu de adição */
+#form-bloco.expanded{
+  max-height:5000px;
+  opacity:1;
+  transition:all .35s ease;
 }
 
-#form-bloco.collapsed #form-bloco-inner {
-  display: none !important;
+#form-bloco.collapsed{
+  display:block !important;
+  height:20px !important;
+  max-height:48px !important;
+  overflow:hidden !important;
+  padding: var(--space-6) var(--space-4) !important;
+  padding-top:10px !important;
+  background: var(--card);
+  border-radius: var(--radius);
+  border:1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  position:relative;
+  opacity:1 !important;
+  transition:all .35s ease;
 }
 
-#form-bloco.expanded #form-bloco-inner {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+#form-bloco.collapsed > *:not(.toggle-form-btn){
+  opacity:0 !important;
+  visibility:hidden !important;
+  height:0 !important;
+  max-height:0 !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  margin:0 !important;
+  pointer-events:none !important;
 }
 
-/* ============================================================
-   CARDS, CAMPOS E LAYOUT WEB
-============================================================ */
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
+#form-bloco.collapsed .toggle-form-btn{
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
 }
 
-.card-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+button.primary{
+  padding:0.9rem 1rem;
+  background:var(--brand);
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:1rem;
 }
 
-.badge {
-  background: var(--badge);
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
+/* ===============================
+   CARTÕES
+================================*/
+.card{
+  background:var(--bg);
+  border:1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.card-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:10px;
+}
+.badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:0.85rem;
+  font-weight:600;
+  background: color-mix(in srgb, var(--brand) 15%, transparent);
+  border:1px solid color-mix(in srgb, var(--brand) 28%, transparent);
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 12px;
+/* ===============================
+   GRID DE REFERÊNCIAS
+================================*/
+.grid-refs{
+  display:grid;
+  gap:16px;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+.ref-apoio{ grid-column:1/-1; }
+@media(max-width:760px){ .grid-refs{ grid-template-columns:1fr; } }
+
+/* ===============================
+   MOBILE READ-ONLY BAR
+================================*/
+#mobile-bar{
+  display:none;
 }
 
-.field-inline {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.field label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.field input[type="text"],
-.field select,
-.field-inline input {
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  width: 100%;
-}
-
-button.primary {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  width: 100%;
-}
-
-button.primary:hover {
-  background: var(--primary-hover);
-}
-
-.grid-refs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
-}
-
-.team-container {
-  border-top: 1px dashed var(--border);
-  padding-top: 12px;
-  margin-top: 12px;
-}
-
-.team-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.team-actions button,
-.chip-actions button,
-.ref-actions button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 2px 4px;
-  font-size: 0.9rem;
-  opacity: 0.7;
-}
-
-.team-actions button:hover,
-.chip-actions button:hover,
-.ref-actions button:hover {
-  opacity: 1;
-}
-
-.people {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 4px 10px;
-  font-size: 0.85rem;
-}
-
-.chip-ok {
-  background: #e8f8f5;
-  border-color: #2ecc71;
-}
-
-.chip-pend {
-  background: #fdf2e9;
-  border-color: #e67e22;
-}
-
-.chip-days {
-  display: flex;
-  gap: 2px;
-}
-
-.chip-day {
-  font-size: 0.68rem;
-  font-weight: bold;
-  background: rgba(0, 0, 0, 0.08);
-  padding: 1px 4px;
-  border-radius: 3px;
-}
-
-/* ============================================================
-   BARRA MOBILE & RODAPÉ WEB
-============================================================ */
-#mobile-bar {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  #mobile-bar {
+@media (max-width: 760px){
+  #mobile-bar{
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: #fff;
-    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-around;
-    padding: 8px;
-    z-index: 1000;
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+    background: var(--card);
+    border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+    z-index: 999999;
   }
 
-  #mobile-bar button {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 12px;
+  #mobile-bar button{
+    flex: 1;
+    margin: 0 4px;
+    background: var(--brand);
+    color:#fff;
+    padding: 10px 6px;
+    border-radius: 8px;
     font-size: 0.85rem;
+    font-weight:600;
+    border:none;
+  }
+
+  #mobile-bar button:active{
+    transform: scale(0.96);
   }
 }
 
-#menu-rodape {
+/* ===============================
+   EQUIPES
+================================*/
+.team-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 4px;
+  margin-bottom:6px;
+  border-bottom:1px dashed color-mix(in srgb, var(--text) 12%, transparent);
+}
+.team-line:hover .team-actions{ opacity:1; pointer-events:auto; }
+.team-name{
+  font-size:1rem;
+  font-weight:600;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.team-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.team-actions button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:1rem;
+  color:var(--text);
+  opacity:0.85;
+}
+.team-actions button:hover{ opacity:1; }
+
+/* ===============================
+   CHIPS
+================================*/
+.people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.chip{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:var(--card);
+  border:2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
+  font-size:0.92rem;
+  transition: border-color 0.25s linear;
+}
+
+.chip-ok{ border-color:#28a745 !important; }
+.chip-pend{ border-color:#dc3545 !important; }
+.chip:hover .chip-actions{ opacity:1; pointer-events:auto; }
+.chip-actions{
+  display:flex;
+  gap:4px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.chip-actions button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:0.85rem;
+  opacity:0.85;
+  color:var(--text);
+}
+.chip-star{ color:var(--warn); font-size:1rem; }
+
+/* ===============================
+   DIAS DA SEMANA
+================================*/
+.chip-days{
+  display:flex;
+  gap:4px;
+  margin-left:4px;
+}
+
+.chip-day{
+  font-size:8px;
+  padding:2px 5px;
+  border-radius:6px;
+  background:rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.12);
+  line-height:1;
+  white-space:nowrap;
+  opacity:.8;
+}
+.chip-day.seg { background:#e3f2fd; }
+.chip-day.ter { background:#e8f5e9; }
+.chip-day.qua { background:#fff3e0; }
+.chip-day.qui { background:#f3e5f5; }
+.chip-day.sex { background:#fce4ec; }
+.chip-day.sab { background:#e0f7fa; }
+.chip-day.dom { background:#ede7f6; }
+
+/* ===============================
+   MENU DE RODAPÉ
+================================*/
+#menu-rodape{
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-top: 1px solid var(--border);
-  padding: 12px 16px;
-  z-index: 900;
+  inset: auto 0 0 0;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+  contain: layout paint;
 }
 
-.menu-rodape-content {
-  max-width: 1200px;
-  margin: 0 auto;
+.menu-rodape-content{
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-width: 0;
 }
 
-.rodape-actions {
+.field-inline{
   display: flex;
+  align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  min-width: 0;
+  flex: 0 1 auto;
 }
 
-.btn_rodape {
+#menu-rodape label{
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#menu-rodape input{
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
   background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: 6px;
+  color: var(--text);
+  min-width: 140px;
+  max-width: 220px;
+  width: 100%;
+}
+
+.rodape-actions{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.btn_rodape,
+.sec-btn{
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.85rem;
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  color: var(--text);
 }
 
-.btn_rodape.brand {
-  background: var(--primary);
-  color: #fff;
-  border: none;
+.btn_rodape{ background: var(--brand); color:#fff; }
+.sec-btn{ background: var(--danger); color:#fff; }
+
+.btn_rodape.brand{
+  border-color: color-mix(in srgb, var(--brand) 60%, transparent);
+  color:#fff;
 }
 
-.watermark {
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-top: 12px;
+.sec-btn.danger{
+  border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+  color:#fff;
 }
 
-/* ============================================================
-   CONFIGURAÇÃO DE IMPRESSÃO EXCLUSIVA (@MEDIA PRINT)
-============================================================ */
-@media print {
-  body {
-    background: #fff !important;
-    color: #000 !important;
-    padding: 0 !important;
-  }
-
-  /* Oculta Elementos da Tela */
-  #web-header, 
-  #form-bloco, 
-  #org, 
-  #mobile-bar, 
-  #menu-rodape, 
-  .watermark {
+/* ESCONDE O RODAPÉ NO MOBILE */
+@media (max-width: 760px){
+  #menu-rodape {
     display: none !important;
   }
+}
 
-  /* Exibe Apenas Elementos de Impressão */
-  #print-lists,
-  .print-only {
-    display: block !important;
+/* ===============================
+   AÇÕES HOVER
+================================*/
+.ref-actions{
+  display:flex;
+  gap:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+.card:hover .ref-actions{ opacity:1; pointer-events:auto; }
+.ref-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:1.25rem;
+  color:var(--text);
+  opacity:0.85;
+}
+.ref-btn:hover{ opacity:1; }
+
+/* ===============================
+   ESCALA DE SERVOS (IMPRESSÃO 2)
+================================*/
+.escala-box{
+  font-family: monospace;
+  font-size: 13px;
+  column-count: 2;
+  column-gap: 40px;
+}
+
+.escala-header,
+.escala-row{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  break-inside: avoid;
+}
+
+.col-nome{ width: 55%; }
+.col-dia{ width: 20%; text-align: center; }
+.escala-sep{ margin: 6px 0; }
+
+/* ===============================
+   CONTROLES PADRÃO DE TELA
+================================*/
+#print-header{ display:none !important; }
+.print-only{ display:none !important; }
+
+/* ============================================
+   IMPRESSÃO — VERSÃO FINAL (CORRIGIDA)
+=========================================== */
+@media print {
+
+  /* ----------- OCULTAR INTERFACE E BOTÕES ----------- */
+  #form-bloco,
+  #form-bloco *,
+  #toggle-form,
+  #web-header,
+  #menu-rodape,
+  #org,
+  #mobile-bar,
+  .team-actions,
+  .chip-actions,
+  .ref-actions,
+  .toggle-form-btn,
+  button {
+      display: none !important;
   }
 
+  .escala-box{
+      display: block !important;
+  }
+
+  /* ----------- PÁGINA ----------- */
+  @page {
+      size: auto;
+      margin: 5mm 8mm 8mm 8mm !important;
+  }
+
+  .print-only {
+      display: block !important;
+  }
+
+  /* ----------- CABEÇALHO FIXO ----------- */
   #print-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex !important;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #000;
-    background: #fff;
+      position: fixed !important;
+      top: 0; left: 0; right: 0;
+      height: 22mm !important;
+      padding: 4mm 0 !important;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      background: #fff !important;
+      z-index: 9999 !important;
+      border: none !important;
   }
 
   #print-header img {
-    height: 36px;
+      position: absolute !important;
+      top: 1mm;
+      left: 0mm;
+      max-height: 22mm !important;
   }
 
-  /* QUEBRAS DE PÁGINA FORÇADAS */
+  /* ----------- ZERAR BODY ----------- */
+  body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+  }
+
+  /* ----------- CONTAINER DAS PÁGINAS ----------- */
+  #print-lists {
+      margin: 0 !important;
+      padding: 0 !important;
+  }
+
+  /* ----------- QUEBRA DE PÁGINA REAL ----------- */
   .print-break {
-    page-break-before: always !important;
-    break-before: page !important;
-    clear: both !important;
-    display: block !important;
-    padding-top: 20mm;
+      page-break-before: always !important;
+      break-before: page !important;
   }
 
+  /* ----------- TÍTULOS DE SEÇÃO ----------- */
   .print-section-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 16px 0 8px 0;
-    border-bottom: 1px solid #ccc;
+      display: block !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      background: #eef3ff !important;
+      border-left: 4px solid #2a5bd7 !important;
+      padding: 2mm 1mm !important;
+      margin: 6mm 0 4mm 0 !important;
+      page-break-inside: avoid !important;
   }
 
+  /* ----------- LISTAS ----------- */
   .print-list-block {
-    margin-bottom: 12px;
+      margin: 1mm 0 2mm 0 !important;
   }
 
+  .print-line {
+      font-size: 14px !important;
+      margin: 1mm 0 !important;
+  }
+
+  /* ----------- EQUIPES ----------- */
   .print-team-outer {
-    margin-bottom: 8px;
+      display: block !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      orphans: 999 !important;
+      widows: 999 !important;
+      margin: 3mm 0 !important;
+      padding-bottom: 1mm !important;
+      border-top: none !important;
+      border-bottom: 1px dashed #999 !important;
+  }
+
+  .print-team-outer:last-of-type {
+      border-bottom: none !important;
   }
 
   .team-title {
-    font-weight: bold;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      border-bottom: 1px solid #ddd !important;
+      padding-bottom: 1mm !important;
+      margin-bottom: 1mm !important;
   }
 
-  /* TABELA DE PRESENÇA */
+  .team-members-inline {
+      font-size: 12.5px !important;
+      line-height: 1.3 !important;
+      word-break: break-word !important;
+      white-space: normal !important;
+  }
+
+  /* ----------- CHIPS ----------- */
+  .chip-ok  { border: 2px solid #28a745 !important; }
+  .chip-pend{ border: 2px solid #dc3545 !important; }
+
+  /* MARCA D'ÁGUA OFF NA IMPRESSÃO */
+  .watermark { display: none !important; }
+
+  /* Garante exibição do bloco de escala apenas ao imprimir */
+  .escala-box {
+    display: block !important;
+    width: 100% !important;
+    font-family: monospace !important;
+    font-size: 12pt !important;
+  }
+  
+  .escala-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 4px 0 !important;
+    border-bottom: 1px dotted #ccc !important;
+  }
+
+/* ===============================
+   AJUSTES PARA A TABELA DE PRESENÇA (IMPRESSÃO)
+================================*/
+
+  /* Tabela de Presença */
   .tabela-presenca {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 10px !important;
   }
 
   .tabela-presenca th,
   .tabela-presenca td {
-    border: 1px solid #000;
-    padding: 6px 8px;
-    text-align: left;
-    font-size: 0.9rem;
+    border: 1px solid #000 !important;
+    padding: 6px 8px !important;
+    text-align: left !important;
+    font-size: 11pt !important;
+    color: #000 !important;
+  }
+
+  .col-nome-presenca {
+    width: 70% !important;
   }
 
   .col-check {
-    width: 80px;
+    width: 15% !important;
     text-align: center !important;
   }
 
-  .box-check {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #000;
-    margin: 0 auto;
+  /* Garante o padding superior para não sobrepor o cabeçalho fixo nas quebras */
+  #print-lists .print-break {
+    padding-top: 24mm !important;
   }
+}  
+  
+
+/* ===============================
+   MARCA D'ÁGUA (TELA)
+================================*/
+.watermark {
+  display: var(--watermark-display);
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 999999;
+  font-size: 60px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.06);
+  transform: rotate(-30deg);
+}
+
+/* ===============================
+   MODAL CUSTOMIZADO
+================================*/
+#custom-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999999;
+}
+
+.modal-box{
+  background:var(--bg);
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.modal-logo{
+  width:80px;
+  margin-bottom:10px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:15px;
+}
+
+.modal-actions button{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
 }
 
 </style>
