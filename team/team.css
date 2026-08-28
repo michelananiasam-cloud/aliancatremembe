@@ -609,6 +609,26 @@ button.primary{
       display: none !important;
   }
 
+  /* ----------- RESETAR ESTRUTURA DESKTOP (#ORG) NA IMPRESSÃO ----------- */
+  #org {
+      display: block !important;
+      background: transparent !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+  }
+
+  #org .card, 
+  #org .secao-equipe,
+  #org .grid-refs {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+
   .print-only {
       display:block !important;
   }
