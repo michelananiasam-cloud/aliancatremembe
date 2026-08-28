@@ -657,6 +657,51 @@ button.primary{
     padding: 4px 0 !important;
     border-bottom: 1px dotted #ccc !important;
   }
+
+  /* ------------ TABELA DE PRESENÇA ------------ */
+  .tabela-presenca {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 4mm !important;
+    font-size: 11pt !important;
+  }
+
+  .tabela-presenca th,
+  .tabela-presenca td {
+    border: 1px solid #777 !important;
+    padding: 5px 8px !important;
+    text-align: left !important;
+  }
+
+  .tabela-presenca th {
+    background-color: #f0f0f0 !important;
+    font-weight: bold !important;
+    font-size: 9.5pt !important;
+  }
+
+  .col-nome-presenca {
+    width: 70% !important;
+  }
+
+  .col-check {
+    width: 15% !important;
+    text-align: center !important;
+  }
+
+  /* Quadradinho para marcar o Checkbox manual */
+  .box-check {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #000;
+    border-radius: 2px;
+    margin: 0 auto;
+  }
+
+  /* Evita cortar uma linha no meio entre páginas da tabela de presença */
+  .tabela-presenca tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
 }
 
 /* ===============================
