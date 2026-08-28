@@ -1419,13 +1419,13 @@ function gerarImpressaoServos(listaServosCompleta) {
     paginaDiv.className = 'gerado-por-tabela-servos print-list-block print-break';
 
     paginaDiv.innerHTML = `
-      <div class="print-section-title">
-        Controle de Presença dos Servos — Página ${numeroPagina}
+      <div class="print-section-title escala-page-break">
+        Lista de Presença dos Servos — Página ${numeroPagina}
       </div>
       <table class="escala-box">
         <thead>
           <tr>
-            <th class="col-nome">NOME DO SERVO</th>
+            <th class="col-nome">LISTA DE SERVOS</th>
             <th class="col-dia">SÁBADO</th>
             <th class="col-dia">DOMINGO</th>
           </tr>
@@ -1495,7 +1495,7 @@ window.addEventListener('beforeprint', () => {
     
     let nomeServo = clone.textContent.trim();
     // Remove estrelas e emojis com segurança
-    nomeServo = nomeServo.replace(/⭐|★|☆|\*/g, '').trim();
+    nomeServo = nomeServo.replace(/🥁|🎤|🎸|🎹|⭐|★|☆|\*/g, '').trim();
     
     // Ignora textos vazios ou rótulos de contagem que possam vir por engano
     if (nomeServo && !nomeServo.includes(':') && !nomeServo.toLowerCase().includes('total')) {
