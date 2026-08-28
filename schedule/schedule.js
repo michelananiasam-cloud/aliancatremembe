@@ -420,14 +420,44 @@ function iniciarLoops() {
   }, 1000);
 }
 
-// Inicializações básicas de eventos omitidas por brevidade, mantendo a estrutura original...
-document.addEventListener("DOMContentLoaded", () => {
-  const ev = getEvangelizacao();
-  const input = document.getElementById("evangelizacao");
-  if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Botão Adicionar Atividade
+    const btnAdicionar = document.querySelector('.add');
+    if (btnAdicionar) {
+        btnAdicionar.addEventListener('click', adicionarAtividade);
+    }
 
-  atualizarTitulos();
-  renderizarLista();
+    // 2. Formulário do Rodapé (Alterar Evangelização)
+    const formRodape = document.querySelector('.menu-rodape-content');
+    if (formRodape) {
+        formRodape.addEventListener('submit', alterarEvangelizacao);
+    }
 
-  iniciarLoops();
+    // 3. Botões de Ação do Rodapé e Mobile (PDF, Atualizar, Importar, Excluir)
+    // Se o botão de zerar tiver ID ou classe específica:
+    const btnZerar = document.getElementById('btn-zerar-tudo');
+    if (btnZerar && typeof zerarTudo === 'function') {
+        btnZerar.addEventListener('click', zerarTudo);
+    }
+
+    // Mapeamento dos botões de PDF e Atualizar que usam onclick no HTML:
+    document.querySelectorAll('[onclick="baixarPDF()"]').forEach(btn => {
+        btn.removeAttribute('onclick');
+        btn.addEventListener('click', baixarPDF);
+    });
+
+    document.querySelectorAll('[onclick="escolherAtualizacaoJSON()"]').forEach(btn => {
+        btn.removeAttribute('onclick');
+        btn.addEventListener('click', escolherAtualizacaoJSON);
+    });
+
+    // 4. Controle do menu de adição (botão de recolher/expandir '-')
+    const toggleBtn = document.getElementById('toggle-menu-adicao');
+    const menuAdicao = document.getElementById('menu-adicao');
+    if (toggleBtn && menuAdicao) {
+        toggleBtn.addEventListener('click', () => {
+            menuAdicao.classList.toggle('fechado'); // Ajuste para a classe CSS que esconde o menu
+            toggleBtn.textContent = menuAdicao.classList.contains('fechado') ? '+' : '-';
+        });
+    }
 });
