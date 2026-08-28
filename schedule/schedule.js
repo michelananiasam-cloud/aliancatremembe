@@ -95,8 +95,12 @@ function atualizarTitulos() {
 function alterarEvangelizacao(e) {
   e?.preventDefault();
   const input = document.getElementById("evangelizacao");
-  const novoValor = input.value.trim();
-  setEvangelizacao(novoValor);
+  if (input) {
+    const novoValor = input.value.trim();
+    if (novoValor) {
+      setEvangelizacao(novoValor);
+    }
+  }
   atualizarTitulos();
   renderizarLista();
 }
@@ -106,9 +110,7 @@ function dois(n){ return n.toString().padStart(2,'0'); }
 function getTempoRestante(data, inicio, fim) {
   if (!data || !inicio || !fim) return "";
 
-  // 🕒 Utiliza a hora sincronizada do servidor
   const agora = getHoraAtual();
-
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
 
@@ -152,7 +154,6 @@ function getStatusAtividade(data, inicio, fim) {
     return "futuro";
   }
 
-  // 🕒 Utiliza a hora sincronizada do servidor
   const agora = getHoraAtual();
 
   if (agora >= inicioDate && agora <= fimDate) {
@@ -167,9 +168,7 @@ function getStatusAtividade(data, inicio, fim) {
 }
 
 function marcarProximaAtividade(lista) {
-  // 🕒 Utiliza a hora sincronizada do servidor
   const agora = getHoraAtual();
-
   let proximaIndex = -1;
   let menorDiff = Infinity;
 
@@ -254,7 +253,7 @@ function getDuracao(inicio, fim) {
 
   if (h > 0 && m > 0) return `${h}h ${m}m`;
   if (h > 0) return `${h}h`;
-  return `${m}mim`;
+  return `${m}min`;
 }
 
 function buildInfo(p) {
@@ -272,7 +271,6 @@ function getProgresso(data, inicio, fim){
   const hoje = new Date(getHoraAtual()).toISOString().split("T")[0];
   if (data !== hoje) return 0;
 
-  // 🕒 Utiliza a hora sincronizada do servidor
   const agora = getHoraAtual();
   const i = parseDateTime(data, inicio);
   const f = parseDateTime(data, fim);
@@ -325,7 +323,7 @@ function renderizarLista() {
       });
 
       if ((p.obs || "").trim()) {
-        const iconObs = el("span", { className: "icon-obs" }, "💬");
+        const iconObs = el("span", { className: "icon-obs tem-obs" }, "💬");
         iconObs.setAttribute("title", p.obs);
         iconObs.addEventListener("click", () => editarObservacao(p.id));
         li.appendChild(iconObs);
@@ -388,6 +386,92 @@ function renderizarLista() {
   });
 }
 
+function adicionarAtividade() {
+  const data = document.getElementById("data").value;
+  const tipo = document.getElementById("tipo").value;
+  const nome = document.getElementById("nome").value;
+  const servo = document.getElementById("servo").value;
+  const inicio = document.getElementById("inicio").value;
+  const fim = document.getElementById("fim").value;
+
+  if (!data || !inicio || !fim) {
+    alert("Preencha ao menos a Data, Hora Início e Hora Fim.");
+    return;
+  }
+
+  const lista = carregarLista();
+  
+  const novaAtividade = {
+    id: `id_${Date.now()}_${Math.random()}`,
+    data,
+    tipo,
+    nome,
+    servo,
+    inicio,
+    fim,
+    obs: "",
+    destaque: false
+  };
+
+  lista.push(novaAtividade);
+  salvarLista(lista);
+  renderizarLista();
+  limparFormulario();
+}
+
+function limparFormulario() {
+  const nomeEl = document.getElementById("nome");
+  const servoEl = document.getElementById("servo");
+  const inicioEl = document.getElementById("inicio");
+  const fimEl = document.getElementById("fim");
+  const tipoEl = document.getElementById("tipo");
+
+  if (nomeEl) nomeEl.value = "";
+  if (servoEl) servoEl.value = "";
+  if (inicioEl) inicioEl.value = "";
+  if (fimEl) fimEl.value = "";
+  if (tipoEl) tipoEl.selectedIndex = 0;
+}
+
+function editarAtividade(id) {
+  const lista = carregarLista();
+  const item = lista.find(i => i.id === id);
+  if (!item) return;
+
+  document.getElementById("data").value = item.data;
+  document.getElementById("tipo").value = item.tipo || "";
+  document.getElementById("nome").value = item.nome || "";
+  document.getElementById("servo").value = item.servo || "";
+  document.getElementById("inicio").value = item.inicio;
+  document.getElementById("fim").value = item.fim;
+
+  // Remove o item atual para reescrevê-lo ao salvar via formulário
+  excluirAtividade(id, false);
+}
+
+function excluirAtividade(id, render = true) {
+  let lista = carregarLista();
+  lista = lista.filter(item => item.id !== id);
+  salvarLista(lista);
+  if (render) renderizarLista();
+}
+
+function clonarAtividade(id) {
+  const lista = carregarLista();
+  const item = lista.find(i => i.id === id);
+  if (!item) return;
+
+  const clone = {
+    ...item,
+    id: `id_${Date.now()}_${Math.random()}`,
+    nome: `${item.nome || 'Atividade'} (Cópia)`
+  };
+
+  lista.push(clone);
+  salvarLista(lista);
+  renderizarLista();
+}
+
 function editarObservacao(id){
   const lista = carregarLista();
   const index = lista.findIndex(item => item.id === id);
@@ -403,6 +487,58 @@ function editarObservacao(id){
 
   salvarLista(lista);
   renderizarLista();
+}
+
+function zerarTudo() {
+  if (confirm("Tem certeza que deseja apagar toda a programação?")) {
+    localStorage.removeItem(LIST_KEY);
+    renderizarLista();
+  }
+}
+
+function exportarBackup() {
+  const lista = carregarLista();
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lista));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", `backup_programacao_${Date.now()}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+
+function handleImportFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const dados = JSON.parse(e.target.result);
+      if (Array.isArray(dados)) {
+        salvarLista(dados);
+        renderizarLista();
+        alert("Importação realizada com sucesso!");
+      } else {
+        alert("Formato de arquivo inválido.");
+      }
+    } catch (err) {
+      alert("Erro ao ler o arquivo JSON.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function baixarPDF() {
+  isPrinting = true;
+  renderizarLista();
+  window.print();
+  setTimeout(() => {
+    isPrinting = false;
+    renderizarLista();
+  }, 1000);
+}
+
+function escolherAtualizacaoJSON() {
+  alert("Função de atualização remota/JSON pronta para ser configurada com sua API.");
 }
 
 let intervalGlobal = null;
@@ -433,31 +569,42 @@ document.addEventListener('DOMContentLoaded', () => {
         formRodape.addEventListener('submit', alterarEvangelizacao);
     }
 
-    // 3. Botões de Ação do Rodapé e Mobile (PDF, Atualizar, Importar, Excluir)
+    // 3. Botão de Zerar Tudo
     const btnZerar = document.getElementById('btn-zerar-tudo');
-    if (btnZerar && typeof zerarTudo === 'function') {
+    if (btnZerar) {
         btnZerar.addEventListener('click', zerarTudo);
     }
 
-    // Mapeamento dos botões de PDF e Atualizar que usam onclick no HTML:
-    document.querySelectorAll('[onclick="baixarPDF()"]').forEach(btn => {
+    // 4. Mapeamento dos botões de PDF e Atualizar para garantir robustez
+    document.querySelectorAll('[onclick*="baixarPDF"]').forEach(btn => {
         btn.removeAttribute('onclick');
         btn.addEventListener('click', baixarPDF);
     });
 
-    document.querySelectorAll('[onclick="escolherAtualizacaoJSON()"]').forEach(btn => {
+    document.querySelectorAll('[onclick*="escolherAtualizacaoJSON"]').forEach(btn => {
         btn.removeAttribute('onclick');
         btn.addEventListener('click', escolherAtualizacaoJSON);
     });
 
-    // 4. Controle do menu de adição (botão de recolher/expandir '-')
+    document.querySelectorAll('[onclick*="exportarBackup"]').forEach(btn => {
+        btn.removeAttribute('onclick');
+        btn.addEventListener('click', exportarBackup);
+    });
+
+    // 5. Controle do menu de adição (botão de recolher/expandir '-')
     const toggleBtn = document.getElementById('toggle-menu-adicao');
     const menuAdicao = document.getElementById('menu-adicao');
     if (toggleBtn && menuAdicao) {
         toggleBtn.addEventListener('click', () => {
-            menuAdicao.classList.toggle('fechado');
-            toggleBtn.textContent = menuAdicao.classList.contains('fechado') ? '+' : '-';
+            menuAdicao.classList.toggle('collapsed');
+            toggleBtn.textContent = menuAdicao.classList.contains('collapsed') ? '+' : '-';
         });
+    }
+
+    // 🚀 Configura valor inicial do input de evangelização no rodapé se houver
+    const inputEvang = document.getElementById('evangelizacao');
+    if (inputEvang) {
+        inputEvang.value = getEvangelizacao() !== EVANG_DEFAULT ? getEvangelizacao() : '';
     }
 
     // 🚀 Renderiza a lista inicial e dispara o cronômetro automático
