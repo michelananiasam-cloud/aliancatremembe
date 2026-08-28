@@ -36,7 +36,7 @@
     <h1 id="titulo-web">Equipe Movimento Tremembé</h1>
   </div>
 
-  <!-- Cabeçalho exclusivo para impressão (repetido em todas as páginas) -->
+  <!-- Cabeçalho exclusivo para impressão -->
   <div id="print-header">
     <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
          alt="Logo da Aliança">
@@ -50,9 +50,9 @@
   <section id="form-bloco" aria-label="Cadastro e Edição">
 
     <!-- Botão de abrir/fechar -->
-    <button id="toggle-form" class="toggle-form-btn">-</button>
+    <button id="toggle-form" class="toggle-form-btn">+</button>
 
-    <!-- WRAPPER CORRETO -->
+    <!-- WRAPPER DO FORMULÁRIO -->
     <div id="form-bloco-inner">
 
       <!-- Pessoas‑Chave -->
@@ -123,17 +123,20 @@
 
 
   <!-- ===============================
-       ÁREA DO SERVOS (WEB)
+       ÁREA DOS SERVOS (WEB)
   ================================== -->
   <section id="org" aria-live="polite"></section>
 
 
   <!-- ===============================
-       ÁREA DE IMPRESSÃO (TEXTO APENAS)
+       ÁREA DE IMPRESSÃO
   ================================== -->
   <section id="print-lists" class="print-only">
+    
+    <!-- Relatórios das páginas 1, 2 e 3 injetados via JS aqui -->
+    <div id="print-dynamic-content"></div>
 
-    <!-- NOVA PÁGINA DE IMPRESSÃO: PRESENÇA / CHECKBOX -->
+    <!-- PÁGINA SEPARADA DE IMPRESSÃO: PRESENÇA / CHECKBOX -->
     <div class="print-break print-only">
       <div class="print-section-title">
         Controle de Presença dos Servos
@@ -148,7 +151,7 @@
           </tr>
         </thead>
         <tbody id="tabela-presenca-body">
-          <!-- O JavaScript vai inserir as linhas aqui automaticamente -->
+          <!-- Linhas geradas automaticamente pelo JS -->
         </tbody>
       </table>
     </div>
@@ -167,7 +170,7 @@
 
 
 <!-- ===============================
-     RODAPÉ — SISTEMA DE GESTÃO
+     RODAPÉ DE AÇÕES
 =================================== -->
 <div id="menu-rodape" role="region" aria-label="Alterar evangelização (rodapé)">
   <form class="menu-rodape-content" id="form-rodape">
