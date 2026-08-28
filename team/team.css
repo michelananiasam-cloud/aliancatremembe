@@ -682,21 +682,23 @@ button.primary{
 }
 
 /* ===============================
-   BLOQUEIO DE TELA MOBILE
+   BLOQUEIO APENAS NO MOBILE
 ================================*/
-body * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  pointer-events: none;
-}
+@media (max-width: 760px) {
+  body * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
 
-button, 
-button *, 
-a, 
-a *, 
-#web-header img, 
-#mobile-bar button, 
-#menu-rodape button {
-  pointer-events: auto !important;
+  button, 
+  button *, 
+  a, 
+  a *, 
+  #web-header img, 
+  #mobile-bar button, 
+  #menu-rodape button {
+    pointer-events: auto !important;
+  }
 }
