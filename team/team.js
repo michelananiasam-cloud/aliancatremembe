@@ -1399,17 +1399,24 @@ function escolherAtualizacaoJSON() {
 }
 
 function gerarImpressaoServos(listaServosCompleta) {
-  const LIMITE_POR_PAGINA = 30;
+  const LIMITE_POR_PAGINA = 20;
   const container = document.getElementById('print-lists');
   if (!container) return;
-  container.innerHTML = '';  
+  
+  // REMOVIDO: container.innerHTML = ''; (Isso apagava o relatório de equipes)
+  
+  // Remove apenas as tabelas de presença geradas em tentativas anteriores de impressão
+  const tabelasAntigas = container.querySelectorAll('.gerado-por-tabela-servos');
+  tabelasAntigas.forEach(tabela => tabela.remove());
 
   for (let i = 0; i < listaServosCompleta.length; i += LIMITE_POR_PAGINA) {
     const bloco = listaServosCompleta.slice(i, i + LIMITE_POR_PAGINA);
     const numeroPagina = Math.floor(i / LIMITE_POR_PAGINA) + 1;
 
     const paginaDiv = document.createElement('div');
-    paginaDiv.className = i === 0 ? 'print-list-block' : 'print-list-block escala-page-break';
+    
+    // Adicionamos a classe 'gerado-por-tabela-servos' para controle e 'print-break' para forçar a nova página
+    paginaDiv.className = 'gerado-por-tabela-servos print-list-block print-break';
 
     paginaDiv.innerHTML = `
       <div class="print-section-title">
@@ -1438,10 +1445,10 @@ function gerarImpressaoServos(listaServosCompleta) {
       </table>
     `;
 
+    // Adiciona as tabelas ao final do contêiner, mantendo as páginas de equipes intactas
     container.appendChild(paginaDiv);
   }
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
   ORG.atualizarTitulos();
@@ -1475,12 +1482,11 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener('beforeprint', () => {
   syncPrintHeaderTitle();
   
-  // Coleta automatizada de todos os servos únicos exibidos nas equipes da tela
-  const chips = document.querySelectorAll('.chip');
+  // Seleciona apenas os chips que estão dentro das listas de pessoas das equipes (ignora contadores e resumos)
+  const chips = document.querySelectorAll('.people .chip, .team-members-inline .chip');
   const nomesSet = new Set();
 
   chips.forEach(chip => {
-    // Clona o chip para remover os botões de ação internos e extrair apenas o texto limpo do nome
     const clone = chip.cloneNode(true);
     const actions = clone.querySelector('.chip-actions');
     if (actions) actions.remove();
@@ -1488,10 +1494,11 @@ window.addEventListener('beforeprint', () => {
     if (days) days.remove();
     
     let nomeServo = clone.textContent.trim();
-    // Remove marcadores de estrela ou caracteres extras se houverem
-    nomeServo = nomeServo.replace('★', '').trim();
+    // Remove estrelas e emojis com segurança
+    nomeServo = nomeServo.replace(/⭐|★|☆|\*/g, '').trim();
     
-    if (nomeServo) {
+    // Ignora textos vazios ou rótulos de contagem que possam vir por engano
+    if (nomeServo && !nomeServo.includes(':') && !nomeServo.toLowerCase().includes('total')) {
       nomesSet.add(nomeServo);
     }
   });
