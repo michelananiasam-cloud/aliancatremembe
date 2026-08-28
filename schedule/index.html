@@ -1111,7 +1111,7 @@ async function sincronizarHoraSupabase() {
     const response = await fetch(SUPABASE_TIME_URL);
     const data = await response.json();
     timeOffset = data.timestamp - Date.now();
-    supabaseSyncStatus = "✅ Hora Certa TK!";
+    supabaseSyncStatus = "✅ Tá Ligado!";
   } catch (err) {
     console.warn("Erro ao sincronizar com Supabase, usando relógio local.", err);
     supabaseSyncStatus = "❌ " + err.message;
