@@ -1442,6 +1442,7 @@ function gerarImpressaoServos(listaServosCompleta) {
   }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
   ORG.atualizarTitulos();
   ORG.initTituloInput();
@@ -1473,13 +1474,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener('beforeprint', () => {
   syncPrintHeaderTitle();
-  gerarListaPresencaDinamica();
   
-  // Resgata o seu array/lista de servos atual
-  const listaServos = obterListaDeServos(); // <- Substitua pela sua variável ou função que guarda os servos
-  
-  // Monta o DOM paginado em lotes de 30 antes do navegador renderizar a impressão
-  gerarImpressaoServos(listaServos);
+  // Coleta automatizada de todos os servos únicos exibidos nas equipes da tela
+  const chips = document.querySelectorAll('.chip');
+  const nomesSet = new Set();
+
+  chips.forEach(chip => {
+    // Clona o chip para remover os botões de ação internos e extrair apenas o texto limpo do nome
+    const clone = chip.cloneNode(true);
+    const actions = clone.querySelector('.chip-actions');
+    if (actions) actions.remove();
+    const days = clone.querySelector('.chip-days');
+    if (days) days.remove();
+    
+    let nomeServo = clone.textContent.trim();
+    // Remove marcadores de estrela ou caracteres extras se houverem
+    nomeServo = nomeServo.replace('★', '').trim();
+    
+    if (nomeServo) {
+      nomesSet.add(nomeServo);
+    }
+  });
+
+  // Transforma em array e ordena em ordem alfabética exata
+  const listaServosOrdenada = Array.from(nomesSet).sort((a, b) => a.localeCompare(b));
+
+  // Dispara a criação das tabelas paginadas de 30 em 30
+  gerarImpressaoServos(listaServosOrdenada);
 });
 
 window.imprimirEscalaSabDom = imprimirEscalaSabDom;
