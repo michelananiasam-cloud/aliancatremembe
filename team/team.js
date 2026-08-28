@@ -1453,7 +1453,7 @@ function gerarImpressaoServos(listaServosCompleta) {
 }
 
 document.addEventListener('click', function(e) {
-  // Executa o bloqueio apenas se a tela tiver 760px ou menos (mobile)
+  // Executa o bloqueio apenas em telas mobile (760px ou menos)
   if (window.innerWidth > 760) return;
 
   const permitido = e.target.closest('button') || 
