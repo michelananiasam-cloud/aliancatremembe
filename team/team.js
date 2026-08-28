@@ -849,9 +849,9 @@ function renderPrintVersion(org) {
         <table class="tabela-presenca">
           <thead>
             <tr>
-              <th class="col-nome-presenca">NOME DO SERVO</th>
-              <th class="col-check">SÁBADO</th>
-              <th class="col-check">DOMINGO</th>
+              <th class="col-nome-presenca">Servos</th>
+              <th class="col-check">Sáb</th>
+              <th class="col-check">Dom</th>
             </tr>
           </thead>
           <tbody id="tabela-presenca-body"></tbody>
