@@ -657,25 +657,40 @@ button.primary{
     padding: 4px 0 !important;
     border-bottom: 1px dotted #ccc !important;
   }
-
-/* ===============================
-   AJUSTES PARA A TABELA DE PRESENÇA (IMPRESSÃO)
-================================*/
-
-  /* Tabela de Presença */
+   
+   /* ===============================
+      CORREÇÃO DE QUEBRA DA TABELA DE PRESENÇA
+   ================================*/
+  /* 1. Força a tabela a respeitar as propriedades de quebra de página */
   .tabela-presenca {
     width: 100% !important;
     border-collapse: collapse !important;
-    margin-top: 10px !important;
+    margin-top: 20px !important;
+    page-break-inside: auto !important;
   }
 
-  .tabela-presenca th,
-  .tabela-presenca td {
+  /* 2. REPETE O CABEÇALHO DA TABELA EM TODAS AS PÁGINAS QUEBRADAS */
+  .tabela-presenca thead {
+    display: table-header-group !important;
+  }
+
+  .tabela-presenca tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .tabela-presenca th {
+    background-color: #fff !important;
+    color: #000 !important;
     border: 1px solid #000 !important;
     padding: 6px 8px !important;
-    text-align: left !important;
-    font-size: 11pt !important;
-    color: #000 !important;
+    font-size: 10pt !important;
+  }
+
+  .tabela-presenca td {
+    border: 1px solid #000 !important;
+    padding: 4px 8px !important;
+    font-size: 9.5pt !important;
   }
 
   .col-nome-presenca {
@@ -687,11 +702,13 @@ button.primary{
     text-align: center !important;
   }
 
-  /* Garante o padding superior para não sobrepor o cabeçalho fixo nas quebras */
+  /* Espaçamento superior para não atropelar o topo nas quebras */
   #print-lists .print-break {
+    page-break-before: always !important;
+    break-before: page !important;
     padding-top: 24mm !important;
   }
-}  
+} 
   
 
 /* ===============================
