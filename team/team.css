@@ -22,7 +22,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.5;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
 }
 
 .container {
@@ -32,7 +32,7 @@ body {
 }
 
 /* ============================================================
-   CABEÇALHO WEB
+   CABEÇALHO WEB & IMPRESSÃO (TELA)
 ============================================================ */
 #web-header {
   display: flex;
@@ -51,8 +51,9 @@ body {
   font-weight: 700;
 }
 
-#print-header {
-  display: none;
+#print-header,
+.print-only {
+  display: none !important;
 }
 
 /* ============================================================
@@ -65,7 +66,6 @@ body {
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 24px;
-  transition: all 0.3s ease;
 }
 
 .toggle-form-btn {
@@ -75,25 +75,30 @@ body {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
 #form-bloco.collapsed #form-bloco-inner {
-  display: none;
+  display: none !important;
 }
 
 #form-bloco.expanded #form-bloco-inner {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 /* ============================================================
-   CARDS, CAMPOS E CHIPS
+   CARDS, CAMPOS E LAYOUT WEB
 ============================================================ */
 .card {
   background: var(--card-bg);
@@ -126,6 +131,12 @@ body {
   margin-bottom: 12px;
 }
 
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .field label {
   font-size: 0.85rem;
   font-weight: 600;
@@ -139,6 +150,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.95rem;
+  width: 100%;
 }
 
 button.primary {
@@ -146,9 +158,10 @@ button.primary {
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
+  width: 100%;
 }
 
 button.primary:hover {
@@ -219,16 +232,21 @@ button.primary:hover {
   border-color: #e67e22;
 }
 
+.chip-days {
+  display: flex;
+  gap: 2px;
+}
+
 .chip-day {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: bold;
-  background: rgba(0,0,0,0.06);
-  padding: 2px 4px;
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
 }
 
 /* ============================================================
-   RODAPÉ E BARRA MOBILE
+   BARRA MOBILE & RODAPÉ WEB
 ============================================================ */
 #mobile-bar {
   display: none;
@@ -307,26 +325,28 @@ button.primary:hover {
 }
 
 /* ============================================================
-   CONFIGURAÇÃO DE IMPRESSÃO (NOVA PÁGINA E TABELA)
+   CONFIGURAÇÃO DE IMPRESSÃO EXCLUSIVA (@MEDIA PRINT)
 ============================================================ */
-.print-only {
-  display: none;
-}
-
 @media print {
   body {
-    background: #fff;
-    color: #000;
-    padding-bottom: 0;
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
   }
 
-  /* Oculta Elementos da Interface Web */
-  #web-header, #form-bloco, #org, #mobile-bar, #menu-rodape, .watermark {
+  /* Oculta Elementos da Tela */
+  #web-header, 
+  #form-bloco, 
+  #org, 
+  #mobile-bar, 
+  #menu-rodape, 
+  .watermark {
     display: none !important;
   }
 
-  /* Exibe Elementos de Impressão */
-  .print-only, #print-header {
+  /* Exibe Apenas Elementos de Impressão */
+  #print-lists,
+  .print-only {
     display: block !important;
   }
 
@@ -340,19 +360,20 @@ button.primary:hover {
     gap: 12px;
     padding-bottom: 8px;
     border-bottom: 2px solid #000;
+    background: #fff;
   }
 
   #print-header img {
     height: 36px;
   }
 
-  /* REGRAS ESTRITAS DE QUEBRA DE PÁGINA */
+  /* QUEBRAS DE PÁGINA FORÇADAS */
   .print-break {
     page-break-before: always !important;
     break-before: page !important;
     clear: both !important;
     display: block !important;
-    margin-top: 30mm;
+    padding-top: 20mm;
   }
 
   .print-section-title {
@@ -401,4 +422,5 @@ button.primary:hover {
     margin: 0 auto;
   }
 }
+
 </style>
