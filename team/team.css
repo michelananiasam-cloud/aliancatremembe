@@ -512,6 +512,13 @@ button.primary{
 =========================================== */
 @media print {
 
+  /* ----------- CONFIGURAÇÃO DE PÁGINA E MARGENS ----------- */
+  @page {
+      size: auto;
+      /* Margem superior de 28mm garante espaço para o topo fixo sem cortar nada */
+      margin: 28mm 8mm 12mm 8mm !important;
+  }
+
   /* ----------- OCULTAR INTERFACE E BOTÕES ----------- */
   #form-bloco,
   #form-bloco *,
@@ -524,30 +531,30 @@ button.primary{
   .chip-actions,
   .ref-actions,
   .toggle-form-btn,
-  button {
+  button,
+  .watermark {
       display: none !important;
   }
 
-  .escala-box{
-      display: block !important;
-  }
-
-  /* ----------- PÁGINA ----------- */
-  @page {
-      size: auto;
-      margin: 5mm 8mm 8mm 8mm !important;
+  /* ----------- ZERAR CONTÊINERES ----------- */
+  body, 
+  #print-lists {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+      overflow: visible !important;
   }
 
   .print-only {
       display: block !important;
   }
 
-  /* ----------- CABEÇALHO FIXO ----------- */
+  /* ----------- CABEÇALHO FIXO DO TOPO ----------- */
   #print-header {
       position: fixed !important;
       top: 0; left: 0; right: 0;
       height: 22mm !important;
-      padding: 4mm 0 !important;
+      padding: 2mm 0 !important;
       display: flex !important;
       justify-content: center;
       align-items: center;
@@ -563,23 +570,11 @@ button.primary{
       max-height: 22mm !important;
   }
 
-  /* ----------- ZERAR BODY ----------- */
-  body {
-      margin: 0 !important;
-      padding: 0 !important;
-      background: #fff !important;
-  }
-
-  /* ----------- CONTAINER DAS PÁGINAS ----------- */
-  #print-lists {
-      margin: 0 !important;
-      padding: 0 !important;
-  }
-
   /* ----------- QUEBRA DE PÁGINA REAL ----------- */
   .print-break {
       page-break-before: always !important;
       break-before: page !important;
+      padding-top: 0 !important; /* Margem controlada pelo @page */
   }
 
   /* ----------- TÍTULOS DE SEÇÃO ----------- */
@@ -590,8 +585,9 @@ button.primary{
       background: #eef3ff !important;
       border-left: 4px solid #2a5bd7 !important;
       padding: 2mm 1mm !important;
-      margin: 6mm 0 4mm 0 !important;
+      margin: 4mm 0 4mm 0 !important;
       page-break-inside: avoid !important;
+      break-inside: avoid !important;
   }
 
   /* ----------- LISTAS ----------- */
@@ -637,78 +633,75 @@ button.primary{
   }
 
   /* ----------- CHIPS ----------- */
-  .chip-ok  { border: 2px solid #28a745 !important; }
-  .chip-pend{ border: 2px solid #dc3545 !important; }
+  .chip-ok   { border: 2px solid #28a745 !important; }
+  .chip-pend { border: 2px solid #dc3545 !important; }
 
-  /* MARCA D'ÁGUA OFF NA IMPRESSÃO */
-  .watermark { display: none !important; }
-
-  /* Garante exibição do bloco de escala apenas ao imprimir */
+  /* ----------- ESCALA DE SERVOS ----------- */
   .escala-box {
-    display: block !important;
-    width: 100% !important;
-    font-family: monospace !important;
-    font-size: 12pt !important;
-  }
-  
-  .escala-row {
-    display: flex !important;
-    justify-content: space-between !important;
-    padding: 4px 0 !important;
-    border-bottom: 1px dotted #ccc !important;
+      display: block !important;
+      width: 100% !important;
+      font-family: monospace !important;
+      font-size: 12pt !important;
+      column-count: 2;
+      column-gap: 40px;
   }
    
-   /* ===============================
-      CORREÇÃO DE QUEBRA DA TABELA DE PRESENÇA
-   ================================*/
-  /* 1. Força a tabela a respeitar as propriedades de quebra de página */
+  .escala-header,
+  .escala-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      padding: 4px 0 !important;
+      border-bottom: 1px dotted #ccc !important;
+      break-inside: avoid !important;
+  }
+
+  /* ===============================================
+     TABELA DE PRESENÇA (CORREÇÃO DE FLUXO/REPETIÇÃO)
+  =============================================== */
   .tabela-presenca {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    margin-top: 20px !important;
-    page-break-inside: auto !important;
+      width: 100% !important;
+      border-collapse: collapse !important;
+      margin-top: 10px !important;
+      page-break-inside: auto !important;
   }
 
-  /* 2. REPETE O CABEÇALHO DA TABELA EM TODAS AS PÁGINAS QUEBRADAS */
-  .tabela-presenca thead {
-    display: table-header-group !important;
+  /* REPETE O CABEÇALHO EM CADA PÁGINA QUEBRADA */
+  .tabela-presenca thead,
+  .tabela-presenca thead tr {
+      display: table-header-group !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
   }
 
-  .tabela-presenca tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  /* IMPEDE QUEBROU DA LINHA DO SERVO */
+  .tabela-presenca tbody tr {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
   }
 
   .tabela-presenca th {
-    background-color: #fff !important;
-    color: #000 !important;
-    border: 1px solid #000 !important;
-    padding: 6px 8px !important;
-    font-size: 10pt !important;
+      background-color: #fff !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
+      padding: 6px 8px !important;
+      font-size: 10pt !important;
   }
 
   .tabela-presenca td {
-    border: 1px solid #000 !important;
-    padding: 4px 8px !important;
-    font-size: 9.5pt !important;
+      border: 1px solid #000 !important;
+      padding: 4px 8px !important;
+      font-size: 9.5pt !important;
   }
 
   .col-nome-presenca {
-    width: 70% !important;
+      width: 70% !important;
   }
 
   .col-check {
-    width: 15% !important;
-    text-align: center !important;
+      width: 15% !important;
+      text-align: center !important;
   }
-
-  /* Espaçamento superior para não atropelar o topo nas quebras */
-  #print-lists .print-break {
-    page-break-before: always !important;
-    break-before: page !important;
-    padding-top: 24mm !important;
-  }
-} 
+}
   
 
 /* ===============================
