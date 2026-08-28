@@ -1,4 +1,4 @@
-const MOBILE_EDITABLE = false; /* true para liberar edição no mobile */
+const MOBILE_EDITABLE = false;
 
 function isMobileEditAllowed() {
   return MOBILE_EDITABLE;
@@ -9,15 +9,13 @@ function canEdit() {
 }
 
 /* ============================================================
-   PARTE 3 — Modelo de dados, storage e utilitários
+   PARTE 1 — Modelo de dados, storage e utilitários
 ============================================================ */
 
-/* ---------- CHAVES ---------- */
 var TITLE_KEY = "Equipes_titulo";
 var TITLE_DEFAULT = "Equipe Movimento Tremembé";
-var ORG_KEY = "Equipes_dados_v2"; // v2 p/ evitar conflito com versões antigas
+var ORG_KEY = "Equipes_dados_v2";
 
-/* ---------- MODELO PADRÃO ---------- */
 function defaultModel() {
   return {
     coordenacao: [],
@@ -27,7 +25,6 @@ function defaultModel() {
   };
 }
 
-/* ---------- TITLE: GET/SET + UI ---------- */
 function getTitulo() {
   try {
     var v = (localStorage.getItem(TITLE_KEY) || "").trim();
@@ -70,9 +67,9 @@ function alterarTitulo(e) {
   var novo = (inp && inp.value || "").trim();
   setTitulo(novo);
   atualizarTitulos();
+  syncPrintHeaderTitle();
 }
 
-/* ---------- STORAGE: LOAD/SAVE/NORMALIZE ---------- */
 function normalizeModel(m) {
   if (!m || typeof m !== "object") return defaultModel();
   if (!Array.isArray(m.coordenacao)) m.coordenacao = [];
@@ -84,7 +81,6 @@ function normalizeModel(m) {
 
     m[key].equipes.forEach(function(eq) {
       if (!eq || typeof eq !== "object") return;
-
       if (typeof eq.nome !== "string") eq.nome = "";
       if (typeof eq.referencia === "undefined") eq.referencia = null;
 
@@ -125,7 +121,6 @@ function saveOrg(m) {
   }
 }
 
-/* ---------- ORDENADORES ---------- */
 function sortByNamePT(a, b) {
   return String(a || "").localeCompare(String(b || ""), "pt-BR", { sensitivity: "base" });
 }
@@ -153,7 +148,6 @@ function orderPeopleForDisplay(eq) {
   return refObj ? [refObj, ...restantes] : restantes;
 }
 
-/* ---------- BUSCAS ---------- */
 function findEquipe(arr, nome) {
   var n = (nome || "").toLowerCase();
   for (var i = 0; i < (arr || []).length; i++) {
@@ -163,27 +157,14 @@ function findEquipe(arr, nome) {
   return null;
 }
 
-/* ---------- ALTERAR DIAS ---------- */
-function toggleDiaPessoa(refKey, nomeEquipe, pessoaNome, dia) {
-  const org = loadOrg();
-  const eq = findEquipe(org[refKey].equipes, nomeEquipe);
-  if (!eq) return;
-
-  const pessoa = eq.pessoas.find(p => p.nome === pessoaNome);
-  if (!pessoa) return;
-
-  if (!Array.isArray(pessoa.dias)) pessoa.dias = [];
-
-  if (pessoa.dias.includes(dia)) {
-    pessoa.dias = pessoa.dias.filter(d => d !== dia);
-  } else {
-    pessoa.dias.push(dia);
-  }
-
-  saveOrg(org);
+function countDistinctInEquipe(eq) {
+  const set = new Set();
+  (eq?.pessoas || []).forEach(p => {
+    if (p && p.nome) set.add(p.nome.trim().toLowerCase());
+  });
+  return set.size;
 }
 
-/* ---------- AÇÕES DE PESSOAS-CHAVE ---------- */
 function addPessoaChave(area, nome) {
   if (!nome) return;
   var org = loadOrg();
@@ -223,7 +204,6 @@ function renamePessoaChave(area, oldName, newName) {
   }
 }
 
-/* ---------- AÇÕES DE EQUIPES E PESSOAS ---------- */
 function upsertEquipe(refKey, nomeEquipe, pessoaOpcional, marcarRef) {
   var org = loadOrg();
   var list = org[refKey].equipes;
@@ -331,7 +311,6 @@ function toggleReferencia(refKey, nomeEquipe, pessoa) {
   saveOrg(org);
 }
 
-/* ---------- EDIÇÃO INLINE ---------- */
 function startInlineEdit(targetEl, initialText, onSave, opts) {
   opts = opts || {};
   var parent = targetEl.parentNode;
@@ -370,7 +349,6 @@ function startInlineEdit(targetEl, initialText, onSave, opts) {
   return input;
 }
 
-/* ---------- EXPOSE OBJETO ORG ---------- */
 window.ORG = {
   getTitulo, setTitulo, atualizarTitulos, initTituloInput, alterarTitulo,
   load: loadOrg, save: saveOrg, orderPeopleForDisplay, sortByNamePT,
@@ -380,8 +358,9 @@ window.ORG = {
 };
 
 /* ============================================================
-   PARTE 4 — Componentes DOM, Renderização e Ações
+   PARTE 2 — Componentes DOM, Renderização e Ações Web
 ============================================================ */
+
 function el(tag, attrs, children) {
   attrs = attrs || {};
   children = children || [];
@@ -668,6 +647,56 @@ function renderPeople(refKey, equipeName, eq) {
   return wrap;
 }
 
+function makeResponsaveisRow(areaKey, arr) {
+  const wrap = el("div", { className: "people" });
+  if (!arr || arr.length === 0) return wrap;
+
+  arr.slice().sort((a, b) => ORG.sortByNamePT(a, b)).forEach(function(name) {
+    const chip = el("div", { className: "chip" });
+    const nameSpan = el("span", { className: "chip-name" }, name);
+
+    nameSpan.ondblclick = function() {
+      if (!canEdit()) return;
+      ORG.startInlineEdit(nameSpan, name, function(newName) {
+        ORG.renamePessoaChave(areaKey, name, newName);
+        render();
+      });
+    };
+
+    const actions = el("div", { className: "chip-actions" });
+
+    actions.appendChild(el("button", {
+      title: "Editar",
+      onclick: function(e) {
+        e.stopPropagation();
+        if (!canEdit()) return;
+        ORG.startInlineEdit(nameSpan, name, function(newName) {
+          ORG.renamePessoaChave(areaKey, name, newName);
+          render();
+        });
+      }
+    }, "✎"));
+
+    actions.appendChild(el("button", {
+      title: "Excluir",
+      onclick: function(e) {
+        e.stopPropagation();
+        if (!canEdit()) return;
+        if (confirm(`Excluir "${name}" desta função?`)) {
+          ORG.removePessoaChave(areaKey, name);
+          render();
+        }
+      }
+    }, "✕"));
+
+    chip.appendChild(nameSpan);
+    chip.appendChild(actions);
+    wrap.appendChild(chip);
+  });
+
+  return wrap;
+}
+
 function renderRefCard(label, refKey, dataRef) {
   const card = el("section", { className: "card" + (refKey === "apoio" ? " ref-apoio" : "") });
 
@@ -719,121 +748,6 @@ function renderRefCard(label, refKey, dataRef) {
   return card;
 }
 
-function makeResponsaveisRow(areaKey, arr) {
-  const wrap = el("div", { className: "people" });
-  if (!arr || arr.length === 0) return wrap;
-
-  arr.slice().sort((a, b) => ORG.sortByNamePT(a, b)).forEach(function(name) {
-    const chip = el("div", { className: "chip" });
-    const nameSpan = el("span", { className: "chip-name" }, name);
-
-    nameSpan.ondblclick = function() {
-      if (!canEdit()) return;
-      ORG.startInlineEdit(nameSpan, name, function(newName) {
-        ORG.renamePessoaChave(areaKey, name, newName);
-        render();
-      });
-    };
-
-    const actions = el("div", { className: "chip-actions" });
-
-    actions.appendChild(el("button", {
-      title: "Editar",
-      onclick: function(e) {
-        e.stopPropagation();
-        if (!canEdit()) return;
-        ORG.startInlineEdit(nameSpan, name, function(newName) {
-          ORG.renamePessoaChave(areaKey, name, newName);
-          render();
-        });
-      }
-    }, "✎"));
-
-    actions.appendChild(el("button", {
-      title: "Excluir",
-      onclick: function(e) {
-        e.stopPropagation();
-        if (!canEdit()) return;
-        if (confirm(`Excluir "${name}" desta função?`)) {
-          ORG.removePessoaChave(areaKey, name);
-          render();
-        }
-      }
-    }, "✕"));
-
-    chip.appendChild(nameSpan);
-    chip.appendChild(actions);
-    wrap.appendChild(chip);
-  });
-
-  return wrap;
-}
-
-/* ---------- IMPRESSÃO E RELATÓRIOS ---------- */
-function renderPrintEscala2() {
-  const org = ORG.load();
-  const wrap = document.getElementById("print-lists");
-  if (!wrap) return;
-
-  wrap.innerHTML = "";
-  const servos = coletarServosComDias(org);
-
-  const container = document.createElement("div");
-  container.className = "escala-box";
-
-  const header = document.createElement("div");
-  header.className = "escala-header";
-  header.innerHTML = `
-    <span class="col-nome"><strong>Servo</strong></span>
-    <span class="col-dia"><strong>Sábado</strong></span>
-    <span class="col-dia"><strong>Domingo</strong></span>
-  `;
-  container.appendChild(header);
-
-  const sep = document.createElement("div");
-  sep.className = "escala-sep";
-  sep.textContent = "--------------------------------------------------";
-  container.appendChild(sep);
-
-  servos.forEach(s => {
-    const row = document.createElement("div");
-    row.className = "escala-row";
-    row.innerHTML = `
-      <span class="col-nome">${s.nome}</span>
-      <span class="col-dia">${s.sab ? "[ ✔ ]" : "[   ]"}</span>
-      <span class="col-dia">${s.dom ? "[ ✔ ]" : "[   ]"}</span>
-    `;
-    container.appendChild(row);
-  });
-
-  wrap.appendChild(container);
-}
-
-function coletarServosComDias(org) {
-  const lista = [];
-
-  ["interna", "externa", "apoio"].forEach(area => {
-    org[area].equipes.forEach(eq => {
-      eq.pessoas.forEach(p => {
-        lista.push({
-          nome: p.nome,
-          sab: p.dias?.includes("Sáb"),
-          dom: p.dias?.includes("Dom")
-        });
-      });
-    });
-  });
-
-  const map = new Map();
-  lista.forEach(p => map.set(p.nome, p));
-
-  return Array.from(map.values()).sort((a, b) => sortByNamePT(a.nome, b.nome));
-}
-
-function normalizeNameKey(name) {
-  return String(name || "").trim().toLowerCase();
-}
-
 function collectDistinctFromRef(ref) {
   const set = new Set();
   (ref?.responsaveis || []).forEach(n => { if (n && n.trim()) set.add(n.trim().toLowerCase()); });
@@ -851,7 +765,7 @@ function getDistinctCounts(org) {
   const apoioSet = collectDistinctFromRef(org.apoio);
 
   const totalSet = new Set();
-  (org.coordenacao || []).forEach(n => { if (n && n.trim()) totalSet.add(normalizeNameKey(n)); });
+  (org.coordenacao || []).forEach(n => { if (n && n.trim()) totalSet.add(n.trim().toLowerCase()); });
   [internaSet, externaSet, apoioSet].forEach(s => s.forEach(k => totalSet.add(k)));
 
   return {
@@ -860,6 +774,19 @@ function getDistinctCounts(org) {
     externa: externaSet.size,
     apoio: apoioSet.size
   };
+}
+
+function renderCountsWeb(counts) {
+  const card = el("section", { className: "card counts-card" });
+  card.appendChild(el("div", { className: "card-title" }, [el("span", { className: "badge" }, "Número de Servos")]));
+  const row = el("div", { className: "people" }, [
+    el("div", { className: "chip" }, "Total: " + counts.total),
+    el("div", { className: "chip" }, "Interna: " + counts.interna),
+    el("div", { className: "chip" }, "Externa: " + counts.externa),
+    el("div", { className: "chip" }, "Apoio: " + counts.apoio)
+  ]);
+  card.appendChild(row);
+  return card;
 }
 
 function render() {
@@ -904,9 +831,36 @@ function render() {
   renderPrintVersion(org);
 }
 
+/* ============================================================
+   PARTE 3 — Impressão e Relatórios
+============================================================ */
+
 function renderPrintVersion(org) {
-  const wrap = document.getElementById("print-lists");
-  if (!wrap) return;
+  let wrap = document.getElementById("print-dynamic-content");
+
+  if (!wrap) {
+    const parent = document.getElementById("print-lists");
+    if (!parent) return;
+
+    parent.innerHTML = `
+      <div id="print-dynamic-content"></div>
+      <div class="print-break print-only">
+        <div class="print-section-title">Controle de Presença dos Servos</div>
+        <table class="tabela-presenca">
+          <thead>
+            <tr>
+              <th class="col-nome-presenca">NOME DO SERVO</th>
+              <th class="col-check">SÁBADO</th>
+              <th class="col-check">DOMINGO</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-presenca-body"></tbody>
+        </table>
+      </div>
+    `;
+
+    wrap = document.getElementById("print-dynamic-content");
+  }
 
   wrap.innerHTML = "";
 
@@ -1018,7 +972,60 @@ function renderPrintVersion(org) {
   ]);
 }
 
-/* ---------- HANDLERS & INICIALIZAÇÃO ---------- */
+function gerarListaPresencaDinamica() {
+  const tbody = document.getElementById('tabela-presenca-body');
+  if (!tbody) return;
+
+  const org = loadOrg();
+  const servosSet = new Set();
+
+  (org.coordenacao || []).forEach(n => { if (n && n.trim()) servosSet.add(n.trim()); });
+
+  ["interna", "externa", "apoio"].forEach(area => {
+    (org[area].responsaveis || []).forEach(n => { if (n && n.trim()) servosSet.add(n.trim()); });
+    (org[area].equipes || []).forEach(eq => {
+      (eq.pessoas || []).forEach(p => { if (p && p.nome) servosSet.add(p.nome.trim()); });
+    });
+  });
+
+  const listaOrdenada = Array.from(servosSet).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+
+  tbody.innerHTML = '';
+  listaOrdenada.forEach(nome => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${nome}</td>
+      <td class="col-check"><div class="box-check"></div></td>
+      <td class="col-check"><div class="box-check"></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function syncPrintHeaderTitle() {
+  try {
+    const h = document.getElementById("print-title");
+    if (!h) return;
+    h.textContent = getTituloFormatado();
+  } catch (e) {}
+}
+
+function imprimirRelatorioGeral() {
+  const org = ORG.load();
+  renderPrintVersion(org);
+  gerarListaPresencaDinamica();
+  setTimeout(() => window.print(), 100);
+}
+
+function imprimirEscalaSabDom() {
+  gerarListaPresencaDinamica();
+  setTimeout(() => window.print(), 100);
+}
+
+/* ============================================================
+   PARTE 4 — Eventos, Importação e Exportação
+============================================================ */
+
 function handleAddPessoaChave(e) {
   if (e) e.preventDefault();
   var area = document.getElementById("chave-area");
@@ -1065,17 +1072,6 @@ function handleClearAll() {
   }
   ORG.atualizarTitulos();
   render();
-}
-
-function syncPrintHeaderTitle() {
-  try {
-    const h = document.getElementById("print-title");
-    if (!h) return;
-    h.textContent = getTituloFormatado();
-    void h.offsetHeight;
-  } catch (e) {
-    console.error("Erro ao atualizar título de impressão:", e);
-  }
 }
 
 function bindUI() {
@@ -1130,36 +1126,6 @@ function bindUI() {
   }
 }
 
-function initApp() {
-  ORG.atualizarTitulos();
-  ORG.initTituloInput();
-  bindUI();
-  render();
-  syncPrintHeaderTitle();
-}
-
-function countDistinctInEquipe(eq) {
-  const set = new Set();
-  (eq?.pessoas || []).forEach(p => {
-    if (p && p.nome) set.add(p.nome.trim().toLowerCase());
-  });
-  return set.size;
-}
-
-function renderCountsWeb(counts) {
-  const card = el("section", { className: "card counts-card" });
-  card.appendChild(el("div", { className: "card-title" }, [el("span", { className: "badge" }, "Número de Servos")]));
-  const row = el("div", { className: "people" }, [
-    el("div", { className: "chip" }, "Total: " + counts.total),
-    el("div", { className: "chip" }, "Interna: " + counts.interna),
-    el("div", { className: "chip" }, "Externa: " + counts.externa),
-    el("div", { className: "chip" }, "Apoio: " + counts.apoio)
-  ]);
-  card.appendChild(row);
-  return card;
-}
-
-/* ---------- EXPORTAÇÃO E IMPORTAÇÃO DE JSON / MERMAID ---------- */
 function baixarJSONEquipes() {
   const json = gerarJSONEquipesComLinks();
   const conteudo = JSON.stringify(json, null, 2);
@@ -1432,71 +1398,12 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar as opções"));
 }
 
-function baixarPDF() {
-  setTimeout(() => window.print(), 100);
-}
-
-function baixarPDFEscala() {
-  renderPrintEscala2();
-  setTimeout(() => window.print(), 100);
-}
-
-function imprimirRelatorioGeral() {
-  const org = ORG.load();
-  renderPrintVersion(org);
-  setTimeout(() => window.print(), 100);
-}
-
-function imprimirEscalaSabDom() {
-  renderPrintEscala2();
-  setTimeout(() => window.print(), 100);
-}
-
-function gerarListaPresencaDinamica() {
-  const tbody = document.getElementById('tabela-presenca-body');
-  if (!tbody) return;
-
-  const chips = document.querySelectorAll('.chip');
-  const servosSet = new Set();
-
-  chips.forEach(chip => {
-    const clone = chip.cloneNode(true);
-    clone.querySelectorAll('.chip-actions, .chip-days, .chip-star, button').forEach(el => el.remove());
-    let nome = clone.textContent.trim();
-    if (nome) servosSet.add(nome);
-  });
-
-  const listaOrdenada = Array.from(servosSet).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
-
-  tbody.innerHTML = '';
-  listaOrdenada.forEach(nome => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${nome}</td>
-      <td class="col-check"><div class="box-check"></div></td>
-      <td class="col-check"><div class="box-check"></div></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-/* ---------- EVENTOS DE INICIALIZAÇÃO ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  initApp();
-
-  fetch('import/option.json?v=' + Date.now())
-    .then(res => res.json())
-    .then(opcoes => {
-      const primeira = opcoes[0];
-      if (!primeira) return;
-      if (!localStorage.getItem(ORG_KEY)) {
-        fetch("import/" + primeira.arquivo)
-          .then(r => r.json())
-          .then(importarJSONDireto)
-          .catch(() => console.warn("Erro ao carregar JSON inicial"));
-      }
-    })
-    .catch(() => console.warn("Erro ao carregar option.json"));
+  ORG.atualizarTitulos();
+  ORG.initTituloInput();
+  bindUI();
+  render();
+  syncPrintHeaderTitle();
 
   const btn = document.getElementById("toggle-form");
   const bloco = document.getElementById("form-bloco");
@@ -1525,26 +1432,11 @@ window.addEventListener('beforeprint', () => {
   gerarListaPresencaDinamica();
 });
 
-/* ---------- EXPOSIÇÃO GLOBAL DE HANDLERS HTML ---------- */
 window.imprimirEscalaSabDom = imprimirEscalaSabDom;
 window.imprimirRelatorioGeral = imprimirRelatorioGeral;
 window.escolherAtualizacaoJSON = escolherAtualizacaoJSON;
 window.baixarJSONEquipes = baixarJSONEquipes;
 window.baixarMermaidA4 = baixarMermaidA4;
-window.baixarPDF = baixarPDF;
-window.baixarPDFEscala = baixarPDFEscala;
-window.renderPrintEscala2 = renderPrintEscala2;
-window.coletarServosComDias = coletarServosComDias;
-window.render = render;
-window.saveOrg = saveOrg;
-window.loadOrg = loadOrg;
-window.importarJSONDireto = importarJSONDireto;
-window.importarJSONEquipes = importarJSONEquipes;
+window.handleRodapeSubmit = handleRodapeSubmit;
 window.handleAddPessoaChave = handleAddPessoaChave;
 window.handleUpsertEquipe = handleUpsertEquipe;
-window.getTitulo = getTitulo;
-window.setTitulo = setTitulo;
-window.getTituloFormatado = getTituloFormatado;
-window.atualizarTitulos = atualizarTitulos;
-
-window.DEBUG = { render, loadOrg, saveOrg };
