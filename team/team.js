@@ -1399,7 +1399,7 @@ function escolherAtualizacaoJSON() {
 }
 
 function gerarImpressaoServos(listaServosCompleta) {
-  const LIMITE_POR_PAGINA = 30;
+  const LIMITE_POR_PAGINA = 25;
   const container = document.getElementById('print-lists');
   if (!container) return;
   
@@ -1506,7 +1506,7 @@ window.addEventListener('beforeprint', () => {
   // Transforma em array e ordena em ordem alfabética exata
   const listaServosOrdenada = Array.from(nomesSet).sort((a, b) => a.localeCompare(b));
 
-  // Dispara a criação das tabelas paginadas de 30 em 30
+  // Dispara a criação das tabelas paginadas de 25 em 25
   gerarImpressaoServos(listaServosOrdenada);
 });
 
