@@ -1,18 +1,16 @@
-// ==========================================
-// 🕒 SINCRONIZAÇÃO DE HORA DO SERVIDOR (SUPABASE)
-// ==========================================
 let offset = 0;
+let atividadeAtual = null;   
+let isPrinting = false; 
+const LIST_KEY  = "Programação";
+const HIST_KEY  = "historicos";
+const EVANG_KEY = "evangelizacao";
+const EVANG_DEFAULT = "Movimento Tremembé";
 
 async function sincronizarHora() {
     try {
-        const response = await fetch(
-            "https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/hora-certa"
-        );
+        const response = await fetch("https://fmyxypykokxfeojmdsuu.supabase.co/functions/v1/hora-certa");
         const data = await response.json();
-        
-        // Calcula a diferença entre o relógio do servidor e o relógio local do usuário
         offset = data.timestamp - Date.now();
-
         const statusEl = document.getElementById("status");
         if (statusEl) statusEl.innerHTML = "✅ Sincronizado";
     } catch(err){
@@ -21,14 +19,12 @@ async function sincronizarHora() {
     }
 }
 
-// Função centralizada para pegar o timestamp atual corrigido com o offset do servidor
 function getHoraAtual() {
     return Date.now() + offset;
 }
 
 function atualizarRelogio() {
     const agora = new Date(getHoraAtual());
-
     const hh = String(agora.getHours()).padStart(2,"0");
     const mm = String(agora.getMinutes()).padStart(2,"0");
     const ss = String(agora.getSeconds()).padStart(2,"0");
@@ -41,23 +37,9 @@ function atualizarRelogio() {
     if (msEl) msEl.innerHTML = ms;
 }
 
-// Inicia a sincronização e os intervalos do relógio visual
 sincronizarHora();
-setInterval(sincronizarHora, 60000); // Re-sincroniza a cada 1 minuto
-setInterval(atualizarRelogio, 50);   // Atualiza os milissegundos da interface
-
-
-// ==========================================
-// 📋 LÓGICA DA PROGRAMAÇÃO E CRONÔMETROS
-// ==========================================
-let atividadeAtual = null;   
-let isPrinting = false; 
-const tiposAtividade = ["Chegada","Introdução","Institucional","Encerramento", "Adoração", "Acolhida", "Animação", "Almoço", "Café", "Dinâmica", "Efusão", "Jantar", "Teatro", "Momento", "Historinha", "Monólogo", "Oração", "Pausa", "Intervalo", "Palestra", "Partilha", "Pregação", "Testemunho", "Santa Missa"];
-const dias = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
-const LIST_KEY  = "Programação";
-const HIST_KEY  = "historicos";
-const EVANG_KEY = "evangelizacao";
-const EVANG_DEFAULT = "Movimento Tremembé";
+setInterval(sincronizarHora, 60000);
+setInterval(atualizarRelogio, 50);
 
 function diaDaSemanaPorData(dataString) {
   const diasSemana = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
@@ -95,21 +77,21 @@ function atualizarTitulos() {
 function alterarEvangelizacao(e) {
   e?.preventDefault();
   const input = document.getElementById("evangelizacao");
-  if (input) {
-    const novoValor = input.value.trim();
-    if (novoValor) {
-      setEvangelizacao(novoValor);
-    }
-  }
+  const novoValor = input.value.trim();
+  setEvangelizacao(novoValor);
   atualizarTitulos();
   renderizarLista();
 }
 
 function dois(n){ return n.toString().padStart(2,'0'); }
 
+function parseDateTime(data, hora) {
+  if (!data || !hora) return null;
+  return new Date(`${data}T${hora}:00`).getTime();
+}
+
 function getTempoRestante(data, inicio, fim) {
   if (!data || !inicio || !fim) return "";
-
   const agora = getHoraAtual();
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
@@ -121,7 +103,6 @@ function getTempoRestante(data, inicio, fim) {
     const h = Math.floor(diff / (1000 * 60 * 60));
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
-
     if (h > 0) return `⏳ Inicia em ${h}h ${m}min ${s}seg`;
     if (m > 0) return `⏳ Inicia em ${m}min ${s}seg`;
     return `⏳ Inicia em ${s}seg`;
@@ -132,7 +113,6 @@ function getTempoRestante(data, inicio, fim) {
     const h = Math.floor(diff / (1000 * 60 * 60));
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
-
     if (h > 0) return `🔥 ${h}h ${m}min ${s}seg restantes`;
     if (m > 0) return `🔥 ${m}min ${s}seg restantes`;
     return `🔥 ${s}seg restantes`;
@@ -141,29 +121,13 @@ function getTempoRestante(data, inicio, fim) {
   return `✅ Encerrado`;
 }
 
-function parseDateTime(data, hora) {
-  if (!data || !hora) return null;
-  return new Date(`${data}T${hora}:00`).getTime();
-}
-
 function getStatusAtividade(data, inicio, fim) {
   const inicioDate = parseDateTime(data, inicio);
   const fimDate = parseDateTime(data, fim);
-
-  if (!inicioDate || !fimDate) {
-    return "futuro";
-  }
-
+  if (!inicioDate || !fimDate) return "futuro";
   const agora = getHoraAtual();
-
-  if (agora >= inicioDate && agora <= fimDate) {
-    return "em-andamento";
-  }
-
-  if (agora > fimDate) {
-    return "encerrado";
-  }
-
+  if (agora >= inicioDate && agora <= fimDate) return "em-andamento";
+  if (agora > fimDate) return "encerrado";
   return "futuro";
 }
 
@@ -171,23 +135,15 @@ function marcarProximaAtividade(lista) {
   const agora = getHoraAtual();
   let proximaIndex = -1;
   let menorDiff = Infinity;
-
   lista.forEach((p, i) => {
     const inicio = parseDateTime(p.data, p.inicio);
     if (!inicio) return;
-
     if (inicio > agora && (inicio - agora) < menorDiff) {
       menorDiff = inicio - agora;
       proximaIndex = i;
     }
   });
-
   return proximaIndex;
-}
-
-function dataHoje(){
-  const d = new Date(getHoraAtual());
-  return `${d.getFullYear()}-${dois(d.getMonth()+1)}-${dois(d.getDate())}`;
 }
 
 function salvarLista(lista){
@@ -202,15 +158,12 @@ function carregarLista(){
   try {
     const lista = localStorage.getItem(LIST_KEY);
     const dados = lista ? JSON.parse(lista) : [];
-
     dados.forEach(item => {
       if (item.obs === undefined) item.obs = "";
       if (!item.id) item.id = `id_${Date.now()}_${Math.random()}`;
     });
-
     return dados;
   } catch(e){
-    console.error(e);
     return [];
   }
 }
@@ -228,10 +181,8 @@ function el(tag, attrs={}, children=[]) {
   const e = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
     if (k === "className") e.className = v;
-    else if (k.startsWith("on") && typeof v === "function")
-      e.addEventListener(k.slice(2), v);
-    else
-      e.setAttribute(k, v);
+    else if (k.startsWith("on") && typeof v === "function") e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
   });
   (Array.isArray(children) ? children : [children]).forEach(c=>{
     if (typeof c === "string") e.appendChild(document.createTextNode(c));
@@ -245,15 +196,12 @@ function getDuracao(inicio, fim) {
   const i = new Date(`1970-01-01T${inicio}:00`).getTime();
   const f = new Date(`1970-01-01T${fim}:00`).getTime();
   const diff = f - i;
-
   if (diff <= 0) return "";
-
   const h = Math.floor(diff / (1000 * 60 * 60));
   const m = Math.floor((diff / (1000 * 60)) % 60);
-
   if (h > 0 && m > 0) return `${h}h ${m}m`;
   if (h > 0) return `${h}h`;
-  return `${m}min`;
+  return `${m}mim`;
 }
 
 function buildInfo(p) {
@@ -270,15 +218,11 @@ function buildInfo(p) {
 function getProgresso(data, inicio, fim){
   const hoje = new Date(getHoraAtual()).toISOString().split("T")[0];
   if (data !== hoje) return 0;
-
   const agora = getHoraAtual();
   const i = parseDateTime(data, inicio);
   const f = parseDateTime(data, fim);
-
-  if (!i || !f) return 0;
-  if (agora < i) return 0;
+  if (!i || !f || agora < i) return 0;
   if (agora > f) return 100;
-
   return Math.floor(((agora - i) / (f - i)) * 100);
 }
 
@@ -289,27 +233,21 @@ function renderizarLista() {
 
   const lista = ordenarLista(carregarLista());
   const proximaIndex = marcarProximaAtividade(lista);
-
   const grupos = {};
+  
   lista.forEach(p => {
     if (!grupos[p.data]) grupos[p.data] = [];
     grupos[p.data].push(p);
   });
 
-  const datasOrdenadas = Object.keys(grupos).sort();
-
-  datasOrdenadas.forEach(data => {
+  Object.keys(grupos).sort().forEach(data => {
     const atividadesDoDia = grupos[data];
     const containerDia = el("section", { className: "pagina-detalhe" });
-
     const dataBr = data.split("-").reverse().join("/");
     const diaSemana = diaDaSemanaPorData(data);
 
-    const h2Titulo = el("h2", { className: "print-only" }, getTituloProgramacao());
-    const hDia = el("h3", {}, `${diaSemana} - ${dataBr}`);
-
-    containerDia.appendChild(h2Titulo);
-    containerDia.appendChild(hDia);
+    containerDia.appendChild(el("h2", { className: "print-only" }, getTituloProgramacao()));
+    containerDia.appendChild(el("h3", {}, `${diaSemana} - ${dataBr}`));
 
     const ul = el("ul", { className: "lista-atividades" });
 
@@ -323,7 +261,7 @@ function renderizarLista() {
       });
 
       if ((p.obs || "").trim()) {
-        const iconObs = el("span", { className: "icon-obs tem-obs" }, "💬");
+        const iconObs = el("span", { className: "icon-obs" }, "💬");
         iconObs.setAttribute("title", p.obs);
         iconObs.addEventListener("click", () => editarObservacao(p.id));
         li.appendChild(iconObs);
@@ -331,24 +269,20 @@ function renderizarLista() {
 
       let texto = buildInfo(p);
       const timer = getTempoRestante(p.data, p.inicio, p.fim);
-
       if (!isPrinting && timer) {
-        if (timer.startsWith("🔥")) texto += ` • ${timer}`;
-        else if (timer.startsWith("✅")) texto += ` • ${timer}`;
-        else if (isProxima && timer.startsWith("⏳")) texto += ` • ${timer}`;
+        if (timer.startsWith("🔥") || timer.startsWith("✅") || (isProxima && timer.startsWith("⏳"))) {
+          texto += ` • ${timer}`;
+        }
       }
 
-      const divInfo = el("div", { className: "item-info" }, texto);
-      li.appendChild(divInfo);
+      li.appendChild(el("div", { className: "item-info" }, texto));
 
       if (status === "em-andamento") {
         const progresso = getProgresso(p.data, p.inicio, p.fim);
         let classeBarra = "progress-bar ativo";
         let classeItemExtra = "ativo";
-
         const fimDate = parseDateTime(p.data, p.fim);
-        const agora = getHoraAtual();
-        const minutosRestantes = (fimDate - agora) / (1000 * 60);
+        const minutosRestantes = (fimDate - getHoraAtual()) / (1000 * 60);
 
         if (minutosRestantes <= 5) {
           classeBarra = "progress-bar danger";
@@ -359,25 +293,19 @@ function renderizarLista() {
         }
 
         const barraContainer = el("div", { className: "progress-container" });
-        const barra = el("div", { className: classeBarra, style: `width: ${progresso}%` });
-
-        barraContainer.appendChild(barra);
+        barraContainer.appendChild(el("div", { className: classeBarra, style: `width: ${progresso}%` }));
         li.appendChild(barraContainer);
         li.classList.add(classeItemExtra);
       }
 
       const bEdit = el("button", { className: "edit" }, "Editar");
       bEdit.addEventListener("click", () => editarAtividade(p.id));
-
       const bDelete = el("button", { className: "delete" }, "Excluir");
       bDelete.addEventListener("click", () => excluirAtividade(p.id));
-
       const bClone = el("button", { className: "clone" }, "Clonar");
       bClone.addEventListener("click", () => clonarAtividade(p.id));
 
-      const divBtns = el("div", { className: "item-botoes" }, [bEdit, bDelete, bClone]);
-      li.appendChild(divBtns);
-
+      li.appendChild(el("div", { className: "item-botoes" }, [bEdit, bDelete, bClone]));
       ul.appendChild(li);
     });
 
@@ -386,88 +314,28 @@ function renderizarLista() {
   });
 }
 
-function adicionarAtividade() {
-  const data = document.getElementById("data").value;
-  const tipo = document.getElementById("tipo").value;
-  const nome = document.getElementById("nome").value;
-  const servo = document.getElementById("servo").value;
+function adicionarAtividade(){
+  const data  = document.getElementById("data").value;
+  const tipo  = document.getElementById("tipo").value;
+  const nome  = document.getElementById("nome").value.trim();
+  const servo = document.getElementById("servo").value.trim();
   const inicio = document.getElementById("inicio").value;
-  const fim = document.getElementById("fim").value;
+  const fim    = document.getElementById("fim").value;
 
-  if (!data || !inicio || !fim) {
-    alert("Preencha ao menos a Data, Hora Início e Hora Fim.");
+  if(!data || !inicio || !fim){
+    alert("Preencha a data e horários!");
     return;
   }
 
   const lista = carregarLista();
-  
-  const novaAtividade = {
+  lista.push({
     id: `id_${Date.now()}_${Math.random()}`,
-    data,
-    tipo,
-    nome,
-    servo,
-    inicio,
-    fim,
-    obs: "",
-    destaque: false
-  };
+    dia: diaDaSemanaPorData(data),
+    data, tipo, nome, servo, inicio, fim,
+    destaque: false,
+    obs: ""
+  });
 
-  lista.push(novaAtividade);
-  salvarLista(lista);
-  renderizarLista();
-  limparFormulario();
-}
-
-function limparFormulario() {
-  const nomeEl = document.getElementById("nome");
-  const servoEl = document.getElementById("servo");
-  const inicioEl = document.getElementById("inicio");
-  const fimEl = document.getElementById("fim");
-  const tipoEl = document.getElementById("tipo");
-
-  if (nomeEl) nomeEl.value = "";
-  if (servoEl) servoEl.value = "";
-  if (inicioEl) inicioEl.value = "";
-  if (fimEl) fimEl.value = "";
-  if (tipoEl) tipoEl.selectedIndex = 0;
-}
-
-function editarAtividade(id) {
-  const lista = carregarLista();
-  const item = lista.find(i => i.id === id);
-  if (!item) return;
-
-  document.getElementById("data").value = item.data;
-  document.getElementById("tipo").value = item.tipo || "";
-  document.getElementById("nome").value = item.nome || "";
-  document.getElementById("servo").value = item.servo || "";
-  document.getElementById("inicio").value = item.inicio;
-  document.getElementById("fim").value = item.fim;
-
-  // Remove o item atual para reescrevê-lo ao salvar via formulário
-  excluirAtividade(id, false);
-}
-
-function excluirAtividade(id, render = true) {
-  let lista = carregarLista();
-  lista = lista.filter(item => item.id !== id);
-  salvarLista(lista);
-  if (render) renderizarLista();
-}
-
-function clonarAtividade(id) {
-  const lista = carregarLista();
-  const item = lista.find(i => i.id === id);
-  if (!item) return;
-
-  const clone = {
-    ...item,
-    id: `id_${Date.now()}_${Math.random()}`,
-    nome: `${item.nome || 'Atividade'} (Cópia)`
-  };
-
-  lista.push(clone);
   salvarLista(lista);
   renderizarLista();
 }
@@ -476,139 +344,122 @@ function editarObservacao(id){
   const lista = carregarLista();
   const index = lista.findIndex(item => item.id === id);
   if (index === -1) return;
-
-  const atual = lista[index].obs || "";
-  const nova = prompt("Observação:", atual);
+  const nova = prompt("Observação:", lista[index].obs || "");
   if (nova === null) return;
-
-  const texto = nova.trim();
-  lista[index].obs = texto;
-  lista[index].destaque = texto.length > 0;
-
+  lista[index].obs = nova.trim();
+  lista[index].destaque = lista[index].obs.length > 0;
   salvarLista(lista);
   renderizarLista();
 }
 
-function zerarTudo() {
-  if (confirm("Tem certeza que deseja apagar toda a programação?")) {
-    localStorage.removeItem(LIST_KEY);
-    renderizarLista();
-  }
-}
-
-function exportarBackup() {
+function editarAtividade(id){
   const lista = carregarLista();
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lista));
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.setAttribute("href", dataStr);
-  downloadAnchor.setAttribute("download", `backup_programacao_${Date.now()}.json`);
-  document.body.appendChild(downloadAnchor);
-  downloadAnchor.click();
-  downloadAnchor.remove();
+  const index = lista.findIndex(item => item.id === id);
+  if (index === -1) return;
+  const p = lista[index];
+
+  const novoInicio = prompt("Hora início:", p.inicio);
+  if (novoInicio === null) return;
+  const novoFim = prompt("Hora fim:", p.fim);
+  if (novoFim === null) return;
+
+  lista[index] = { ...p, inicio: novoInicio, fim: novoFim };
+  salvarLista(lista);
+  renderizarLista();
 }
 
-function handleImportFile(file) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const dados = JSON.parse(e.target.result);
-      if (Array.isArray(dados)) {
-        salvarLista(dados);
+function excluirAtividade(id){
+  if(!confirm("Deseja realmente excluir esta atividade?")) return;
+  salvarLista(carregarLista().filter(item => item.id !== id));
+  renderizarLista();
+}
+
+function clonarAtividade(id){
+  const lista = carregarLista();
+  const original = lista.find(item => item.id === id);
+  if (!original) return;
+  lista.push({ ...original, id: `id_${Date.now()}_${Math.random()}` });
+  salvarLista(lista);
+  renderizarLista();
+}
+
+function exportarBackup(){
+  const data = { version: 1, current: { evangelizacao: getEvangelizacao(), lista: carregarLista() } };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Programacao_backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function handleImportFile(file){
+  if(!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{
+      const obj = JSON.parse(fr.result);
+      if(obj?.current?.lista){
+        salvarLista(obj.current.lista);
+        setEvangelizacao(obj.current.evangelizacao || EVANG_DEFAULT);
+        atualizarTitulos();
         renderizarLista();
-        alert("Importação realizada com sucesso!");
-      } else {
-        alert("Formato de arquivo inválido.");
+        alert("Backup importado com sucesso.");
       }
-    } catch (err) {
-      alert("Erro ao ler o arquivo JSON.");
-    }
+    }catch(e){ alert("Erro ao importar."); }
   };
-  reader.readAsText(file);
+  fr.readAsText(file);
+}
+
+function zerarTudo(){
+  if (!confirm("Tem certeza que deseja EXCLUIR essa PROGRAMAÇÃO?")) return;
+  localStorage.removeItem(LIST_KEY);
+  localStorage.removeItem(HIST_KEY);
+  atualizarTitulos();
+  renderizarLista();
 }
 
 function baixarPDF() {
-  isPrinting = true;
-  renderizarLista();
   window.print();
-  setTimeout(() => {
-    isPrinting = false;
-    renderizarLista();
-  }, 1000);
 }
 
 function escolherAtualizacaoJSON() {
-  alert("Função de atualização remota/JSON pronta para ser configurada com sua API.");
+  alert("Função de atualização remota via JSON ativada.");
 }
 
 let intervalGlobal = null;
-
-function pararLoops() {
-  if (!intervalGlobal) return;
-  clearInterval(intervalGlobal);
-  intervalGlobal = null;
-}
-
 function iniciarLoops() {
   if (intervalGlobal) return;
-  intervalGlobal = setInterval(() => {
-    renderizarLista();
-  }, 1000);
+  intervalGlobal = setInterval(renderizarLista, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Botão Adicionar Atividade
-    const btnAdicionar = document.querySelector('.add');
-    if (btnAdicionar) {
-        btnAdicionar.addEventListener('click', adicionarAtividade);
-    }
+  document.querySelector('.add')?.addEventListener('click', adicionarAtividade);
+  document.querySelector('.menu-rodape-content')?.addEventListener('submit', alterarEvangelizacao);
+  document.getElementById('btn-zerar-tudo')?.addEventListener('click', zerarTudo);
+  document.getElementById('btn-export')?.addEventListener('click', exportarBackup);
+  document.getElementById('btn-import-local')?.addEventListener('click', () => document.getElementById('importar-arquivo').click());
+  document.getElementById('importar-arquivo')?.addEventListener('change', (e) => handleImportFile(e.target.files[0]));
+  document.getElementById('btn-pdf')?.addEventListener('click', baixarPDF);
+  document.getElementById('btn-pdf-mobile')?.addEventListener('click', baixarPDF);
+  document.getElementById('btn-atualizar')?.addEventListener('click', escolherAtualizacaoJSON);
+  document.getElementById('btn-atualizar-mobile')?.addEventListener('click', escolherAtualizacaoJSON);
 
-    // 2. Formulário do Rodapé (Alterar Evangelização)
-    const formRodape = document.querySelector('.menu-rodape-content');
-    if (formRodape) {
-        formRodape.addEventListener('submit', alterarEvangelizacao);
-    }
-
-    // 3. Botão de Zerar Tudo
-    const btnZerar = document.getElementById('btn-zerar-tudo');
-    if (btnZerar) {
-        btnZerar.addEventListener('click', zerarTudo);
-    }
-
-    // 4. Mapeamento dos botões de PDF e Atualizar para garantir robustez
-    document.querySelectorAll('[onclick*="baixarPDF"]').forEach(btn => {
-        btn.removeAttribute('onclick');
-        btn.addEventListener('click', baixarPDF);
+  const toggleBtn = document.getElementById('toggle-menu-adicao');
+  const menuAdicao = document.getElementById('menu-adicao');
+  if (toggleBtn && menuAdicao) {
+    toggleBtn.addEventListener('click', () => {
+      menuAdicao.classList.toggle('collapsed');
+      toggleBtn.textContent = menuAdicao.classList.contains('collapsed') ? '+' : '-';
     });
+  }
 
-    document.querySelectorAll('[onclick*="escolherAtualizacaoJSON"]').forEach(btn => {
-        btn.removeAttribute('onclick');
-        btn.addEventListener('click', escolherAtualizacaoJSON);
-    });
+  const ev = getEvangelizacao();
+  const input = document.getElementById("evangelizacao");
+  if (input) input.value = (ev === EVANG_DEFAULT ? "" : ev);
 
-    document.querySelectorAll('[onclick*="exportarBackup"]').forEach(btn => {
-        btn.removeAttribute('onclick');
-        btn.addEventListener('click', exportarBackup);
-    });
-
-    // 5. Controle do menu de adição (botão de recolher/expandir '-')
-    const toggleBtn = document.getElementById('toggle-menu-adicao');
-    const menuAdicao = document.getElementById('menu-adicao');
-    if (toggleBtn && menuAdicao) {
-        toggleBtn.addEventListener('click', () => {
-            menuAdicao.classList.toggle('collapsed');
-            toggleBtn.textContent = menuAdicao.classList.contains('collapsed') ? '+' : '-';
-        });
-    }
-
-    // 🚀 Configura valor inicial do input de evangelização no rodapé se houver
-    const inputEvang = document.getElementById('evangelizacao');
-    if (inputEvang) {
-        inputEvang.value = getEvangelizacao() !== EVANG_DEFAULT ? getEvangelizacao() : '';
-    }
-
-    // 🚀 Renderiza a lista inicial e dispara o cronômetro automático
-    atualizarTitulos();
-    renderizarLista();
-    iniciarLoops(); 
+  atualizarTitulos();
+  renderizarLista();
+  iniciarLoops();
 });
