@@ -1422,6 +1422,7 @@ function gerarImpressaoServos(listaServosCompleta) {
       <div class="print-section-title escala-page-break">
         Lista de Presença dos Servos — Página ${numeroPagina}
       </div>
+      <br>
       <table class="escala-box">
         <thead>
           <tr>
