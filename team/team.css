@@ -693,13 +693,19 @@ button.primary{
     pointer-events: none !important;
   }
 
-  /* 2. Libera estritamente o link da Logo no cabeçalho */
+  /* 2. Oculta completamente o painel de cadastro e o rodapé complexo */
+  #form-bloco,
+  #menu-rodape {
+    display: none !important;
+  }
+
+  /* 3. Libera estritamente o link da Logo no cabeçalho */
   #web-header a.logo-link,
   #web-header a.logo-link * {
     pointer-events: auto !important;
   }
 
-  /* 3. Libera estritamente a barra de botões mobile (PDF Equipes e Atualizar) */
+  /* 4. Libera estritamente a barra de botões mobile (PDF e Atualizar) */
   #mobile-bar,
   #mobile-bar button,
   #mobile-bar button * {
