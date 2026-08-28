@@ -1399,7 +1399,7 @@ function escolherAtualizacaoJSON() {
 }
 
 function gerarImpressaoServos(listaServosCompleta) {
-  const LIMITE_POR_PAGINA = 20;
+  const LIMITE_POR_PAGINA = 30;
   const container = document.getElementById('print-lists');
   if (!container) return;
   
