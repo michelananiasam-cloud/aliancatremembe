@@ -1452,6 +1452,20 @@ function gerarImpressaoServos(listaServosCompleta) {
   }
 }
 
+document.addEventListener('click', function(e) {
+  // Permite apenas se o alvo for um botão, um link (<a>) ou a logo do cabeçalho
+  const permitido = e.target.closest('button') || 
+                    e.target.closest('a') || 
+                    e.target.id === 'logo' || 
+                    e.target.closest('#web-header img');
+
+  if (!permitido) {
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
+  }
+}, true);
+
 document.addEventListener("DOMContentLoaded", () => {
   ORG.atualizarTitulos();
   ORG.initTituloInput();
