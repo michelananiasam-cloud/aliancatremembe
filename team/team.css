@@ -12,7 +12,7 @@
 }
 
 /* ===============================
-   VARIÁVEIS E TEMA
+   VARIÁVEIS E TEMA (MODO WEB)
 ================================*/
 :root {
   --watermark-display: flex;	
@@ -173,7 +173,7 @@ button.primary {
 }
 
 /* ===============================
-   CARTÕES & GRID
+   CARTÕES & GRID WEB
 ================================*/
 .card {
   background: var(--bg);
@@ -208,7 +208,7 @@ button.primary {
 @media(max-width: 760px) { .grid-refs { grid-template-columns: 1fr; } }
 
 /* ===============================
-   MOBILE BAR
+   MOBILE BAR WEB
 ================================*/
 #mobile-bar { display: none; }
 
@@ -233,7 +233,7 @@ button.primary {
 }
 
 /* ===============================
-   EQUIPES & CHIPS
+   EQUIPES & CHIPS (TELA INTERATIVA)
 ================================*/
 .team-line {
   display: flex; align-items: center; justify-content: space-between;
@@ -295,13 +295,10 @@ button.primary {
 .card:hover .ref-actions { opacity: 1; pointer-events: auto; }
 .ref-btn { background: none; border: none; cursor: pointer; font-size: 1.25rem; color: var(--text); opacity: 0.85; }
 
-/* ===============================
-   CONTROLES PADRÃO DE TELA
-================================*/
+/* CONTROLES PADRÃO DE TELA */
 #print-header { display: none !important; }
 .print-only { display: none !important; }
 
-/* MARCA D'ÁGUA EM TELA */
 .watermark {
   display: var(--watermark-display);
   position: fixed; inset: 0;
@@ -322,17 +319,82 @@ button.primary {
 
 
 /* ==========================================================================
-   CONFIGURAÇÃO DE IMPRESSÃO (@MEDIA PRINT) - CORREÇÃO DE IMPRESSÃO
+   IMPRESSÃO ISOLADA (@MEDIA PRINT)
    ========================================================================== */
 @media print {
 
-  /* 1. Ocultar totalmente elementos da interface WEB */
-  #form-bloco, #form-bloco *, #toggle-form, #web-header,
-  #menu-rodape, #mobile-bar, .team-actions, .chip-actions,
-  .ref-actions, .toggle-form-btn, button, .watermark {
+  /* 1. ESCONDE TUDO DO BODY POR PADRÃO PARA ELIMINAR O VAZAMENTO DA TELA WEB */
+  body * {
       display: none !important;
   }
 
+  /* 2. LIBERA SOMENTE OS CONTAINERS OFICIAIS DA IMPRESSÃO */
+  #print-header, #print-header *,
+  #org, #org *,
+  #print-lists, #print-lists * {
+      display: block !important;
+  }
+
+  /* 3. RESTAURA A ESTRUTURA DE TABELA COMPLETA NO #PRINT-LISTS */
+  #print-lists table.tabela-presenca {
+      display: table !important;
+      width: 100% !important;
+      border-collapse: collapse !important;
+      table-layout: fixed !important;
+      margin-top: 2mm !important;
+  }
+
+  #print-lists table.tabela-presenca thead {
+      display: table-header-group !important;
+  }
+
+  #print-lists table.tabela-presenca tbody {
+      display: table-row-group !important;
+  }
+
+  #print-lists table.tabela-presenca tr {
+      display: table-row !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      height: 7.5mm !important;
+  }
+
+  #print-lists table.tabela-presenca th,
+  #print-lists table.tabela-presenca td {
+      display: table-cell !important;
+      vertical-align: middle !important;
+  }
+
+  /* 4. FORMATAÇÃO VISUAL E BORDAS DA TABELA DE PRESENÇA */
+  #print-lists table.tabela-presenca th {
+      background-color: #f0f0f0 !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
+      padding: 4px 8px !important;
+      font-size: 9.5pt !important;
+      font-weight: bold !important;
+      text-align: left !important;
+  }
+
+  #print-lists table.tabela-presenca td {
+      border: 1px solid #444 !important;
+      padding: 4px 8px !important;
+      font-size: 9pt !important;
+  }
+
+  /* Largura fixa das colunas para evitar desalinhamento */
+  #print-lists table.tabela-presenca th:first-child,
+  #print-lists table.tabela-presenca td:first-child {
+      width: 60% !important;
+  }
+
+  #print-lists table.tabela-presenca th.col-check,
+  #print-lists table.tabela-presenca td.col-check {
+      width: 20% !important;
+      text-align: center !important;
+  }
+
+  /* 5. REGRAS DE PÁGINA A4 E QUEBRAS DE SEÇÃO */
   @page {
       size: A4 portrait;
       margin: 12mm 10mm 12mm 10mm !important;
@@ -346,33 +408,13 @@ button.primary {
       font-size: 11pt;
   }
 
-  .print-only { 
-      display: block !important; 
-  }
-
-  /* 2. Cabeçalho oficial de Impressão */
-  #print-header {
-      display: flex !important;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 3mm !important;
-      margin-bottom: 5mm !important;
-      border-bottom: 2px solid #2d6cdf !important;
-  }
-
-  #print-header img {
-      max-height: 18mm !important;
-      width: auto !important;
-  }
-
-  /* 3. Blocos de Equipes (Páginas 1 a 3) */
+  /* Isola o bloco de Equipes nas primeiras páginas */
   #org {
       page-break-after: always !important;
       break-after: page !important;
   }
 
   .print-team-outer {
-      display: block !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
       margin-bottom: 4mm !important;
@@ -389,11 +431,10 @@ button.primary {
       line-height: 1.3 !important;
   }
 
-  /* 4. Tabela de Presença dos Servos (Páginas 4 e 5) */
+  /* Isola o Controle de Presença nas páginas finais */
   #print-lists .print-page {
       page-break-before: always !important;
       break-before: page !important;
-      display: block !important;
   }
 
   .print-section-title {
@@ -403,53 +444,6 @@ button.primary {
       padding: 4px 0 !important;
       margin-bottom: 6mm !important;
       border-bottom: 2px solid #000 !important;
-  }
-
-  /* Tabela estruturada com linhas bem definidas */
-  table.tabela-presenca {
-      width: 100% !important;
-      border-collapse: collapse !important;
-      table-layout: fixed !important;
-      margin-top: 2mm !important;
-  }
-
-  table.tabela-presenca thead {
-      display: table-header-group !important;
-  }
-
-  table.tabela-presenca tr {
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-      height: 7.5mm !important; /* Altura ideal de linha para marcação manual */
-  }
-
-  table.tabela-presenca th {
-      background-color: #f0f0f0 !important;
-      color: #000 !important;
-      border: 1px solid #000 !important;
-      padding: 4px 8px !important;
-      font-size: 9.5pt !important;
-      font-weight: bold !important;
-      text-align: left !important;
-  }
-
-  table.tabela-presenca td {
-      border: 1px solid #444 !important;
-      padding: 4px 8px !important;
-      font-size: 9pt !important;
-      vertical-align: middle !important;
-  }
-
-  /* Distribuição rígida de largura das colunas */
-  table.tabela-presenca th:first-child,
-  table.tabela-presenca td:first-child {
-      width: 60% !important;
-  }
-
-  table.tabela-presenca th.col-check,
-  table.tabela-presenca td.col-check {
-      width: 20% !important;
-      text-align: center !important;
   }
 }
 
