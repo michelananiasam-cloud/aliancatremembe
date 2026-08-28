@@ -1408,7 +1408,7 @@ function gerarImpressaoServos(listaServosCompleta) {
     const bloco = listaServosCompleta.slice(i, i + LIMITE_POR_PAGINA);
     const numeroPagina = Math.floor(i / LIMITE_POR_PAGINA) + 1;
 
-    // Cria a página
+    // Cria o container da página
     const paginaDiv = document.createElement('div');
     paginaDiv.className = 'print-page';
     
@@ -1417,16 +1417,27 @@ function gerarImpressaoServos(listaServosCompleta) {
       paginaDiv.classList.add('print-break');
     }
 
-    // Conteúdo da página (Cabeçalho da seção + Lista)
+    // Estrutura com TABELA NATIVA para garantir cabeçalho e evitar corte de linhas
     paginaDiv.innerHTML = `
       <div class="print-section-title">
         Lista de Servos — Pagina ${numeroPagina}
       </div>
-      <div class="print-list-block">
-        ${bloco.map(servo => `
-          <div class="print-line">${servo.nome}</div>
-        `).join('')}
-      </div>
+      <table class="tabela-presenca">
+        <thead>
+          <tr>
+            <th class="col-nome-presenca">Nome do Servo</th>
+            <th class="col-check">Presença</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${bloco.map(servo => `
+            <tr>
+              <td>${servo.nome}</td>
+              <td class="col-check"> [ &nbsp; ] </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
     `;
 
     container.appendChild(paginaDiv);
