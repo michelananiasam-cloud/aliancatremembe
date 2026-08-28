@@ -434,7 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 3. Botões de Ação do Rodapé e Mobile (PDF, Atualizar, Importar, Excluir)
-    // Se o botão de zerar tiver ID ou classe específica:
     const btnZerar = document.getElementById('btn-zerar-tudo');
     if (btnZerar && typeof zerarTudo === 'function') {
         btnZerar.addEventListener('click', zerarTudo);
@@ -456,8 +455,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuAdicao = document.getElementById('menu-adicao');
     if (toggleBtn && menuAdicao) {
         toggleBtn.addEventListener('click', () => {
-            menuAdicao.classList.toggle('fechado'); // Ajuste para a classe CSS que esconde o menu
+            menuAdicao.classList.toggle('fechado');
             toggleBtn.textContent = menuAdicao.classList.contains('fechado') ? '+' : '-';
         });
     }
+
+    // 🚀 Renderiza a lista inicial e dispara o cronômetro automático
+    atualizarTitulos();
+    renderizarLista();
+    iniciarLoops(); 
 });
