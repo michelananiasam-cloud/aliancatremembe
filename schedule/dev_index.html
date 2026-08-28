@@ -1,181 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Programação Movimento Tremembé</title>
-  <link rel="icon"
-        href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png"
-        type="image/png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programação Movimento Tremembé</title>
+  <link rel="icon" href="https://misericordia.com.br/wp-content/uploads/2019/11/16x16px.png" type="image/png" />
 
-  <!-- ✅ CSS -->
+  <!-- ✅ CSS Externo -->
   <link rel="stylesheet" href="schedule.css">
-
-  <!-- ✅ Biblioteca -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" defer></script>
-
-  <!-- ✅ Seu app -->
-  <script src="schedule.js" defer></script>
 </head>
 
 <body>
 <div class="container">
 
-<div id="web-header" role="banner" aria-label="Topo">
-  	<a href="../" class="logo-link">
-    	<img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png"
-         	alt="Logo da Aliança">
-  	</a>
-  
-  	<h1 id="titulo-web">Programação Movimento Tremembé</h1>
+  <div id="web-header" role="banner" aria-label="Topo">
+    <a href="../" class="logo-link">
+      <img src="https://misericordia.com.br/wp-content/uploads/2023/08/alianca_logo-header.png" alt="Logo da Aliança">
+    </a>
+    <h1 id="titulo-web">Programação Movimento Tremembé</h1>
         
-        <div id="relogio-container" style="font-family: monospace; font-size: 1.1rem; margin-top: 5px;">
-            🕒 <span id="hora">--:--:--</span><span id="ms" style="font-size: 0.8rem; opacity: 0.7;">.---</span>
-            <span id="status" style="font-size: 0.8rem; margin-left: 8px;">⏳ Sincronizando...</span>
-        </div>
-	</div>
+    <div id="relogio-container" style="font-family: monospace; font-size: 1.1rem; margin-top: 5px;">
+      🕒 <span id="hora">--:--:--</span><span id="ms" style="font-size: 0.8rem; opacity: 0.7;">.---</span>
+      <span id="status" style="font-size: 0.8rem; margin-left: 8px;">⏳ Sincronizando...</span>
+    </div>
+  </div>
 
   <div id="menu-adicao" aria-labelledby="titulo-form">
-	<button id="toggle-menu-adicao" class="toggle-form-btn">-</button>
-	<h2 id="titulo-form" class="sr-only" style="position:absolute;left:-9999px;">
-	  Adicionar atividade
-	</h2>
+    <button id="toggle-menu-adicao" class="toggle-form-btn">-</button>
+    <h2 id="titulo-form" class="sr-only" style="position:absolute;left:-9999px;">Adicionar atividade</h2>
 
-	<div class="field col-2">
-	  <label for="data">Data</label>
-	  <input type="date" id="data" title="Selecione a data da atividade">
-	</div>
-	
-	<div class="field col-4">
-	  <label for="tipo">Tipo</label>
-	  <select id="tipo" title="Escolha o tipo da atividade">
-		<option value="" disabled selected>Selecione o Tipo..</option>
-		<option value="Chegada">Chegada</option>
-		<option value="Introdução">Introdução</option>
-		<option value="Institucional">Institucional</option>  
-		<option value="Pregação">Pregação</option>
-		<option value="Oração">Oração</option>
-		<option value="Acolhida">Acolhida</option>
-		<option value="Animação">Animação</option>
-		<option value="Adoração">Adoração</option>
-		<option value="Dinâmica">Dinâmica</option>
-		<option value="Testemunho">Testemunho</option>
-		<option value="Santa Missa">Santa Missa</option>
-		<option value="Momento">Momento</option>
-		<option value="Historinha">Historinha</option>
-		<option value="Monólogo">Monólogo</option>
-		<option value="Efusão">Efusão</option>
-		<option value="Teatro">Teatro</option>
-		<option value="Pausa">Pausa</option>
-		<option value="Intervalo">Intervalo</option>
-		<option value="Almoço">Almoço</option>
-		<option value="Café">Café</option>
-		<option value="Jantar">Jantar</option>
-		<option value="Palestra">Palestra</option>
-		<option value="Partilha">Partilha</option>
-		<option value="Encerramento">Encerramento</option> 
-	  </select>
-	</div>
+    <div class="field col-2">
+      <label for="data">Data</label>
+      <input type="date" id="data" title="Selecione a data da atividade">
+    </div>
+    
+    <div class="field col-4">
+      <label for="tipo">Tipo</label>
+      <select id="tipo" title="Escolha o tipo da atividade">
+        <option value="" disabled selected>Selecione o Tipo..</option>
+        <option value="Chegada">Chegada</option>
+        <option value="Introdução">Introdução</option>
+        <option value="Institucional">Institucional</option>  
+        <option value="Pregação">Pregação</option>
+        <option value="Oração">Oração</option>
+        <option value="Acolhida">Acolhida</option>
+        <option value="Animação">Animação</option>
+        <option value="Adoração">Adoração</option>
+        <option value="Dinâmica">Dinâmica</option>
+        <option value="Testemunho">Testemunho</option>
+        <option value="Santa Missa">Santa Missa</option>
+        <option value="Momento">Momento</option>
+        <option value="Historinha">Historinha</option>
+        <option value="Monólogo">Monólogo</option>
+        <option value="Efusão">Efusão</option>
+        <option value="Teatro">Teatro</option>
+        <option value="Pausa">Pausa</option>
+        <option value="Intervalo">Intervalo</option>
+        <option value="Almoço">Almoço</option>
+        <option value="Café">Café</option>
+        <option value="Jantar">Jantar</option>
+        <option value="Palestra">Palestra</option>
+        <option value="Partilha">Partilha</option>
+        <option value="Encerramento">Encerramento</option> 
+      </select>
+    </div>
    
-	<div class="field col-4">
-	  <label for="nome">Nome da Atividade</label>
-	  <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
-	</div>
+    <div class="field col-4">
+      <label for="nome">Nome da Atividade</label>
+      <input type="text" id="nome" placeholder="Nome da Atividade" title="Digite o nome da atividade">
+    </div>
    
-	<div class="field col-6">
-	  <label for="servo">Servo</label>
-	  <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
-	</div>
+    <div class="field col-6">
+      <label for="servo">Servo</label>
+      <input type="text" id="servo" placeholder="Nome do Servo" title="Digite o nome do Servo">
+    </div>
    
-	<div class="field col-2">
-	  <label for="inicio">Hora Início</label>
-	  <input type="time" id="inicio" title="Selecione a hora de início da atividade">
-	</div>
+    <div class="field col-2">
+      <label for="inicio">Hora Início</label>
+      <input type="time" id="inicio" title="Selecione a hora de início da atividade">
+    </div>
    
-	<div class="field col-2">
-	  <label for="fim">Hora Fim</label>
-	  <input type="time" id="fim" title="Selecione a hora de término da atividade">
-	</div>
+    <div class="field col-2">
+      <label for="fim">Hora Fim</label>
+      <input type="time" id="fim" title="Selecione a hora de término da atividade">
+    </div>
    
-	<div class="field col-12" style="align-items:flex-start;">
-	  <button class="add" onclick="adicionarAtividade()" aria-label="Adicionar Atividade">
-		Adicionar Atividade
-	  </button>
-	</div>
-
+    <div class="field col-12" style="align-items:flex-start;">
+      <button class="add" aria-label="Adicionar Atividade">Adicionar Atividade</button>
+    </div>
   </div>
 
   <div id="lista" aria-live="polite"></div>
 
-<div id="menu-rodape" role="region" aria-label="Alterar evangelização (rodapé)">
-  <form class="menu-rodape-content" onsubmit="alterarEvangelizacao(event)">
-	
-	<div class="field-inline">
-	  <label for="evangelizacao">Evangelização</label>
-	  <input 
-		type="text" 
-		id="evangelizacao" 
-		placeholder="Nome da Evangelização" 
-		title="Digite o nome da Evangelização"
-	  >
-	</div>
+  <div id="menu-rodape" role="region" aria-label="Alterar evangelização (rodapé)">
+    <form class="menu-rodape-content">
+      <div class="field-inline">
+        <label for="evangelizacao">Evangelização</label>
+        <input type="text" id="evangelizacao" placeholder="Nome da Evangelização" title="Digite o nome da Evangelização">
+      </div>
 
-	<div class="rodape-actions">
-	  <button type="submit" class="btn_rodape brand">
-		Alterar Evangelização
-	  </button>
+      <div class="rodape-actions">
+        <button type="submit" class="btn_rodape brand">Alterar Evangelização</button>
+        <button id="btn-zerar-tudo" type="button" class="sec-btn danger">Excluir</button>
+        <button id="btn-export" type="button" class="btn_rodape">Export</button>
+        <button id="btn-import-local" type="button" class="btn_rodape">ImportLocal</button>
+        <button id="btn-pdf" type="button" class="btn_rodape">PDF</button>
+        <button id="btn-atualizar" type="button" class="btn_rodape">Atualizar</button>
+        
+        <input type="file" id="importar-arquivo" accept=".json,application/json,*/*" style="display:none"/>
+      </div>
+    </form>
+  </div>
 
-	  <button id="btn-zerar-tudo" type="button" class="sec-btn danger">
-		Excluir
-	  </button>
-	  
-	  <button type="button" class="btn_rodape" onclick="exportarBackup()">
-	    Export
-	  </button>
-	  
-	  <button type="button" class="btn_rodape" onclick="document.getElementById('importar-arquivo').click()">
-	    ImportLocal
-	  </button>
-
-	  <button class="btn_rodape" onclick="baixarPDF()">
-  	    PDF
-	  </button>
-
-	  <button class="btn_rodape" onclick="escolherAtualizacaoJSON()">
-  	    Atualizar
-	  </button>
-		
-	  <input 
-	  type="file" 
-	  id="importar-arquivo" 
-	  accept=".json,application/json,*/*"
-	  style="display:none" 
-	  onchange="handleImportFile(this.files[0])"
-	  />
-	</div>
-
-  </form>
-</div>
-
-
-<button id="btn-pdf-mobile"
-        type="button"
-        onclick="baixarPDF()">
-  📄 PDF
-</button>
-	
-<!-- ✅ BOTÃO MOBILE -->
-<button id="btn-atualizar-mobile"
-        type="button"
-        onclick="escolherAtualizacaoJSON()">
-  🔄 Atualizar
-</button>
-	
-  <!-- ✅ BOTÃO MOBILE -->
-<div id="scroll-spacer"></div>
+  <button id="btn-pdf-mobile" type="button">📄 PDF</button>
+  <button id="btn-atualizar-mobile" type="button">🔄 Atualizar</button>
+  
+  <div id="scroll-spacer"></div>
 </div>
 
 <div class="watermark">TK Agosto</div>
 
+<!-- ✅ Scripts Externos -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" defer></script>
+<script src="schedule.js" defer></script>
 </body>
 </html>
