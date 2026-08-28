@@ -323,7 +323,7 @@ button.primary {
    ========================================================================== */
 @media print {
 
-  /* ----------- 1. OCULTAR APENAS A INTERFACE E ELEMENTOS DA WEB ----------- */
+  /* ----------- 1. OCULTA ELEMENTOS WEB E INTERATIVOS ----------- */
   #web-header,
   #form-bloco,
   #form-bloco *,
@@ -339,7 +339,7 @@ button.primary {
       display: none !important;
   }
 
-  /* ----------- 2. CONFIGURAÇÕES DE PÁGINA E BODY ----------- */
+  /* ----------- 2. CONFIGURAÇÕES DA PÁGINA A4 ----------- */
   @page {
       size: A4 portrait;
       margin: 8mm 10mm 8mm 10mm !important;
@@ -351,9 +351,9 @@ button.primary {
       padding: 0 !important;
       background: #fff !important;
       color: #000 !important;
+      font-size: 9.5pt !important;
   }
 
-  /* ----------- 3. EXIBIR ELEMENTOS DE IMPRESSÃO ----------- */
   .print-only,
   #print-header,
   #org,
@@ -361,7 +361,7 @@ button.primary {
       display: block !important;
   }
 
-  /* ----------- 4. CABEÇALHO FIXO DE IMPRESSÃO ----------- */
+  /* ----------- 3. CABEÇALHO DA IMPRESSÃO ----------- */
   #print-header {
       display: flex !important;
       justify-content: space-between;
@@ -373,49 +373,60 @@ button.primary {
   }
 
   #print-header img {
-      max-height: 18mm !important;
+      max-height: 16mm !important;
       width: auto !important;
   }
 
-  /* ----------- 5. IMPRESSÃO DAS EQUIPES (ESTILO ANTIGO DO SEU CSS) ----------- */
+  /* ----------- 4. MONTA O LAYOUT DAS EQUIPES EM COLUNAS LADO A LADO ----------- */
   #org {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important; /* 3 Colunas como o DOC original */
+      gap: 12px !important;
+      width: 100% !important;
       page-break-after: always !important;
       break-after: page !important;
+  }
+
+  /* Se a tela for impressa utilizando Flexbox em vez de Grid no HTML */
+  #org.flex-mode {
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between !important;
+  }
+
+  #org > div, 
+  #org .card,
+  #org .grid-refs {
+      display: block !important;
       width: 100% !important;
+      margin-bottom: 0 !important;
   }
 
   .print-team-outer {
       display: block !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      orphans: 999 !important;
-      widows: 999 !important;
-      margin: 3mm 0 !important;
+      margin-bottom: 2.5mm !important;
       padding-bottom: 1mm !important;
-      border-top: none !important;
-      border-bottom: 1px dashed #999 !important;
-  }
-
-  .print-team-outer:last-of-type {
-      border-bottom: none !important;
+      border-bottom: 1px dashed #aaa !important;
   }
 
   .team-title {
-      font-size: 14px !important;
-      font-weight: 700 !important;
-      border-bottom: 1px solid #ddd !important;
-      padding-bottom: 1mm !important;
-      margin-bottom: 1mm !important;
+      font-size: 10pt !important;
+      font-weight: bold !important;
+      border-bottom: 1px solid #ccc !important;
+      padding-bottom: 1px !important;
+      margin-bottom: 2px !important;
   }
 
   .team-members-inline {
-      font-size: 12.5px !important;
-      line-height: 1.3 !important;
+      font-size: 8.5pt !important;
+      line-height: 1.25 !important;
       word-break: break-word !important;
       white-space: normal !important;
   }
 
-  /* ----------- 6. TABELA DE PRESENÇA (NOVO AJUSTE SEM ESTOURAR LATERAIS) ----------- */
+  /* ----------- 5. TABELA DE PRESENÇA (MANTÉM O ESTILO DA IMPRESSÃO_6) ----------- */
   #print-lists .print-page {
       page-break-before: always !important;
       break-before: page !important;
@@ -424,7 +435,7 @@ button.primary {
 
   .print-section-title {
       display: block !important;
-      font-size: 11.5pt !important;
+      font-size: 11pt !important;
       font-weight: bold !important;
       text-transform: uppercase;
       padding: 4px 0 !important;
@@ -456,7 +467,7 @@ button.primary {
       display: table-row !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      height: 7.5mm !important;
+      height: 7mm !important;
   }
 
   table.tabela-presenca th,
@@ -464,7 +475,7 @@ button.primary {
       display: table-cell !important;
       vertical-align: middle !important;
       border: 1px solid #000 !important;
-      padding: 3px 6px !important;
+      padding: 2px 6px !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
@@ -474,7 +485,7 @@ button.primary {
   table.tabela-presenca th {
       background-color: #f0f0f0 !important;
       color: #000 !important;
-      font-size: 9pt !important;
+      font-size: 8.5pt !important;
       font-weight: bold !important;
       text-align: left !important;
       -webkit-print-color-adjust: exact;
@@ -485,7 +496,7 @@ button.primary {
       font-size: 8.5pt !important;
   }
 
-  /* Distribuição proporcional exata para caber em A4 sem cortar a direita */
+  /* Largura fixa da tabela para caber no A4 */
   table.tabela-presenca th:first-child,
   table.tabela-presenca td:first-child {
       width: 50% !important;
@@ -497,21 +508,18 @@ button.primary {
       text-align: center !important;
   }
 
-  /* ----------- 7. COMPATIBILIDADE EXTRA (CHIPS E ESCALA) ----------- */
-  .chip-ok  { border: 2px solid #28a745 !important; }
-  .chip-pend{ border: 2px solid #dc3545 !important; }
-
+  /* ----------- 6. ELEMENTOS COMPLEMENTARES ----------- */
   .escala-box {
       display: block !important;
       width: 100% !important;
       font-family: monospace !important;
-      font-size: 12pt !important;
+      font-size: 11pt !important;
   }
 
   .escala-row {
       display: flex !important;
       justify-content: space-between !important;
-      padding: 4px 0 !important;
+      padding: 3px 0 !important;
       border-bottom: 1px dotted #ccc !important;
   }
 }
