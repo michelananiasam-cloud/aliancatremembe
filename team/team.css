@@ -680,3 +680,23 @@ button.primary{
   border:none;
   cursor:pointer;
 }
+
+/* ===============================
+   BLOQUEIO DE TELA MOBILE
+================================*/
+body * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+button, 
+button *, 
+a, 
+a *, 
+#web-header img, 
+#mobile-bar button, 
+#menu-rodape button {
+  pointer-events: auto !important;
+}
