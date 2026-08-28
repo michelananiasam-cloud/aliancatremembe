@@ -593,19 +593,14 @@ button.primary{
       margin: 5mm 8mm 8mm 8mm !important;
   }
 
-/* ----------- OCULTAR INTERFACE WEB ----------- */
+  /* ----------- OCULTAR INTERFACE WEB ----------- */
   #form-bloco,
   #form-bloco *,
   #toggle-form,
   #web-header,
   #menu-rodape,
-  #mobile-bar,
-  #custom-modal,
-  .team-actions,
-  .chip-actions,
-  .ref-actions,
-  button {
-      display: none !important;
+  #org {
+      display:none !important;
   }
 
   .print-only {
