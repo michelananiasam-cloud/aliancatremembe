@@ -1,329 +1,122 @@
-<style>
+/* ==========================================================================
+   1. ESTILOS DA INTERFACE WEB (TELA DO SISTEMA)
+   ========================================================================== */
 
-/* ===============================
-   FIXAR HEADER WEB NO TOPO
-================================*/
-#web-header {
-    position: sticky;
-    top: 0;
-    backdrop-filter: blur(6px);
-    background: rgba(255, 255, 255, 0.75);
-    z-index: 9999 !important;
+/* Configurações Globais */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-
-/* ===============================
-   VARIÁVEIS E TEMA (MODO WEB)
-================================*/
-:root {
-  --watermark-display: flex;	
-  --bg: #ffffff;
-  --text: #111;
-  --muted: #666;
-  --card: #f5f5f7;
-  --brand: #2d6cdf;
-  --warn: #ffc107;
-  --danger: #dc3545;
-  --radius: 10px;
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --font-base: 16px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b0b0c;
-    --text: #f1f1f1;
-    --muted: #aaa;
-    --card: #141416;
-    --brand: #5a8dff;
-  }
-}
-
-/* ===============================
-   BASE WEB
-================================*/
-* { box-sizing: border-box; }
-html, body { min-height: 100%; height: auto; }
 
 body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-size: var(--font-base);
-  line-height: 1.45;
-  color: var(--text);
-  background: var(--bg);
-  margin: 0;
-  padding: var(--space-6) var(--space-4) var(--space-8);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    line-height: 1.5;
 }
 
-h1, h2, h3 { margin: 0 0 var(--space-4); line-height: 1.2; }
-h1 { font-size: 1.6rem; font-weight: 700; }
+/* Esconde elementos exclusivos de impressão na tela */
+.print-only,
+#print-header {
+    display: none !important;
+}
 
-.container { max-width: 1100px; margin: 0 auto; }
-
-/* ===============================
-   CABEÇALHO WEB
-================================*/
+/* Cabeçalho da Web */
 #web-header {
-  display: flex;
-  gap: var(--space-4);
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-4);
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-  backdrop-filter: blur(6px);
-}
-#web-header img { width: 120px; height: auto; }
-
-/* ===============================
-   FORMULÁRIOS WEB
-================================*/
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field label { font-weight: 600; font-size: 0.92rem; }
-
-input, select {
-  width: 100%;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-  background: var(--bg);
-  color: var(--text);
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-#form-bloco {
-  display: block;
-  position: relative;
-  padding: var(--space-6) var(--space-4);
-}
-
-#form-bloco .card { margin-bottom: 16px; }
-#form-bloco-inner { display: grid; gap: 16px; }
-
-.toggle-form-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  line-height: 1;
-  transition: 0.2s;
-  z-index: 10;
-}
-.toggle-form-btn:hover { opacity: 0.6; }
-
-#form-bloco.expanded {
-  max-height: 5000px;
-  opacity: 1;
-  transition: all .35s ease;
-}
-
-#form-bloco.collapsed {
-  display: block !important;
-  height: 20px !important;
-  max-height: 48px !important;
-  overflow: hidden !important;
-  padding: var(--space-6) var(--space-4) !important;
-  padding-top: 10px !important;
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-  position: relative;
-  opacity: 1 !important;
-  transition: all .35s ease;
-}
-
-#form-bloco.collapsed > *:not(.toggle-form-btn) {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  max-height: 0 !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  pointer-events: none !important;
-}
-
-#form-bloco.collapsed .toggle-form-btn {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-button.primary {
-  padding: 0.9rem 1rem;
-  background: var(--brand);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-/* ===============================
-   CARTÕES & GRID WEB
-================================*/
-.card {
-  background: var(--bg);
-  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-.card-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.badge {
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  background: color-mix(in srgb, var(--brand) 15%, transparent);
-  border: 1px solid color-mix(in srgb, var(--brand) 28%, transparent);
-}
-
-.grid-refs {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-}
-.ref-apoio { grid-column: 1/-1; }
-@media(max-width: 760px) { .grid-refs { grid-template-columns: 1fr; } }
-
-/* ===============================
-   MOBILE BAR WEB
-================================*/
-#mobile-bar { display: none; }
-
-@media (max-width: 760px) {
-  #mobile-bar {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
+    background-color: #2d6cdf;
+    color: #fff;
+    padding: 1rem 2rem;
     display: flex;
-    justify-content: space-around;
-    padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
-    background: var(--card);
-    border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-    z-index: 999999;
-  }
-
-  #mobile-bar button {
-    flex: 1; margin: 0 4px;
-    background: var(--brand); color: #fff;
-    padding: 10px 6px; border-radius: 8px;
-    font-size: 0.85rem; font-weight: 600; border: none;
-  }
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* ===============================
-   EQUIPES & CHIPS WEB
-================================*/
-.team-line {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 4px; margin-bottom: 6px;
-  border-bottom: 1px dashed color-mix(in srgb, var(--text) 12%, transparent);
-}
-.team-line:hover .team-actions { opacity: 1; pointer-events: auto; }
-.team-name { font-size: 1rem; font-weight: 600; display: flex; gap: 6px; align-items: center; }
-.team-actions { display: flex; gap: 8px; opacity: 0; pointer-events: none; transition: 0.2s ease; }
-.team-actions button { background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--text); opacity: 0.85; }
-
-.people { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.chip {
-  display: flex; align-items: center; gap: 6px; padding: 6px 10px;
-  border-radius: 999px; background: var(--card);
-  border: 2px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
-  font-size: 0.92rem; transition: border-color 0.25s linear;
-}
-.chip-ok { border-color: #28a745 !important; }
-.chip-pend { border-color: #dc3545 !important; }
-.chip:hover .chip-actions { opacity: 1; pointer-events: auto; }
-.chip-actions { display: flex; gap: 4px; opacity: 0; pointer-events: none; transition: 0.2s ease; }
-.chip-actions button { background: none; border: none; cursor: pointer; font-size: 0.85rem; opacity: 0.85; color: var(--text); }
-.chip-star { color: var(--warn); font-size: 1rem; }
-
-.chip-days { display: flex; gap: 4px; margin-left: 4px; }
-.chip-day { font-size: 8px; padding: 2px 5px; border-radius: 6px; background: rgba(0,0,0,.08); border: 1px solid rgba(0,0,0,.12); line-height: 1; white-space: nowrap; opacity: .8; }
-.chip-day.seg { background: #e3f2fd; }
-.chip-day.ter { background: #e8f5e9; }
-.chip-day.qua { background: #fff3e0; }
-.chip-day.qui { background: #f3e5f5; }
-.chip-day.sex { background: #fce4ec; }
-.chip-day.sab { background: #e0f7fa; }
-.chip-day.dom { background: #ede7f6; }
-
-/* ===============================
-   MENU DE RODAPÉ WEB
-================================*/
-#menu-rodape {
-  position: fixed; inset: auto 0 0 0;
-  background: color-mix(in srgb, var(--card) 80%, transparent);
-  border-top: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
-  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
-  z-index: 1000;
-}
-.menu-rodape-content { display: flex; align-items: center; justify-content: space-between; gap: 10px; max-width: 1100px; margin: 0 auto; }
-.field-inline { display: flex; align-items: center; gap: 8px; }
-#menu-rodape label { font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
-#menu-rodape input { padding: 6px 10px; font-size: 0.9rem; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--text) 18%, transparent); background: var(--bg); color: var(--text); }
-.rodape-actions { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; justify-content: flex-end; }
-.btn_rodape, .sec-btn { padding: 8px 12px; font-size: 0.9rem; border-radius: 8px; cursor: pointer; white-space: nowrap; border: 1px solid color-mix(in srgb, var(--text) 18%, transparent); background: color-mix(in srgb, var(--card) 92%, transparent); color: var(--text); }
-.btn_rodape { background: var(--brand); color: #fff; }
-.sec-btn { background: var(--danger); color: #fff; }
-
-@media (max-width: 760px) { #menu-rodape { display: none !important; } }
-
-.ref-actions { display: flex; gap: 8px; opacity: 0; pointer-events: none; transition: 0.2s ease; }
-.card:hover .ref-actions { opacity: 1; pointer-events: auto; }
-.ref-btn { background: none; border: none; cursor: pointer; font-size: 1.25rem; color: var(--text); opacity: 0.85; }
-
-/* CONTROLES PADRÃO DE TELA */
-#print-header { display: none !important; }
-.print-only { display: none !important; }
-
-.watermark {
-  display: var(--watermark-display);
-  position: fixed; inset: 0;
-  align-items: center; justify-content: center;
-  pointer-events: none; user-select: none;
-  z-index: 999999; font-size: 60px; font-weight: bold;
-  color: rgba(0,0,0,0.06); transform: rotate(-30deg);
+/* Layout dos Containers de Equipes na Tela */
+#org {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-#custom-modal {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-  display: none; align-items: center; justify-content: center; z-index: 9999999;
+.secao-equipe, .card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-.modal-box { background: var(--bg); padding: 20px; border-radius: 12px; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
-.modal-logo { width: 80px; margin-bottom: 10px; }
-.modal-actions { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
-.modal-actions button { padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; }
+
+.team-title {
+    font-weight: 700;
+    color: #2d6cdf;
+    margin-bottom: 0.5rem;
+}
+
+/* Chips de Status */
+.chip-ok {
+    background-color: #e6f4ea;
+    color: #28a745;
+    border: 1px solid #28a745;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.chip-pend {
+    background-color: #fce8e6;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* Formulários e Ações */
+#form-bloco {
+    background: #fff;
+    padding: 1.5rem;
+    margin: 1rem 2rem;
+    border-radius: 8px;
+}
+
+button {
+    cursor: pointer;
+    background-color: #2d6cdf;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+button:hover {
+    background-color: #1a52b8;
+}
 
 
 /* ==========================================================================
-   IMPRESSÃO COMPLETA: EQUIPES (ESTILO ANTIGO) + TABELA AJUSTADA
+   2. REGRAS DE IMPRESSÃO (EQUIPES + TABELA DE PRESENÇA)
    ========================================================================== */
 @media print {
 
-  /* ----------- 1. OCULTA ELEMENTOS WEB E INTERATIVOS ----------- */
+  /* ----------- CONFIGURAÇÕES GERAIS DE PÁGINA ----------- */
+  @page {
+      size: A4 portrait;
+      margin: 25mm 8mm 8mm 8mm !important;
+  }
+
+  html, body {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+      color: #000 !important;
+      font-size: 9.5pt !important;
+  }
+
+  /* ----------- OCULTAR ELEMENTOS DA INTERFACE WEB ----------- */
   #web-header,
   #form-bloco,
   #form-bloco *,
@@ -339,110 +132,114 @@ button.primary {
       display: none !important;
   }
 
-  /* ----------- 2. CONFIGURAÇÕES DA PÁGINA A4 ----------- */
-  @page {
-      size: A4 portrait;
-      margin: 8mm 10mm 8mm 10mm !important;
-  }
-
-  html, body {
-      width: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: #fff !important;
-      color: #000 !important;
-      font-size: 9.5pt !important;
-  }
-
   .print-only,
-  #print-header,
   #org,
   #print-lists {
       display: block !important;
   }
 
-  /* ----------- 3. CABEÇALHO DA IMPRESSÃO ----------- */
+  /* ----------- CABEÇALHO FIXO EM TODAS AS PÁGINAS ----------- */
   #print-header {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 20mm !important;
+      padding: 2mm 0 !important;
       display: flex !important;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      padding-bottom: 3mm !important;
-      margin-bottom: 4mm !important;
+      background: #fff !important;
+      z-index: 9999 !important;
       border-bottom: 2px solid #2d6cdf !important;
-      width: 100% !important;
   }
 
   #print-header img {
-      max-height: 16mm !important;
+      position: absolute !important;
+      top: 1mm;
+      left: 0mm;
+      max-height: 18mm !important;
       width: auto !important;
   }
 
-  /* ----------- 4. MONTA O LAYOUT DAS EQUIPES EM COLUNAS LADO A LADO ----------- */
+  /* ----------- FLUXO 1: LISTA DE EQUIPES (INTERNA, EXTERNA, APOIO) ----------- */
   #org {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important; /* 3 Colunas como o DOC original */
-      gap: 12px !important;
-      width: 100% !important;
-      page-break-after: always !important;
-      break-after: page !important;
-  }
-
-  /* Se a tela for impressa utilizando Flexbox em vez de Grid no HTML */
-  #org.flex-mode {
-      display: flex !important;
-      flex-direction: row !important;
-      justify-content: space-between !important;
-  }
-
-  #org > div, 
-  #org .card,
-  #org .grid-refs {
       display: block !important;
       width: 100% !important;
-      margin-bottom: 0 !important;
   }
 
+  /* Força a quebra de página entre cada bloco de equipe (Interna / Externa / Apoio) */
+  #org .secao-equipe,
+  #org .card,
+  .print-break-section {
+      page-break-after: always !important;
+      break-after: page !important;
+      display: block !important;
+      width: 100% !important;
+  }
+
+  /* Linhas individuais de cada equipe dentro da seção */
   .print-team-outer {
       display: block !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      margin-bottom: 2.5mm !important;
+      margin: 3mm 0 !important;
       padding-bottom: 1mm !important;
-      border-bottom: 1px dashed #aaa !important;
+      border-bottom: 1px dashed #999 !important;
+  }
+
+  .print-team-outer:last-of-type {
+      border-bottom: none !important;
   }
 
   .team-title {
-      font-size: 10pt !important;
-      font-weight: bold !important;
-      border-bottom: 1px solid #ccc !important;
-      padding-bottom: 1px !important;
-      margin-bottom: 2px !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      color: #000 !important;
+      border-bottom: 1px solid #ddd !important;
+      padding-bottom: 1mm !important;
+      margin-bottom: 1mm !important;
   }
 
   .team-members-inline {
-      font-size: 8.5pt !important;
-      line-height: 1.25 !important;
+      font-size: 12.5px !important;
+      line-height: 1.3 !important;
       word-break: break-word !important;
       white-space: normal !important;
   }
 
-  /* ----------- 5. TABELA DE PRESENÇA (MANTÉM O ESTILO DA IMPRESSÃO_6) ----------- */
-  #print-lists .print-page {
+  /* Bloco resumo no final das equipes: "Número de Servos" */
+  .resumo-servos,
+  .numero-servos-box {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      margin-top: 5mm !important;
+      padding: 3mm !important;
+      border: 1px solid #000 !important;
+      background-color: #f9f9f9 !important;
+      font-weight: bold !important;
+  }
+
+  /* ----------- FLUXO 2: TABELA DE PRESENÇA DOS SERVOS ----------- */
+  #print-lists {
+      margin: 0 !important;
+      padding: 0 !important;
       page-break-before: always !important;
       break-before: page !important;
-      width: 100% !important;
   }
 
   .print-section-title {
       display: block !important;
-      font-size: 11pt !important;
-      font-weight: bold !important;
-      text-transform: uppercase;
-      padding: 4px 0 !important;
-      margin-bottom: 4mm !important;
-      border-bottom: 2px solid #000 !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      background: #eef3ff !important;
+      border-left: 4px solid #2a5bd7 !important;
+      padding: 2mm 1mm !important;
+      margin: 4mm 0 4mm 0 !important;
+      page-break-inside: avoid !important;
   }
 
+  /* Tabela formatada e contida no A4 */
   table, table.tabela-presenca {
       display: table !important;
       width: 100% !important;
@@ -467,7 +264,7 @@ button.primary {
       display: table-row !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      height: 7mm !important;
+      height: 7.5mm !important;
   }
 
   table.tabela-presenca th,
@@ -475,7 +272,7 @@ button.primary {
       display: table-cell !important;
       vertical-align: middle !important;
       border: 1px solid #000 !important;
-      padding: 2px 6px !important;
+      padding: 2px 5px !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
@@ -485,7 +282,7 @@ button.primary {
   table.tabela-presenca th {
       background-color: #f0f0f0 !important;
       color: #000 !important;
-      font-size: 8.5pt !important;
+      font-size: 9pt !important;
       font-weight: bold !important;
       text-align: left !important;
       -webkit-print-color-adjust: exact;
@@ -496,7 +293,7 @@ button.primary {
       font-size: 8.5pt !important;
   }
 
-  /* Largura fixa da tabela para caber no A4 */
+  /* Divisão das colunas: Nome do Servo (50%) | Sábado (25%) | Domingo (25%) */
   table.tabela-presenca th:first-child,
   table.tabela-presenca td:first-child {
       width: 50% !important;
@@ -508,20 +305,21 @@ button.primary {
       text-align: center !important;
   }
 
-  /* ----------- 6. ELEMENTOS COMPLEMENTARES ----------- */
+  /* ----------- COMPLEMENTOS ----------- */
+  .chip-ok  { border: 2px solid #28a745 !important; background: transparent !important; }
+  .chip-pend{ border: 2px solid #dc3545 !important; background: transparent !important; }
+
   .escala-box {
       display: block !important;
       width: 100% !important;
       font-family: monospace !important;
-      font-size: 11pt !important;
+      font-size: 10pt !important;
   }
 
   .escala-row {
       display: flex !important;
       justify-content: space-between !important;
-      padding: 3px 0 !important;
+      padding: 2px 0 !important;
       border-bottom: 1px dotted #ccc !important;
   }
 }
-
-</style>
