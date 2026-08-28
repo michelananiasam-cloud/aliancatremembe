@@ -1398,6 +1398,41 @@ function escolherAtualizacaoJSON() {
     .catch(() => alert("Erro ao carregar as opções"));
 }
 
+function gerarImpressaoServos(listaServosCompleta) {
+  const LIMITE_POR_PAGINA = 30;
+  const container = document.getElementById('print-lists');
+  container.innerHTML = ''; // Limpa impressão anterior
+
+  // Divisão em blocos de 30
+  for (let i = 0; i < listaServosCompleta.length; i += LIMITE_POR_PAGINA) {
+    const bloco = listaServosCompleta.slice(i, i + LIMITE_POR_PAGINA);
+    const numeroPagina = Math.floor(i / LIMITE_POR_PAGINA) + 1;
+
+    // Cria a página
+    const paginaDiv = document.createElement('div');
+    paginaDiv.className = 'print-page';
+    
+    // Adiciona quebra de página a partir da página 2
+    if (i > 0) {
+      paginaDiv.classList.add('print-break');
+    }
+
+    // Conteúdo da página (Cabeçalho da seção + Lista)
+    paginaDiv.innerHTML = `
+      <div class="print-section-title">
+        Lista de Servos — Pagina ${numeroPagina}
+      </div>
+      <div class="print-list-block">
+        ${bloco.map(servo => `
+          <div class="print-line">${servo.nome}</div>
+        `).join('')}
+      </div>
+    `;
+
+    container.appendChild(paginaDiv);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   ORG.atualizarTitulos();
   ORG.initTituloInput();
@@ -1430,6 +1465,12 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener('beforeprint', () => {
   syncPrintHeaderTitle();
   gerarListaPresencaDinamica();
+  
+  // Resgata o seu array/lista de servos atual
+  const listaServos = obterListaDeServos(); // <- Substitua pela sua variável ou função que guarda os servos
+  
+  // Monta o DOM paginado em lotes de 30 antes do navegador renderizar a impressão
+  gerarImpressaoServos(listaServos);
 });
 
 window.imprimirEscalaSabDom = imprimirEscalaSabDom;
