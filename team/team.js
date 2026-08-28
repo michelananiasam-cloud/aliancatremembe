@@ -1453,15 +1453,15 @@ function gerarImpressaoServos(listaServosCompleta) {
 }
 
 document.addEventListener('click', function(e) {
-  // Executa o bloqueio apenas em telas mobile (760px ou menos)
+  // Apenas executa no mobile (telas até 760px)
   if (window.innerWidth > 760) return;
 
-  const permitido = e.target.closest('button') || 
-                    e.target.closest('a') || 
-                    e.target.id === 'logo' || 
-                    e.target.closest('#web-header img');
+  // Verifica se o alvo do clique é a logo ou a barra mobile de botões permitidos
+  const clicouLogo = e.target.closest('#web-header a.logo-link');
+  const clicouMobileBar = e.target.closest('#mobile-bar');
 
-  if (!permitido) {
+  // Se não for nenhum dos dois, cancela o evento imediatamente
+  if (!clicouLogo && !clicouMobileBar) {
     e.stopPropagation();
     e.preventDefault();
     return false;
