@@ -1,0 +1,827 @@
+{
+  "titulo": "Thalita Kum - Setembro 2026",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Coordenação",
+      "title": "Coordenação"
+    },
+    {
+      "id": "2",
+      "name": "Wilson",
+      "title": "Coordenador",
+      "parentId": "1"
+    },
+    {
+      "id": "3",
+      "name": "Interna",
+      "title": "Referência Interna",
+      "parentId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Maria Lívia",
+      "title": "Referência",
+      "parentId": "3"
+    },
+    {
+      "id": "5",
+      "name": "Mateus Victal",
+      "title": "Referência",
+      "parentId": "3"
+    },
+    {
+      "id": "6",
+      "name": "Animadores🧑🏻‍🎤",
+      "title": "Animadores🧑🏻‍🎤",
+      "parentId": "3"
+    },
+    {
+      "id": "7",
+      "name": "Lina",
+      "title": "Servo",
+      "parentId": "6",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "8",
+      "name": "Michel",
+      "title": "Servo",
+      "parentId": "6",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "9",
+      "name": "Baliza⏱️",
+      "title": "Baliza⏱️",
+      "parentId": "3"
+    },
+    {
+      "id": "10",
+      "name": "Rosy",
+      "title": "Servo",
+      "parentId": "9",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "11",
+      "name": "Jéssica-SP",
+      "title": "Servo",
+      "parentId": "9",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "12",
+      "name": "Comunicação📷",
+      "title": "Comunicação📷",
+      "parentId": "3"
+    },
+    {
+      "id": "13",
+      "name": "Fabrício",
+      "title": "Servo",
+      "parentId": "12",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb"
+      ]
+    },
+    {
+      "id": "14",
+      "name": "Bruno Passos",
+      "title": "Servo",
+      "parentId": "12",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "15",
+      "name": "Letícia",
+      "title": "Servo",
+      "parentId": "12",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Dom"
+      ]
+    },
+    {
+      "id": "16",
+      "name": "Dança💃",
+      "title": "Dança💃",
+      "parentId": "3"
+    },
+    {
+      "id": "17",
+      "name": "Jéssica",
+      "title": "Servo",
+      "parentId": "16",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "18",
+      "name": "Luna",
+      "title": "Servo",
+      "parentId": "16",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "19",
+      "name": "Intercessão🛐",
+      "title": "Intercessão🛐",
+      "parentId": "3"
+    },
+    {
+      "id": "20",
+      "name": "Fatinha",
+      "title": "Servo",
+      "parentId": "19",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "21",
+      "name": "Jaque",
+      "title": "Servo",
+      "parentId": "19",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": []
+    },
+    {
+      "id": "22",
+      "name": "Marília",
+      "title": "Servo",
+      "parentId": "19",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "23",
+      "name": "Célia",
+      "title": "Servo",
+      "parentId": "19",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "24",
+      "name": "Dorotéia",
+      "title": "Servo",
+      "parentId": "19",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "25",
+      "name": "Liturgia🕯️",
+      "title": "Liturgia🕯️",
+      "parentId": "3"
+    },
+    {
+      "id": "26",
+      "name": "Ana Dayse",
+      "title": "Servo",
+      "parentId": "25",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "27",
+      "name": "Ana Alice",
+      "title": "Servo",
+      "parentId": "25",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "28",
+      "name": "Lojinha🛍️",
+      "title": "Lojinha🛍️",
+      "parentId": "3"
+    },
+    {
+      "id": "29",
+      "name": "Sarah",
+      "title": "Servo",
+      "parentId": "28",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "30",
+      "name": "Ana Aline",
+      "title": "Servo",
+      "parentId": "28",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "31",
+      "name": "Música🎶",
+      "title": "Música🎶",
+      "parentId": "3"
+    },
+    {
+      "id": "32",
+      "name": "Angélica🎤🎸",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "33",
+      "name": "Biel🎤🎸🥁",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": []
+    },
+    {
+      "id": "34",
+      "name": "Felipe Sousa🎸🥁",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "35",
+      "name": "Beatriz🎤",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "36",
+      "name": "Ivan🎸",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "37",
+      "name": "Ana Júlia🎤",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "38",
+      "name": "Redson🥁",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "39",
+      "name": "João Paulo🎤🎸",
+      "title": "Servo",
+      "parentId": "31",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "40",
+      "name": "Pastores🐑",
+      "title": "Pastores🐑",
+      "parentId": "3"
+    },
+    {
+      "id": "41",
+      "name": "Ana Dayse",
+      "title": "Servo",
+      "parentId": "40",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "42",
+      "name": "Luna",
+      "title": "Servo",
+      "parentId": "40",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "43",
+      "name": "Junior",
+      "title": "Servo",
+      "parentId": "40",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "44",
+      "name": "Cely",
+      "title": "Servo",
+      "parentId": "40",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "45",
+      "name": "Fernanda Fonseca",
+      "title": "Servo",
+      "parentId": "40",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Dom"
+      ]
+    },
+    {
+      "id": "46",
+      "name": "Lourdinha",
+      "title": "Servo",
+      "parentId": "40",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "47",
+      "name": "Técnica💻",
+      "title": "Técnica💻",
+      "parentId": "3"
+    },
+    {
+      "id": "48",
+      "name": "Vando",
+      "title": "Servo",
+      "parentId": "47",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "49",
+      "name": "Externa",
+      "title": "Referência Externa",
+      "parentId": "1"
+    },
+    {
+      "id": "50",
+      "name": "Mircis",
+      "title": "Referência",
+      "parentId": "49"
+    },
+    {
+      "id": "51",
+      "name": "Teresinha",
+      "title": "Referência",
+      "parentId": "49"
+    },
+    {
+      "id": "52",
+      "name": "Cozinha👨‍🍳",
+      "title": "Cozinha👨‍🍳",
+      "parentId": "49"
+    },
+    {
+      "id": "53",
+      "name": "Lindalva",
+      "title": "Servo",
+      "parentId": "52",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "54",
+      "name": "Andre AX",
+      "title": "Servo",
+      "parentId": "52",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "55",
+      "name": "Edmilson",
+      "title": "Servo",
+      "parentId": "52",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "56",
+      "name": "Adê",
+      "title": "Servo",
+      "parentId": "52",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "57",
+      "name": "Decoração✨",
+      "title": "Decoração✨",
+      "parentId": "49"
+    },
+    {
+      "id": "58",
+      "name": "Andréa",
+      "title": "Servo",
+      "parentId": "57",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "59",
+      "name": "Enfermagem🩺",
+      "title": "Enfermagem🩺",
+      "parentId": "49"
+    },
+    {
+      "id": "60",
+      "name": "Maria Angélica",
+      "title": "Servo",
+      "parentId": "59",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": []
+    },
+    {
+      "id": "61",
+      "name": "Ordem e Limpeza🧹",
+      "title": "Ordem e Limpeza🧹",
+      "parentId": "49"
+    },
+    {
+      "id": "62",
+      "name": "Everton",
+      "title": "Servo",
+      "parentId": "61",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "63",
+      "name": "Stéfany",
+      "title": "Servo",
+      "parentId": "61",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "64",
+      "name": "Salão☕",
+      "title": "Salão☕",
+      "parentId": "49"
+    },
+    {
+      "id": "65",
+      "name": "Ida",
+      "title": "Servo",
+      "parentId": "64",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "66",
+      "name": "Jaqueline",
+      "title": "Servo",
+      "parentId": "64",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "67",
+      "name": "Alessandra",
+      "title": "Servo",
+      "parentId": "64",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "68",
+      "name": "Valquiria",
+      "title": "Servo",
+      "parentId": "64",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Dom"
+      ]
+    },
+    {
+      "id": "69",
+      "name": "Secretaria📚",
+      "title": "Secretaria📚",
+      "parentId": "49"
+    },
+    {
+      "id": "70",
+      "name": "Mariana",
+      "title": "Servo",
+      "parentId": "69",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "71",
+      "name": "Lara Santos",
+      "title": "Servo",
+      "parentId": "69",
+      "confirmado": true,
+      "isReferencia": false,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "72",
+      "name": "Gabi",
+      "title": "Servo",
+      "parentId": "69",
+      "confirmado": true,
+      "isReferencia": true,
+      "dias": [
+        "Sáb",
+        "Dom"
+      ]
+    },
+    {
+      "id": "73",
+      "name": "Apoio",
+      "title": "Apoio",
+      "parentId": "1"
+    },
+    {
+      "id": "74",
+      "name": "Se Lançar💪🏻",
+      "title": "Se Lançar💪🏻",
+      "parentId": "73"
+    },
+    {
+      "id": "75",
+      "name": "André AX",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "76",
+      "name": "Everton",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "77",
+      "name": "Fabiano",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": true
+    },
+    {
+      "id": "78",
+      "name": "Junior",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "79",
+      "name": "Vando",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "80",
+      "name": "Marcelo Pacheco",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "81",
+      "name": "Michel",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "82",
+      "name": "Marcos Alencar",
+      "title": "Servo",
+      "parentId": "74",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "83",
+      "name": "Suporte🛠️",
+      "title": "Suporte🛠️",
+      "parentId": "73"
+    },
+    {
+      "id": "84",
+      "name": "Fabiano",
+      "title": "Servo",
+      "parentId": "83",
+      "confirmado": true,
+      "isReferencia": true
+    },
+    {
+      "id": "85",
+      "name": "Marcos Alencar",
+      "title": "Servo",
+      "parentId": "83",
+      "confirmado": true,
+      "isReferencia": false
+    },
+    {
+      "id": "86",
+      "name": "Transporte e Compras🚖",
+      "title": "Transporte e Compras🚖",
+      "parentId": "73"
+    }
+  ],
+  "links": [
+    {
+      "from": "73",
+      "to": "3",
+      "type": "responde_para"
+    },
+    {
+      "from": "73",
+      "to": "49",
+      "type": "responde_para"
+    }
+  ]
+}
